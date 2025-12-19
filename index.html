@@ -171,7 +171,19 @@
           <a href="#case-studies" class="nav-link">Projects</a>
         </li>
         <li class="nav-item">
-          <a href="services/mern-development.html" class="nav-link">Services</a>
+          <a href="services/mern-development.html" class="nav-link">MERN Development</a>
+        </li>
+        <li class="nav-item">
+          <a href="services/wordpress-development.html" class="nav-link">WordPress</a>
+        </li>
+        <li class="nav-item">
+          <a href="geo/tunisia.html" class="nav-link">Tunisia</a>
+        </li>
+        <li class="nav-item">
+          <a href="geo/france.html" class="nav-link">France</a>
+        </li>
+        <li class="nav-item">
+          <a href="blog/index.html" class="nav-link">Blog</a>
         </li>
         <li class="nav-item">
           <a href="#contact" class="nav-link">Contact</a>
@@ -186,7 +198,7 @@
     <section class="hero" id="home">
       <div class="hero-content">
         <h1 class="hero-title">Building Scalable Web Solutions</h1>
-        <p class="hero-subtitle">Full-Stack Developer specializing in MERN Stack & WordPress Development | Delivering High-Performance, SEO-Optimized Web Applications</p>
+        <p class="hero-subtitle">Serving clients in <span class="geo-target">worldwide</span> | Full-Stack Developer specializing in MERN Stack & WordPress Development | Delivering High-Performance, SEO-Optimized Web Applications</p>
         <div class="flex flex-center gap-md" style="flex-wrap: wrap; justify-content: center;">
           <a href="#contact" class="btn btn-primary btn-lg">Get Started</a>
           <a href="#case-studies" class="btn btn-secondary btn-lg">View My Work</a>
@@ -417,7 +429,10 @@
             <li style="margin-bottom: var(--space-sm);"><a href="#home" class="nav-link">Home</a></li>
             <li style="margin-bottom: var(--space-sm);"><a href="#skills" class="nav-link">Skills</a></li>
             <li style="margin-bottom: var(--space-sm);"><a href="#case-studies" class="nav-link">Projects</a></li>
-            <li><a href="services/mern-development.html" class="nav-link">Services</a></li>
+            <li style="margin-bottom: var(--space-sm);"><a href="services/mern-development.html" class="nav-link">MERN Development</a></li>
+            <li style="margin-bottom: var(--space-sm);"><a href="services/wordpress-development.html" class="nav-link">WordPress</a></li>
+            <li style="margin-bottom: var(--space-sm);"><a href="geo/tunisia.html" class="nav-link">Tunisia</a></li>
+            <li><a href="geo/france.html" class="nav-link">France</a></li>
           </ul>
         </div>
         
@@ -430,7 +445,7 @@
           </p>
           <p class="text-secondary" style="margin-bottom: var(--space-sm);">
             <strong>Location:</strong><br>
-            <span style="color: var(--text-secondary);">Tunisia • France • International</span>
+            Serving <span class="geo-target">worldwide</span>
           </p>
           <p class="text-secondary">
             <strong>Availability:</strong><br>
@@ -447,31 +462,13 @@
     </div>
   </footer>
   
-  <!-- Script: Dynamic Year in Footer -->
-  <script defer>
-    document.getElementById('year').textContent = new Date().getFullYear();
-  </script>
+  <!-- Scroll to Top Button -->
+  <button id="scroll-to-top" class="btn btn-primary" aria-label="Scroll to top" style="position: fixed; bottom: 20px; right: 20px; display: none; z-index: var(--z-sticky); padding: var(--space-sm); width: 48px; height: 48px; border-radius: 50%; font-size: var(--text-lg);">↑</button>
   
-  <!-- Script: Mobile Navigation Toggle -->
-  <script defer>
-    const navToggle = document.querySelector('.nav-toggle');
-    const navMenu = document.querySelector('.nav-menu');
-    
-    if (navToggle && navMenu) {
-      navToggle.addEventListener('click', () => {
-        const isExpanded = navToggle.getAttribute('aria-expanded') === 'true';
-        navToggle.setAttribute('aria-expanded', !isExpanded);
-        navMenu.classList.toggle('active');
-      });
-      
-      // Close menu when link is clicked
-      document.querySelectorAll('.nav-link').forEach(link => {
-        link.addEventListener('click', () => {
-          navToggle.setAttribute('aria-expanded', 'false');
-          navMenu.classList.remove('active');
-        });
-      });
-    }
-  </script>
+  <!-- Script: Main Interactivity -->
+  <script src="js/main.js" defer></script>
+  
+  <!-- Script: GEO Personalization -->
+  <script src="js/geo.js" defer></script>
 </body>
 </html>
