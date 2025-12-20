@@ -1,4 +1,37 @@
-/* ============================================
+/* ========== Theme Toggle ========== */
+.theme-toggle {
+  background: none;
+  border: none;
+  color: var(--text-primary);
+  cursor: pointer;
+  padding: var(--space-sm);
+  border-radius: 50%;
+  transition: all var(--transition-base);
+  display: flex;
+  align-items: center;
+  justify-content: center;
+}
+
+.theme-toggle:hover {
+  background: rgba(0, 0, 0, 0.05);
+  color: var(--accent-primary);
+}
+
+[data-theme="dark"] .theme-toggle:hover {
+  background: rgba(255, 255, 255, 0.1);
+}
+
+/* ========== 3D Tilt Effect ========== */
+.tilt-card {
+  transform-style: preserve-3d;
+  transform: perspective(1000px);
+}
+
+.tilt-content {
+  transition: transform 0.1s ease-out; /* Super fast for real-time feel */
+  will-change: transform;
+}
+
    Component Stylesheet: Reusable UI Elements
    ============================================ */
 
@@ -788,13 +821,6 @@ textarea {
   background: #ffffff;
   border: 1px solid #e5e7eb;
   box-shadow: 0 4px 12px rgba(0, 0, 0, 0.1);
-}
-
-.nav {
-  background: #ffffff;
-  border-top: 1px solid #e5e7eb;
-  border-bottom: 1px solid #e5e7eb;
-  box-shadow: 0 2px 8px rgba(0, 0, 0, 0.1);
 }
 
 input[type="text"],

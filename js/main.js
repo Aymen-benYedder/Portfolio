@@ -547,6 +547,86 @@
   }
 
   /**
+   * Theme Toggle (Light/Dark)
+   * Handles user preference switching and persistence
+   */
+  function initThemeToggle() {
+    const toggleBtn = document.getElementById('theme-toggle');
+    const sunIcon = toggleBtn?.querySelector('.sun-icon');
+    const moonIcon = toggleBtn?.querySelector('.moon-icon');
+    const html = document.documentElement;
+    
+    if (!toggleBtn) return;
+
+    // Check saved preference or system preference
+    const savedTheme = localStorage.getItem('theme');
+    const systemDark = window.matchMedia('(prefers-color-scheme: dark)').matches;
+    
+    if (savedTheme === 'dark' || (!savedTheme && systemDark)) {
+      html.setAttribute('data-theme', 'dark');
+      if(sunIcon) sunIcon.style.display = 'none';
+      if(moonIcon) moonIcon.style.display = 'block';
+    } else {
+      html.setAttribute('data-theme', 'light');
+      if(sunIcon) sunIcon.style.display = 'block';
+      if(moonIcon) moonIcon.style.display = 'none';
+    }
+
+    toggleBtn.addEventListener('click', () => {
+      const currentTheme = html.getAttribute('data-theme');
+      const newTheme = currentTheme === 'dark' ? 'light' : 'dark';
+      
+      html.setAttribute('data-theme', newTheme);
+      localStorage.setItem('theme', newTheme);
+      
+      if (newTheme === 'dark') {
+        if(sunIcon) sunIcon.style.display = 'none';
+        if(moonIcon) moonIcon.style.display = 'block';
+      } else {
+        if(sunIcon) sunIcon.style.display = 'block';
+        if(moonIcon) moonIcon.style.display = 'none';
+      }
+    });
+  }
+
+  /**
+   * 3D Tilt Effect for Cards
+   * Applies a subtle parallax rotation based on mouse position
+   */
+  function initTiltEffect() {
+    const cards = document.querySelectorAll('.project-card, .work-card, .glass-card, .executive-summary-card');
+    
+    if (cards.length === 0) return;
+
+    cards.forEach(card => {
+      card.classList.add('tilt-card');
+      // Wrap content if not already wrapped (to separate frame from content transform if needed, 
+      // but for simple tilt we can transform the card itself or a direct child)
+      // For this implementation, we'll tilt the card itself but reset on leave.
+      
+      card.addEventListener('mousemove', function(e) {
+        const rect = card.getBoundingClientRect();
+        const x = e.clientX - rect.left;
+        const y = e.clientY - rect.top;
+        
+        // Calculate rotation (max 5 degrees)
+        const xPct = (x / rect.width) - 0.5;
+        const yPct = (y / rect.height) - 0.5;
+        
+        // Reverse signs for "looking at" effect
+        const rotateX = yPct * -10; 
+        const rotateY = xPct * 10;
+        
+        card.style.transform = `perspective(1000px) rotateX(${rotateX}deg) rotateY(${rotateY}deg) scale3d(1.02, 1.02, 1.02)`;
+      });
+      
+      card.addEventListener('mouseleave', function() {
+        card.style.transform = 'perspective(1000px) rotateX(0) rotateY(0) scale3d(1, 1, 1)';
+      });
+    });
+  }
+
+  /**
    * Initialize all features on page load
    * Runs when DOM is fully parsed
    */
@@ -564,6 +644,8 @@
       initTableOfContents();
       initCopyCodeButton();
       initBlogFilter();
+      initThemeToggle();
+      initTiltEffect();
     } catch (err) {
       console.error('Initialization error in initAll:', err);
     }

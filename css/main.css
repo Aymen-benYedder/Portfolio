@@ -109,6 +109,15 @@ img {
 /* Main Content */
 main {
   flex: 1;
+  padding-top: var(--space-2xl);
+  padding-bottom: var(--space-2xl);
+}
+
+@media (min-width: var(--bp-md)) {
+  main {
+    padding-top: var(--space-3xl);
+    padding-bottom: var(--space-3xl);
+  }
 }
 
 /* Container: Mobile-First Responsive */
@@ -210,9 +219,9 @@ section {
   padding: var(--space-2xl) 0;
 }
 
-@media (max-width: var(--bp-sm)) {
+@media (min-width: var(--bp-md)) {
   section {
-    padding: var(--space-xl) 0;
+    padding: var(--space-3xl) 0;
   }
 }
 
