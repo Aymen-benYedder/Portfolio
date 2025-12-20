@@ -1,0 +1,101 @@
+# ===== Environment & Virtual Environments =====
+.venv/
+venv/
+env/
+ENV/
+.env
+.env.local
+.env.*.local
+
+# ===== IDE & Editor Settings =====
+.vscode/
+.idea/
+*.swp
+*.swo
+*~
+.DS_Store
+.project
+.pydevproject
+.settings/
+*.sublime-project
+*.sublime-workspace
+
+# ===== Python =====
+__pycache__/
+*.py[cod]
+*$py.class
+*.so
+.Python
+build/
+develop-eggs/
+dist/
+downloads/
+eggs/
+.eggs/
+lib/
+lib64/
+parts/
+sdist/
+var/
+wheels/
+*.egg-info/
+.installed.cfg
+*.egg
+MANIFEST
+
+# ===== Node/NPM (if used) =====
+node_modules/
+npm-debug.log
+yarn-error.log
+package-lock.json
+yarn.lock
+
+# ===== Logs =====
+*.log
+*.logs
+logs/
+
+# ===== OS Files =====
+Thumbs.db
+.DS_Store
+.AppleDouble
+.LSOverride
+
+# ===== Temporary Files =====
+*.tmp
+*.temp
+*.bak
+*.backup
+*~
+.cache/
+.tmp/
+
+# ===== Development/Reference Files =====
+refrence_project/
+Portflio/
+scripts/
+assets/resume copy.md
+TESTING_VERIFICATION_REPORT.md
+IMPLEMENTATION_COMPLETE.md
+OPTIMIZATION_REPORT.md
+specs.md
+
+# ===== Build/Compilation Output =====
+*.min.css.map
+*.min.js.map
+
+# ===== IDE Specific =====
+.vscode/settings.json
+.vscode/launch.json
+.vscode/extensions.json
+
+# ===== Package Managers =====
+.npm/
+.yarn/
+
+# ===== Misc Development =====
+.DS_Store?
+._*
+.Spotlight-V100
+.Trashes
+ehthumbs.db

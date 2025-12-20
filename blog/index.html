@@ -13,19 +13,19 @@
   
   <!-- Open Graph / Social Media -->
   <meta property="og:type" content="website">
-  <meta property="og:url" content="https://yourdomain.com/blog/">
+  <meta property="og:url" content="https://www.yourportfolio.com/blog/">
   <meta property="og:title" content="Technical Blog | Full-Stack Development">
   <meta property="og:description" content="In-depth articles on MERN Stack, WordPress, and web development best practices.">
-  <meta property="og:image" content="https://yourdomain.com/assets/style.webp">
+  <meta property="og:image" content="https://www.yourportfolio.com/assets/style.webp">
   
   <!-- Twitter Card -->
   <meta name="twitter:card" content="summary_large_image">
   <meta name="twitter:title" content="Technical Blog | Full-Stack Development">
   <meta name="twitter:description" content="In-depth articles on MERN Stack, WordPress, and web development.">
-  <meta name="twitter:image" content="https://yourdomain.com/assets/style.webp">
+  <meta name="twitter:image" content="https://www.yourportfolio.com/assets/style.webp">
   
   <!-- Canonical URL -->
-  <link rel="canonical" href="https://yourdomain.com/blog/">
+  <link rel="canonical" href="https://www.yourportfolio.com/blog/">
   
   <!-- Favicon -->
   <link rel="icon" type="image/png" sizes="32x32" href="data:image/svg+xml,<svg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 100 100'><rect fill='%2300d4ff' width='100' height='100'/><text x='50' y='65' font-size='70' font-weight='bold' text-anchor='middle' fill='%230a0a0f' font-family='system-ui'>D</text></svg>">
@@ -37,24 +37,28 @@
     "@type": "Blog",
     "name": "Full-Stack Developer Technical Blog",
     "description": "Technical articles and tutorials on MERN Stack development, WordPress, and web performance.",
-    "url": "https://yourdomain.com/blog/",
+    "url": "https://www.yourportfolio.com/blog/", 
     "author": {
       "@type": "Person",
       "name": "Full-Stack Developer",
-      "url": "https://yourdomain.com"
+      "url": "https://www.yourportfolio.com"
     },
     "publisher": {
-      "@type": "Person",
+      "@type": "Organization",
       "name": "Full-Stack Developer",
-      "url": "https://yourdomain.com"
+      "url": "https://www.yourportfolio.com", 
+      "logo": {
+        "@type": "ImageObject",
+        "url": "https://www.yourportfolio.com/assets/style.webp",
+        "width": 120,
+        "height": 120
+      }
     }
   }
   </script>
   
   <!-- CSS Files -->
-  <link rel="stylesheet" href="../css/variables.css">
-  <link rel="stylesheet" href="../css/main.css">
-  <link rel="stylesheet" href="../css/components.css">
+  <link rel="stylesheet" href="../css/styles.min.css">
   
   <!-- Blog-specific styles -->
   <style>
@@ -204,7 +208,7 @@
           <a href="../index.html#skills" class="nav-link">Skills</a>
         </li>
         <li class="nav-item">
-          <a href="../index.html#case-studies" class="nav-link">Projects</a>
+          <a href="../index.html#experience" class="nav-link">Experience</a>
         </li>
         <li class="nav-item">
           <a href="../services/mern-development.html" class="nav-link">MERN Development</a>
@@ -246,12 +250,14 @@
     <!-- Category Filters -->
     <section style="padding: var(--space-lg) 0;">
       <div class="container">
-        <div class="filter-buttons">
-          <button class="filter-btn active" data-filter="all">All Articles</button>
-          <button class="filter-btn" data-filter="mern">MERN Stack</button>
-          <button class="filter-btn" data-filter="wordpress">WordPress</button>
-          <button class="filter-btn" data-filter="performance">Performance</button>
-          <button class="filter-btn" data-filter="tutorial">Tutorials</button>
+        <div class="filter-buttons" role="toolbar" aria-label="Filter blog articles by category">
+          <button class="filter-btn active" data-filter="all" aria-pressed="true" aria-label="Show all articles">All Articles</button>
+          <button class="filter-btn" data-filter="mern" aria-pressed="false" aria-label="Filter MERN Stack">MERN Stack</button>
+          <button class="filter-btn" data-filter="wordpress" aria-pressed="false" aria-label="Filter WordPress">WordPress</button>
+          <button class="filter-btn" data-filter="performance" aria-pressed="false" aria-label="Filter Performance">Performance</button>
+          <button class="filter-btn" data-filter="tutorial" aria-pressed="false" aria-label="Filter Tutorials">Tutorials</button>
+          <button class="filter-btn" data-filter="typescript" aria-pressed="false" aria-label="Filter TypeScript">TypeScript</button>
+          <button class="filter-btn" data-filter="api" aria-pressed="false" aria-label="Filter API Design">API Design</button>
         </div>
       </div>
     </section>
@@ -409,7 +415,86 @@
               <a href="#" class="btn btn-ghost">Read More →</a>
             </div>
           </article>
+
+          <!-- New Post Card 7 -->
+          <article class="glass-card blog-card" data-category="typescript">
+            <div class="blog-card-header">
+              <h3>TypeScript for Node.js: Safer Backends</h3>
+              <div class="blog-meta">
+                <time datetime="2024-11-10">Nov 10, 2024</time>
+                <span class="blog-meta-separator">•</span>
+                <span class="read-time">7 min read</span>
+              </div>
+            </div>
+            
+            <p class="blog-card-excerpt">
+              Learn how TypeScript improves developer experience and runtime reliability for Node.js backends — configuring tsconfig, typing Express middleware, and compiling for production.
+            </p>
+            
+            <div class="blog-card-footer">
+              <div class="blog-badges">
+                <span class="badge">TypeScript</span>
+                <span class="badge">Node.js</span>
+                <span class="badge">Best Practices</span>
+              </div>
+              <a href="sample-post.html" class="btn btn-ghost">Read More →</a>
+            </div>
+          </article>
+
+          <!-- New Post Card 8 -->
+          <article class="glass-card blog-card" data-category="api">
+            <div class="blog-card-header">
+              <h3>Designing Resilient APIs: Best Practices</h3>
+              <div class="blog-meta">
+                <time datetime="2024-10-30">Oct 30, 2024</time>
+                <span class="blog-meta-separator">•</span>
+                <span class="read-time">9 min read</span>
+              </div>
+            </div>
+            
+            <p class="blog-card-excerpt">
+              Strategies for designing robust APIs: versioning, rate limiting, pagination, observability, and graceful error handling for resilient systems.
+            </p>
+            
+            <div class="blog-card-footer">
+              <div class="blog-badges">
+                <span class="badge">API</span>
+                <span class="badge">Design</span>
+                <span class="badge">Resilience</span>
+              </div>
+              <a href="sample-post.html" class="btn btn-ghost">Read More →</a>
+            </div>
+          </article>
+
+          <!-- New Post Card 9 -->
+          <article class="glass-card blog-card" data-category="security">
+            <div class="blog-card-header">
+              <h3>Authentication with JWT: Best Practices</h3>
+              <div class="blog-meta">
+                <time datetime="2024-10-15">Oct 15, 2024</time>
+                <span class="blog-meta-separator">•</span>
+                <span class="read-time">6 min read</span>
+              </div>
+            </div>
+
+            <p class="blog-card-excerpt">
+              Implement secure authentication with JSON Web Tokens (JWT), refresh token rotation, secure cookie storage, and common pitfalls to avoid.
+            </p>
+
+            <div class="blog-card-footer">
+              <div class="blog-badges">
+                <span class="badge">Security</span>
+                <span class="badge">JWT</span>
+                <span class="badge">Auth</span>
+              </div>
+              <a href="sample-post.html" class="btn btn-ghost">Read More →</a>
+            </div>
+          </article>
+
         </div>
+
+        <!-- Empty state when filters match no posts -->
+        <div id="blog-empty-state" role="status" aria-live="polite" style="display:none; text-align:center; padding:var(--space-lg); color:var(--text-secondary);">No posts match this category. Try another filter or view <a href="index.html">All Articles</a>.</div>
       </div>
     </section>
     
@@ -457,7 +542,7 @@
           <h3 style="margin-bottom: var(--space-md); color: var(--accent-primary);">Contact</h3>
           <p class="text-secondary" style="margin-bottom: var(--space-sm);">
             <strong>Email:</strong><br>
-            <a href="mailto:hello@yourdomain.com" class="nav-link">hello@yourdomain.com</a>
+            <a href="mailto:aymen@yourportfolio.com" class="nav-link">aymen@yourportfolio.com</a>
           </p>
           <p class="text-secondary" style="margin-bottom: var(--space-sm);">
             <strong>Availability:</strong><br>
@@ -477,37 +562,10 @@
   <!-- Scroll to Top Button -->
   <button id="scroll-to-top" class="btn btn-primary" aria-label="Scroll to top" style="position: fixed; bottom: 20px; right: 20px; display: none; z-index: var(--z-sticky); padding: var(--space-sm); width: 48px; height: 48px; border-radius: 50%; font-size: var(--text-lg);">↑</button>
   
-  <!-- Script: Main Interactivity -->
-  <script src="../js/main.js" defer></script>
+  <!-- Script: Main Interactivity (minified) -->
+  <script src="../js/main.min.js" defer></script>
   
-  <!-- Script: GEO Personalization -->
-  <script src="../js/geo.js" defer></script>
-  
-  <!-- Blog Filter Script -->
-  <script defer>
-    document.addEventListener('DOMContentLoaded', function() {
-      const filterBtns = document.querySelectorAll('.filter-btn');
-      const blogCards = document.querySelectorAll('.blog-card');
-      
-      filterBtns.forEach(btn => {
-        btn.addEventListener('click', function() {
-          const filterValue = this.getAttribute('data-filter');
-          
-          // Update active state
-          filterBtns.forEach(b => b.classList.remove('active'));
-          this.classList.add('active');
-          
-          // Filter cards
-          blogCards.forEach(card => {
-            if (filterValue === 'all' || card.getAttribute('data-category') === filterValue) {
-              card.style.display = 'block';
-            } else {
-              card.style.display = 'none';
-            }
-          });
-        });
-      });
-    });
-  </script>
+  <!-- Script: GEO Personalization (minified) -->
+  <script src="../js/geo.min.js" defer></script>
 </body>
-</html>
+</html> 

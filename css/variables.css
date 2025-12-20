@@ -35,21 +35,24 @@
    ============================================ */
 
 :root {
-  /* Color Palette: Dark Navy/Black + Cyan/Blue Accents */
-  --bg-primary: #0a0a0f;
-  --bg-secondary: #1a1a2e;
-  --accent-primary: #00d4ff;
-  --accent-secondary: #0099cc;
-  --text-primary: #ffffff;
-  --text-secondary: #b3b3cc;
-  --text-muted: #808099;
+  /* Color Palette: Blue-600 & Slate */
+  --bg-primary: #ffffff;
+  --bg-secondary: #f8f9fa;
+  --accent-primary: #2563eb;
+  --accent-secondary: #1d4ed8;
+  --text-primary: #0f172a;
+  --text-secondary: #64748b;
+  --text-muted: #94a3b8;
+  --text-light: #cbd5e1;
   
-  /* Glassmorphism Effects */
-  --glass-bg: rgba(255, 255, 255, 0.05);
-  --glass-border: rgba(255, 255, 255, 0.1);
-  --glass-shadow: 0 8px 32px rgba(0, 0, 0, 0.3);
-  --glass-blur: blur(10px);
-  --glass-blur-heavy: blur(20px);
+  /* Light Card Effects */
+  --glass-bg: #ffffff;
+  --glass-border: #f1f5f9;
+  --border-light: #e2e8f0;
+  --glass-shadow: 0 4px 12px rgba(0, 0, 0, 0.1);
+  --backdrop-blur: blur(12px);
+  --glass-blur: none;
+  --glass-blur-heavy: none;
   
   /* Spacing Scale (Mobile-First) */
   --space-xs: 0.25rem;
@@ -58,8 +61,10 @@
   --space-lg: 2rem;
   --space-xl: 3rem;
   --space-2xl: 4rem;
+  --space-3xl: 5rem;
+  --space-4xl: 6rem;
   
-  /* Typography: Fluid & Accessible */
+  /* Typography Scale */
   --font-primary: 'Inter', system-ui, -apple-system, sans-serif;
   --font-mono: 'Fira Code', 'Courier New', monospace;
   
@@ -70,12 +75,19 @@
   --text-xl: clamp(1.25rem, 3vw, 1.5rem);
   --text-2xl: clamp(1.5rem, 4vw, 2rem);
   --text-3xl: clamp(1.875rem, 5vw, 2.25rem);
+  --text-4xl: clamp(2.25rem, 5vw, 2.5rem);
+  --text-5xl: clamp(2.5rem, 6vw, 3rem);
+  --text-6xl: clamp(3rem, 7vw, 3.75rem);
   
-  /* Border Radius */
+  /* Border Radius Scale */
   --radius-sm: 8px;
   --radius-md: 12px;
-  --radius-lg: 16px;
+  --radius-lg: 32px;
+  --radius-xl: 40px;
   --radius-full: 9999px;
+  
+  /* Container */
+  --container-max-width: 768px;
   
   /* Responsive Breakpoints */
   --bp-sm: 640px;
@@ -88,12 +100,15 @@
   --transition-fast: 0.15s ease;
   --transition-base: 0.3s ease;
   --transition-slow: 0.5s ease;
+  --transition-colors: color 0.3s ease, background-color 0.3s ease, border-color 0.3s ease;
+  --transition-transform: transform 0.3s ease;
   
-  /* Shadow Scale */
-  --shadow-sm: 0 2px 8px rgba(0, 0, 0, 0.2);
-  --shadow-md: 0 4px 16px rgba(0, 0, 0, 0.25);
-  --shadow-lg: 0 8px 32px rgba(0, 0, 0, 0.3);
-  --shadow-xl: 0 12px 48px rgba(0, 0, 0, 0.35);
+  /* Shadow Scale (Light Theme) */
+  --shadow-sm: 0 1px 2px rgba(0, 0, 0, 0.05);
+  --shadow-md: 0 4px 6px rgba(0, 0, 0, 0.07);
+  --shadow-lg: 0 10px 15px rgba(0, 0, 0, 0.1);
+  --shadow-xl: 0 20px 25px rgba(0, 0, 0, 0.1);
+  --shadow-blue: 0 10px 25px rgba(37, 99, 235, 0.15);
   
   /* Z-Index Scale */
   --z-base: 1;
@@ -101,4 +116,32 @@
   --z-sticky: 200;
   --z-modal: 1000;
   --z-tooltip: 1100;
+}
+
+/* Dark Theme Fallback */
+[data-theme="dark"],
+.dark {
+  /* Color Palette: Dark Navy/Black + Cyan Accents */
+  --bg-primary: #050508;
+  --bg-secondary: #0f0f1e;
+  --accent-primary: #00e5ff;
+  --accent-secondary: #0099cc;
+  --text-primary: #ffffff;
+  --text-secondary: #a8a8c0;
+  --text-muted: #707088;
+  --text-light: #505570;
+  
+  /* Dark Card Effects */
+  --glass-bg: rgba(255, 255, 255, 0.03);
+  --glass-border: rgba(255, 255, 255, 0.15);
+  --border-light: rgba(255, 255, 255, 0.08);
+  --glass-shadow: 0 12px 40px rgba(0, 0, 0, 0.4);
+  --backdrop-blur: blur(16px);
+  
+  /* Shadow Scale (Dark Theme) */
+  --shadow-sm: 0 2px 8px rgba(0, 0, 0, 0.4);
+  --shadow-md: 0 4px 16px rgba(0, 0, 0, 0.5);
+  --shadow-lg: 0 8px 32px rgba(0, 0, 0, 0.6);
+  --shadow-xl: 0 12px 48px rgba(0, 0, 0, 0.7);
+  --shadow-blue: 0 10px 25px rgba(0, 229, 255, 0.2);
 }

@@ -5,18 +5,28 @@
   <meta name="viewport" content="width=device-width, initial-scale=1.0">
   
   <!-- SEO & Primary Meta Tags -->
-  <title>[Article Title] | Full-Stack Developer Blog</title>
-  <meta name="description" content="[Article Description - 150-160 characters]">
-  <meta name="keywords" content="[Comma-separated keywords]">
+  <!-- [PLACEHOLDER: Article Title] Replace with the full article title. Example: "How to Optimize React Apps" -->
+  <title>[PLACEHOLDER: Article Title] | Full-Stack Developer Blog</title>
+  <!-- [PLACEHOLDER: Article Description] 150-160 characters for meta description -->
+  <meta name="description" content="[PLACEHOLDER: Article Description - 150-160 characters]">
+  <!-- [PLACEHOLDER: Keywords] Comma-separated values for SEO -->
+  <meta name="keywords" content="[PLACEHOLDER: Comma-separated keywords]">
   <meta name="author" content="Full-Stack Developer">
   <meta name="robots" content="index, follow">
+
+  <!-- Template usage notes:
+       - Replace all [PLACEHOLDER: ...] values before publishing.
+       - Use relative asset paths: ../css/, ../js/, ../assets/
+       - Add an absolute canonical URL and update Article schema mainEntityOfPage @id
+       - Include an ImageObject if you have a feature image with width/height
+  -->
   
   <!-- Open Graph / Social Media -->
   <meta property="og:type" content="article">
-  <meta property="og:url" content="https://yourdomain.com/blog/[article-slug].html">
+  <meta property="og:url" content="https://www.yourportfolio.com/blog/[article-slug].html">
   <meta property="og:title" content="[Article Title]">
   <meta property="og:description" content="[Article Description]">
-  <meta property="og:image" content="https://yourdomain.com/assets/style.webp">
+  <meta property="og:image" content="https://www.yourportfolio.com/assets/style.webp">
   <meta property="article:published_time" content="[ISO Date]">
   <meta property="article:author" content="Full-Stack Developer">
   
@@ -24,10 +34,10 @@
   <meta name="twitter:card" content="summary_large_image">
   <meta name="twitter:title" content="[Article Title]">
   <meta name="twitter:description" content="[Article Description]">
-  <meta name="twitter:image" content="https://yourdomain.com/assets/style.webp">
+  <meta name="twitter:image" content="https://www.yourportfolio.com/assets/style.webp">
   
   <!-- Canonical URL -->
-  <link rel="canonical" href="https://yourdomain.com/blog/[article-slug].html">
+  <link rel="canonical" href="https://www.yourportfolio.com/blog/[article-slug].html">
   
   <!-- Favicon -->
   <link rel="icon" type="image/png" sizes="32x32" href="data:image/svg+xml,<svg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 100 100'><rect fill='%2300d4ff' width='100' height='100'/><text x='50' y='65' font-size='70' font-weight='bold' text-anchor='middle' fill='%230a0a0f' font-family='system-ui'>D</text></svg>">
@@ -37,32 +47,41 @@
   {
     "@context": "https://schema.org",
     "@type": "Article",
-    "headline": "[Article Title]",
-    "description": "[Article Description]",
+    "headline": "[PLACEHOLDER: Article Title]",
+    "description": "[PLACEHOLDER: Article Description]",
     "author": {
       "@type": "Person",
       "name": "Full-Stack Developer",
-      "url": "https://yourdomain.com"
+      "url": "https://www.yourportfolio.com"
     },
-    "datePublished": "[ISO Date - e.g., 2024-12-15]",
-    "dateModified": "[ISO Date - e.g., 2024-12-15]",
-    "image": "https://yourdomain.com/assets/style.webp",
+    "datePublished": "[PLACEHOLDER: ISO Date - e.g., 2024-12-15]",
+    "dateModified": "[PLACEHOLDER: ISO Date - e.g., 2024-12-15]",
+    "image": {
+      "@type": "ImageObject",
+      "url": "https://www.yourportfolio.com/assets/style.webp",
+      "width": 1200,
+      "height": 628
+    },
     "publisher": {
-      "@type": "Person",
+      "@type": "Organization",
       "name": "Full-Stack Developer",
-      "url": "https://yourdomain.com"
+      "url": "https://www.yourportfolio.com", 
+      "logo": {
+        "@type": "ImageObject",
+        "url": "https://www.yourportfolio.com/assets/style.webp",
+        "width": 120,
+        "height": 120
+      }
     },
     "mainEntityOfPage": {
       "@type": "WebPage",
-      "@id": "https://yourdomain.com/blog/[article-slug].html"
+      "@id": "https://www.yourportfolio.com/blog/[PLACEHOLDER: article-slug].html"
     }
   }
   </script>
   
   <!-- CSS Files -->
-  <link rel="stylesheet" href="../css/variables.css">
-  <link rel="stylesheet" href="../css/main.css">
-  <link rel="stylesheet" href="../css/components.css">
+  <link rel="stylesheet" href="../css/styles.min.css">
   
   <!-- Blog Post Styles -->
   <style>
@@ -349,7 +368,7 @@
           <a href="../index.html#skills" class="nav-link">Skills</a>
         </li>
         <li class="nav-item">
-          <a href="../index.html#case-studies" class="nav-link">Projects</a>
+          <a href="../index.html#experience" class="nav-link">Experience</a>
         </li>
         <li class="nav-item">
           <a href="../services/mern-development.html" class="nav-link">MERN Development</a>
@@ -588,7 +607,7 @@ function example() {
           <h3 style="margin-bottom: var(--space-md); color: var(--accent-primary);">Get in Touch</h3>
           <p class="text-secondary" style="margin-bottom: var(--space-sm);">
             <strong>Email:</strong><br>
-            <a href="mailto:hello@yourdomain.com" class="nav-link">hello@yourdomain.com</a>
+            <a href="mailto:aymen@yourportfolio.com" class="nav-link">aymen@yourportfolio.com</a>
           </p>
           <p class="text-secondary">
             <strong>Availability:</strong><br>
@@ -608,10 +627,10 @@ function example() {
   <!-- Scroll to Top Button -->
   <button id="scroll-to-top" class="btn btn-primary" aria-label="Scroll to top" style="position: fixed; bottom: 20px; right: 20px; display: none; z-index: var(--z-sticky); padding: var(--space-sm); width: 48px; height: 48px; border-radius: 50%; font-size: var(--text-lg);">↑</button>
   
-  <!-- Script: Main Interactivity -->
-  <script src="../js/main.js" defer></script>
+  <!-- Script: Main Interactivity (minified) -->
+  <script src="../js/main.min.js" defer></script>
   
-  <!-- Script: GEO Personalization -->
-  <script src="../js/geo.js" defer></script>
+  <!-- Script: GEO Personalization (minified) -->
+  <script src="../js/geo.min.js" defer></script>
 </body>
 </html>

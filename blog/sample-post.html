@@ -13,10 +13,10 @@
   
   <!-- Open Graph / Social Media -->
   <meta property="og:type" content="article">
-  <meta property="og:url" content="https://yourdomain.com/blog/sample-post.html">
+  <meta property="og:url" content="https://www.yourportfolio.com/blog/sample-post.html">
   <meta property="og:title" content="Building a MERN Stack Application: A Complete Guide">
   <meta property="og:description" content="Comprehensive guide to building production-ready MERN Stack applications with best practices.">
-  <meta property="og:image" content="https://yourdomain.com/assets/style.webp">
+  <meta property="og:image" content="https://www.yourportfolio.com/assets/style.webp">
   <meta property="article:published_time" content="2024-12-15">
   <meta property="article:author" content="Full-Stack Developer">
   
@@ -24,10 +24,10 @@
   <meta name="twitter:card" content="summary_large_image">
   <meta name="twitter:title" content="Building a MERN Stack Application: A Complete Guide">
   <meta name="twitter:description" content="Learn MERN Stack development from scratch with this comprehensive tutorial.">
-  <meta name="twitter:image" content="https://yourdomain.com/assets/style.webp">
+  <meta name="twitter:image" content="https://www.yourportfolio.com/assets/style.webp">
   
   <!-- Canonical URL -->
-  <link rel="canonical" href="https://yourdomain.com/blog/sample-post.html">
+  <link rel="canonical" href="https://www.yourportfolio.com/blog/sample-post.html">
   
   <!-- Favicon -->
   <link rel="icon" type="image/png" sizes="32x32" href="data:image/svg+xml,<svg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 100 100'><rect fill='%2300d4ff' width='100' height='100'/><text x='50' y='65' font-size='70' font-weight='bold' text-anchor='middle' fill='%230a0a0f' font-family='system-ui'>D</text></svg>">
@@ -42,27 +42,25 @@
     "author": {
       "@type": "Person",
       "name": "Full-Stack Developer",
-      "url": "https://yourdomain.com"
+      "url": "https://www.yourportfolio.com", 
     },
     "datePublished": "2024-12-15",
     "dateModified": "2024-12-15",
-    "image": "https://yourdomain.com/assets/style.webp",
+    "image": "https://www.yourportfolio.com/assets/style.webp",
     "publisher": {
       "@type": "Person",
       "name": "Full-Stack Developer",
-      "url": "https://yourdomain.com"
+      "url": "https://www.yourportfolio.com"
     },
     "mainEntityOfPage": {
       "@type": "WebPage",
-      "@id": "https://yourdomain.com/blog/sample-post.html"
+      "@id": "https://www.yourportfolio.com/blog/sample-post.html"
     }
   }
   </script>
   
   <!-- CSS Files -->
-  <link rel="stylesheet" href="../css/variables.css">
-  <link rel="stylesheet" href="../css/main.css">
-  <link rel="stylesheet" href="../css/components.css">
+  <link rel="stylesheet" href="../css/styles.min.css">
   
   <!-- Blog Post Styles -->
   <style>
@@ -342,7 +340,7 @@
           <a href="../index.html#skills" class="nav-link">Skills</a>
         </li>
         <li class="nav-item">
-          <a href="../index.html#case-studies" class="nav-link">Projects</a>
+          <a href="../index.html#experience" class="nav-link">Experience</a>
         </li>
         <li class="nav-item">
           <a href="../services/mern-development.html" class="nav-link">MERN Development</a>
@@ -677,8 +675,63 @@ export NODE_ENV=production
 
 // 4. Deploy to your hosting platform</code></pre>
         </div>
-        
+
+        <!-- CSS Example Code Block -->
+        <div class="code-block">
+          <div class="code-block-header">
+            <span class="code-language">CSS</span>
+          </div>
+          <pre><code>/* Responsive container */
+.container {
+  max-width: 1200px;
+  margin: 0 auto;
+  padding: 0 1rem;
+}
+
+@media (max-width: 600px) {
+  .container {
+    padding: 0 0.5rem;
+  }
+}</code></pre>
+        </div>
+
+        <!-- JSON Example: package.json snippet -->
+        <div class="code-block">
+          <div class="code-block-header">
+            <span class="code-language">JSON</span>
+          </div>
+          <pre><code>{
+  "name": "my-mern-app",
+  "version": "1.0.0",
+  "scripts": {
+    "start": "node server.js",
+    "dev": "nodemon server.js"
+  },
+  "dependencies": {
+    "express": "^4.18.2",
+    "mongoose": "^6.0.0"
+  }
+}</code></pre>
+        </div>
+
         <h2>Conclusion</h2>
+
+        <!-- Glossary additions: Virtual DOM, ORM, JWT -->
+        <div class="glossary-section">
+          <h3>MERN Stack Terminology</h3>
+          <dl class="glossary-list">
+            <dt>Virtual DOM</dt>
+            <dd>An in-memory tree representation of the UI used by libraries like React for efficient DOM updates by diffing and reconciling changes.</dd>
+
+            <dt>ORM</dt>
+            <dd>Object-Relational Mapping (ORM) is a technique for mapping database tables to programming language objects. For MongoDB, projects often use an ODM (Object Document Mapper) such as Mongoose to enforce schema and validation.</dd>
+
+            <dt>JWT</dt>
+            <dd>JSON Web Tokens (JWT) are compact tokens used for stateless authentication, containing claims that can be validated and signed to secure API access.</dd>
+          </dl>
+        </div>
+
+        
         <p>
           The MERN Stack provides a complete, modern solution for building web applications with JavaScript across
           all layers. By following these practices and patterns, you can build scalable, maintainable applications
@@ -724,7 +777,7 @@ export NODE_ENV=production
             <p class="text-secondary" style="font-size: var(--text-sm); margin-bottom: var(--space-md);">
               Master React Hooks including useState, useEffect, and custom hooks for powerful state management.
             </p>
-            <a href="index.html" class="btn btn-ghost" style="font-size: var(--text-sm);">Read More →</a>
+            <a href="sample-post.html" class="btn btn-ghost" style="font-size: var(--text-sm);">Read More →</a>
           </article>
           
           <article class="glass-card related-article-card animate-on-scroll">
@@ -775,7 +828,7 @@ export NODE_ENV=production
           <h3 style="margin-bottom: var(--space-md); color: var(--accent-primary);">Get in Touch</h3>
           <p class="text-secondary" style="margin-bottom: var(--space-sm);">
             <strong>Email:</strong><br>
-            <a href="mailto:hello@yourdomain.com" class="nav-link">hello@yourdomain.com</a>
+            <a href="mailto:aymen@yourportfolio.com" class="nav-link">aymen@yourportfolio.com</a>
           </p>
           <p class="text-secondary">
             <strong>Availability:</strong><br>
@@ -795,10 +848,10 @@ export NODE_ENV=production
   <!-- Scroll to Top Button -->
   <button id="scroll-to-top" class="btn btn-primary" aria-label="Scroll to top" style="position: fixed; bottom: 20px; right: 20px; display: none; z-index: var(--z-sticky); padding: var(--space-sm); width: 48px; height: 48px; border-radius: 50%; font-size: var(--text-lg);">↑</button>
   
-  <!-- Script: Main Interactivity -->
-  <script src="../js/main.js" defer></script>
+  <!-- Script: Main Interactivity (minified) -->
+  <script src="../js/main.min.js" defer></script>
   
-  <!-- Script: GEO Personalization -->
-  <script src="../js/geo.js" defer></script>
+  <!-- Script: GEO Personalization (minified) -->
+  <script src="../js/geo.min.js" defer></script>
 </body>
 </html>

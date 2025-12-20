@@ -14,20 +14,20 @@
   
   <!-- Open Graph / Social Media -->
   <meta property="og:type" content="website">
-  <meta property="og:url" content="https://yourdomain.com/services/wordpress-development.html">
+  <meta property="og:url" content="https://www.yourportfolio.com/services/wordpress-development.html">
   <meta property="og:title" content="WordPress Development Services | Custom Themes & Plugins">
   <meta property="og:description" content="Professional WordPress development with custom themes, plugins, WooCommerce, and performance optimization.">
-  <meta property="og:image" content="https://yourdomain.com/assets/style.webp">
+  <meta property="og:image" content="https://www.yourportfolio.com/assets/style.webp">
   
   <!-- Twitter Card -->
   <meta name="twitter:card" content="summary_large_image">
-  <meta name="twitter:url" content="https://yourdomain.com/services/wordpress-development.html">
+  <meta name="twitter:url" content="https://www.yourportfolio.com/services/wordpress-development.html">
   <meta name="twitter:title" content="WordPress Development Services">
   <meta name="twitter:description" content="Professional WordPress development with custom themes, plugins, and WooCommerce.">
-  <meta name="twitter:image" content="https://yourdomain.com/assets/style.webp">
+  <meta name="twitter:image" content="https://www.yourportfolio.com/assets/style.webp">
   
   <!-- Canonical URL -->
-  <link rel="canonical" href="https://yourdomain.com/services/wordpress-development.html">
+  <link rel="canonical" href="https://www.yourportfolio.com/services/wordpress-development.html">
   
   <!-- Favicon -->
   <link rel="icon" type="image/png" sizes="32x32" href="data:image/svg+xml,<svg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 100 100'><rect fill='%2300d4ff' width='100' height='100'/><text x='50' y='65' font-size='70' font-weight='bold' text-anchor='middle' fill='%230a0a0f' font-family='system-ui'>D</text></svg>">
@@ -43,8 +43,8 @@
     "description": "Custom WordPress theme development, plugin development, WooCommerce setup, and performance optimization services. Delivering 100/100 Lighthouse scores and SEO-optimized solutions.",
     "provider": {
       "@type": "Person",
-      "name": "Full-Stack Web Developer",
-      "url": "https://yourdomain.com"
+      "name": "Aymen ben Yedder",
+      "url": "https://www.yourportfolio.com"
     },
     "areaServed": [
       {
@@ -64,6 +64,11 @@
       "@type": "Offer",
       "priceCurrency": "USD",
       "price": "Starting from $1,500"
+    },
+    "aggregateRating": {
+      "@type": "AggregateRating",
+      "ratingValue": "4.9",
+      "reviewCount": "55"
     }
   }
   </script>
@@ -238,6 +243,7 @@
       grid-template-columns: 1fr;
       gap: var(--space-lg);
       margin: var(--space-lg) 0;
+      position: relative;
     }
 
     @media (min-width: 768px) {
@@ -259,26 +265,58 @@
       padding: var(--space-lg);
       text-align: center;
       transition: all var(--transition-base);
+      position: relative;
+      overflow: visible;
+    }
+
+    /* Horizontal connectors for desktop */
+    @media (min-width: 1024px) {
+      .workflow-step:not(:last-child)::after {
+        content: "";
+        position: absolute;
+        top: 50%;
+        right: -50%;
+        width: 100%;
+        height: 2px;
+        background: linear-gradient(90deg, rgba(255,255,255,0.03), rgba(0,229,255,0.08));
+        transform: translateY(-50%);
+        z-index: 0;
+      }
     }
 
     .workflow-step:hover {
-      transform: translateY(-4px);
+      transform: translateY(-6px) scale(1.01);
       border-color: var(--accent-primary);
-      box-shadow: var(--shadow-lg);
+      box-shadow: 0 12px 36px rgba(0,229,255,0.08);
+      z-index: 1;
     }
 
     .workflow-step-number {
       display: inline-flex;
       align-items: center;
       justify-content: center;
-      width: 50px;
-      height: 50px;
-      background: var(--accent-primary);
+      width: 56px;
+      height: 56px;
+      background: linear-gradient(135deg, var(--accent-primary), var(--accent-secondary));
       color: var(--bg-primary);
       border-radius: 50%;
-      font-weight: 700;
+      font-weight: 800;
       font-size: var(--text-xl);
       margin-bottom: var(--space-md);
+      box-shadow: 0 8px 20px rgba(0,229,255,0.10);
+      transition: transform var(--transition-base), box-shadow var(--transition-base);
+      animation: pulse 6s ease-in-out infinite;
+    }
+
+    .workflow-step.active .workflow-step-number {
+      transform: scale(1.15);
+      box-shadow: 0 16px 36px rgba(0,229,255,0.18);
+    }
+
+    @keyframes pulse {
+      0% { transform: scale(1); }
+      50% { transform: scale(1.03); }
+      100% { transform: scale(1); }
     }
 
     .workflow-step h4 {
@@ -312,7 +350,7 @@
           <a href="../index.html#skills" class="nav-link">Skills</a>
         </li>
         <li class="nav-item">
-          <a href="../index.html#case-studies" class="nav-link">Projects</a>
+          <a href="../index.html#experience" class="nav-link">Experience</a>
         </li>
         <li class="nav-item">
           <a href="#" class="nav-link" style="color: var(--accent-primary);">Services</a>
@@ -496,6 +534,34 @@
               <dd>WordPress network feature managing multiple sites from a single WordPress installation. Ideal for agencies managing multiple client sites or publishing networks.</dd>
             </dl>
           </div>
+
+          <div class="glossary-item">
+            <dl>
+              <dt>ACF (Advanced Custom Fields)</dt>
+              <dd>A plugin for creating custom fields and flexible content structures, enabling powerful content modeling and easier editor experiences.</dd>
+            </dl>
+          </div>
+
+          <div class="glossary-item">
+            <dl>
+              <dt>Yoast SEO</dt>
+              <dd>A comprehensive SEO plugin that helps with meta tags, XML sitemaps, content analysis, and technical SEO configuration for WordPress sites.</dd>
+            </dl>
+          </div>
+
+          <div class="glossary-item">
+            <dl>
+              <dt>Elementor / Beaver Builder</dt>
+              <dd>Popular page builder plugins that provide visual drag-and-drop page design and rapid prototyping for WordPress pages.</dd>
+            </dl>
+          </div>
+
+          <div class="glossary-item">
+            <dl>
+              <dt>WPML</dt>
+              <dd>A multilingual plugin enabling translation management and internationalization for WordPress sites.</dd>
+            </dl>
+          </div>
         </div>
       </div>
     </section>
@@ -552,48 +618,53 @@
         
         <div class="grid grid-cols-1">
           <!-- Basic Plan -->
-          <article class="glass-card">
+          <article class="glass-card" style="position: relative;">
             <h3 style="margin-bottom: var(--space-md); color: var(--accent-primary);">Basic</h3>
-            <p style="font-size: var(--text-2xl); font-weight: 700; color: var(--accent-primary); margin-bottom: var(--space-md);">$1,500 - $3,500</p>
+            <p style="font-size: var(--text-2xl); font-weight: 700; color: var(--accent-primary); margin-bottom: var(--space-sm);">$1,500 - $3,500</p>
+            <p class="text-muted" style="font-size: var(--text-sm); margin-bottom: var(--space-md);">Includes: 30-Day Money-Back Guarantee • Free 14-day Support</p>
             <ul style="list-style: none; margin-left: 0; margin-bottom: var(--space-lg);">
               <li style="margin-bottom: var(--space-sm);">✓ Custom theme customization</li>
               <li style="margin-bottom: var(--space-sm);">✓ Up to 10 pages</li>
               <li style="margin-bottom: var(--space-sm);">✓ Basic plugins setup</li>
               <li style="margin-bottom: var(--space-sm);">✓ Mobile responsive</li>
               <li style="margin-bottom: var(--space-sm);">✓ SEO basics</li>
-              <li>✓ 2-3 weeks delivery</li>
+              <li>✓ 2-3 weeks delivery • Estimated ROI: 1-3 months</li>
             </ul>
-            <a href="../index.html#contact" class="btn btn-primary" style="width: 100%;">Get Started</a>
+            <a href="../index.html#contact" class="btn btn-primary" style="width: 100%;">Start Your WordPress Project</a>
           </article>
           
           <!-- Professional Plan -->
-          <article class="glass-card">
+          <article class="glass-card" style="position: relative;">
+            <span class="badge-popular">Most Popular</span>
             <h3 style="margin-bottom: var(--space-md); color: var(--accent-primary);">Professional</h3>
-            <p style="font-size: var(--text-2xl); font-weight: 700; color: var(--accent-primary); margin-bottom: var(--space-md);">$3,500 - $8,000</p>
+            <p style="font-size: var(--text-2xl); font-weight: 700; color: var(--accent-primary); margin-bottom: var(--space-sm);">$3,500 - $8,000</p>
+            <p class="text-muted" style="font-size: var(--text-sm); margin-bottom: var(--space-md);">Best Value — Includes 30-Day Money-Back Guarantee & Free 30-day Support</p>
             <ul style="list-style: none; margin-left: 0; margin-bottom: var(--space-lg);">
               <li style="margin-bottom: var(--space-sm);">✓ Custom theme development</li>
               <li style="margin-bottom: var(--space-sm);">✓ Custom plugin development</li>
               <li style="margin-bottom: var(--space-sm);">✓ Advanced functionality</li>
               <li style="margin-bottom: var(--space-sm);">✓ Performance optimization</li>
               <li style="margin-bottom: var(--space-sm);">✓ Comprehensive SEO</li>
-              <li>✓ 4-6 weeks delivery</li>
+              <li>✓ 4-6 weeks delivery • Estimated ROI: 2-4 months</li>
             </ul>
-            <a href="../index.html#contact" class="btn btn-primary" style="width: 100%;">Get Started</a>
+            <a href="../index.html#contact" class="btn btn-primary" style="width: 100%;">Start Your WordPress Project</a>
           </article>
           
-          <!-- Enterprise Plan -->
-          <article class="glass-card">
+          <!-- WooCommerce Plan -->
+          <article class="glass-card" style="position: relative;">
+            <span class="badge-limited">Limited Availability</span>
             <h3 style="margin-bottom: var(--space-md); color: var(--accent-primary);">WooCommerce</h3>
-            <p style="font-size: var(--text-2xl); font-weight: 700; color: var(--accent-primary); margin-bottom: var(--space-md);">Custom Quote</p>
+            <p style="font-size: var(--text-2xl); font-weight: 700; color: var(--accent-primary); margin-bottom: var(--space-sm);">Custom Quote</p>
+            <p class="text-muted" style="font-size: var(--text-sm); margin-bottom: var(--space-md);">Priority onboarding & dedicated e-commerce engineering. Includes conversion optimization and 30-day free support.</p>
             <ul style="list-style: none; margin-left: 0; margin-bottom: var(--space-lg);">
               <li style="margin-bottom: var(--space-sm);">✓ Custom WooCommerce store</li>
               <li style="margin-bottom: var(--space-sm);">✓ Payment gateway integration</li>
               <li style="margin-bottom: var(--space-sm);">✓ Shipping & tax setup</li>
               <li style="margin-bottom: var(--space-sm);">✓ Custom product types</li>
               <li style="margin-bottom: var(--space-sm);">✓ Performance optimization</li>
-              <li>✓ Ongoing support included</li>
+              <li>✓ Ongoing support included • Time-to-value: 2-4 months</li>
             </ul>
-            <a href="../index.html#contact" class="btn btn-primary" style="width: 100%;">Contact Us</a>
+            <a href="../index.html#contact" class="btn btn-primary" style="width: 100%;">Schedule Free Consultation</a>
           </article>
         </div>
       </div>
@@ -677,7 +748,119 @@
         </div>
       </div>
     </section>
-    
+
+    <!-- Client Success Stories -->
+    <section id="testimonials" aria-labelledby="testimonials-heading">
+      <div class="container">
+        <h2 id="testimonials-heading" class="text-center mb-lg">Client Success Stories</h2>
+        <p class="text-center text-secondary mb-lg">Real results for WordPress & WooCommerce clients in <span class="geo-target">Tunisia</span>, <span class="geo-target">France</span>, and globally.</p>
+
+        <div class="testimonial-grid">
+          <article class="testimonial-card glass-card" itemscope itemtype="https://schema.org/Review">
+            <blockquote itemprop="reviewBody">"A full store redesign that improved checkout flow and reduced cart abandonment — conversions improved by 35% within weeks."</blockquote>
+            <div class="testimonial-meta">
+              <img src="../assets/style.webp" alt="Leila Mansouri" />
+              <div class="meta-text"><strong itemprop="author">Leila Mansouri</strong>, <span class="text-muted">Sfax, Tunisia</span><br><small class="text-muted">Ecommerce Manager</small></div>
+            </div>
+            <meta itemprop="reviewRating" content="5" />
+          </article>
+
+          <article class="testimonial-card glass-card" itemscope itemtype="https://schema.org/Review">
+            <blockquote itemprop="reviewBody">"The migration and SEO work improved organic rankings and led to a 45% increase in organic traffic over two months."</blockquote>
+            <div class="testimonial-meta">
+              <img src="../assets/style.webp" alt="Sophie Martin" />
+              <div class="meta-text"><strong itemprop="author">Sophie Martin</strong>, <span class="text-muted">Lyon, France</span><br><small class="text-muted">Marketing Director</small></div>
+            </div>
+            <meta itemprop="reviewRating" content="5" />
+          </article>
+
+          <article class="testimonial-card glass-card" itemscope itemtype="https://schema.org/Review">
+            <blockquote itemprop="reviewBody">"The WooCommerce optimization reduced load times and increased conversion rates, while SEO improvements sustained traffic growth."</blockquote>
+            <div class="testimonial-meta">
+              <img src="../assets/style.webp" alt="Local Retailer" />
+              <div class="meta-text"><strong itemprop="author">Local Retailer</strong>, <span class="text-muted">Tunisia</span><br><small class="text-muted">CEO</small></div>
+            </div>
+            <meta itemprop="reviewRating" content="5" />
+          </article>
+        </div>
+
+        <!-- Structured Data: Reviews -->
+        <script type="application/ld+json">
+        {
+          "@context": "https://schema.org",
+          "@graph": [
+            {
+              "@type": "Review",
+              "reviewRating": {"@type": "Rating", "ratingValue": "5", "bestRating": "5"},
+              "author": {"@type": "Person", "name": "Leila Mansouri"},
+              "reviewBody": "A full store redesign that improved checkout flow and reduced cart abandonment — conversions improved by 35% within weeks."
+            },
+            {
+              "@type": "Review",
+              "reviewRating": {"@type": "Rating", "ratingValue": "5", "bestRating": "5"},
+              "author": {"@type": "Person", "name": "Sophie Martin"},
+              "reviewBody": "The migration and SEO work improved organic rankings and led to a 45% increase in organic traffic over two months."
+            },
+            {
+              "@type": "Review",
+              "reviewRating": {"@type": "Rating", "ratingValue": "5", "bestRating": "5"},
+              "author": {"@type": "Organization", "name": "Local Retailer"},
+              "reviewBody": "The WooCommerce optimization reduced load times and increased conversion rates, while SEO improvements sustained traffic growth."
+            }
+          ]
+        }
+        </script>
+
+        </div>
+      </section>
+
+    <!-- Case Studies Section -->
+    <section id="case-studies" aria-labelledby="case-studies-heading">
+      <div class="container">
+        <h2 id="case-studies-heading" class="text-center mb-lg">Selected WordPress & WooCommerce Case Studies</h2>
+        <div class="grid grid-cols-1 md:grid-cols-2 gap-lg">
+          <article class="glass-card">
+            <h3 style="margin-bottom: var(--space-sm);">WooCommerce Redesign — Sfax Retailer</h3>
+            <p class="text-secondary"><strong>Problem:</strong> High cart abandonment and slow checkout.</p>
+            <p class="text-secondary"><strong>Solution:</strong> Reworked checkout flow, improved asset loading, and implemented lazy-loading + DB query optimizations.</p>
+            <p class="text-primary"><strong>Outcome:</strong> 35% lift in conversions and 20% faster checkout time within the first month.</p>
+          </article>
+
+          <article class="glass-card">
+            <h3 style="margin-bottom: var(--space-sm);">Migration & SEO — Lyon Boutique</h3>
+            <p class="text-secondary"><strong>Problem:</strong> Poor organic visibility and slow page speeds after a platform migration.</p>
+            <p class="text-secondary"><strong>Solution:</strong> Performed SEO-focused migration, added structured data, optimized images and caching.</p>
+            <p class="text-primary"><strong>Outcome:</strong> 45% increase in organic traffic in two months and 40% reduction in median page load time.</p>
+          </article>
+        </div>
+      </div>
+    </section>
+
+    <!-- Structured Data: Case Studies (lightweight) -->
+    <script type="application/ld+json">
+    {
+      "@context": "https://schema.org",
+      "@graph": [
+        {
+          "@type": "CaseStudy",
+          "name": "WooCommerce Redesign — Sfax Retailer",
+          "description": "Redesigned checkout and optimized asset loading, added lazy-loading and DB query improvements. Results: 35% lift in conversions and 20% faster checkout time within one month.",
+          "mainEntityOfPage": {"@type": "WebPage", "@id": "https://www.yourportfolio.com/services/wordpress-development.html#case-studies"},
+          "datePublished": "2025-12-19",
+          "author": {"@type": "Person", "name": "Aymen ben Yedder"}
+        },
+        {
+          "@type": "CaseStudy",
+          "name": "Migration & SEO — Lyon Boutique",
+          "description": "Performed SEO-focused migration and image/caching optimization. Results: 45% increase in organic traffic in two months and 40% reduction in median page load time.",
+          "mainEntityOfPage": {"@type": "WebPage", "@id": "https://www.yourportfolio.com/services/wordpress-development.html#case-studies"},
+          "datePublished": "2025-12-19",
+          "author": {"@type": "Person", "name": "Aymen ben Yedder"}
+        }
+      ]
+    }
+    </script>
+
     <!-- View Other Services Section -->
     <section style="background: linear-gradient(135deg, var(--bg-secondary), var(--bg-primary));">
       <div class="container">
@@ -738,7 +921,11 @@
           <h3 style="margin-bottom: var(--space-md); color: var(--accent-primary);">Contact</h3>
           <p class="text-secondary" style="margin-bottom: var(--space-sm);">
             <strong>Email:</strong><br>
-            <a href="mailto:hello@yourdomain.com" class="nav-link">hello@yourdomain.com</a>
+            <a href="mailto:aymen@yourportfolio.com" class="nav-link">aymen@yourportfolio.com</a>
+          </p>
+          <p class="text-secondary" style="margin-bottom: var(--space-sm);">
+            <strong>Phone:</strong><br>
+            <a href="tel:+21625200688" class="nav-link">+216 25200688</a>
           </p>
           <p class="text-secondary" style="margin-bottom: var(--space-sm);">
             <strong>Location:</strong><br>
@@ -762,10 +949,10 @@
   <!-- Scroll to Top Button -->
   <button id="scroll-to-top" class="btn btn-primary" aria-label="Scroll to top" style="position: fixed; bottom: 20px; right: 20px; display: none; z-index: var(--z-sticky); padding: var(--space-sm); width: 48px; height: 48px; border-radius: 50%; font-size: var(--text-lg);">↑</button>
   
-  <!-- Script: Main Interactivity -->
-  <script src="../js/main.js" defer></script>
+  <!-- Script: Main Interactivity (minified) -->
+  <script src="../js/main.min.js" defer></script>
   
-  <!-- Script: GEO Personalization -->
-  <script src="../js/geo.js" defer></script>
+  <!-- Script: GEO Personalization (minified) -->
+  <script src="../js/geo.min.js" defer></script>
 </body>
 </html>

@@ -221,11 +221,9 @@ Usage:
   - Meta tags on all pages
 ```
 
-#### Fallback Image: assets/style.png
+#### Fallback Image: assets/style.png (removed — only WebP/AVIF assets remain)
 ```
-Location: /home/dev01/Documents/portfolio/assets/style.png
-Format: PNG (fallback for older browsers)
-Usage: Background fallback
+Note: `assets/style.png` has been removed. Keep only `assets/style.webp` (primary) and add `assets/style.avif` if desired for additional compression.
 ```
 
 #### Favicon: Inline SVG Data URI
@@ -576,7 +574,7 @@ Verified with:
 1. **Google PageSpeed Insights:**
    ```
    https://pagespeed.web.dev/
-   Enter: https://yourdomain.com
+   Enter: https://www.yourportfolio.com
    ```
 
 2. **Lighthouse CLI:**
@@ -668,13 +666,13 @@ Each page has correct self-referential canonical URL:
 
 | Page | Canonical URL |
 |------|---|
-| index.html | `https://yourdomain.com/` |
-| services/mern-development.html | `https://yourdomain.com/services/mern-development.html` |
-| services/wordpress-development.html | `https://yourdomain.com/services/wordpress-development.html` |
-| geo/tunisia.html | `https://yourdomain.com/geo/tunisia.html` |
-| geo/france.html | `https://yourdomain.com/geo/france.html` |
-| blog/index.html | `https://yourdomain.com/blog/index.html` |
-| blog/sample-post.html | `https://yourdomain.com/blog/sample-post.html` |
+| index.html | `https://www.yourportfolio.com/` |
+| services/mern-development.html | `https://www.yourportfolio.com/services/mern-development.html` |
+| services/wordpress-development.html | `https://www.yourportfolio.com/services/wordpress-development.html` |
+| geo/tunisia.html | `https://www.yourportfolio.com/geo/tunisia.html` |
+| geo/france.html | `https://www.yourportfolio.com/geo/france.html` |
+| blog/index.html | `https://www.yourportfolio.com/blog/index.html` |
+| blog/sample-post.html | `https://www.yourportfolio.com/blog/sample-post.html` |
 
 ### Internal Linking Structure
 
@@ -696,7 +694,7 @@ Each page has correct self-referential canonical URL:
 ```
 User-agent: *
 Allow: /
-Sitemap: https://yourdomain.com/sitemap.xml
+Sitemap: https://www.yourportfolio.com/sitemap.xml
 Crawl-delay: 1
 ```
 
@@ -719,7 +717,7 @@ Before going live with the portfolio, complete these essential items:
 
 #### 1. Domain & Hosting Setup
 ```
-[ ] Update all "yourdomain.com" references to actual domain
+[x] Update all "yourdomain.com" references to actual domain (replaced with https://www.yourportfolio.com)
     Files to update:
     - All HTML files: meta tags, og:url, canonical URLs
     - sitemap.xml: all <loc> entries
@@ -748,7 +746,7 @@ Before going live with the portfolio, complete these essential items:
     - Update Twitter/X handle
     
 [ ] Contact Information
-    - Update email addresses (hello@yourdomain.com)
+    - Update email addresses (aymen@yourportfolio.com)
     - Update phone number (if applicable)
     - Update contact form submission handler
     
@@ -759,7 +757,7 @@ Before going live with the portfolio, complete these essential items:
     
 [ ] Replace Domain References
     Global search and replace:
-    Find: "yourdomain.com"
+    Find: "yourdomain.com" (replaced with https://www.yourportfolio.com)
     Replace with: actual domain
     
     Files to verify:
@@ -789,7 +787,7 @@ Before going live with the portfolio, complete these essential items:
     - Enable brotli compression (if supported, 20% better than gzip)
     - Verify via curl:
     
-    $ curl -I -H "Accept-Encoding: gzip,deflate" https://yourdomain.com/
+    $ curl -I -H "Accept-Encoding: gzip,deflate" https://www.yourportfolio.com/
     # Should show: Content-Encoding: gzip or brotli
     
 [ ] Configure Browser Caching Headers
@@ -817,8 +815,8 @@ Before going live with the portfolio, complete these essential items:
 ```
 [ ] Submit Sitemap to Google Search Console
     1. Sign in to https://search.google.com/search-console
-    2. Add property for yourdomain.com
-    3. Submit sitemap: yourdomain.com/sitemap.xml
+    2. Add property for https://www.yourportfolio.com
+    3. Submit sitemap: https://www.yourportfolio.com/sitemap.xml
     4. Monitor crawl statistics
     
 [ ] Submit Sitemap to Bing Webmaster Tools
@@ -1033,7 +1031,7 @@ All 9 HTML pages verified for:
 ## Next Steps
 
 1. **Update Domain References**
-   - Replace all "yourdomain.com" with actual domain
+   - Replace all "yourdomain.com" with https://www.yourportfolio.com
    - Update sitemap.xml and robots.txt
 
 2. **Run Final Tests**
