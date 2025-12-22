@@ -44,7 +44,7 @@
   --text-secondary: #64748b;
   --text-muted: #94a3b8;
   --text-light: #cbd5e1;
-  
+
   /* Light Card Effects */
   --glass-bg: #ffffff;
   --glass-border: #f1f5f9;
@@ -53,7 +53,7 @@
   --backdrop-blur: blur(12px);
   --glass-blur: none;
   --glass-blur-heavy: none;
-  
+
   /* Spacing Scale (Mobile-First) */
   --space-xs: 0.25rem;
   --space-sm: 0.5rem;
@@ -63,11 +63,11 @@
   --space-2xl: 4rem;
   --space-3xl: 5rem;
   --space-4xl: 6rem;
-  
+
   /* Typography Scale */
   --font-primary: 'Inter', system-ui, -apple-system, sans-serif;
   --font-mono: 'Fira Code', 'Courier New', monospace;
-  
+
   --text-xs: clamp(0.75rem, 1vw, 0.875rem);
   --text-sm: clamp(0.875rem, 1.5vw, 1rem);
   --text-base: clamp(1rem, 2vw, 1.125rem);
@@ -78,48 +78,52 @@
   --text-4xl: clamp(2.25rem, 5vw, 2.5rem);
   --text-5xl: clamp(2.5rem, 6vw, 3rem);
   --text-6xl: clamp(3rem, 7vw, 3.75rem);
-  
+
   /* Border Radius Scale */
   --radius-sm: 8px;
   --radius-md: 12px;
   --radius-lg: 32px;
   --radius-xl: 40px;
   --radius-full: 9999px;
-  
+
   /* Container */
-  --container-max-width: 768px;
-  
+  --container-max-width: 1280px;
+
   /* Responsive Breakpoints */
   --bp-sm: 640px;
   --bp-md: 768px;
   --bp-lg: 1024px;
   --bp-xl: 1280px;
   --bp-2xl: 1536px;
-  
+
   /* Transitions & Animations */
   --transition-fast: 0.15s ease;
   --transition-base: 0.3s ease;
   --transition-slow: 0.5s ease;
   --transition-colors: color 0.3s ease, background-color 0.3s ease, border-color 0.3s ease;
   --transition-transform: transform 0.3s ease;
-  
+
   /* Shadow Scale (Light Theme) */
   --shadow-sm: 0 1px 2px rgba(0, 0, 0, 0.05);
   --shadow-md: 0 4px 6px rgba(0, 0, 0, 0.07);
   --shadow-lg: 0 10px 15px rgba(0, 0, 0, 0.1);
   --shadow-xl: 0 20px 25px rgba(0, 0, 0, 0.1);
   --shadow-blue: 0 10px 25px rgba(37, 99, 235, 0.15);
-  
+
   /* Z-Index Scale */
   --z-base: 1;
   --z-dropdown: 100;
   --z-sticky: 200;
   --z-modal: 1000;
   --z-tooltip: 1100;
+
+  /* Component Specific */
+  --nav-bg: rgba(255, 255, 255, 0.8);
+  --input-bg: #ffffff;
 }
 
 /* Dark Theme Fallback */
-[data-theme="dark"],
+:root[data-theme="dark"],
 .dark {
   /* Color Palette: Dark Navy/Black + Cyan Accents */
   --bg-primary: #050508;
@@ -130,18 +134,35 @@
   --text-secondary: #a8a8c0;
   --text-muted: #707088;
   --text-light: #505570;
-  
+
   /* Dark Card Effects */
   --glass-bg: rgba(255, 255, 255, 0.03);
   --glass-border: rgba(255, 255, 255, 0.15);
   --border-light: rgba(255, 255, 255, 0.08);
   --glass-shadow: 0 12px 40px rgba(0, 0, 0, 0.4);
   --backdrop-blur: blur(16px);
-  
+
   /* Shadow Scale (Dark Theme) */
   --shadow-sm: 0 2px 8px rgba(0, 0, 0, 0.4);
   --shadow-md: 0 4px 16px rgba(0, 0, 0, 0.5);
   --shadow-lg: 0 8px 32px rgba(0, 0, 0, 0.6);
   --shadow-xl: 0 12px 48px rgba(0, 0, 0, 0.7);
   --shadow-blue: 0 10px 25px rgba(0, 229, 255, 0.2);
+
+  /* Component Specific Overrides */
+  --nav-bg: rgba(5, 5, 8, 0.8);
+  --input-bg: rgba(255, 255, 255, 0.05);
+
+  /* Industrial & Aurora Design System (Dark Mode Only) */
+  --bg-aurora: radial-gradient(circle at 15% 50%, rgba(76, 29, 149, 0.15), transparent 25%),
+    radial-gradient(circle at 85% 30%, rgba(0, 229, 255, 0.15), transparent 25%);
+
+  --noise-pattern: url("data:image/svg+xml,%3Csvg viewBox='0 0 200 200' xmlns='http://www.w3.org/2000/svg'%3E%3Cfilter id='noiseFilter'%3E%3CfeTurbulence type='fractalNoise' baseFrequency='0.65' numOctaves='3' stitchTiles='stitch'/%3E%3C/filter%3E%3Crect width='100%25' height='100%25' filter='url(%23noiseFilter)' opacity='0.07'/%3E%3C/svg%3E");
+
+  --border-glow: 1px solid rgba(0, 229, 255, 0.3);
+  --glass-industrial: rgba(255, 255, 255, 0.03);
+
+  /* Advanced Animation Tokens */
+  --ease-elastic: cubic-bezier(0.175, 0.885, 0.32, 1.275);
+  --ease-squish: cubic-bezier(0.68, -0.6, 0.32, 1.6);
 }

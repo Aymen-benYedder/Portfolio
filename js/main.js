@@ -4,8 +4,16 @@
  * Uses IIFE pattern for encapsulation and DOMContentLoaded lifecycle management
  */
 
-(function() {
+(function () {
   'use strict';
+
+  /**
+   * Detect if device is mobile/touch-capable
+   * Used to conditionally initialize mouse-dependent effects
+   */
+  function isMobileDevice() {
+    return 'ontouchstart' in window || navigator.maxTouchPoints > 0 || navigator.msMaxTouchPoints > 0;
+  }
 
   /**
    * Smooth Scrolling for Anchor Links
@@ -13,17 +21,17 @@
    */
   function initSmoothScroll() {
     document.querySelectorAll('a[href^="#"]').forEach(anchor => {
-      anchor.addEventListener('click', function(e) {
+      anchor.addEventListener('click', function (e) {
         const href = this.getAttribute('href');
         // Skip if href is just '#'
         if (href === '#') return;
-        
+
         const target = document.querySelector(href);
         if (target) {
           e.preventDefault();
-          target.scrollIntoView({ 
-            behavior: 'smooth', 
-            block: 'start' 
+          target.scrollIntoView({
+            behavior: 'smooth',
+            block: 'start'
           });
         }
       });
@@ -37,12 +45,12 @@
    */
   function initMobileNav() {
     const navToggle = document.querySelector('.nav-toggle');
-    const navMenu = document.querySelector('.nav-menu');
+    const navMenu = document.querySelector('.mobile-menu-dropdown');
 
     if (!navToggle || !navMenu) return;
 
     // Toggle menu on button click
-    navToggle.addEventListener('click', function() {
+    navToggle.addEventListener('click', function () {
       const isExpanded = navToggle.getAttribute('aria-expanded') === 'true';
       navToggle.setAttribute('aria-expanded', !isExpanded);
       navMenu.classList.toggle('active');
@@ -50,14 +58,14 @@
 
     // Close menu when link is clicked
     document.querySelectorAll('.nav-link').forEach(link => {
-      link.addEventListener('click', function() {
+      link.addEventListener('click', function () {
         navToggle.setAttribute('aria-expanded', 'false');
         navMenu.classList.remove('active');
       });
     });
 
     // Close menu on ESC key
-    document.addEventListener('keydown', function(e) {
+    document.addEventListener('keydown', function (e) {
       if (e.key === 'Escape') {
         navToggle.setAttribute('aria-expanded', 'false');
         navMenu.classList.remove('active');
@@ -65,8 +73,8 @@
     });
 
     // Close menu on outside click
-    document.addEventListener('click', function(e) {
-      if (!e.target.closest('.nav') && navMenu.classList.contains('active')) {
+    document.addEventListener('click', function (e) {
+      if (!e.target.closest('.nav-container') && navMenu.classList.contains('active')) {
         navToggle.setAttribute('aria-expanded', 'false');
         navMenu.classList.remove('active');
       }
@@ -81,7 +89,7 @@
   // Utility: Debounce helper
   function debounce(fn, wait) {
     let timeout;
-    return function(...args) {
+    return function (...args) {
       const later = () => {
         timeout = null;
         fn.apply(this, args);
@@ -93,7 +101,7 @@
 
   function initScrollAnimations() {
     const animateElements = document.querySelectorAll('.animate-on-scroll');
-    
+
     if (animateElements.length === 0) return;
 
     // Feature detection for IntersectionObserver
@@ -104,7 +112,7 @@
           rootMargin: '0px 0px -50px 0px'
         };
 
-        const observer = new IntersectionObserver(function(entries) {
+        const observer = new IntersectionObserver(function (entries) {
           entries.forEach(entry => {
             if (entry.isIntersecting) {
               entry.target.classList.add('animated');
@@ -133,10 +141,10 @@
   function initContactForm() {
     const form = document.getElementById('contact-form');
     if (!form) return;
-    
+
     form.addEventListener('submit', async (e) => {
       e.preventDefault();
-      
+
       // Get form data
       const formData = new FormData(form);
       const data = {
@@ -145,19 +153,19 @@
         subject: formData.get('subject'),
         message: formData.get('message')
       };
-      
+
       // Validate form
       if (!data.name || !data.email || !data.subject || !data.message) {
         alert('Please fill in all fields.');
         return;
       }
-      
+
       // Disable submit button during request
       const submitBtn = form.querySelector('button[type="submit"]');
       const originalText = submitBtn.textContent;
       submitBtn.disabled = true;
       submitBtn.textContent = 'Sending...';
-      
+
       try {
         // Send email via backend endpoint
         const response = await fetch('/api/send-email', {
@@ -167,7 +175,7 @@
           },
           body: JSON.stringify(data)
         });
-        
+
         if (response.ok) {
           // Success feedback
           submitBtn.textContent = '✓ Message Sent!';
@@ -196,16 +204,16 @@
    */
   function initActiveNav() {
     const navLinks = document.querySelectorAll('.nav-link[href^="#"]');
-    
+
     if (navLinks.length === 0) return;
 
     function updateActiveLink() {
       let current = '';
-      
+
       navLinks.forEach(link => {
         const href = link.getAttribute('href');
         if (href === '#' || href === '') return;
-        
+
         const section = document.querySelector(href);
         if (section) {
           const rect = section.getBoundingClientRect();
@@ -243,11 +251,11 @@
    */
   function initScrollToTop() {
     const scrollButton = document.getElementById('scroll-to-top');
-    
+
     if (!scrollButton) return;
 
     const handler = debounce(() => {
-      window.requestAnimationFrame(function() {
+      window.requestAnimationFrame(function () {
         if (window.scrollY > 300) {
           scrollButton.classList.add('visible');
         } else {
@@ -262,13 +270,39 @@
       window.addEventListener('scroll', handler);
     }
 
-    scrollButton.addEventListener('click', function(e) {
+    scrollButton.addEventListener('click', function (e) {
       e.preventDefault();
-      window.scrollTo({ 
-        top: 0, 
-        behavior: 'smooth' 
+      window.scrollTo({
+        top: 0,
+        behavior: 'smooth'
       });
     });
+  }
+
+  /**
+   * Navigation Scroll Effect
+   * Changes nav styling when user scrolls down
+   */
+  function initNavScrollEffect() {
+    const navContainer = document.querySelector('.nav-container');
+    
+    if (!navContainer) return;
+
+    const handler = debounce(() => {
+      window.requestAnimationFrame(function () {
+        if (window.scrollY > 100) {
+          navContainer.classList.add('scrolled');
+        } else {
+          navContainer.classList.remove('scrolled');
+        }
+      });
+    }, 50);
+
+    try {
+      window.addEventListener('scroll', handler, { passive: true });
+    } catch (e) {
+      window.addEventListener('scroll', handler);
+    }
   }
 
   /**
@@ -278,23 +312,23 @@
    */
   function initFAQAccordion() {
     const faqQuestions = document.querySelectorAll('.faq-question');
-    
+
     if (faqQuestions.length === 0) return;
 
     faqQuestions.forEach(question => {
       const faqItem = question.closest('.faq-item');
       const toggle = question.querySelector('.faq-toggle');
-      
+
       if (faqItem && toggle) {
         // Initialize aria-expanded state
         const isActive = faqItem.classList.contains('active');
         toggle.setAttribute('aria-expanded', isActive);
-        
+
         // Add click handler to question element
-        question.addEventListener('click', function(e) {
+        question.addEventListener('click', function (e) {
           // Prevent event bubbling
           e.stopPropagation();
-          
+
           // Toggle the active state
           faqItem.classList.toggle('active');
           const newState = faqItem.classList.contains('active');
@@ -310,11 +344,11 @@
    */
   function initReadingProgressBar() {
     const progressBar = document.getElementById('reading-progress');
-    
+
     if (!progressBar) return;
 
     const handler = debounce(() => {
-      window.requestAnimationFrame(function() {
+      window.requestAnimationFrame(function () {
         try {
           const docHeight = document.documentElement.scrollHeight - window.innerHeight;
           const scrolled = docHeight > 0 ? (window.scrollY / docHeight) * 100 : 0;
@@ -345,7 +379,7 @@
       if (!tocContainer || !article) return;
 
       const headings = Array.from(article.querySelectorAll('h2'));
-      
+
       if (headings.length === 0) return;
 
       // Generate TOC
@@ -354,7 +388,7 @@
         if (!heading.id) {
           heading.id = `heading-${index}`;
         }
-        
+
         const li = document.createElement('li');
         const a = document.createElement('a');
         a.href = `#${heading.id}`;
@@ -368,7 +402,7 @@
 
       // Highlight current section (debounced + RAF)
       const handler = debounce(() => {
-        window.requestAnimationFrame(function() {
+        window.requestAnimationFrame(function () {
           let current = '';
           headings.forEach(heading => {
             const rect = heading.getBoundingClientRect();
@@ -415,7 +449,7 @@
     document.querySelectorAll('.code-block').forEach(block => {
       // Only add button if not already present
       if (block.querySelector('.code-block-copy')) return;
-      
+
       const copyButton = document.createElement('button');
       copyButton.className = 'code-block-copy';
       copyButton.setAttribute('aria-label', 'Copy code to clipboard');
@@ -430,7 +464,7 @@
 
       block.appendChild(copyButton);
 
-      copyButton.addEventListener('click', function(e) {
+      copyButton.addEventListener('click', function (e) {
         e.preventDefault();
         const code = block.querySelector('code')?.textContent || block.textContent;
 
@@ -455,19 +489,19 @@
 
         // Prefer modern Clipboard API
         if (navigator.clipboard && navigator.clipboard.writeText) {
-          navigator.clipboard.writeText(code).then(function() {
+          navigator.clipboard.writeText(code).then(function () {
             copyButton.textContent = 'Copied!';
             copyButton.classList.add('copied');
             announce('Code copied to clipboard');
-            setTimeout(function() {
+            setTimeout(function () {
               copyButton.textContent = 'Copy';
               copyButton.classList.remove('copied');
             }, 2000);
-          }).catch(function(err) {
+          }).catch(function (err) {
             console.error('Failed to copy with Clipboard API:', err);
             copyButton.textContent = 'Error';
             announce('Copy failed');
-            setTimeout(function() { copyButton.textContent = 'Copy'; }, 1500);
+            setTimeout(function () { copyButton.textContent = 'Copy'; }, 1500);
           });
           return;
         }
@@ -487,17 +521,17 @@
             copyButton.textContent = 'Copied!';
             copyButton.classList.add('copied');
             announce('Code copied to clipboard');
-            setTimeout(function() { copyButton.textContent = 'Copy'; copyButton.classList.remove('copied'); }, 2000);
+            setTimeout(function () { copyButton.textContent = 'Copy'; copyButton.classList.remove('copied'); }, 2000);
           } else {
             copyButton.textContent = 'Error';
             announce('Copy not supported');
-            setTimeout(function() { copyButton.textContent = 'Copy'; }, 1500);
+            setTimeout(function () { copyButton.textContent = 'Copy'; }, 1500);
           }
         } catch (err) {
           console.error('Copy fallback failed:', err);
           copyButton.textContent = 'Not supported';
           announce('Copy not supported');
-          setTimeout(function() { copyButton.textContent = 'Copy'; }, 1500);
+          setTimeout(function () { copyButton.textContent = 'Copy'; }, 1500);
         }
       });
     });
@@ -533,7 +567,7 @@
     }
 
     buttons.forEach(btn => {
-      btn.addEventListener('click', function() {
+      btn.addEventListener('click', function () {
         buttons.forEach(b => { b.classList.remove('active'); b.setAttribute('aria-pressed', 'false'); });
         btn.classList.add('active');
         btn.setAttribute('aria-pressed', 'true');
@@ -547,45 +581,30 @@
   }
 
   /**
-   * Theme Toggle (Light/Dark)
-   * Handles user preference switching and persistence
-   */
+  /* Theme Toggle (Light/Dark) - Desktop & Mobile Synchronized */
   function initThemeToggle() {
-    const toggleBtn = document.getElementById('theme-toggle');
-    const sunIcon = toggleBtn?.querySelector('.sun-icon');
-    const moonIcon = toggleBtn?.querySelector('.moon-icon');
+    const toggleBtns = document.querySelectorAll('#theme-toggle, .mobile-theme-toggle');
     const html = document.documentElement;
-    
-    if (!toggleBtn) return;
 
-    // Check saved preference or system preference
+    if (toggleBtns.length === 0) return;
+
+    // 1. Initialize State (apply once)
     const savedTheme = localStorage.getItem('theme');
-    const systemDark = window.matchMedia('(prefers-color-scheme: dark)').matches;
-    
-    if (savedTheme === 'dark' || (!savedTheme && systemDark)) {
-      html.setAttribute('data-theme', 'dark');
-      if(sunIcon) sunIcon.style.display = 'none';
-      if(moonIcon) moonIcon.style.display = 'block';
-    } else {
-      html.setAttribute('data-theme', 'light');
-      if(sunIcon) sunIcon.style.display = 'block';
-      if(moonIcon) moonIcon.style.display = 'none';
-    }
+    const defaultTheme = savedTheme || 'dark';
 
-    toggleBtn.addEventListener('click', () => {
+    html.setAttribute('data-theme', defaultTheme);
+
+    // 2. Toggle Handler - attach to all buttons
+    const toggleHandler = () => {
       const currentTheme = html.getAttribute('data-theme');
       const newTheme = currentTheme === 'dark' ? 'light' : 'dark';
-      
+
       html.setAttribute('data-theme', newTheme);
       localStorage.setItem('theme', newTheme);
-      
-      if (newTheme === 'dark') {
-        if(sunIcon) sunIcon.style.display = 'none';
-        if(moonIcon) moonIcon.style.display = 'block';
-      } else {
-        if(sunIcon) sunIcon.style.display = 'block';
-        if(moonIcon) moonIcon.style.display = 'none';
-      }
+    };
+
+    toggleBtns.forEach(btn => {
+      btn.addEventListener('click', toggleHandler);
     });
   }
 
@@ -594,8 +613,8 @@
    * Applies a subtle parallax rotation based on mouse position
    */
   function initTiltEffect() {
-    const cards = document.querySelectorAll('.project-card, .work-card, .glass-card, .executive-summary-card');
-    
+    const cards = document.querySelectorAll('.glass-card, .glass-card-dark, .work-card, .project-card, .executive-summary-card, .blog-card, .testimonial-card, .language-card, .capabilities-card, .related-article-card, .education-item');
+
     if (cards.length === 0) return;
 
     cards.forEach(card => {
@@ -603,25 +622,84 @@
       // Wrap content if not already wrapped (to separate frame from content transform if needed, 
       // but for simple tilt we can transform the card itself or a direct child)
       // For this implementation, we'll tilt the card itself but reset on leave.
-      
-      card.addEventListener('mousemove', function(e) {
+
+      card.addEventListener('mousemove', function (e) {
         const rect = card.getBoundingClientRect();
         const x = e.clientX - rect.left;
         const y = e.clientY - rect.top;
-        
+
         // Calculate rotation (max 5 degrees)
         const xPct = (x / rect.width) - 0.5;
         const yPct = (y / rect.height) - 0.5;
-        
+
         // Reverse signs for "looking at" effect
-        const rotateX = yPct * -10; 
+        const rotateX = yPct * -10;
         const rotateY = xPct * 10;
-        
+
         card.style.transform = `perspective(1000px) rotateX(${rotateX}deg) rotateY(${rotateY}deg) scale3d(1.02, 1.02, 1.02)`;
       });
-      
-      card.addEventListener('mouseleave', function() {
+
+      card.addEventListener('mouseleave', function () {
         card.style.transform = 'perspective(1000px) rotateX(0) rotateY(0) scale3d(1, 1, 1)';
+      });
+    });
+  }
+
+  /**
+   * Interactive Spotlight for Glass Cards
+   * Tracks mouse position to create a dynamic gradient light effect
+   */
+  function initSpotlightEffect() {
+    const cards = document.querySelectorAll('.glass-card, .glass-card-dark, .work-card, .project-card, .testimonial-card, .capabilities-card, .blog-card, .language-card, .executive-summary-card, .related-article-card, .education-item');
+
+    if (cards.length === 0) return;
+
+    // Use a singlemousemove listener on body for performance, or per-card if specific container needed.
+    // Here we'll attach to cards for localized coordinates.
+    cards.forEach(card => {
+      card.addEventListener('mousemove', function (e) {
+        const rect = card.getBoundingClientRect();
+        const x = e.clientX - rect.left;
+        const y = e.clientY - rect.top;
+
+        card.style.setProperty('--mouse-x', `${x}px`);
+        card.style.setProperty('--mouse-y', `${y}px`);
+      });
+    });
+  }
+
+  /**
+   * Magnetic Typography Effect
+   * Physically attracts text elements to the mouse cursor
+   */
+  function initMagneticEffect() {
+    const magnets = document.querySelectorAll('.magnetic-text');
+
+    if (magnets.length === 0) return;
+
+    magnets.forEach(magnet => {
+      magnet.addEventListener('mousemove', function (e) {
+        const rect = magnet.getBoundingClientRect();
+        // Calculate center of the element
+        const centerX = rect.left + rect.width / 2;
+        const centerY = rect.top + rect.height / 2;
+
+        // Calculate distance from center
+        const deltaX = e.clientX - centerX;
+        const deltaY = e.clientY - centerY;
+
+        // Strength of the pull (0.5 means move half the distance to cursor)
+        const strength = 0.5;
+
+        // Move the element
+        magnet.style.transform = `translate(${deltaX * strength}px, ${deltaY * strength}px)`;
+        magnet.style.transition = 'transform 0.1s cubic-bezier(0.2, 0.8, 0.2, 1)'; // Snappy movement
+      });
+
+      magnet.addEventListener('mouseleave', function () {
+        // Snap back to original position
+        magnet.style.transform = 'translate(0, 0)';
+        magnet.style.transition = 'transform 0.5s cubic-bezier(0.2, 0.8, 0.2, 1)'; // Smooth release
       });
     });
   }
@@ -639,13 +717,20 @@
       initActiveNav();
       initContactForm();
       initScrollToTop();
+      initNavScrollEffect();
       initFAQAccordion();
       initReadingProgressBar();
       initTableOfContents();
       initCopyCodeButton();
       initBlogFilter();
       initThemeToggle();
-      initTiltEffect();
+
+      // Desktop-only effects (mouse-based interactions)
+      if (!isMobileDevice()) {
+        initTiltEffect();
+        initSpotlightEffect();
+        initMagneticEffect();
+      }
     } catch (err) {
       console.error('Initialization error in initAll:', err);
     }

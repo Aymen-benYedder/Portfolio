@@ -1,6 +1,6 @@
 Aymen ben Yedder
-Project Manager & Devops
-El May, Midoun, Médenine 4175, Tunisia | (+216) 25200688 | aymen@yourportfolio.com
+Project Manager & DevOps
+El May, Midoun, Médenine 4175, Tunisia | (+216) 25200688 | aymen.ben.yedder@mail.com
 EXPERIENCE
 Alizeth, Mednine - DevOps & Project Manager
 March 2023 - PRESENT

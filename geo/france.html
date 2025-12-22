@@ -136,39 +136,106 @@
 <body>
   <!-- Skip to Main Content -->
   <a href="#main" class="skip-link">Passer au contenu principal</a>
-  
+
   <!-- Navigation -->
-  <nav class="nav">
-    <div class="nav-container">
-      <a href="../index.html" class="nav-logo">Dev</a>
-      <button class="nav-toggle" aria-label="Basculer la navigation" aria-expanded="false">
-        <span>☰</span>
-      </button>
-      <ul class="nav-menu">
-        <li class="nav-item">
-          <a href="../index.html" class="nav-link">Accueil</a>
-        </li>
-        <li class="nav-item">
-          <a href="../index.html#skills" class="nav-link">Compétences</a>
-        </li>
-        <li class="nav-item">
-          <a href="../index.html#experience" class="nav-link">Experience</a>
-        </li>
-        <li class="nav-item">
-          <a href="../services/mern-development.html" class="nav-link">MERN Stack</a>
-        </li>
-        <li class="nav-item">
-          <a href="../services/wordpress-development.html" class="nav-link">WordPress</a>
-        </li>
-        <li class="nav-item">
-          <a href="../blog/index.html" class="nav-link">Blog</a>
-        </li>
-        <li class="nav-item">
-          <a href="#contact" class="nav-link">Contact</a>
-        </li>
-      </ul>
-    </div>
-  </nav>
+  <div class="nav-container">
+      <nav class="nav-hub">
+          <!-- Brand -->
+          <div class="nav-logo-area">
+              <a href="../index.html" class="nav-logo">AYMEN<span>.DEV</span></a>
+          </div>
+
+          <!-- Links -->
+          <ul class="nav-links">
+              <li class="nav-item"><a href="../index.html" class="nav-link">Accueil</a></li>
+              <li class="nav-item"><a href="../index.html#skills" class="nav-link">Compétences</a></li>
+              <li class="nav-item"><a href="../index.html#experience" class="nav-link">Expérience</a></li>
+              <li class="nav-item"><a href="../services/mern-development.html" class="nav-link">MERN Stack</a></li>
+              <li class="nav-item"><a href="../services/wordpress-development.html" class="nav-link">WordPress</a></li>
+              <li class="nav-item"><a href="../blog/index.html" class="nav-link">Blog</a></li>
+              <li class="nav-item"><a href="#contact" class="nav-link">Contact</a></li>
+              <!-- Mobile Only (Hidden on Desktop) -->
+              <li class="nav-item mobile-item"><a href="#contact" class="nav-link">Contact</a></li>
+          </ul>
+
+          <!-- Actions -->
+          <div class="nav-actions">
+              <button id="theme-toggle" class="theme-btn-mini desktop-only" aria-label="Basculer le mode sombre">
+                  <svg class="sun-icon" width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor"
+                      stroke-width="2" stroke-linecap="round" stroke-linejoin="round">
+                      <circle cx="12" cy="12" r="5"></circle>
+                      <line x1="12" y1="1" x2="12" y2="3"></line>
+                      <line x1="12" y1="21" x2="12" y2="23"></line>
+                      <line x1="4.22" y1="4.22" x2="5.64" y2="5.64"></line>
+                      <line x1="18.36" y1="18.36" x2="19.78" y2="19.78"></line>
+                      <line x1="1" y1="12" x2="3" y2="12"></line>
+                      <line x1="21" y1="12" x2="23" y2="12"></line>
+                      <line x1="4.22" y1="19.78" x2="5.64" y2="18.36"></line>
+                      <line x1="18.36" y1="5.64" x2="19.78" y2="4.22"></line>
+                  </svg>
+                  <svg class="moon-icon" width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor"
+                      stroke-width="2" stroke-linecap="round" stroke-linejoin="round" style="display:none;">
+                      <path d="M21 12.79A9 9 0 1 1 11.21 3 7 7 0 0 0 21 12.79z"></path>
+                  </svg>
+              </button>
+
+              <!-- Mobile Toggle -->
+              <button class="nav-toggle mobile-only" aria-label="Ouvrir le menu" aria-expanded="false">
+                  <svg width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
+                      <path d="M3 12h18M3 6h18M3 18h18" />
+                  </svg>
+              </button>
+          </div>
+
+          <!-- CTA -->
+          <div class="nav-cta desktop-only">
+              <a href="../index.html#contact" class="btn-spotlight">Parlons-en</a>
+          </div>
+      </nav>
+
+      <!-- Mobile Dropdown Menu -->
+      <div class="nav-menu mobile-menu-dropdown">
+          <ul class="mobile-nav-links">
+              <li><a href="../index.html" class="nav-link">Accueil</a></li>
+              <li><a href="../index.html#skills" class="nav-link">Compétences</a></li>
+              <li><a href="../index.html#experience" class="nav-link">Expérience</a></li>
+              <li><a href="../services/mern-development.html" class="nav-link">MERN Stack</a></li>
+              <li><a href="../services/wordpress-development.html" class="nav-link">WordPress</a></li>
+              <li><a href="../blog/index.html" class="nav-link">Blog</a></li>
+              <li><a href="#contact" class="nav-link">Contact</a></li>
+
+              <!-- Divider -->
+              <li style="border-top: 1px solid var(--border-light); margin: 8px 0; padding-top: 8px;"></li>
+
+              <!-- Mobile Actions (Regrouped) -->
+              <li class="mobile-action-item">
+                  <button class="mobile-theme-toggle nav-link" style="justify-content: center; width: 100%;">
+                      <span style="margin-right: 8px;">Basculer le thème</span>
+                      <svg class="sun-icon" width="18" height="18" viewBox="0 0 24 24" fill="none"
+                          stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round">
+                          <circle cx="12" cy="12" r="5"></circle>
+                          <line x1="12" y1="1" x2="12" y2="3"></line>
+                          <line x1="12" y1="21" x2="12" y2="23"></line>
+                          <line x1="4.22" y1="4.22" x2="5.64" y2="5.64"></line>
+                          <line x1="18.36" y1="18.36" x2="19.78" y2="19.78"></line>
+                          <line x1="1" y1="12" x2="3" y2="12"></line>
+                          <line x1="21" y1="12" x2="23" y2="12"></line>
+                          <line x1="4.22" y1="19.78" x2="5.64" y2="18.36"></line>
+                          <line x1="18.36" y1="5.64" x2="19.78" y2="4.22"></line>
+                      </svg>
+                      <svg class="moon-icon" width="18" height="18" viewBox="0 0 24 24" fill="none"
+                          stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"
+                          style="display:none;">
+                          <path d="M21 12.79A9 9 0 1 1 11.21 3 7 7 0 0 0 21 12.79z"></path>
+                      </svg>
+                  </button>
+              </li>
+              <li>
+                  <a href="../index.html#contact" class="btn-spotlight" style="justify-content: center; width: 100%;">Parlons-en</a>
+              </li>
+          </ul>
+      </div>
+  </div>
   
   <!-- Breadcrumb Navigation -->
   <div style="background: var(--bg-secondary); border-bottom: 1px solid var(--glass-border); padding: var(--space-md) 0;">
@@ -185,12 +252,56 @@
   <main id="main">
     <!-- Hero Section -->
     <section class="hero" id="home">
-      <div class="hero-content">
-        <h1 class="hero-title">Développeur Full-Stack Expert en France</h1>
-        <p class="hero-subtitle">Solutions MERN Stack et WordPress haute performance pour entreprises à <span class="geo-target">France</span> (Paris, Lyon, Marseille). Expertise locale, standards internationaux.</p>
-        <div class="flex flex-center gap-md" style="flex-wrap: wrap; justify-content: center;">
-          <a href="#contact" class="btn btn-primary btn-lg">Démarrer Votre Projet</a>
-          <a href="../services/mern-development.html" class="btn btn-secondary btn-lg">Nos Services</a>
+      <!-- 3D Perspective Grid Background -->
+      <div class="hero-grid-bg"></div>
+
+      <div class="container hero-container">
+        <!-- Top Status Bar -->
+        <div class="hero-status-bar fade-in-up">
+          <div class="status-indicator">
+            <span class="status-dot"></span>
+            <span class="status-text">STATUT LOCALISATION: AU SERVICE DE LA FRANCE</span>
+          </div>
+        </div>
+
+        <!-- Center Stage: Massive Typography -->
+        <div class="hero-center-stage">
+          <h1 class="hero-title ghost-text magnetic-text">
+            EXPERTISE<br>
+            <span class="text-stroke">FRANÇAISE</span>
+          </h1>
+          <p class="hero-subtitle ghost-text delay-1 magnetic-text">
+            SOLUTIONS CONFORMES RGPD POUR PARIS, LYON & MARSEILLE
+          </p>
+        </div>
+
+        <!-- Bottom Control Deck (Glass Bar) -->
+        <div class="hero-control-deck fade-in-up delay-300">
+          <!-- Stat 1 -->
+          <div class="deck-item">
+            <span class="deck-label">COUVERTURE</span>
+            <span class="deck-value">NATIONALE</span>
+          </div>
+
+          <div class="deck-divider"></div>
+
+          <!-- Stat 2 -->
+          <div class="deck-item">
+            <span class="deck-label">CONFORMITÉ</span>
+            <span class="deck-value">RGPD COMPLIANT</span>
+          </div>
+
+          <div class="deck-divider"></div>
+
+          <!-- Actions -->
+          <div class="deck-actions">
+            <a href="#contact" class="btn btn-sm btn-glass">
+              <span>DÉMARRER</span>
+            </a>
+            <a href="../services/mern-development.html" class="btn btn-sm btn-primary">
+              <span>NOS SERVICES</span>
+            </a>
+          </div>
         </div>
       </div>
     </section>
@@ -432,52 +543,73 @@
     </section>
   </main>
   
-  <!-- Footer -->
-  <footer style="background: var(--bg-secondary); border-top: 1px solid var(--glass-border); padding: var(--space-2xl) 0; margin-top: var(--space-2xl);">
+  <!-- Footer: Industrial Premium Design -->
+  <footer class="footer-industrial">
     <div class="container">
-      <div class="grid grid-cols-1">
-        <div>
-          <h3 style="margin-bottom: var(--space-md); color: var(--accent-primary);">À Propos</h3>
-          <p class="text-secondary" style="margin-bottom: var(--space-lg);">Développeur full-stack basé en France, spécialisé en développement MERN Stack et WordPress. Servant les entreprises à Paris, Lyon, Marseille et partout en France.</p>
-          <div style="display: flex; gap: var(--space-md); margin-bottom: var(--space-lg);">
-            <a href="https://github.com" class="nav-link" aria-label="Profil GitHub">GitHub</a>
-            <a href="https://linkedin.com" class="nav-link" aria-label="Profil LinkedIn">LinkedIn</a>
-            <a href="https://twitter.com" class="nav-link" aria-label="Profil Twitter">Twitter</a>
+      <div class="footer-grid">
+        <!-- Column 1: Brand & Philosophy -->
+        <div class="footer-col brand-col">
+          <a href="../index.html" class="footer-logo">
+            AYMEN<span class="text-accent">.DEV</span>
+          </a>
+          <p class="footer-desc">
+            Développeur full-stack basé en France. Servant les entreprises à Paris, Lyon, Marseille, et partout en France.
+          </p>
+          <div class="social-links">
+            <a href="https://github.com/yourusername" aria-label="GitHub" class="social-link">GH</a>
+            <a href="https://linkedin.com/in/yourprofile" aria-label="LinkedIn" class="social-link">LI</a>
+            <a href="https://twitter.com/yourhandle" aria-label="Twitter" class="social-link">TW</a>
           </div>
         </div>
-        
-        <div>
-          <h3 style="margin-bottom: var(--space-md); color: var(--accent-primary);">Liens Rapides</h3>
-          <ul style="list-style: none; margin-left: 0;">
-            <li style="margin-bottom: var(--space-sm);"><a href="../index.html" class="nav-link">Accueil</a></li>
-            <li style="margin-bottom: var(--space-sm);"><a href="../services/mern-development.html" class="nav-link">MERN Stack</a></li>
-            <li style="margin-bottom: var(--space-sm);"><a href="../services/wordpress-development.html" class="nav-link">WordPress</a></li>
-            <li><a href="#contact" class="nav-link">Contact</a></li>
+
+        <!-- Column 2: Navigation -->
+        <div class="footer-col">
+          <h4 class="footer-heading">NAVIGATION</h4>
+          <ul class="footer-links">
+            <li><a href="../index.html">Accueil</a></li>
+            <li><a href="../index.html#skills">Compétences</a></li>
+            <li><a href="../index.html#experience">Expérience</a></li>
+            <li><a href="../index.html#case-studies">Études de cas</a></li>
           </ul>
         </div>
-        
-        <div>
-          <h3 style="margin-bottom: var(--space-md); color: var(--accent-primary);">Contact</h3>
-          <p class="text-secondary" style="margin-bottom: var(--space-sm);">
-            <strong>Email:</strong><br>
-            <a href="mailto:aymen@yourportfolio.com" class="nav-link">aymen@yourportfolio.com</a>
-          </p>
-          <p class="text-secondary" style="margin-bottom: var(--space-sm);">
-            <strong>Localisation:</strong><br>
-            Basé en <span class="geo-target">France</span>
-          </p>
-          <p class="text-secondary">
-            <strong>Disponibilité:</strong><br>
-            <span style="color: var(--accent-primary); font-weight: 600;">Ouvert aux Projets</span>
-          </p>
+
+        <!-- Column 3: Services -->
+        <div class="footer-col">
+          <h4 class="footer-heading">SERVICES</h4>
+          <ul class="footer-links">
+            <li><a href="../services/mern-development.html">MERN Stack</a></li>
+            <li><a href="../services/wordpress-development.html">WordPress</a></li>
+            <li><a href="#contact">Conseil</a></li>
+            <li><a href="../blog/index.html">Articles Techniques</a></li>
+          </ul>
+        </div>
+
+        <!-- Column 4: Status -->
+        <div class="footer-col">
+          <h4 class="footer-heading">STATUT</h4>
+          <div class="status-widget">
+            <div class="status-row">
+              <span class="status-dot online"></span>
+              <span class="status-label">Ouvert aux projets</span>
+            </div>
+            <p class="status-note">
+              Actuellement accepte les nouveaux projets en France et en Europe.
+            </p>
+            <a href="#contact" class="btn btn-sm btn-primary">Démarrer un Projet</a>
+          </div>
         </div>
       </div>
-      
-      <div class="divider"></div>
-      
-      <p class="text-center text-muted" style="font-size: var(--text-sm);">
-        © <span id="year">2024</span> Développeur Full-Stack - France. Tous droits réservés.
-      </p>
+
+      <div class="footer-bottom">
+        <div class="footer-legal">
+          &copy; 2024 Aymen ben Yedder. Tous droits réservés.
+        </div>
+        <div class="footer-meta">
+          <span>V 2.0.4 (STABLE)</span>
+          <span class="separator">|</span>
+          <span>FRANCE</span>
+        </div>
+      </div>
     </div>
   </footer>
   
