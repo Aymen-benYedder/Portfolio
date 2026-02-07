@@ -826,7 +826,12 @@
                         and I'll
                         get back shortly.</p>
 
-                    <form id="contact-form" class="glass-card">
+                    <form id="contact-form" class="glass-card" action="https://api.web3forms.com/submit" method="POST">
+                        <!-- Web3Forms Access Key -->
+                        <input type="hidden" name="access_key" value="0888c0d1-a716-4c5d-a271-733bfb3be2bc">
+                        <input type="hidden" name="subject" value="New Contact Form Submission from Portfolio">
+                        <input type="hidden" name="from_name" value="Portfolio Contact Form">
+
                         <!-- Name Field -->
                         <div class="form-group">
                             <label for="name">Full Name</label>
@@ -840,10 +845,10 @@
                             <small>We'll respond within 24 hours.</small>
                         </div>
 
-                        <!-- Subject Field -->
+                        <!-- Project Type Field -->
                         <div class="form-group">
-                            <label for="subject">Project Type</label>
-                            <select id="subject" name="subject" required>
+                            <label for="projecttype">Project Type</label>
+                            <select id="projecttype" name="projecttype" required>
                                 <option value="">Select a project type</option>
                                 <option value="mern">MERN Stack Development</option>
                                 <option value="wordpress">WordPress Development</option>
@@ -871,17 +876,15 @@
 
                         <!-- Mobile Contact Options -->
                         <div class="mobile-contact-options">
-                            <a href="https://wa.me/21625200688" class="mobile-contact-btn whatsapp" aria-label="Contact via WhatsApp">
-                                <svg width="20" height="20" viewBox="0 0 24 24" fill="currentColor">
-                                    <path d="M17.472 14.382c-.297-.149-1.758-.867-2.03-.967-.273-.099-.471-.148-.67.15-.197.297-.767.966-.94 1.164-.173.199-.347.223-.644.075-.297-.15-1.255-.463-2.39-1.475-.883-.788-1.48-1.761-1.653-2.059-.173-.297-.018-.458.13-.606.134-.133.298-.347.446-.52.149-.174.198-.298.298-.497.099-.198.05-.371-.025-.52-.075-.149-.669-1.612-.916-2.207-.242-.579-.487-.5-.67-.51-.173-.008-.371-.01-.57-.01-.198 0-.52.074-.792.372-.272.297-1.04 1.016-1.04 2.479 0 1.462 1.065 2.875 1.213 3.074.149.198 2.096 3.2 5.076 4.487.709.306 1.262.489 1.694.625.712.227 1.36.195 1.871.118.571-.085 1.758-.719 2.006-1.413.248-.694.248-1.289.173-1.413-.074-.124-.272-.198-.57-.347m-5.421-7.403h-.004a9.87 9.87 0 00-4.947 1.21l-.355.192-.368-.06c-1.286-.23-2.428-.856-3.274-1.86L2.05 6.586c-.516 1.292-.446 2.933.379 4.298 1.065 1.766 2.904 2.942 4.9 2.942.9 0 1.823-.178 2.72-.533l.4-.2.422.07c1.402.25 2.89.86 4.023 1.81l1.622-1.623c-.71-.954-1.637-1.746-2.74-2.304-.944-.46-2.069-.73-3.237-.73z"/>
-                                </svg>
-                                WhatsApp
+                            <a href="https://wa.me/21625200688" class="mobile-contact-btn whatsapp" aria-label="Contact via WhatsApp" target="_blank" rel="noopener noreferrer">
+                                <img src="assets/img/Whatsapp.png" alt="WhatsApp" class="contact-icon">
+                                <span>WhatsApp</span>
                             </a>
                             <a href="tel:+21625200688" class="mobile-contact-btn phone" aria-label="Call us">
                                 <svg width="20" height="20" viewBox="0 0 24 24" fill="currentColor">
                                     <path d="M6.62 10.79c1.44 2.83 3.76 5.14 6.59 6.59l2.2-2.2c.27-.27.67-.36 1.02-.24 1.12.37 2.33.57 3.57.57.55 0 1 .45 1 1V20c0 .55-.45 1-1 1-9.39 0-17-7.61-17-17 0-.55.45-1 1-1h3.5c.55 0 1 .45 1 1 0 1.25.2 2.45.57 3.57.11.35.03.74-.25 1.02l-2.2 2.2z"/>
                                 </svg>
-                                Call
+                                <span>Call</span>
                             </a>
                         </div>
                     </form>
@@ -904,9 +907,16 @@
                         Specialized in high-scale infrastructure and operational resilience.
                     </p>
                     <div class="social-links">
-                        <a href="https://github.com/yourusername" aria-label="GitHub" class="social-link">GH</a>
-                        <a href="https://linkedin.com/in/yourprofile" aria-label="LinkedIn" class="social-link">LI</a>
-                        <a href="https://twitter.com/yourhandle" aria-label="Twitter" class="social-link">TW</a>
+                        <a href="https://github.com/Aymen-benYedder" aria-label="GitHub" class="social-link" target="_blank" rel="noopener noreferrer">
+                            <svg width="20" height="20" viewBox="0 0 24 24" fill="currentColor">
+                                <path d="M12 0c-6.626 0-12 5.373-12 12 0 5.302 3.438 9.8 8.207 11.387.599.111.793-.261.793-.577v-2.234c-3.338.726-4.033-1.416-4.033-1.416-.546-1.387-1.333-1.756-1.333-1.756-1.089-.745.083-.729.083-.729 1.205.084 1.839 1.237 1.839 1.237 1.07 1.834 2.807 1.304 3.492.997.107-.775.418-1.305.762-1.604-2.665-.305-5.467-1.334-5.467-5.931 0-1.311.469-2.381 1.236-3.221-.124-.303-.535-1.524.117-3.176 0 0 1.008-.322 3.301 1.23.957-.266 1.983-.399 3.003-.404 1.02.005 2.047.138 3.006.404 2.291-1.552 3.297-1.23 3.297-1.23.653 1.653.242 2.874.118 3.176.77.84 1.235 1.911 1.235 3.221 0 4.609-2.807 5.624-5.479 5.921.43.372.823 1.102.823 2.222v 3.293c0 .319.192.694.801.576 4.765-1.589 8.199-6.086 8.199-11.386 0-6.627-5.373-12-12-12z"/>
+                            </svg>
+                        </a>
+                        <a href="https://linkedin.com/in/aymenby" aria-label="LinkedIn" class="social-link" target="_blank" rel="noopener noreferrer">
+                            <svg width="20" height="20" viewBox="0 0 24 24" fill="currentColor">
+                                <path d="M20.447 20.452h-3.554v-5.569c0-1.328-.475-2.236-1.986-2.236-1.081 0-1.722.731-2.004 1.438-.103.25-.129.599-.129.948v5.419h-3.554s.05-8.736 0-9.646h3.554v1.364c.429-.658 1.196-1.593 2.905-1.593 2.12 0 3.714 1.39 3.714 4.376v5.499zM5.337 8.855c-1.144 0-1.915-.759-1.915-1.71 0-.956.768-1.71 1.959-1.71 1.19 0 1.916.754 1.939 1.71 0 .951-.749 1.71-1.983 1.71zm1.946 11.597H3.392V9.26h3.891v11.192zM22.225 0H1.771C.792 0 0 .774 0 1.729v20.542C0 23.227.792 24 1.771 24h20.451C23.2 24 24 23.227 24 22.271V1.729C24 .774 23.2 0 22.225 0z"/>
+                            </svg>
+                        </a>
                     </div>
                 </div>
 

@@ -18,6 +18,7 @@
   /**
    * Smooth Scrolling for Anchor Links
    * Prevents default behavior and smoothly scrolls to target elements
+   * For contact section, scrolls further down to show mobile buttons
    */
   function initSmoothScroll() {
     document.querySelectorAll('a[href^="#"]').forEach(anchor => {
@@ -29,10 +30,20 @@
         const target = document.querySelector(href);
         if (target) {
           e.preventDefault();
-          target.scrollIntoView({
-            behavior: 'smooth',
-            block: 'start'
-          });
+          
+          // For contact section, scroll more to show the mobile buttons
+          if (href === '#contact') {
+            const targetPosition = target.offsetTop + 200;
+            window.scrollTo({
+              top: targetPosition,
+              behavior: 'smooth'
+            });
+          } else {
+            target.scrollIntoView({
+              behavior: 'smooth',
+              block: 'start'
+            });
+          }
         }
       });
     });
@@ -136,7 +147,7 @@
 
   /**
    * Contact Form Submission Handler
-   * Sends form data via fetch/AJAX with fallback to email client
+   * Uses Web3Forms to send emails directly
    */
   function initContactForm() {
     const form = document.getElementById('contact-form');
@@ -150,50 +161,57 @@
       const data = {
         name: formData.get('name'),
         email: formData.get('email'),
-        subject: formData.get('subject'),
+        projecttype: formData.get('projecttype'),
         message: formData.get('message')
       };
 
       // Validate form
-      if (!data.name || !data.email || !data.subject || !data.message) {
+      if (!data.name || !data.email || !data.projecttype || !data.message) {
         alert('Please fill in all fields.');
         return;
       }
 
-      // Disable submit button during request
+      // Validate email format
+      const emailRegex = /^[^\s@]+@[^\s@]+\.[^\s@]+$/;
+      if (!emailRegex.test(data.email)) {
+        alert('Please enter a valid email address.');
+        return;
+      }
+
+      // Disable submit button during submission
       const submitBtn = form.querySelector('button[type="submit"]');
       const originalText = submitBtn.textContent;
       submitBtn.disabled = true;
       submitBtn.textContent = 'Sending...';
 
       try {
-        // Send email via backend endpoint
-        const response = await fetch('/api/send-email', {
+        // Submit form to Web3Forms
+        const response = await fetch('https://api.web3forms.com/submit', {
           method: 'POST',
-          headers: {
-            'Content-Type': 'application/json'
-          },
-          body: JSON.stringify(data)
+          body: formData
         });
 
-        if (response.ok) {
+        const result = await response.json();
+
+        if (result.success) {
           // Success feedback
           submitBtn.textContent = '✓ Message Sent!';
+          submitBtn.style.backgroundColor = '#10b981';
           form.reset();
+          
           setTimeout(() => {
             submitBtn.textContent = originalText;
+            submitBtn.style.backgroundColor = '';
             submitBtn.disabled = false;
           }, 3000);
         } else {
-          throw new Error('Failed to send email');
+          throw new Error('Failed to send message');
         }
       } catch (error) {
         console.error('Form submission error:', error);
-        // Fallback: open email client
-        alert('Could not send message via server. Opening email client...');
-        window.location.href = `mailto:aymen@yourportfolio.com?subject=${encodeURIComponent(data.subject)}&body=${encodeURIComponent(data.message + '\n\nFrom: ' + data.name + ' (' + data.email + ')')}`;
-        submitBtn.disabled = false;
+        alert('Error sending message. Please try again.');
         submitBtn.textContent = originalText;
+        submitBtn.disabled = false;
       }
     });
   }
