@@ -33,7 +33,7 @@
           
           // For contact section, scroll more to show the mobile buttons
           if (href === '#contact') {
-            const targetPosition = target.offsetTop + 200;
+            const targetPosition = target.offsetTop + 500;
             window.scrollTo({
               top: targetPosition,
               behavior: 'smooth'
