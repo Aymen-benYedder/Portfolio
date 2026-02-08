@@ -31,9 +31,9 @@
         if (target) {
           e.preventDefault();
           
-          // For contact section, scroll more to show the mobile buttons
+          // For contact section, scroll to show it at the bottom of viewport
           if (href === '#contact') {
-            const targetPosition = target.offsetTop + 500;
+            const targetPosition = target.offsetTop + target.offsetHeight - window.innerHeight;
             window.scrollTo({
               top: targetPosition,
               behavior: 'smooth'
