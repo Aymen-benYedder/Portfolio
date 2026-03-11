@@ -1,0 +1,591 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Beyond the Tutorial: Architecting Web Systems for 99.9% Resilience | Full-Stack Developer Blog</title>
+  <meta name="description" content="A practical framework for building resilient web systems with GitOps, NGINX, Docker isolation, observability, and Agile execution for 99.9% uptime.">
+  <meta name="keywords" content="99.9 uptime architecture, resilient web systems, gitops workflow, argocd fluxcd github actions, nginx reverse proxy docker, pm2 node process manager, fail2ban security, prometheus grafana elk stack, agile engineering delivery">
+  <meta name="author" content="Aymen ben Yedder">
+  <meta name="robots" content="index, follow">
+
+  <meta property="og:type" content="article">
+  <meta property="og:url" content="https://www.yourportfolio.com/blog/beyond-tutorial-web-resilience.html">
+  <meta property="og:title" content="Beyond the Tutorial: Architecting Web Systems for 99.9% Resilience">
+  <meta property="og:description" content="From GitOps to observability and Agile rigor, here is a practical framework for building resilient production web systems.">
+  <meta property="og:image" content="https://www.yourportfolio.com/assets/style.webp">
+  <meta property="article:published_time" content="2026-03-11">
+  <meta property="article:modified_time" content="2026-03-11">
+  <meta property="article:author" content="Aymen ben Yedder">
+
+  <meta name="twitter:card" content="summary_large_image">
+  <meta name="twitter:title" content="Beyond the Tutorial: Architecting Web Systems for 99.9% Resilience">
+  <meta name="twitter:description" content="A production-ready framework for reliability using GitOps, NGINX, Docker networking, observability, and Agile delivery.">
+  <meta name="twitter:image" content="https://www.yourportfolio.com/assets/style.webp">
+
+  <link rel="canonical" href="https://www.yourportfolio.com/blog/beyond-tutorial-web-resilience.html">
+  <link rel="stylesheet" href="../css/vars.css">
+  <link rel="stylesheet" href="../css/main.css">
+  <link rel="stylesheet" href="../css/components.css">
+
+  <script type="application/ld+json">
+  {
+    "@context": "https://schema.org",
+    "@type": "Article",
+    "headline": "Beyond the Tutorial: Architecting Web Systems for 99.9% Resilience",
+    "description": "A practical framework for building resilient web systems with GitOps, NGINX, Docker isolation, observability, and Agile execution for 99.9% uptime.",
+    "author": {
+      "@type": "Person",
+      "name": "Aymen ben Yedder",
+      "url": "https://www.yourportfolio.com"
+    },
+    "datePublished": "2026-03-11",
+    "dateModified": "2026-03-11",
+    "image": {
+      "@type": "ImageObject",
+      "url": "https://www.yourportfolio.com/assets/style.webp",
+      "width": 1200,
+      "height": 628
+    },
+    "publisher": {
+      "@type": "Organization",
+      "name": "Aymen.dev",
+      "url": "https://www.yourportfolio.com"
+    },
+    "mainEntityOfPage": {
+      "@type": "WebPage",
+      "@id": "https://www.yourportfolio.com/blog/beyond-tutorial-web-resilience.html"
+    }
+  }
+  </script>
+
+  <script type="application/ld+json">
+  {
+    "@context": "https://schema.org",
+    "@type": "FAQPage",
+    "mainEntity": [
+      {
+        "@type": "Question",
+        "name": "What is the biggest gap between tutorial projects and production systems?",
+        "acceptedAnswer": {
+          "@type": "Answer",
+          "text": "The biggest gap is operational rigor. Production systems need versioned infrastructure, observability, rollback safety, and a workflow that prevents configuration drift."
+        }
+      },
+      {
+        "@type": "Question",
+        "name": "How does GitOps improve reliability?",
+        "acceptedAnswer": {
+          "@type": "Answer",
+          "text": "GitOps treats Git as the source of truth for infrastructure and deployment state. That reduces manual changes and lets systems self-reconcile after failures."
+        }
+      },
+      {
+        "@type": "Question",
+        "name": "Why use NGINX with Dockerized applications?",
+        "acceptedAnswer": {
+          "@type": "Answer",
+          "text": "NGINX handles SSL termination, request routing, and traffic control while Docker provides isolated runtime environments. Together they improve performance and operational safety."
+        }
+      },
+      {
+        "@type": "Question",
+        "name": "Why combine observability with Agile planning?",
+        "acceptedAnswer": {
+          "@type": "Answer",
+          "text": "Observability reveals bottlenecks and failure patterns. Agile planning converts those insights into sprint priorities that reduce resolution time and improve delivery predictability."
+        }
+      }
+    ]
+  }
+  </script>
+
+  <style>
+    .skip-link {
+      position: fixed;
+      top: -120px;
+      left: 12px;
+      background: var(--accent-primary);
+      color: var(--bg-primary);
+      padding: var(--space-sm) var(--space-md);
+      text-decoration: none;
+      z-index: var(--z-modal);
+      border-radius: var(--radius-md);
+      opacity: 0;
+      pointer-events: none;
+      transition: top var(--transition-fast), opacity var(--transition-fast);
+    }
+
+    .skip-link:focus,
+    .skip-link:focus-visible {
+      top: 14px;
+      opacity: 1;
+      pointer-events: auto;
+    }
+
+    #reading-progress {
+      position: fixed;
+      top: 0;
+      left: 0;
+      height: 3px;
+      width: 0;
+      background: linear-gradient(90deg, var(--accent-primary), var(--accent-secondary));
+      z-index: var(--z-sticky);
+    }
+
+    article {
+      max-width: 900px;
+      margin: 0 auto;
+      padding: 0 var(--space-md);
+    }
+
+    .article-header {
+      text-align: center;
+      margin-bottom: var(--space-2xl);
+    }
+
+    .article-meta,
+    .article-badges,
+    .share-buttons {
+      display: flex;
+      justify-content: center;
+      gap: var(--space-sm);
+      flex-wrap: wrap;
+    }
+
+    .article-meta {
+      color: var(--text-secondary);
+      margin-bottom: var(--space-lg);
+      padding-bottom: var(--space-lg);
+      border-bottom: 1px solid var(--glass-border);
+    }
+
+    .article-content h2 {
+      margin-top: var(--space-2xl);
+      padding-top: var(--space-md);
+      border-top: 1px solid var(--glass-border);
+      color: var(--accent-primary);
+    }
+
+    .article-content p,
+    .article-content li {
+      color: var(--text-secondary);
+      line-height: 1.8;
+    }
+
+    .highlight-section,
+    #table-of-contents,
+    .glossary-section {
+      background: var(--glass-bg);
+      border: 1px solid var(--glass-border);
+      border-radius: var(--radius-md);
+      padding: var(--space-lg);
+      margin: var(--space-lg) 0;
+    }
+
+    .related-articles {
+      display: grid;
+      grid-template-columns: repeat(auto-fit, minmax(250px, 1fr));
+      gap: var(--space-lg);
+    }
+
+    .page-breadcrumb {
+      margin-top: 108px;
+      background: var(--bg-secondary);
+      border-bottom: 1px solid var(--glass-border);
+      padding: var(--space-md) 0;
+    }
+
+    .breadcrumb-nav {
+      display: flex;
+      align-items: center;
+      flex-wrap: wrap;
+      gap: var(--space-sm);
+      font-size: var(--text-sm);
+      color: var(--text-secondary);
+    }
+
+    .breadcrumb-link {
+      display: inline-flex;
+      align-items: center;
+      height: auto;
+      padding: 0;
+      border: 0;
+      color: var(--accent-primary);
+      text-decoration: none;
+      font-weight: 500;
+    }
+
+    .breadcrumb-link:hover {
+      color: var(--accent-secondary);
+    }
+
+    .breadcrumb-separator {
+      color: var(--text-muted);
+      line-height: 1;
+    }
+
+    /* Keep code snippets visually consistent across light/dark modes */
+    .code-block,
+    [data-theme="light"] .code-block {
+      position: relative;
+      background: linear-gradient(180deg, rgba(11, 15, 30, 0.96), rgba(7, 10, 20, 0.98));
+      border: 1px solid rgba(0, 229, 255, 0.24);
+      border-radius: 14px;
+      box-shadow: 0 12px 30px rgba(0, 0, 0, 0.35);
+      padding: 0;
+      overflow: hidden;
+      margin: var(--space-lg) 0;
+    }
+
+    .code-block-header,
+    [data-theme="light"] .code-block-header {
+      background: rgba(0, 229, 255, 0.1);
+      border-bottom: 1px solid rgba(0, 229, 255, 0.24);
+      padding: 10px 14px;
+    }
+
+    .code-language,
+    [data-theme="light"] .code-language {
+      color: #7befff;
+      font-weight: 700;
+      text-transform: uppercase;
+      letter-spacing: 0.06em;
+      font-size: 0.78rem;
+    }
+
+    .code-block pre,
+    [data-theme="light"] .code-block pre {
+      margin: 0;
+      padding: 18px 18px 20px;
+      background: transparent;
+      border: 0;
+      border-radius: 0;
+    }
+
+    .code-block code,
+    [data-theme="light"] .code-block code {
+      display: block;
+      background: transparent;
+      color: #e8eefc;
+      text-shadow: none;
+      font-family: var(--font-mono);
+      line-height: 1.65;
+    }
+
+    .code-block-copy,
+    [data-theme="light"] .code-block-copy {
+      background: rgba(0, 229, 255, 0.16);
+      border: 1px solid rgba(0, 229, 255, 0.38);
+      color: #9ff7ff;
+      border-radius: 10px;
+    }
+
+    .code-block-copy:hover,
+    [data-theme="light"] .code-block-copy:hover {
+      background: rgba(0, 229, 255, 0.26);
+      color: #dbfbff;
+    }
+
+    @media (max-width: 767px) {
+      .page-breadcrumb {
+        margin-top: 88px;
+      }
+    }
+  </style>
+</head>
+<body>
+  <a href="#main" class="skip-link">Skip to main content</a>
+  <div id="reading-progress"></div>
+
+  <div class="nav-container">
+      <nav class="nav-hub">
+          <div class="nav-logo-area">
+              <a href="../index.html" class="nav-logo">AYMEN<span>.DEV</span></a>
+          </div>
+
+          <ul class="nav-links">
+              <li class="nav-item"><a href="../index.html" class="nav-link">Home</a></li>
+              <li class="nav-item"><a href="../index.html#skills" class="nav-link">Skills</a></li>
+              <li class="nav-item"><a href="../index.html#experience" class="nav-link">Experience</a></li>
+              <li class="nav-item"><a href="../services/mern-development.html" class="nav-link">MERN</a></li>
+              <li class="nav-item"><a href="../services/wordpress-development.html" class="nav-link">WordPress</a></li>
+              <li class="nav-item"><a href="index.html" class="nav-link active">Blog</a></li>
+              <li class="nav-item"><a href="../index.html#contact" class="nav-link">Contact</a></li>
+              <li class="nav-item mobile-item"><a href="index.html" class="nav-link">Blog</a></li>
+          </ul>
+
+          <div class="nav-actions">
+              <button id="theme-toggle" class="theme-btn-mini desktop-only" aria-label="Toggle Dark Mode">
+                  <svg class="sun-icon" width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor"
+                      stroke-width="2" stroke-linecap="round" stroke-linejoin="round">
+                      <circle cx="12" cy="12" r="5"></circle>
+                      <line x1="12" y1="1" x2="12" y2="3"></line>
+                      <line x1="12" y1="21" x2="12" y2="23"></line>
+                      <line x1="4.22" y1="4.22" x2="5.64" y2="5.64"></line>
+                      <line x1="18.36" y1="18.36" x2="19.78" y2="19.78"></line>
+                      <line x1="1" y1="12" x2="3" y2="12"></line>
+                      <line x1="21" y1="12" x2="23" y2="12"></line>
+                      <line x1="4.22" y1="19.78" x2="5.64" y2="18.36"></line>
+                      <line x1="18.36" y1="5.64" x2="19.78" y2="4.22"></line>
+                  </svg>
+                  <svg class="moon-icon" width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor"
+                      stroke-width="2" stroke-linecap="round" stroke-linejoin="round" style="display:none;">
+                      <path d="M21 12.79A9 9 0 1 1 11.21 3 7 7 0 0 0 21 12.79z"></path>
+                  </svg>
+              </button>
+
+              <button class="nav-toggle mobile-only" aria-label="Open Menu" aria-expanded="false">
+                  <svg width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
+                      <path d="M3 12h18M3 6h18M3 18h18" />
+                  </svg>
+              </button>
+          </div>
+
+          <div class="nav-cta desktop-only">
+              <a href="../index.html#contact" class="btn-spotlight">Let's Talk</a>
+          </div>
+      </nav>
+
+      <div class="nav-menu mobile-menu-dropdown">
+          <ul class="mobile-nav-links">
+              <li><a href="../index.html" class="nav-link">Home</a></li>
+              <li><a href="../index.html#skills" class="nav-link">Skills</a></li>
+              <li><a href="../index.html#experience" class="nav-link">Experience</a></li>
+              <li><a href="../services/mern-development.html" class="nav-link">MERN</a></li>
+              <li><a href="../services/wordpress-development.html" class="nav-link">WordPress</a></li>
+              <li><a href="index.html" class="nav-link">Blog</a></li>
+              <li><a href="../index.html#contact" class="nav-link">Contact</a></li>
+              <li style="border-top: 1px solid var(--border-light); margin: 8px 0; padding-top: 8px;"></li>
+              <li class="mobile-action-item">
+                  <button class="mobile-theme-toggle nav-link" style="justify-content: center; width: 100%;">
+                      <span style="margin-right: 8px;">Switch Theme</span>
+                      <svg class="sun-icon" width="18" height="18" viewBox="0 0 24 24" fill="none"
+                          stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round">
+                          <circle cx="12" cy="12" r="5"></circle>
+                          <line x1="12" y1="1" x2="12" y2="3"></line>
+                          <line x1="12" y1="21" x2="12" y2="23"></line>
+                          <line x1="4.22" y1="4.22" x2="5.64" y2="5.64"></line>
+                          <line x1="18.36" y1="18.36" x2="19.78" y2="19.78"></line>
+                          <line x1="1" y1="12" x2="3" y2="12"></line>
+                          <line x1="21" y1="12" x2="23" y2="12"></line>
+                          <line x1="4.22" y1="19.78" x2="5.64" y2="18.36"></line>
+                          <line x1="18.36" y1="5.64" x2="19.78" y2="4.22"></line>
+                      </svg>
+                      <svg class="moon-icon" width="18" height="18" viewBox="0 0 24 24" fill="none"
+                          stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"
+                          style="display:none;">
+                          <path d="M21 12.79A9 9 0 1 1 11.21 3 7 7 0 0 0 21 12.79z"></path>
+                      </svg>
+                  </button>
+              </li>
+              <li>
+                  <a href="../index.html#contact" class="btn-spotlight" style="justify-content: center; width: 100%;">Let's Talk</a>
+              </li>
+          </ul>
+      </div>
+  </div>
+
+  <div class="page-breadcrumb">
+    <div class="container">
+      <nav class="breadcrumb-nav" aria-label="Breadcrumb">
+        <a href="../index.html" class="breadcrumb-link">Home</a>
+        <span class="breadcrumb-separator">&rsaquo;</span>
+        <a href="index.html" class="breadcrumb-link">Blog</a>
+        <span class="breadcrumb-separator">&rsaquo;</span>
+        <span>Beyond the Tutorial</span>
+      </nav>
+    </div>
+  </div>
+
+  <main id="main">
+    <article>
+      <header class="article-header">
+        <h1>Beyond the Tutorial: Architecting Web Systems for 99.9% Resilience</h1>
+        <div class="article-meta">
+          <time datetime="2026-03-11">March 11, 2026</time>
+          <span>&bull;</span>
+          <span>10 min read</span>
+          <span>&bull;</span>
+          <span>By <strong>Aymen ben Yedder</strong></span>
+        </div>
+        <div class="article-badges">
+          <span class="badge">DevOps</span>
+          <span class="badge">GitOps</span>
+          <span class="badge">Observability</span>
+          <span class="badge">Reliability</span>
+        </div>
+      </header>
+
+      <div id="table-of-contents">
+        <h3>Table of Contents</h3>
+      </div>
+
+      <div class="article-content animate-on-scroll">
+        <h2>Introduction</h2>
+        <p>In a world where "it works on my machine" is a liability, the role of a web and systems engineer is to bridge the gap between creative code and industrial-grade operations.</p>
+        <p>Moving a project from a local repository to production that can handle thousands of concurrent users requires more than a deployment script. It requires an ecosystem built on GitOps, observability, and Agile rigor.</p>
+
+        <div class="highlight-section">
+          <strong>Practical goal:</strong> Build systems that maintain 99.9% resilience while still shipping quickly and safely.
+        </div>
+
+        <h2>1. The GitOps Workflow: Automating Stability</h2>
+        <p>Traditional CI/CD pipelines often suffer from configuration drift, where the runtime state diverges from repository intent. GitOps prevents this by declaring infrastructure and deployment state in Git, then reconciling runtime automatically.</p>
+        <ul>
+          <li><strong>Continuous deployment:</strong> pair ArgoCD or FluxCD with GitHub Actions for declarative updates.</li>
+          <li><strong>Self-healing runtime:</strong> failed nodes or bad manual edits are corrected by reconciliation.</li>
+          <li><strong>Safer operations:</strong> fewer manual interventions means fewer deployment incidents.</li>
+        </ul>
+        <div class="code-block">
+          <div class="code-block-header"><span class="code-language">YAML</span></div>
+          <pre><code>apiVersion: argoproj.io/v1alpha1
+kind: Application
+metadata:
+  name: resilient-web
+spec:
+  destination:
+    namespace: production
+    server: https://kubernetes.default.svc
+  source:
+    repoURL: https://github.com/your-org/platform-infra
+    targetRevision: main
+    path: clusters/prod/web
+  syncPolicy:
+    automated:
+      prune: true
+      selfHeal: true</code></pre>
+        </div>
+
+        <h2>2. High-Performance Serving with NGINX and Docker</h2>
+        <p>Containerization is only the first step. To sustain 99.9% uptime, orchestration and service boundaries matter just as much as application code.</p>
+        <h3>Reverse proxying and TLS termination</h3>
+        <p>Deploy NGINX in front of Node.js or React workloads to handle SSL/TLS termination, route control, and reduced direct exposure of internal services.</p>
+        <div class="code-block">
+          <div class="code-block-header"><span class="code-language">NGINX</span></div>
+          <pre><code>server {
+  listen 443 ssl http2;
+  server_name app.example.com;
+
+  ssl_certificate     /etc/letsencrypt/live/app/fullchain.pem;
+  ssl_certificate_key /etc/letsencrypt/live/app/privkey.pem;
+
+  location / {
+    proxy_pass http://web:3000;
+    proxy_set_header Host $host;
+    proxy_set_header X-Forwarded-For $proxy_add_x_forwarded_for;
+    proxy_set_header X-Forwarded-Proto $scheme;
+  }
+}</code></pre>
+        </div>
+        <h3>Process and network resilience</h3>
+        <ul>
+          <li><strong>PM2 inside the app container:</strong> restarts Node.js processes after memory leaks or crashes.</li>
+          <li><strong>Private Docker networks:</strong> keep PostgreSQL and MongoDB reachable only by the app layer.</li>
+          <li><strong>No public DB exposure:</strong> databases should never be directly reachable from the internet.</li>
+        </ul>
+        <div class="code-block">
+          <div class="code-block-header"><span class="code-language">YAML</span></div>
+          <pre><code>services:
+  web:
+    image: ghcr.io/your-org/web-app:latest
+    depends_on: [db]
+    networks: [app_net]
+
+  db:
+    image: postgres:16
+    networks: [app_net]
+    ports: []  # private only
+
+networks:
+  app_net:
+    driver: bridge</code></pre>
+        </div>
+
+        <h2>3. Practical Security: Beyond the Firewall</h2>
+        <p>Security is often treated like a final checklist, but in sensitive systems such as financial CRMs, it must be baked into architecture and operations.</p>
+        <ul>
+          <li><strong>Fail2Ban strategy:</strong> dynamically block IPs that match brute-force patterns.</li>
+          <li><strong>Layered hardening:</strong> combine firewall rules, key-based access, and least privilege defaults.</li>
+          <li><strong>Runtime visibility:</strong> detect anomalies before they become incidents.</li>
+        </ul>
+        <p>Automated monitoring with ELK or Prometheus plus Grafana gives a real-time view of traffic spikes, server bottlenecks, and saturation trends.</p>
+        <div class="highlight-section">
+          <strong>Operational principle:</strong> A system you cannot see is a system you cannot secure.
+        </div>
+
+        <h2>4. Agile Management: The Engineer-Manager Synergy</h2>
+        <p>Great engineering requires clear direction. Transitioning from technical support into project management means translating complex bottlenecks into measurable sprint goals.</p>
+        <ul>
+          <li><strong>Sprint planning:</strong> use ClickUp or Kanban boards to track the critical path from automation scripts to production frontend release.</li>
+          <li><strong>Feedback loop:</strong> convert incidents into sprint improvements, not ad-hoc fire drills.</li>
+          <li><strong>Delivery metrics:</strong> track ticket resolution time, lead time, and on-time milestone completion.</li>
+        </ul>
+        <p>Agile leadership is not just task tracking. It is continuous workflow refinement that increases delivery reliability for complex platforms.</p>
+
+        <h2>Practical Framework Checklist</h2>
+        <ol>
+          <li><strong>Version all infrastructure:</strong> env config, networking policies, and runtime manifests in Git.</li>
+          <li><strong>Automate reconciliation:</strong> let GitOps controllers enforce desired state.</li>
+          <li><strong>Harden the edge:</strong> NGINX reverse proxy, strict ingress, and protected internals.</li>
+          <li><strong>Observe continuously:</strong> logs, metrics, traces, and alert thresholds tied to SLOs.</li>
+          <li><strong>Run Agile loops:</strong> treat every incident as planning input for the next sprint.</li>
+        </ol>
+
+        <h2>The Bottom Line</h2>
+        <p>Modern infrastructure is a living organism. Whether you are building a restaurant platform like Eatorder or a secure safety system like Riskvision, the mission is the same: create systems that are as stable as they are scalable.</p>
+        <p>When teams focus on automation, security, and rigorous project management, they do not just ship code. They ship reliability.</p>
+
+        <div class="highlight-section">
+          <h3 style="margin-top: 0; color: var(--accent-primary);">Need a Resilience Architecture Review?</h3>
+          <p>If you want a practical roadmap for uptime, deployment safety, and delivery flow, let's design a system your team can run with confidence.</p>
+          <div style="display: flex; gap: var(--space-md); flex-wrap: wrap;">
+            <a href="../index.html#contact" class="btn btn-primary">Request Architecture Review</a>
+            <a href="devops-vps-startups.html" class="btn btn-secondary">Read DevOps VPS Guide</a>
+          </div>
+        </div>
+      </div>
+
+      <div class="share-buttons">
+        <a href="#" class="share-btn" aria-label="Share on Twitter"><span>Share on Twitter</span></a>
+        <a href="#" class="share-btn" aria-label="Share on LinkedIn"><span>Share on LinkedIn</span></a>
+        <a href="#" class="share-btn" aria-label="Share on Facebook"><span>Share on Facebook</span></a>
+      </div>
+
+      <section style="margin-top: var(--space-2xl); padding-top: var(--space-2xl); border-top: 1px solid var(--glass-border);">
+        <h2 style="text-align: center; color: var(--accent-primary); margin-bottom: var(--space-lg);">Related Articles</h2>
+        <div class="related-articles">
+          <article class="glass-card related-article-card animate-on-scroll">
+            <h4>DevOps on a VPS for Startups</h4>
+            <p class="text-secondary" style="font-size: var(--text-sm); margin-bottom: var(--space-md);">A practical guide for low-overhead infrastructure, CI/CD, and operations on a startup VPS.</p>
+            <a href="devops-vps-startups.html" class="btn btn-ghost" style="font-size: var(--text-sm);">Read More &rarr;</a>
+          </article>
+          <article class="glass-card related-article-card animate-on-scroll">
+            <h4>MERN Stack Development Services</h4>
+            <p class="text-secondary" style="font-size: var(--text-sm); margin-bottom: var(--space-md);">Production-minded architecture for scalable MERN applications and platform reliability.</p>
+            <a href="../services/mern-development.html" class="btn btn-ghost" style="font-size: var(--text-sm);">Read More &rarr;</a>
+          </article>
+          <article class="glass-card related-article-card animate-on-scroll">
+            <h4>Building a MERN Stack Application</h4>
+            <p class="text-secondary" style="font-size: var(--text-sm); margin-bottom: var(--space-md);">A foundational tutorial to pair with this article's production resilience framework.</p>
+            <a href="sample-post.html" class="btn btn-ghost" style="font-size: var(--text-sm);">Read More &rarr;</a>
+          </article>
+        </div>
+      </section>
+    </article>
+  </main>
+
+  <footer class="footer-industrial">
+    <div class="container">
+      <div class="footer-bottom">
+        <div class="footer-legal">&copy; 2024 Aymen ben Yedder. All rights reserved.</div>
+      </div>
+    </div>
+  </footer>
+
+  <button id="scroll-to-top" class="btn btn-primary" aria-label="Scroll to top" style="position: fixed; bottom: 20px; right: 20px; display: none; z-index: var(--z-sticky); padding: var(--space-sm); width: 48px; height: 48px; border-radius: 50%; font-size: var(--text-lg);">&uarr;</button>
+
+  <script src="../js/main.min.js" defer></script>
+  <script src="../js/geo.min.js" defer></script>
+</body>
+</html>
