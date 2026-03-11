@@ -1,54 +1,58 @@
 <?xml version="1.0" encoding="UTF-8"?>
 <urlset xmlns="http://www.sitemaps.org/schemas/sitemap/0.9">
-  <!-- Homepage -->
   <url>
     <loc>https://www.yourportfolio.com/</loc>
     <lastmod>2025-12-19</lastmod>
     <changefreq>weekly</changefreq>
     <priority>1.0</priority>
   </url>
-  
-  <!-- MERN Development Service Page -->
+
   <url>
     <loc>https://www.yourportfolio.com/services/mern-development.html</loc>
     <lastmod>2025-12-19</lastmod>
     <changefreq>weekly</changefreq>
     <priority>0.9</priority>
   </url>
-  
-  <!-- WordPress Development Service Page -->
+
   <url>
     <loc>https://www.yourportfolio.com/services/wordpress-development.html</loc>
     <lastmod>2025-12-19</lastmod>
     <changefreq>weekly</changefreq>
     <priority>0.9</priority>
   </url>
-  
-  <!-- Tunisia GEO Landing Page -->
+
   <url>
-    <loc>https://www.yourportfolio.com/geo/tunisia.html</newString>    <lastmod>2025-12-19</lastmod>
+    <loc>https://www.yourportfolio.com/geo/tunisia.html</loc>
+    <lastmod>2025-12-19</lastmod>
     <changefreq>monthly</changefreq>
     <priority>0.8</priority>
   </url>
-  
-  <!-- France GEO Landing Page -->
+
   <url>
-    <loc>https://www.yourportfolio.com/geo/france.html</newString>    <lastmod>2025-12-19</lastmod>
+    <loc>https://www.yourportfolio.com/geo/france.html</loc>
+    <lastmod>2025-12-19</lastmod>
     <changefreq>monthly</changefreq>
     <priority>0.8</priority>
   </url>
-  
-  <!-- Blog Listing Page -->
+
   <url>
-    <loc>https://www.yourportfolio.com/blog/index.html</newString>    <lastmod>2025-12-19</lastmod>
+    <loc>https://www.yourportfolio.com/blog/index.html</loc>
+    <lastmod>2026-03-11</lastmod>
     <changefreq>weekly</changefreq>
     <priority>0.7</priority>
   </url>
-  
-  <!-- Sample Blog Post: MERN Stack -->
+
   <url>
-    <loc>https://www.yourportfolio.com/blog/sample-post.html</newString>    <lastmod>2025-12-19</lastmod>
+    <loc>https://www.yourportfolio.com/blog/sample-post.html</loc>
+    <lastmod>2025-12-19</lastmod>
     <changefreq>monthly</changefreq>
     <priority>0.6</priority>
+  </url>
+
+  <url>
+    <loc>https://www.yourportfolio.com/blog/devops-vps-startups.html</loc>
+    <lastmod>2026-03-11</lastmod>
+    <changefreq>monthly</changefreq>
+    <priority>0.8</priority>
   </url>
 </urlset>
