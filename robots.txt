@@ -5,7 +5,7 @@ User-agent: *
 Allow: /
 
 # Sitemap location for search engines
-Sitemap: https://www.yourportfolio.com/sitemap.xml
+Sitemap: https://aymen.benyedder.top/sitemap.xml
 
 # Crawl delay to prevent server overload
 # One second between requests is reasonable for a small portfolio site
