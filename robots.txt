@@ -1,22 +1,24 @@
-# Portfolio Website Robots File
-# Controls search engine crawler access and behavior
+# Aymen.dev robots policy
+# Updated: 2026-03-22
 
 User-agent: *
 Allow: /
 
-# Sitemap location for search engines
+# Prevent indexing of non-public/internal build and utility paths.
+Disallow: /backend/
+Disallow: /api/
+Disallow: /refrence_project/
+
+# Exclude non-production blog assets from indexing.
+Disallow: /blog/template.html
+Disallow: /blog/sample-post.html
+
+# Explicitly allow static assets used for rendering.
+Allow: /*.css$
+Allow: /*.js$
+Allow: /*.webp$
+Allow: /*.avif$
+Allow: /*.woff2$
+
+# Primary XML sitemap.
 Sitemap: https://aymen.benyedder.top/sitemap.xml
-
-# Crawl delay to prevent server overload
-# One second between requests is reasonable for a small portfolio site
-Crawl-delay: 1
-
-# Block specific directories if needed (uncomment as necessary)
-# Disallow: /admin/
-# Disallow: /private/
-
-# Allow search engines to access specific resource types
-Allow: /*.css
-Allow: /*.js
-Allow: /*.webp
-Allow: /*.woff2

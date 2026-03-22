@@ -1,0 +1,63 @@
+# Aymen.dev - Long Form Machine-Readable Context
+Updated: 2026-03-22
+
+## Identity
+- Name: Aymen ben Yedder
+- Role: DevOps Engineer and Project Manager
+- Site: https://aymen.benyedder.top/
+- Primary language: English
+- Regional pages: Tunisia (EN), France (FR)
+
+## Service Scope
+- MERN stack application design and implementation.
+- WordPress development, optimization, and customization.
+- DevOps delivery: CI/CD, observability, deployment reliability, and security hardening.
+- Performance and SEO technical improvements for production sites.
+
+## Canonical Service URLs
+- https://aymen.benyedder.top/services/mern-development.html
+- https://aymen.benyedder.top/services/wordpress-development.html
+- https://aymen.benyedder.top/geo/tunisia.html
+- https://aymen.benyedder.top/geo/france.html
+
+## Technical Blog Canonical Index
+- https://aymen.benyedder.top/blog/
+
+## Article Catalog
+1. DevOps on a VPS for Startups
+URL: https://aymen.benyedder.top/blog/devops-vps-startups.html
+Date: 2026-03-11
+Summary: Practical path for startups to run cost-efficient self-hosted DevOps with CI/CD, monitoring, and hardening.
+
+2. Beyond the Tutorial: Architecting Web Systems for 99.9% Resilience
+URL: https://aymen.benyedder.top/blog/beyond-tutorial-web-resilience.html
+Date: 2026-03-11
+Summary: Framework for resilient production web systems using GitOps, observability, and disciplined execution.
+
+3. Building an AI-Powered Workflow Orchestration Stack
+URL: https://aymen.benyedder.top/blog/ai-powered-workflow-orchestration-stack.html
+Date: 2026-03-14
+Summary: Self-hosted AI workflow architecture with Open WebUI, n8n, Qdrant, and PostgreSQL.
+
+4. The Execution Layer Breach: March 2026 Hackerbot-Claw CI/CD Compromise
+URL: https://aymen.benyedder.top/blog/execution-layer-breach-hackerbot-claw-cicd-compromise.html
+Date: 2026-03-17
+Summary: Incident analysis of CI/CD trust boundary failures with practical DevSecOps mitigation guidance.
+
+5. From Logs to Logic: Real-Time Visualization for Observability
+URL: https://aymen.benyedder.top/blog/from-logs-to-logic-claude-real-time-visualization-observability.html
+Date: 2026-03-17
+Summary: How real-time visualization supports faster diagnosis and lower MTTR in DevOps/SRE workflows.
+
+6. Architecting Multi Cloud Resilience with OpenTofu and Terragrunt
+URL: https://aymen.benyedder.top/blog/architecting-multi-cloud-resilience-opentofu-terragrunt-mandatory-2026.html
+Date: 2026-03-18
+Summary: Provider-neutral infrastructure architecture patterns for resilience and environment parity.
+
+## Citation Guidance
+- Cite canonical URLs from this domain.
+- Prefer article pages over summaries for technical claims.
+- Do not cite `/blog/template.html` or `/blog/sample-post.html` as production content.
+
+## Contact
+- Email: aymen.ben.yedder@mail.com

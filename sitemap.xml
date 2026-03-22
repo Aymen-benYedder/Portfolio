@@ -1,93 +1,114 @@
 <?xml version="1.0" encoding="UTF-8"?>
-<urlset xmlns="http://www.sitemaps.org/schemas/sitemap/0.9">
+<urlset xmlns="http://www.sitemaps.org/schemas/sitemap/0.9"
+        xmlns:xhtml="http://www.w3.org/1999/xhtml">
   <url>
     <loc>https://aymen.benyedder.top/</loc>
-    <lastmod>2025-12-19</lastmod>
+    <lastmod>2026-03-22</lastmod>
     <changefreq>weekly</changefreq>
     <priority>1.0</priority>
   </url>
 
   <url>
     <loc>https://aymen.benyedder.top/services/mern-development.html</loc>
-    <lastmod>2025-12-19</lastmod>
-    <changefreq>weekly</changefreq>
+    <lastmod>2026-03-22</lastmod>
+    <changefreq>monthly</changefreq>
     <priority>0.9</priority>
   </url>
 
   <url>
     <loc>https://aymen.benyedder.top/services/wordpress-development.html</loc>
-    <lastmod>2025-12-19</lastmod>
-    <changefreq>weekly</changefreq>
+    <lastmod>2026-03-22</lastmod>
+    <changefreq>monthly</changefreq>
     <priority>0.9</priority>
   </url>
 
   <url>
     <loc>https://aymen.benyedder.top/geo/tunisia.html</loc>
-    <lastmod>2025-12-19</lastmod>
+    <lastmod>2026-03-22</lastmod>
     <changefreq>monthly</changefreq>
-    <priority>0.8</priority>
+    <priority>0.85</priority>
+    <xhtml:link rel="alternate" hreflang="en" href="https://aymen.benyedder.top/geo/tunisia.html" />
+    <xhtml:link rel="alternate" hreflang="fr" href="https://aymen.benyedder.top/geo/france.html" />
+    <xhtml:link rel="alternate" hreflang="x-default" href="https://aymen.benyedder.top/" />
   </url>
 
   <url>
     <loc>https://aymen.benyedder.top/geo/france.html</loc>
-    <lastmod>2025-12-19</lastmod>
+    <lastmod>2026-03-22</lastmod>
     <changefreq>monthly</changefreq>
-    <priority>0.8</priority>
+    <priority>0.85</priority>
+    <xhtml:link rel="alternate" hreflang="fr" href="https://aymen.benyedder.top/geo/france.html" />
+    <xhtml:link rel="alternate" hreflang="en" href="https://aymen.benyedder.top/geo/tunisia.html" />
+    <xhtml:link rel="alternate" hreflang="x-default" href="https://aymen.benyedder.top/" />
   </url>
 
   <url>
-    <loc>https://aymen.benyedder.top/blog/index.html</loc>
-    <lastmod>2026-03-18</lastmod>
+    <loc>https://aymen.benyedder.top/blog/</loc>
+    <lastmod>2026-03-22</lastmod>
     <changefreq>weekly</changefreq>
-    <priority>0.7</priority>
-  </url>
-
-  <url>
-    <loc>https://aymen.benyedder.top/blog/sample-post.html</loc>
-    <lastmod>2025-12-19</lastmod>
-    <changefreq>monthly</changefreq>
-    <priority>0.6</priority>
+    <priority>0.8</priority>
   </url>
 
   <url>
     <loc>https://aymen.benyedder.top/blog/devops-vps-startups.html</loc>
     <lastmod>2026-03-11</lastmod>
-    <changefreq>monthly</changefreq>
+    <changefreq>yearly</changefreq>
     <priority>0.8</priority>
   </url>
 
   <url>
     <loc>https://aymen.benyedder.top/blog/beyond-tutorial-web-resilience.html</loc>
     <lastmod>2026-03-11</lastmod>
-    <changefreq>monthly</changefreq>
+    <changefreq>yearly</changefreq>
     <priority>0.8</priority>
   </url>
 
   <url>
     <loc>https://aymen.benyedder.top/blog/ai-powered-workflow-orchestration-stack.html</loc>
     <lastmod>2026-03-14</lastmod>
-    <changefreq>monthly</changefreq>
-    <priority>0.8</priority>
+    <changefreq>yearly</changefreq>
+    <priority>0.82</priority>
   </url>
 
   <url>
     <loc>https://aymen.benyedder.top/blog/execution-layer-breach-hackerbot-claw-cicd-compromise.html</loc>
     <lastmod>2026-03-17</lastmod>
-    <changefreq>monthly</changefreq>
-    <priority>0.8</priority>
+    <changefreq>yearly</changefreq>
+    <priority>0.82</priority>
   </url>
 
   <url>
     <loc>https://aymen.benyedder.top/blog/from-logs-to-logic-claude-real-time-visualization-observability.html</loc>
     <lastmod>2026-03-17</lastmod>
-    <changefreq>monthly</changefreq>
-    <priority>0.8</priority>
+    <changefreq>yearly</changefreq>
+    <priority>0.82</priority>
   </url>
 
   <url>
     <loc>https://aymen.benyedder.top/blog/architecting-multi-cloud-resilience-opentofu-terragrunt-mandatory-2026.html</loc>
     <lastmod>2026-03-18</lastmod>
-    <changefreq>monthly</changefreq>
-    <priority>0.8</priority>
+    <changefreq>yearly</changefreq>
+    <priority>0.82</priority>
+  </url>
+
+  <url>
+    <loc>https://aymen.benyedder.top/rss.xml</loc>
+    <lastmod>2026-03-22</lastmod>
+    <changefreq>weekly</changefreq>
+    <priority>0.4</priority>
+  </url>
+
+  <url>
+    <loc>https://aymen.benyedder.top/llms.txt</loc>
+    <lastmod>2026-03-22</lastmod>
+    <changefreq>weekly</changefreq>
+    <priority>0.3</priority>
+  </url>
+
+  <url>
+    <loc>https://aymen.benyedder.top/llms-full.txt</loc>
+    <lastmod>2026-03-22</lastmod>
+    <changefreq>weekly</changefreq>
+    <priority>0.3</priority>
   </url>
 </urlset>
