@@ -18,12 +18,12 @@ Updated: 2026-03-22
 - [Blog Index](https://aymen.benyedder.top/blog/)
 
 ## Featured Technical Articles
-- [DevOps on a VPS for Startups](https://aymen.benyedder.top/blog/devops-vps-startups.html)
-- [Architecting Web Systems for 99.9% Resilience](https://aymen.benyedder.top/blog/beyond-tutorial-web-resilience.html)
-- [AI Workflow Orchestration Stack](https://aymen.benyedder.top/blog/ai-powered-workflow-orchestration-stack.html)
-- [Execution Layer Breach Analysis](https://aymen.benyedder.top/blog/execution-layer-breach-hackerbot-claw-cicd-compromise.html)
-- [From Logs to Logic](https://aymen.benyedder.top/blog/from-logs-to-logic-claude-real-time-visualization-observability.html)
-- [OpenTofu and Terragrunt in 2026](https://aymen.benyedder.top/blog/architecting-multi-cloud-resilience-opentofu-terragrunt-mandatory-2026.html)
+- [Architecting Multi Cloud Resilience: Why OpenTofu and Terragrunt Are Mandatory in 2026](https://aymen.benyedder.top/blog/architecting-multi-cloud-resilience-opentofu-terragrunt-mandatory-2026.html)
+- [The Execution Layer Breach: Analyzing the March 2026 Hackerbot-Claw CI/CD Compromise](https://aymen.benyedder.top/blog/execution-layer-breach-hackerbot-claw-cicd-compromise.html)
+- [From Logs to Logic: Claude's Real-Time Visualization is the Observability Leap DevOps Demanded](https://aymen.benyedder.top/blog/from-logs-to-logic-claude-real-time-visualization-observability.html)
+- [Building an AI-Powered Workflow Orchestration Stack: Open WebUI, n8n, Qdrant, and PostgreSQL](https://aymen.benyedder.top/blog/ai-powered-workflow-orchestration-stack.html)
+- [Beyond the Tutorial: Architecting Web Systems for 99.9% Resilience](https://aymen.benyedder.top/blog/beyond-tutorial-web-resilience.html)
+- [DevOps on a VPS for Startups: Self-Hosted CI/CD, Docker and Monitoring](https://aymen.benyedder.top/blog/devops-vps-startups.html)
 
 ## Contact
 - Email: aymen.ben.yedder@mail.com

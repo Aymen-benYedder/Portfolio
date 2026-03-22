@@ -50,22 +50,8 @@
   </url>
 
   <url>
-    <loc>https://aymen.benyedder.top/blog/devops-vps-startups.html</loc>
-    <lastmod>2026-03-11</lastmod>
-    <changefreq>yearly</changefreq>
-    <priority>0.8</priority>
-  </url>
-
-  <url>
-    <loc>https://aymen.benyedder.top/blog/beyond-tutorial-web-resilience.html</loc>
-    <lastmod>2026-03-11</lastmod>
-    <changefreq>yearly</changefreq>
-    <priority>0.8</priority>
-  </url>
-
-  <url>
-    <loc>https://aymen.benyedder.top/blog/ai-powered-workflow-orchestration-stack.html</loc>
-    <lastmod>2026-03-14</lastmod>
+    <loc>https://aymen.benyedder.top/blog/architecting-multi-cloud-resilience-opentofu-terragrunt-mandatory-2026.html</loc>
+    <lastmod>2026-03-18</lastmod>
     <changefreq>yearly</changefreq>
     <priority>0.82</priority>
   </url>
@@ -85,8 +71,22 @@
   </url>
 
   <url>
-    <loc>https://aymen.benyedder.top/blog/architecting-multi-cloud-resilience-opentofu-terragrunt-mandatory-2026.html</loc>
-    <lastmod>2026-03-18</lastmod>
+    <loc>https://aymen.benyedder.top/blog/ai-powered-workflow-orchestration-stack.html</loc>
+    <lastmod>2026-03-14</lastmod>
+    <changefreq>yearly</changefreq>
+    <priority>0.82</priority>
+  </url>
+
+  <url>
+    <loc>https://aymen.benyedder.top/blog/beyond-tutorial-web-resilience.html</loc>
+    <lastmod>2026-03-11</lastmod>
+    <changefreq>yearly</changefreq>
+    <priority>0.82</priority>
+  </url>
+
+  <url>
+    <loc>https://aymen.benyedder.top/blog/devops-vps-startups.html</loc>
+    <lastmod>2026-03-11</lastmod>
     <changefreq>yearly</changefreq>
     <priority>0.82</priority>
   </url>

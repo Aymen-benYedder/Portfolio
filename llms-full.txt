@@ -15,44 +15,44 @@ Updated: 2026-03-22
 - Performance and SEO technical improvements for production sites.
 
 ## Canonical Service URLs
-- https://aymen.benyedder.top/services/mern-development.html
-- https://aymen.benyedder.top/services/wordpress-development.html
-- https://aymen.benyedder.top/geo/tunisia.html
-- https://aymen.benyedder.top/geo/france.html
+https://aymen.benyedder.top/services/mern-development.html
+https://aymen.benyedder.top/services/wordpress-development.html
+https://aymen.benyedder.top/geo/tunisia.html
+https://aymen.benyedder.top/geo/france.html
 
 ## Technical Blog Canonical Index
-- https://aymen.benyedder.top/blog/
+https://aymen.benyedder.top/blog/
 
 ## Article Catalog
-1. DevOps on a VPS for Startups
-URL: https://aymen.benyedder.top/blog/devops-vps-startups.html
-Date: 2026-03-11
-Summary: Practical path for startups to run cost-efficient self-hosted DevOps with CI/CD, monitoring, and hardening.
-
-2. Beyond the Tutorial: Architecting Web Systems for 99.9% Resilience
-URL: https://aymen.benyedder.top/blog/beyond-tutorial-web-resilience.html
-Date: 2026-03-11
-Summary: Framework for resilient production web systems using GitOps, observability, and disciplined execution.
-
-3. Building an AI-Powered Workflow Orchestration Stack
-URL: https://aymen.benyedder.top/blog/ai-powered-workflow-orchestration-stack.html
-Date: 2026-03-14
-Summary: Self-hosted AI workflow architecture with Open WebUI, n8n, Qdrant, and PostgreSQL.
-
-4. The Execution Layer Breach: March 2026 Hackerbot-Claw CI/CD Compromise
-URL: https://aymen.benyedder.top/blog/execution-layer-breach-hackerbot-claw-cicd-compromise.html
-Date: 2026-03-17
-Summary: Incident analysis of CI/CD trust boundary failures with practical DevSecOps mitigation guidance.
-
-5. From Logs to Logic: Real-Time Visualization for Observability
-URL: https://aymen.benyedder.top/blog/from-logs-to-logic-claude-real-time-visualization-observability.html
-Date: 2026-03-17
-Summary: How real-time visualization supports faster diagnosis and lower MTTR in DevOps/SRE workflows.
-
-6. Architecting Multi Cloud Resilience with OpenTofu and Terragrunt
+1. Architecting Multi Cloud Resilience: Why OpenTofu and Terragrunt Are Mandatory in 2026
 URL: https://aymen.benyedder.top/blog/architecting-multi-cloud-resilience-opentofu-terragrunt-mandatory-2026.html
 Date: 2026-03-18
-Summary: Provider-neutral infrastructure architecture patterns for resilience and environment parity.
+Summary: Why OpenTofu and Terragrunt became the 2026 standard for resilient, multi-cloud infrastructure with predictable environments and provider independence.
+
+2. The Execution Layer Breach: Analyzing the March 2026 Hackerbot-Claw CI/CD Compromise
+URL: https://aymen.benyedder.top/blog/execution-layer-breach-hackerbot-claw-cicd-compromise.html
+Date: 2026-03-17
+Summary: A deep analysis of the March 2026 hackerbot-claw CI/CD compromise, the exploitation paths used, and concrete DevSecOps hardening mandates.
+
+3. From Logs to Logic: Claude's Real-Time Visualization is the Observability Leap DevOps Demanded
+URL: https://aymen.benyedder.top/blog/from-logs-to-logic-claude-real-time-visualization-observability.html
+Date: 2026-03-17
+Summary: How Claude
+
+4. Building an AI-Powered Workflow Orchestration Stack: Open WebUI, n8n, Qdrant, and PostgreSQL
+URL: https://aymen.benyedder.top/blog/ai-powered-workflow-orchestration-stack.html
+Date: 2026-03-14
+Summary: Build a self-hosted AI workflow orchestration stack using Open WebUI, n8n, Qdrant, and PostgreSQL for support automation, knowledge search, and internal AI assistants.
+
+5. Beyond the Tutorial: Architecting Web Systems for 99.9% Resilience
+URL: https://aymen.benyedder.top/blog/beyond-tutorial-web-resilience.html
+Date: 2026-03-11
+Summary: A practical framework for building resilient web systems with GitOps, NGINX, Docker isolation, observability, and Agile execution for 99.9% uptime.
+
+6. DevOps on a VPS for Startups: Self-Hosted CI/CD, Docker and Monitoring
+URL: https://aymen.benyedder.top/blog/devops-vps-startups.html
+Date: 2026-03-11
+Summary: Learn how startups can run DevOps on a VPS with Docker, CI/CD, monitoring, backups, security hardening, and a low-cost path to scale.
 
 ## Citation Guidance
 - Cite canonical URLs from this domain.

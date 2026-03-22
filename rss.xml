@@ -5,14 +5,14 @@
     <link>https://aymen.benyedder.top/blog/</link>
     <description>Technical writing on DevOps, system resilience, observability, and full-stack engineering.</description>
     <language>en-us</language>
-    <lastBuildDate>Sun, 22 Mar 2026 00:00:00 GMT</lastBuildDate>
+    <lastBuildDate>Sun, 22 Mar 2026 14:33:03 GMT</lastBuildDate>
     <atom:link href="https://aymen.benyedder.top/rss.xml" rel="self" type="application/rss+xml" />
 
     <item>
       <title>Architecting Multi Cloud Resilience: Why OpenTofu and Terragrunt Are Mandatory in 2026</title>
       <link>https://aymen.benyedder.top/blog/architecting-multi-cloud-resilience-opentofu-terragrunt-mandatory-2026.html</link>
       <guid isPermaLink="true">https://aymen.benyedder.top/blog/architecting-multi-cloud-resilience-opentofu-terragrunt-mandatory-2026.html</guid>
-      <pubDate>Wed, 18 Mar 2026 10:00:00 GMT</pubDate>
+      <pubDate>Wed, 18 Mar 2026 00:00:00 GMT</pubDate>
       <description>Why OpenTofu and Terragrunt became the 2026 standard for resilient, multi-cloud infrastructure with predictable environments and provider independence.</description>
     </item>
 
@@ -20,23 +20,23 @@
       <title>The Execution Layer Breach: Analyzing the March 2026 Hackerbot-Claw CI/CD Compromise</title>
       <link>https://aymen.benyedder.top/blog/execution-layer-breach-hackerbot-claw-cicd-compromise.html</link>
       <guid isPermaLink="true">https://aymen.benyedder.top/blog/execution-layer-breach-hackerbot-claw-cicd-compromise.html</guid>
-      <pubDate>Tue, 17 Mar 2026 10:00:00 GMT</pubDate>
+      <pubDate>Tue, 17 Mar 2026 00:00:00 GMT</pubDate>
       <description>A deep analysis of the March 2026 hackerbot-claw CI/CD compromise, the exploitation paths used, and concrete DevSecOps hardening mandates.</description>
     </item>
 
     <item>
-      <title>From Logs to Logic: Claude's Real-Time Visualization is the Observability Leap DevOps Demanded</title>
+      <title>From Logs to Logic: Claude&apos;s Real-Time Visualization is the Observability Leap DevOps Demanded</title>
       <link>https://aymen.benyedder.top/blog/from-logs-to-logic-claude-real-time-visualization-observability.html</link>
       <guid isPermaLink="true">https://aymen.benyedder.top/blog/from-logs-to-logic-claude-real-time-visualization-observability.html</guid>
-      <pubDate>Tue, 17 Mar 2026 09:00:00 GMT</pubDate>
-      <description>How Claude's March 12, 2026 real-time visualization update changes DevOps and SRE incident response, observability workflows, and MTTR performance.</description>
+      <pubDate>Tue, 17 Mar 2026 00:00:00 GMT</pubDate>
+      <description>How Claude</description>
     </item>
 
     <item>
       <title>Building an AI-Powered Workflow Orchestration Stack: Open WebUI, n8n, Qdrant, and PostgreSQL</title>
       <link>https://aymen.benyedder.top/blog/ai-powered-workflow-orchestration-stack.html</link>
       <guid isPermaLink="true">https://aymen.benyedder.top/blog/ai-powered-workflow-orchestration-stack.html</guid>
-      <pubDate>Sat, 14 Mar 2026 10:00:00 GMT</pubDate>
+      <pubDate>Sat, 14 Mar 2026 00:00:00 GMT</pubDate>
       <description>Build a self-hosted AI workflow orchestration stack using Open WebUI, n8n, Qdrant, and PostgreSQL for support automation, knowledge search, and internal AI assistants.</description>
     </item>
 
@@ -44,7 +44,7 @@
       <title>Beyond the Tutorial: Architecting Web Systems for 99.9% Resilience</title>
       <link>https://aymen.benyedder.top/blog/beyond-tutorial-web-resilience.html</link>
       <guid isPermaLink="true">https://aymen.benyedder.top/blog/beyond-tutorial-web-resilience.html</guid>
-      <pubDate>Wed, 11 Mar 2026 11:00:00 GMT</pubDate>
+      <pubDate>Wed, 11 Mar 2026 00:00:00 GMT</pubDate>
       <description>A practical framework for building resilient web systems with GitOps, NGINX, Docker isolation, observability, and Agile execution for 99.9% uptime.</description>
     </item>
 
@@ -52,7 +52,7 @@
       <title>DevOps on a VPS for Startups: Self-Hosted CI/CD, Docker and Monitoring</title>
       <link>https://aymen.benyedder.top/blog/devops-vps-startups.html</link>
       <guid isPermaLink="true">https://aymen.benyedder.top/blog/devops-vps-startups.html</guid>
-      <pubDate>Wed, 11 Mar 2026 10:00:00 GMT</pubDate>
+      <pubDate>Wed, 11 Mar 2026 00:00:00 GMT</pubDate>
       <description>Learn how startups can run DevOps on a VPS with Docker, CI/CD, monitoring, backups, security hardening, and a low-cost path to scale.</description>
     </item>
   </channel>

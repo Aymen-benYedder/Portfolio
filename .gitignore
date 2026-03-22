@@ -73,7 +73,9 @@ Thumbs.db
 # ===== Development/Reference Files =====
 refrence_project/
 Portflio/
-scripts/
+scripts/*
+!scripts/generate-seo-assets.mjs
+!scripts/SEO_AUTOGEN.md
 assets/resume copy.md
 TESTING_VERIFICATION_REPORT.md
 IMPLEMENTATION_COMPLETE.md
