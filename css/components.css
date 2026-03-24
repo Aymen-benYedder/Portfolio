@@ -2390,7 +2390,7 @@ select {
   margin-bottom: 0;
 }
 
-.capabilities-card h3 {
+.capabilities-card .skill-title {
   font-size: 0.875rem;
   font-weight: 700;
   color: var(--text-primary);
@@ -2581,7 +2581,7 @@ select {
   padding: 0;
 }
 
-.skill-category h3 {
+.skill-category .skill-title {
   font-size: var(--text-lg);
   font-weight: 700;
   color: var(--text-primary);
@@ -2659,7 +2659,7 @@ select {
   gap: 1rem;
 }
 
-.project-card h3 {
+.project-card .project-title {
   font-size: 1.25rem;
   font-weight: 700;
   color: var(--text-primary);
@@ -2667,7 +2667,7 @@ select {
   margin: 0;
 }
 
-.project-card:hover h3 {
+.project-card:hover .project-title {
   color: var(--accent-primary);
 }
 
@@ -2714,7 +2714,7 @@ select {
   z-index: 1;
 }
 
-.education-item h3 {
+.education-item .education-school {
   font-size: var(--text-base);
   font-weight: 700;
   color: var(--text-primary);
