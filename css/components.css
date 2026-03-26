@@ -768,24 +768,38 @@
   align-items: center;
   height: 44px;
   padding: 0 20px;
-  background: var(--accent-primary);
-  color: white;
+  background: #1d4ed8;
+  color: #ffffff;
   font-size: 0.85rem;
   font-weight: 600;
   border-radius: 99px;
   text-decoration: none;
-  border: 1px solid rgba(255, 255, 255, 0.2);
-  box-shadow: 0 0 15px rgba(0, 229, 255, 0.4);
+  border: 1px solid #1e40af;
+  box-shadow: 0 6px 16px rgba(30, 64, 175, 0.35);
   transition: all 0.3s ease;
   white-space: nowrap;
 }
 
 .btn-spotlight:hover {
   transform: translateY(-1px);
-  background: rgba(0, 212, 255, 0.15);
+  background: #1e40af;
   color: #ffffff;
-  box-shadow: 0 0 20px rgba(0, 212, 255, 0.6);
-  border-color: rgba(0, 212, 255, 0.4);
+  box-shadow: 0 8px 20px rgba(30, 64, 175, 0.4);
+  border-color: #1e3a8a;
+}
+
+[data-theme="dark"] .btn-spotlight {
+  background: #22d3ee;
+  color: #04202a;
+  border-color: #67e8f9;
+  box-shadow: 0 6px 16px rgba(34, 211, 238, 0.35);
+}
+
+[data-theme="dark"] .btn-spotlight:hover {
+  background: #67e8f9;
+  color: #03161d;
+  border-color: #a5f3fc;
+  box-shadow: 0 8px 20px rgba(103, 232, 249, 0.35);
 }
 
 .nav-cta {
@@ -851,6 +865,8 @@
 
   .nav-hub {
     padding: 6px 12px;
+    backdrop-filter: none;
+    -webkit-backdrop-filter: none;
   }
 
   /* Dropdown Styles */
@@ -2108,9 +2124,10 @@ select {
 }
 
 .deck-label {
-  font-size: 0.65rem;
+  font-size: 0.75rem;
+  font-weight: 600;
   text-transform: uppercase;
-  color: var(--text-muted);
+  color: #475569;
   letter-spacing: 0.1em;
 }
 
@@ -2129,6 +2146,10 @@ select {
 
 [data-theme="dark"] .deck-divider {
   background: rgba(255, 255, 255, 0.1);
+}
+
+[data-theme="dark"] .deck-label {
+  color: rgba(226, 232, 240, 0.95);
 }
 
 .deck-actions {
@@ -2158,11 +2179,17 @@ select {
 
 /* Responsive Adjustments */
 @media (max-width: 768px) {
+  .hero-grid-bg {
+    display: none;
+  }
+
   .hero-control-deck {
     flex-direction: column;
     gap: var(--space-md);
     width: 90%;
     padding: var(--space-lg);
+    backdrop-filter: none;
+    -webkit-backdrop-filter: none;
   }
 
   .deck-divider {
@@ -2774,10 +2801,16 @@ select {
 }
 
 .language-flag {
-  display: inline-block;
+  display: inline-flex;
+  align-items: center;
+  justify-content: center;
   width: 28px;
   height: 21px;
+  font-size: 1rem;
+  line-height: 1;
   border-radius: 3px;
+  background: #ffffff;
+  border: 1px solid #e2e8f0;
   flex-shrink: 0;
   opacity: 0.9;
   transition: all var(--transition-base);

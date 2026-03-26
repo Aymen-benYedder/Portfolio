@@ -47,6 +47,12 @@ body::before {
   opacity: 0.05;
 }
 
+@media (max-width: 768px) {
+  body::before {
+    display: none;
+  }
+}
+
 /* Deep Space Aurora Background */
 [data-theme="dark"] body,
 .dark body {

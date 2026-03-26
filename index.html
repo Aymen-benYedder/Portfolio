@@ -5,13 +5,33 @@
     <meta charset="UTF-8">
   <meta name="viewport" content="width=device-width, initial-scale=1.0">
 
-  <!-- Google tag (gtag.js) -->
-  <script async src="https://www.googletagmanager.com/gtag/js?id=G-HS3EJEQ16Q"></script>
+  <!-- Google tag (lazy-loaded for better initial paint) -->
   <script>
-    window.dataLayer = window.dataLayer || [];
-    function gtag(){dataLayer.push(arguments);}
-    gtag('js', new Date());
-    gtag('config', 'G-HS3EJEQ16Q');
+    (function () {
+      window.dataLayer = window.dataLayer || [];
+      window.gtag = window.gtag || function () { dataLayer.push(arguments); };
+
+      function loadAnalytics() {
+        if (window.__gtagLoaded) return;
+        window.__gtagLoaded = true;
+        var s = document.createElement('script');
+        s.async = true;
+        s.src = 'https://www.googletagmanager.com/gtag/js?id=G-HS3EJEQ16Q';
+        s.onload = function () {
+          gtag('js', new Date());
+          gtag('config', 'G-HS3EJEQ16Q');
+        };
+        document.head.appendChild(s);
+      }
+
+      window.addEventListener('load', function () {
+        if ('requestIdleCallback' in window) {
+          requestIdleCallback(loadAnalytics, { timeout: 3000 });
+        } else {
+          setTimeout(loadAnalytics, 1500);
+        }
+      });
+    })();
   </script>
 
     <!-- SEO & Primary Meta Tags -->
@@ -72,7 +92,7 @@
       "@type": "PostalAddress",
       "streetAddress": "El May, Midoun",
       "addressLocality": "Midoun",
-      "addressRegion": "Médenine",
+      "addressRegion": "Medenine",
       "postalCode": "4175",
       "addressCountry": "Tunisia"
     },
@@ -176,9 +196,12 @@
   }
   </script>
 
+    <!-- Font Preloads -->
+    <link rel="preload" href="assets/fonts/Inter-Regular.woff2" as="font" type="font/woff2" crossorigin>
+    <link rel="preload" href="assets/fonts/Inter-SemiBold.woff2" as="font" type="font/woff2" crossorigin>
+    <link rel="preload" href="assets/fonts/Inter-Bold.woff2" as="font" type="font/woff2" crossorigin>
+
     <!-- CSS Files: Development -->
-    <link rel="stylesheet" href="https://cdn.jsdelivr.net/gh/lipis/flag-icons@7.0.0/css/flag-icons.min.css">
-    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css" crossorigin="anonymous" referrerpolicy="no-referrer">
     <link rel="stylesheet" href="css/vars.css">
     <link rel="stylesheet" href="css/main.css">
     <link rel="stylesheet" href="css/components.css">
@@ -549,7 +572,7 @@
                         <span class="work-highlight">Overseeing automation, deployments, and infrastructure</span>
                         <div class="work-header">
                             <p class="work-title">Alizeth</p>
-                            <span class="work-badge">Médenine</span>
+                            <span class="work-badge">Medenine</span>
                         </div>
                         <p class="work-period">Mar 2023 - Present</p>
                         <p class="work-role">DevOps Engineer & Project Manager</p>
@@ -565,7 +588,7 @@
                         <span class="work-highlight">Ensuring system reliability and uptime</span>
                         <div class="work-header">
                             <p class="work-title">DevCom</p>
-                            <span class="work-badge">Médenine</span>
+                            <span class="work-badge">Medenine</span>
                         </div>
                         <p class="work-period">Mar 2021 - Feb 2023</p>
                         <p class="work-role">Tech Support</p>
@@ -641,7 +664,7 @@
                             <span class="project-impact-badge">Food Ordering Platform</span>
                         </div>
                         <p class="text-secondary" style="margin-bottom: var(--space-md);">Food ordering and restaurant management platform. Handled project management and DevOps infrastructure for scalable deployments.</p>
-                        <p class="text-muted" style="font-size: var(--text-xs); margin-bottom: var(--space-xs);">Alizeth - Médenine • On-going</p>
+                        <p class="text-muted" style="font-size: var(--text-xs); margin-bottom: var(--space-xs);">Alizeth - Medenine - On-going</p>
                         <div style="display:flex; gap:var(--space-sm); flex-wrap:wrap; margin-bottom: var(--space-md);">
                             <span class="badge">PM</span><span class="badge">DevOps</span><span class="badge">Infrastructure</span>
                         </div>
@@ -654,7 +677,7 @@
                             <span class="project-impact-badge">Safety Management Platform</span>
                         </div>
                         <p class="text-secondary" style="margin-bottom: var(--space-md);">Safety and risk management platform. Developed full-stack features and managed deployments for production reliability.</p>
-                        <p class="text-muted" style="font-size: var(--text-xs); margin-bottom: var(--space-xs);">DevCom - Médenine • On-going</p>
+                        <p class="text-muted" style="font-size: var(--text-xs); margin-bottom: var(--space-xs);">DevCom - Medenine - On-going</p>
                         <div style="display:flex; gap:var(--space-sm); flex-wrap:wrap; margin-bottom: var(--space-md);">
                             <span class="badge">Full Stack</span><span class="badge">Deployments</span><span class="badge">DevOps</span>
                         </div>
@@ -667,7 +690,7 @@
                             <span class="project-impact-badge">On-Demand Services Platform</span>
                         </div>
                         <p class="text-secondary" style="margin-bottom: var(--space-md);">On-demand services platform. Developed frontend features and managed application deployments to production.</p>
-                        <p class="text-muted" style="font-size: var(--text-xs); margin-bottom: var(--space-xs);">CB Audit - Médenine • On-going</p>
+                        <p class="text-muted" style="font-size: var(--text-xs); margin-bottom: var(--space-xs);">CB Audit - Medenine - On-going</p>
                         <div style="display:flex; gap:var(--space-sm); flex-wrap:wrap; margin-bottom: var(--space-md);">
                             <span class="badge">Frontend</span><span class="badge">Deployments</span><span class="badge">DevOps</span>
                         </div>
@@ -701,9 +724,9 @@
                             Infrastructure & DevOps
                         </p>
                         <div class="skill-badges">
-                            <span class="badge"><i class="fab fa-linux"></i>Linux</span><span class="badge"><i class="fas fa-cog"></i>NGINX</span><span
-                                class="badge"><i class="fas fa-feather"></i>Apache</span><span class="badge"><i class="fab fa-docker"></i>Docker</span><span
-                                class="badge"><i class="fas fa-sync"></i>CI/CD</span><span class="badge"><i class="fab fa-git"></i>Git</span><span class="badge"><i class="fab fa-github"></i>GitHub Actions</span><span class="badge"><i class="fas fa-code-branch"></i>ArgoCD</span><span class="badge"><i class="fas fa-bolt"></i>FluxCD</span><span class="badge"><i class="fas fa-hourglass-end"></i>PM2</span>
+                            <span class="badge">Linux</span><span class="badge">NGINX</span><span
+                                class="badge">Apache</span><span class="badge">Docker</span><span
+                                class="badge">CI/CD</span><span class="badge">Git</span><span class="badge">GitHub Actions</span><span class="badge">ArgoCD</span><span class="badge">FluxCD</span><span class="badge">PM2</span>
                         </div>
                     </div>
 
@@ -715,8 +738,8 @@
                             Monitoring & Security
                         </p>
                         <div class="skill-badges">
-                            <span class="badge"><i class="fas fa-chart-bar"></i>Prometheus</span><span class="badge"><i class="fas fa-chart-line"></i>Grafana</span><span
-                                class="badge"><i class="fas fa-file-lines"></i>ELK</span><span class="badge"><i class="fas fa-lock"></i>SSL/TLS</span><span class="badge"><i class="fas fa-shield"></i>Fail2Ban</span>
+                            <span class="badge">Prometheus</span><span class="badge">Grafana</span><span
+                                class="badge">ELK</span><span class="badge">SSL/TLS</span><span class="badge">Fail2Ban</span>
                         </div>
                     </div>
 
@@ -729,9 +752,9 @@
                             Development
                         </p>
                         <div class="skill-badges">
-                            <span class="badge"><i class="fab fa-react"></i>React</span><span class="badge"><i class="fab fa-node-js"></i>Node.js</span><span
-                                class="badge"><i class="fab fa-js"></i>JavaScript</span><span class="badge"><i class="fab fa-html5"></i>HTML5</span><span
-                                class="badge"><i class="fab fa-css3-alt"></i>CSS3</span>
+                            <span class="badge">React</span><span class="badge">Node.js</span><span
+                                class="badge">JavaScript</span><span class="badge">HTML5</span><span
+                                class="badge">CSS3</span>
                         </div>
                     </div>
 
@@ -745,7 +768,7 @@
                             Automation & Scripting
                         </p>
                         <div class="skill-badges">
-                            <span class="badge"><i class="fas fa-terminal"></i>Bash</span><span class="badge"><i class="fab fa-windows"></i>PowerShell</span>
+                            <span class="badge">Bash</span><span class="badge">PowerShell</span>
                         </div>
                     </div>
 
@@ -759,8 +782,8 @@
                             Databases
                         </p>
                         <div class="skill-badges">
-                            <span class="badge"><i class="fas fa-leaf"></i>MongoDB</span><span class="badge"><i class="fas fa-database"></i>PostgreSQL</span><span
-                                class="badge"><i class="fas fa-database"></i>MySQL</span>
+                            <span class="badge">MongoDB</span><span class="badge">PostgreSQL</span><span
+                                class="badge">MySQL</span>
                         </div>
                     </div>
 
@@ -775,8 +798,8 @@
                             Project Management
                         </p>
                         <div class="skill-badges">
-                            <span class="badge"><i class="fas fa-bullseye"></i>Agile</span><span class="badge"><i class="fas fa-person-running"></i>Scrum</span><span
-                                class="badge"><i class="fas fa-clipboard-list"></i>Kanban</span><span class="badge"><i class="fas fa-check-circle"></i>ClickUp</span>
+                            <span class="badge">Agile</span><span class="badge">Scrum</span><span
+                                class="badge">Kanban</span><span class="badge">ClickUp</span>
                         </div>
                     </div>
                 </div>
@@ -796,7 +819,7 @@
                 <div class="languages-list">
                     <div class="language-card">
                         <div class="language-left">
-                            <span class="language-flag fi fi-sa"></span>
+                            <span class="language-flag" aria-hidden="true">AR</span>
                             <span class="language-name">Arabic</span>
                         </div>
                         <span class="language-level">Native</span>
@@ -804,7 +827,7 @@
 
                     <div class="language-card">
                         <div class="language-left">
-                            <span class="language-flag fi fi-gb"></span>
+                            <span class="language-flag" aria-hidden="true">EN</span>
                             <span class="language-name">English</span>
                         </div>
                         <span class="language-level">Advanced</span>
@@ -812,7 +835,7 @@
 
                     <div class="language-card">
                         <div class="language-left">
-                            <span class="language-flag fi fi-fr"></span>
+                            <span class="language-flag" aria-hidden="true">FR</span>
                             <span class="language-name">French</span>
                         </div>
                         <span class="language-level">Fluent</span>
@@ -931,7 +954,7 @@
 
                 <!-- Column 2: Navigation -->
                 <div class="footer-col">
-                    <h4 class="footer-heading">NAVIGATION</h4>
+                    <h3 class="footer-heading">NAVIGATION</h3>
                     <ul class="footer-links">
                         <li><a href="#home">Home Base</a></li>
                         <li><a href="#skills">Capabilities</a></li>
@@ -942,7 +965,7 @@
 
                 <!-- Column 3: Services -->
                 <div class="footer-col">
-                    <h4 class="footer-heading">SERVICES</h4>
+                    <h3 class="footer-heading">SERVICES</h3>
                     <ul class="footer-links">
                         <li><a href="services/mern-development.html">MERN Stack</a></li>
                         <li><a href="services/wordpress-development.html">WordPress</a></li>
@@ -953,7 +976,7 @@
 
                 <!-- Column 4: Status -->
                 <div class="footer-col">
-                    <h4 class="footer-heading">STATUS</h4>
+                    <h3 class="footer-heading">STATUS</h3>
                     <div class="status-widget">
                         <div class="status-row">
                             <span class="status-dot online"></span>
