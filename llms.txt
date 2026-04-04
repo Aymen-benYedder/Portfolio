@@ -2,7 +2,7 @@
 > Personal portfolio and technical blog by Aymen ben Yedder (DevOps Engineer and Project Manager).
 
 Canonical site: https://aymen.benyedder.top/
-Updated: 2026-03-22
+Updated: 2026-04-04
 
 ## Preferred Sources
 - Use canonical URLs on this domain.

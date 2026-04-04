@@ -100,6 +100,18 @@ function cleanTitle(title) {
   return title.replace(/\s*\|\s*Full-Stack Developer Blog\s*$/i, "").trim();
 }
 
+function hasNoindexRobots(html) {
+  const patternA =
+    /<meta\s+[^>]*name=["']robots["'][^>]*content=["'][^"']*noindex[^"']*["'][^>]*>/i;
+  const patternB =
+    /<meta\s+[^>]*content=["'][^"']*noindex[^"']*["'][^>]*name=["']robots["'][^>]*>/i;
+  return patternA.test(html) || patternB.test(html);
+}
+
+function hasTemplatePlaceholders(html) {
+  return html.includes("[PLACEHOLDER:");
+}
+
 function dateFromAny(value, fallbackIsoDate) {
   if (!value) {
     return new Date(`${fallbackIsoDate}T00:00:00Z`);
@@ -129,6 +141,9 @@ async function collectBlogPosts() {
 
     const rel = path.posix.join("blog", file);
     const html = await readFile(rel);
+    if (hasNoindexRobots(html) || hasTemplatePlaceholders(html)) {
+      continue;
+    }
     const fallbackDate = await fileDate(rel);
 
     const title = matchTitle(html);
