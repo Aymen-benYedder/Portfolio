@@ -355,7 +355,7 @@
           <!-- Stat 1 -->
           <div class="deck-item">
             <span class="deck-label">ARTICLES</span>
-            <span class="deck-value">25+ POSTS</span>
+            <span class="deck-value">6 LIVE POSTS</span>
           </div>
 
           <div class="deck-divider"></div>
@@ -363,19 +363,19 @@
           <!-- Stat 2 -->
           <div class="deck-item">
             <span class="deck-label">TOPICS</span>
-            <span class="deck-value">MERN & WORDPRESS</span>
+            <span class="deck-value">DEVOPS & AI OPS</span>
           </div>
 
           <div class="deck-divider"></div>
 
           <!-- Actions -->
           <div class="deck-actions">
-            <button class="btn btn-sm btn-glass">
+            <a href="#blog-grid" class="btn btn-sm btn-glass">
               <span>VIEW ALL</span>
-            </button>
-            <button class="btn btn-sm btn-primary">
-              <span>SUBSCRIBE</span>
-            </button>
+            </a>
+            <a href="../rss.xml" class="btn btn-sm btn-primary">
+              <span>RSS FEED</span>
+            </a>
           </div>
         </div>
       </div>
@@ -386,14 +386,8 @@
       <div class="container">
         <div class="filter-buttons" role="toolbar" aria-label="Filter blog articles by category">
           <button class="filter-btn active" data-filter="all" aria-pressed="true" aria-label="Show all articles">All Articles</button>
-          <button class="filter-btn" data-filter="mern" aria-pressed="false" aria-label="Filter MERN Stack">MERN Stack</button>
-          <button class="filter-btn" data-filter="wordpress" aria-pressed="false" aria-label="Filter WordPress">WordPress</button>
           <button class="filter-btn" data-filter="ai" aria-pressed="false" aria-label="Filter AI & Automation">AI & Automation</button>
-          <button class="filter-btn" data-filter="performance" aria-pressed="false" aria-label="Filter Performance">Performance</button>
-          <button class="filter-btn" data-filter="tutorial" aria-pressed="false" aria-label="Filter Tutorials">Tutorials</button>
           <button class="filter-btn" data-filter="devops" aria-pressed="false" aria-label="Filter DevOps">DevOps</button>
-          <button class="filter-btn" data-filter="typescript" aria-pressed="false" aria-label="Filter TypeScript">TypeScript</button>
-          <button class="filter-btn" data-filter="api" aria-pressed="false" aria-label="Filter API Design">API Design</button>
         </div>
       </div>
     </section>
@@ -552,6 +546,7 @@
             </div>
           </article>
 
+          <template id="blog-placeholder-archive">
           <!-- Sample Post Card 1 -->
           <article class="glass-card blog-card" data-category="mern">
             <div class="blog-card-header">
@@ -776,6 +771,7 @@
               <a href="sample-post.html" class="btn btn-ghost">Read More →</a>
             </div>
           </article>
+          </template>
 
         </div>
 
