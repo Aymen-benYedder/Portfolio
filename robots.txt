@@ -1,24 +1,7 @@
-# Aymen.dev robots policy
-# Updated: 2026-03-22
-
 User-agent: *
-Allow: /
+Disallow:
 
-# Prevent indexing of non-public/internal build and utility paths.
-Disallow: /backend/
-Disallow: /api/
-Disallow: /refrence_project/
+# Crawl-delay and sitemap are optional. CI will replace https://aymen.benyedder.top/sitemap.xml with your BASE_URL.
+# If you want to block any paths, update this template before generating robots.txt
 
-# Exclude non-production blog assets from indexing.
-Disallow: /blog/template.html
-Disallow: /blog/sample-post.html
-
-# Explicitly allow static assets used for rendering.
-Allow: /*.css$
-Allow: /*.js$
-Allow: /*.webp$
-Allow: /*.avif$
-Allow: /*.woff2$
-
-# Primary XML sitemap.
 Sitemap: https://aymen.benyedder.top/sitemap.xml

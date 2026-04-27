@@ -1,0 +1,7 @@
+User-agent: *
+Disallow:
+
+# Crawl-delay and sitemap are optional. CI will replace {{SITEMAP_URL}} with your BASE_URL.
+# If you want to block any paths, update this template before generating robots.txt
+
+Sitemap: {{SITEMAP_URL}}

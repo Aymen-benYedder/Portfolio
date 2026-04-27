@@ -1,0 +1,12 @@
+{
+  "name": "portfolio-scripts",
+  "version": "1.0.0",
+  "private": true,
+  "type": "module",
+  "scripts": {
+    "generate-sitemap": "node scripts/generate-sitemap.mjs",
+    "inject-breadcrumbs": "node scripts/inject-breadcrumbs.mjs",
+    "validate-jsonld": "node scripts/validate-jsonld.mjs",
+    "optimize-cwv": "node scripts/optimize-cwv.mjs"
+  }
+}

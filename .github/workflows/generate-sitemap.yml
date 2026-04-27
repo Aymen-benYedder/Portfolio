@@ -1,0 +1,39 @@
+name: Generate sitemap and robots
+
+on:
+  push:
+    branches: [ main, master ]
+  pull_request:
+    branches: [ main, master ]
+
+jobs:
+  build:
+    runs-on: ubuntu-latest
+    steps:
+      - name: Checkout
+        uses: actions/checkout@v4
+        with:
+          persist-credentials: true
+
+      - name: Setup Node.js
+        uses: actions/setup-node@v4
+        with:
+          node-version: '18'
+
+      - name: Run sitemap generator
+        env:
+          BASE_URL: ${{ secrets.SITE_BASE_URL }}
+        run: |
+          node scripts/generate-sitemap.mjs
+
+      - name: Commit and push sitemap (if changed)
+        run: |
+          git config user.name "github-actions[bot]"
+          git config user.email "github-actions[bot]@users.noreply.github.com"
+          if [ -n "$(git status --porcelain)" ]; then
+            git add sitemap.xml robots.txt || true
+            git commit -m "chore(ci): update sitemap and robots.txt" || true
+            git push origin HEAD:${{ github.ref_name }} || true
+          else
+            echo "No changes to commit"
+          fi
