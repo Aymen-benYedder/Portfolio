@@ -76,6 +76,11 @@ Portflio/
 scripts/*
 !scripts/generate-seo-assets.mjs
 !scripts/SEO_AUTOGEN.md
+!scripts/generate-sitemap.mjs
+!scripts/generate-sitemap.ps1
+!scripts/inject-breadcrumbs.mjs
+!scripts/validate-jsonld.mjs
+!scripts/optimize-cwv.mjs
 assets/resume copy.md
 TESTING_VERIFICATION_REPORT.md
 IMPLEMENTATION_COMPLETE.md
