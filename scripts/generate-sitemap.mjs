@@ -28,9 +28,11 @@ async function collectHtmlFiles(dir, baseDir) {
     const full = path.join(dir, ent.name);
     const rel = path.relative(baseDir, full).replace(/\\/g, '/');
     if (ent.isDirectory()) {
-      if (['node_modules', '.git', '.github', 'scripts'].includes(ent.name)) continue;
+      if (['node_modules', '.git', '.github', 'scripts', 'mockups'].includes(ent.name)) continue;
       files.push(...await collectHtmlFiles(full, baseDir));
     } else if (ent.isFile() && ent.name.endsWith('.html')) {
+      if (/^google[a-z0-9]+\.html$/i.test(ent.name)) continue;
+      if (await hasNoindexHtml(full)) continue;
       files.push({ full, rel });
     }
   }
@@ -61,6 +63,15 @@ async function statIso(file) {
 
 function escapeXml(str) {
   return str.replace(/&/g, '&amp;').replace(/</g, '&lt;').replace(/>/g, '&gt;');
+}
+
+async function hasNoindexHtml(file) {
+  try {
+    const html = await fs.readFile(file, 'utf8');
+    return /<meta\s+[^>]*name=["']robots["'][^>]*content=["'][^"']*noindex[^"']*["'][^>]*>/i.test(html);
+  } catch (e) {
+    return false;
+  }
 }
 
 async function buildSitemap() {

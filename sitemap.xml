@@ -2,97 +2,79 @@
 <urlset xmlns="http://www.sitemaps.org/schemas/sitemap/0.9">
   <url>
     <loc>https://aymen.benyedder.top/</loc>
-    <lastmod>2026-04-27T23:27:48.457Z</lastmod>
+    <lastmod>2026-04-27T23:05:39.373Z</lastmod>
     <changefreq>daily</changefreq>
     <priority>1.0</priority>
   </url>
   <url>
     <loc>https://aymen.benyedder.top/blog/</loc>
-    <lastmod>2026-04-27T23:27:48.455Z</lastmod>
+    <lastmod>2026-04-27T23:04:34.043Z</lastmod>
     <changefreq>weekly</changefreq>
     <priority>0.8</priority>
   </url>
   <url>
     <loc>https://aymen.benyedder.top/blog/ai-powered-workflow-orchestration-stack.html</loc>
-    <lastmod>2026-04-27T23:27:48.455Z</lastmod>
+    <lastmod>2026-04-27T22:53:35.832Z</lastmod>
     <changefreq>weekly</changefreq>
     <priority>0.8</priority>
   </url>
   <url>
     <loc>https://aymen.benyedder.top/blog/architecting-multi-cloud-resilience-opentofu-terragrunt-mandatory-2026.html</loc>
-    <lastmod>2026-04-27T23:27:48.455Z</lastmod>
+    <lastmod>2026-04-27T22:53:35.832Z</lastmod>
     <changefreq>weekly</changefreq>
     <priority>0.8</priority>
   </url>
   <url>
     <loc>https://aymen.benyedder.top/blog/beyond-tutorial-web-resilience.html</loc>
-    <lastmod>2026-04-27T23:27:48.455Z</lastmod>
+    <lastmod>2026-04-27T23:04:34.023Z</lastmod>
     <changefreq>weekly</changefreq>
     <priority>0.8</priority>
   </url>
   <url>
     <loc>https://aymen.benyedder.top/blog/devops-vps-startups.html</loc>
-    <lastmod>2026-04-27T23:27:48.455Z</lastmod>
+    <lastmod>2026-04-27T23:04:34.031Z</lastmod>
     <changefreq>weekly</changefreq>
     <priority>0.8</priority>
   </url>
   <url>
     <loc>https://aymen.benyedder.top/blog/execution-layer-breach-hackerbot-claw-cicd-compromise.html</loc>
-    <lastmod>2026-04-27T23:27:48.455Z</lastmod>
+    <lastmod>2026-04-27T22:52:42.214Z</lastmod>
     <changefreq>weekly</changefreq>
     <priority>0.8</priority>
   </url>
   <url>
     <loc>https://aymen.benyedder.top/blog/from-logs-to-logic-claude-real-time-visualization-observability.html</loc>
-    <lastmod>2026-04-27T23:27:48.455Z</lastmod>
-    <changefreq>weekly</changefreq>
-    <priority>0.8</priority>
-  </url>
-  <url>
-    <loc>https://aymen.benyedder.top/blog/sample-post.html</loc>
-    <lastmod>2026-04-27T23:27:48.455Z</lastmod>
-    <changefreq>weekly</changefreq>
-    <priority>0.8</priority>
-  </url>
-  <url>
-    <loc>https://aymen.benyedder.top/blog/template.html</loc>
-    <lastmod>2026-04-27T23:27:48.455Z</lastmod>
+    <lastmod>2026-04-27T22:53:35.832Z</lastmod>
     <changefreq>weekly</changefreq>
     <priority>0.8</priority>
   </url>
   <url>
     <loc>https://aymen.benyedder.top/geo/france.html</loc>
-    <lastmod>2026-04-27T23:27:48.457Z</lastmod>
+    <lastmod>2026-03-26T18:44:32.160Z</lastmod>
     <changefreq>monthly</changefreq>
     <priority>0.5</priority>
   </url>
   <url>
     <loc>https://aymen.benyedder.top/geo/tunisia.html</loc>
-    <lastmod>2026-04-27T23:27:48.457Z</lastmod>
+    <lastmod>2026-03-26T18:44:36.561Z</lastmod>
     <changefreq>monthly</changefreq>
     <priority>0.5</priority>
   </url>
   <url>
-    <loc>https://aymen.benyedder.top/googlec2359b4f38019308.html</loc>
-    <lastmod>2026-04-27T23:27:48.457Z</lastmod>
-    <changefreq>monthly</changefreq>
-    <priority>0.5</priority>
-  </url>
-  <url>
-    <loc>https://aymen.benyedder.top/mockups/menu_preview.html</loc>
-    <lastmod>2026-04-27T23:27:48.458Z</lastmod>
+    <loc>https://aymen.benyedder.top/refrence_project/</loc>
+    <lastmod>2026-03-12T01:35:03.575Z</lastmod>
     <changefreq>monthly</changefreq>
     <priority>0.5</priority>
   </url>
   <url>
     <loc>https://aymen.benyedder.top/services/mern-development.html</loc>
-    <lastmod>2026-04-27T23:27:48.459Z</lastmod>
+    <lastmod>2026-04-27T23:05:39.384Z</lastmod>
     <changefreq>monthly</changefreq>
     <priority>0.7</priority>
   </url>
   <url>
     <loc>https://aymen.benyedder.top/services/wordpress-development.html</loc>
-    <lastmod>2026-04-27T23:27:48.459Z</lastmod>
+    <lastmod>2026-04-27T23:05:39.387Z</lastmod>
     <changefreq>monthly</changefreq>
     <priority>0.7</priority>
   </url>
