@@ -389,12 +389,14 @@
         <p>Manual cloud console workflows do not scale. Massive copy-pasted configuration does not scale either. Infrastructure as Code solved this in principle, but execution quality depends on the stack behind it.</p>
 
         <h2>OpenTofu: The Open Source Engine</h2>
-        <p>OpenTofu emerged as a necessity. It is a community-driven execution engine that transforms infrastructure definitions into real cloud assets.</p>
-        <p>When you define a secure network, server tier, or database cluster in code, OpenTofu applies that architecture consistently. Most importantly, your infrastructure logic remains portable. That protects teams from abrupt licensing constraints and pricing volatility.</p>
+        <p><a href="https://opentofu.org/" target="_blank" rel="noopener">OpenTofu</a> emerged as a necessity. It is a community-driven execution engine that transforms infrastructure definitions into real cloud assets.</p>
+        <p>When you define a secure network, server tier, or database cluster in code, OpenTofu applies that architecture consistently. Unlike proprietary tools, your infrastructure logic remains portable. That protects teams from abrupt licensing constraints and pricing volatility.</p>
+        <p><strong>Key advantage:</strong> OpenTofu is vendor-agnostic, supporting <a href="https://aws.amazon.com/" target="_blank" rel="noopener">AWS</a>, <a href="https://cloud.google.com/" target="_blank" rel="noopener">Google Cloud</a>, <a href="https://azure.microsoft.com/" target="_blank" rel="noopener">Azure</a>, and on-premises infrastructure through a unified interface.</p>
 
         <h2>Terragrunt: The Blueprint for Scale</h2>
         <p>A strong engine is not enough without coordination. As systems grow, teams often duplicate the same definitions across development, staging, and production. This redundancy drives drift and outage risk.</p>
-        <p>Terragrunt acts as an orchestration layer on top of OpenTofu. You write core modules once, then reuse them cleanly across environments. The result is less duplication, clearer structure, and easier onboarding for any engineer joining the project.</p>
+        <p><a href="https://terragrunt.gruntwork.io/" target="_blank" rel="noopener">Terragrunt</a> acts as an orchestration layer on top of OpenTofu. You write core modules once, then reuse them cleanly across environments. The result is less duplication, clearer structure, and easier onboarding for any engineer joining the project.</p>
+        <p>Learn more from <a href="https://gruntwork.io/" target="_blank" rel="noopener">Gruntwork</a>, the creators of Terragrunt.</p>
 
         <h2>The Strategic Value for Engineering Teams</h2>
         <ul>
@@ -402,6 +404,22 @@
           <li><strong>Bulletproof state management:</strong> Remote state, locking, and encryption patterns reduce collision risk when multiple engineers deploy at the same time.</li>
           <li><strong>True provider independence:</strong> Business logic stays in your control while deployment targets can evolve across AWS, Google Cloud, or private infrastructure.</li>
         </ul>
+
+        <h2>Technical Glossary</h2>
+        <div class="glossary-section">
+          <dl class="glossary-list">
+            <dt><strong>Infrastructure as Code (IaC)</strong></dt>
+            <dd>Practice of managing cloud infrastructure through code (e.g., <a href="https://opentofu.org/" target="_blank" rel="noopener">OpenTofu</a>) instead of manual console clicks, enabling version control, reproducibility, and audit trails.</dd>
+            <dt><strong>Provider Lock-in</strong></dt>
+            <dd>Dependency on a single vendor's proprietary tools, making migration to competitors expensive or impossible. OpenTofu prevents this through portability.</dd>
+            <dt><strong>State File</strong></dt>
+            <dd>A record of all infrastructure resources currently deployed, managed by OpenTofu or Terraform. Remote state files enable team collaboration and prevent conflicts.</dd>
+            <dt><strong>Terraform Module</strong></dt>
+            <dd>Reusable package of OpenTofu/Terraform code defining infrastructure components (e.g., VPC, database). Modules reduce duplication across environments.</dd>
+            <dt><strong>State Locking</strong></dt>
+            <dd>Mechanism preventing concurrent infrastructure modifications. Ensures only one team member can apply changes at a time, protecting against state corruption.</dd>
+          </dl>
+        </div>
 
         <div class="highlight-section">
           <h3 style="margin-top: 0; color: var(--accent-primary);">Adoption Playbook</h3>

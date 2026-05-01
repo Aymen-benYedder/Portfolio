@@ -385,8 +385,8 @@
         <p>Instead of static text output, engineers now get an interactive execution view for stack traces, traffic spikes, and resource contention while investigating live issues.</p>
 
         <h2>The End of Wall of Text Analysis</h2>
-        <p>Traditional LLM troubleshooting often looked like this: paste hundreds of CloudWatch lines, get a bullet summary, then manually reconstruct the timeline in your head. That text to mental model conversion is slow during incident response.</p>
-        <p>The March 12 release introduces interactive visualizations inside the chat flow itself. The visuals are adaptive and context-aware.</p>
+        <p>Traditional LLM troubleshooting often looked like this: paste hundreds of logs into a chat window with <a href="https://claude.ai/" target="_blank" rel="noopener">Claude</a>, get a bullet summary, then manually reconstruct the timeline. That text-to-mental-model conversion is slow during incident response.</p>
+        <p>The March 12 release introduces interactive visualizations inside the chat flow itself. Access <a href="https://docs.anthropic.com/" target="_blank" rel="noopener">Claude API documentation</a> to integrate these capabilities into custom observability tooling.</p>
         <ul>
           <li><strong>Dynamic flowcharts:</strong> Claude can parse a complex microservices manifest and render a clickable architecture map.</li>
           <li><strong>Time-series insight:</strong> Feed raw performance metrics and Claude can produce interactive charts where engineers can inspect specific latency breach points.</li>
@@ -394,9 +394,9 @@
         </ul>
 
         <h2>Strategic Impact on the DevOps Lifecycle</h2>
-        <p>This closes part of the long-standing gap between generative AI and operational intelligence. The practical benefit is lower Mean Time to Resolution.</p>
+        <p>This closes part of the long-standing gap between generative AI and operational intelligence. The practical benefit is lower Mean Time to Resolution (MTTR).</p>
         <ul>
-          <li><strong>Faster observability analysis:</strong> During incidents, pattern recognition happens quicker when the issue is visualized, not summarized as plain text.</li>
+          <li><strong>Faster observability analysis:</strong> During incidents, pattern recognition happens quicker when the issue is visualized, not summarized as plain text. Popular observability platforms like <a href="https://www.datadog.com/" target="_blank" rel="noopener">Datadog</a>, <a href="https://newrelic.com/" target="_blank" rel="noopener">New Relic</a>, <a href="https://prometheus.io/" target="_blank" rel="noopener">Prometheus</a>, and <a href="https://grafana.com/" target="_blank" rel="noopener">Grafana</a> provide raw data; Claude transforms it into actionable intelligence.</li>
           <li><strong>Codebase contextualization:</strong> Paired with Claude Code, teams can visualize blast radius and architecture impact before running a build.</li>
           <li><strong>No-code dashboards:</strong> Junior engineers can create usable incident dashboards by asking Claude to visualize recent Prometheus or log-derived data.</li>
         </ul>
@@ -415,6 +415,24 @@
         <div class="highlight-section">
           <h3 style="margin-top: 0; color: var(--accent-primary);">Practical Rollout Tip</h3>
           <p>Start with one high-noise service in production. Standardize log shape, run incident reviews with inline visuals for two weeks, and compare MTTR and handoff quality against your current baseline.</p>
+        </div>
+
+        <h2>Technical Glossary</h2>
+        <div class="glossary-section">
+          <dl class="glossary-list">
+            <dt><strong>MTTR (Mean Time to Resolution)</strong></dt>
+            <dd>Average time from incident detection to system recovery. Lower MTTR indicates efficient incident response. Visualization reduces MTTR by accelerating diagnosis.</dd>
+            <dt><strong>Observability</strong></dt>
+            <dd>System property enabling engineers to understand internal behavior through external outputs (metrics, logs, traces). Different from monitoring, which alerts on known issues. Observability helps diagnose unknown problems.</dd>
+            <dt><strong>Metric</strong></dt>
+            <dd>Quantitative measurement (e.g., CPU %, latency, request rate). <a href="https://prometheus.io/" target="_blank" rel="noopener">Prometheus</a> and <a href="https://grafana.com/" target="_blank" rel="noopener">Grafana</a> are common metric storage/visualization systems.</dd>
+            <dt><strong>Trace</strong></dt>
+            <dd>Record of a request's path through a distributed system. Shows call chains, latency at each hop, and failure points. Critical for microservices debugging.</dd>
+            <dt><strong>Log</strong></dt>
+            <dd>Text or structured data record of system events. Structured logs (JSON) are ideal for AI analysis and visualization.</dd>
+            <dt><strong>Dashboard</strong></dt>
+            <dd>Visual interface aggregating metrics, logs, and traces. <a href="https://grafana.com/" target="_blank" rel="noopener">Grafana</a> and <a href="https://www.datadog.com/" target="_blank" rel="noopener">Datadog</a> offer dynamic dashboarding. Claude can auto-generate temporary dashboards from data.</dd>
+          </dl>
         </div>
 
         <h2>Conclusion</h2>

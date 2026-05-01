@@ -402,13 +402,32 @@
         </ol>
 
         <h2>DevSecOps Mandates: Hardening the CI/CD Pipeline</h2>
-        <p>This incident makes one point clear: automation without strict governance becomes liability at scale. CI/CD runners must be treated with the same zero-trust rigor applied to production systems.</p>
+        <p>This incident makes one point clear: automation without strict governance becomes liability at scale. <a href="https://docs.github.com/en/actions/security-guides" target="_blank" rel="noopener">GitHub Actions security guides</a> outline best practices that remain critical.</p>
         <ul>
-          <li><strong>Enforce least privilege at job level:</strong> Set explicit permissions per workflow and job. Default to <code>contents: read</code> and elevate only where strictly required.</li>
+          <li><strong>Enforce least privilege at job level:</strong> Set explicit permissions per workflow and job. Default to <code>contents: read</code> and elevate only where strictly required. Reference: <a href="https://docs.github.com/en/actions/security-guides/automatic-token-authentication" target="_blank" rel="noopener">GitHub token scope documentation</a>.</li>
           <li><strong>Eradicate untrusted checkouts:</strong> Never checkout untrusted fork code inside privileged <code>pull_request_target</code> jobs. Split untrusted and trusted phases using artifacts.</li>
           <li><strong>Bind contexts to environment variables:</strong> Avoid direct interpolation of GitHub contexts inside inline shell commands. Bind safely first, then consume in shell logic.</li>
           <li><strong>Implement outbound network filtering:</strong> Assume runner compromise and enforce egress controls to reduce token and credential exfiltration risk.</li>
+          <li><strong>Monitor CI/CD security:</strong> Reference <a href="https://owasp.org/www-community/CI-CD/" target="_blank" rel="noopener">OWASP CI/CD security guidelines</a> and <a href="https://www.cisa.gov/" target="_blank" rel="noopener">CISA supply chain security alerts</a> for emerging threats.</li>
         </ul>
+
+        <h2>Technical Glossary</h2>
+        <div class="glossary-section">
+          <dl class="glossary-list">
+            <dt><strong>pull_request_target</strong></dt>
+            <dd><a href="https://docs.github.com/en/actions/using-workflows/events-that-trigger-workflows#pull_request_target" target="_blank" rel="noopener">GitHub Actions workflow trigger</a> that runs in the context of the base repository (not the fork), giving access to secrets. Dangerous if untrusted code is checked out.</dd>
+            <dt><strong>GITHUB_TOKEN</strong></dt>
+            <dd>Automatic credential provisioned by GitHub Actions granting permissions to the repository. Scope determines access level. Token exfiltration in malicious workflows enables unauthorized pushes and merges.</dd>
+            <dt><strong>Trust Boundary</strong></dt>
+            <dd>Point in a system where external (untrusted) code meets internal (privileged) systems. CI/CD runners crossing trust boundaries need strict input validation and privilege separation.</dd>
+            <dt><strong>Supply Chain Attack</strong></dt>
+            <dd>Compromise targeting software dependencies or build pipelines rather than end-user systems. CI/CD breaches are supply chain attacks.</dd>
+            <dt><strong>Zero-Trust Model</strong></dt>
+            <dd>Security approach assuming all actors (internal or external) are untrusted by default. Applies to CI/CD: verify every credential, token, and code input.</dd>
+            <dt><strong>Egress Filtering</strong></dt>
+            <dd>Network controls restricting outbound traffic from systems. Prevents data exfiltration and credential theft from compromised CI runners.</dd>
+          </dl>
+        </div>
 
         <div class="highlight-section">
           <h3 style="margin-top: 0; color: var(--accent-primary);">Immediate Hardening Baseline</h3>

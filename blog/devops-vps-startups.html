@@ -447,15 +447,20 @@
       <div class="article-content animate-on-scroll">
         <h2>Introduction</h2>
         <p>Most startups do not need a huge cloud platform on day one. They need a reliable deployment path, predictable costs, and a setup the team can debug without guessing. That is why a self-managed VPS is still one of the best places to start.</p>
-        <p>This article shows how to build a practical startup DevOps stack on a VPS using Docker, CI/CD, monitoring, backups, and a small set of security controls that matter.</p>
+        <p>This article shows how to build a practical startup DevOps stack on a VPS using <strong>Docker</strong>, <strong>CI/CD</strong>, monitoring, backups, and a small set of security controls that matter. The goal: move from manual deployments to automated, observable, and recoverable infrastructure—without the operational overhead of managed Kubernetes clusters.</p>
 
         <div class="highlight-section">
-          <strong>Quick takeaway:</strong> one well-managed VPS with Docker, health checks, alerts, and tested backups is often a smarter startup move than adopting heavyweight platform tooling too early.
+          <strong>Quick takeaway:</strong> one well-managed VPS with Docker, health checks, alerts, and tested backups is often a smarter startup move than adopting heavyweight platform tooling too early. This approach aligns with the <a href="https://12factor.net/" target="_blank" rel="noopener">12-factor app methodology</a> and can scale to multiple machines as your product grows.
         </div>
 
         <h2>What "On-Prem" Means When Startups Use a VPS</h2>
-        <p>Strictly speaking, on-prem means infrastructure on hardware you own. A VPS is cloud-hosted. But in startup conversations, "on-prem" often means self-managed infrastructure instead of a fully managed platform.</p>
-        <p>That distinction matters because the work is similar: your team owns the Linux host, firewall, reverse proxy, deployments, secrets, and recovery plan. Operationally, the mindset is very close to self-hosted DevOps.</p>
+        <p>Strictly speaking, <strong>on-prem</strong> means infrastructure on hardware you own. A <strong>VPS</strong> (Virtual Private Server) is cloud-hosted, but the operational model is similar. The distinction matters: in startup conversations, "on-prem" often means <strong>self-managed infrastructure</strong> instead of a fully managed platform.</p>
+        <p>That distinction matters because the work is similar: your team owns the <strong>Linux host</strong>, firewall, reverse proxy, deployments, secrets, and recovery plan. Unlike <strong>Platform-as-a-Service (PaaS)</strong> providers like Heroku or Vercel, you control the entire stack. Operationally, the mindset is very close to self-hosted DevOps.</p>
+        <p><strong>VPS vs. Managed Platforms:</strong></p>
+        <ul>
+          <li><strong>VPS approach:</strong> You manage OS updates, runtime, deployments, security patches, and backups. Cost-effective, full control, requires operational expertise.</li>
+          <li><strong>Managed platform:</strong> Provider handles OS/runtime/scaling. Higher cost, less control, faster time-to-market, limited customization.</li>
+        </ul>
 
         <h2>Why a VPS-First DevOps Stack Works</h2>
         <ul>
@@ -529,12 +534,19 @@ jobs:
     runs-on: ubuntu-latest
     steps:
       - uses: actions/checkout@v4
-      - run: docker build -t ghcr.io/your-org/startup-app:${{ github.sha }} .
-      - run: docker push ghcr.io/your-org/startup-app:${{ github.sha }}</code></pre>
-        </div>
-
-        <h2>Monitoring, Logging, and Backups</h2>
-        <p>The right observability setup answers four questions fast: is the site reachable, are containers healthy, is the host running out of resources, and can the team restore data after failure?</p>
+      - run: docker b<strong>observability</strong> setup answers four questions fast:</p>
+        <ol>
+          <li>Is the site reachable?</li>
+          <li>Are containers healthy?</li>
+          <li>Is the host running out of resources?</li>
+          <li>Can the team restore data after failure?</li>
+        </ol>
+        <p>Startups should invest in these four areas:</p>
+        <ul>
+          <li><strong>Uptime checks:</strong> test the public domain from outside the server (e.g., <a href="https://www.pingdom.com/" target="_blank" rel="noopener">Pingdom</a>, <a href="https://www.uptimerobot.com/" target="_blank" rel="noopener">Uptime Robot</a>, or <a href="https://betterstack.com/better-uptime" target="_blank" rel="noopener">Better Stack</a>).</li>
+          <li><strong>Host metrics:</strong> watch CPU, RAM, disk, and restart behavior (use <a href="https://prometheus.io/" target="_blank" rel="noopener">Prometheus</a> or cloud-provider dashboards).</li>
+          <li><strong>Structured logs:</strong> make logs searchable and consistent (JSON logging, centralized log aggregation via <a href="https://www.elastic.co/logstash/" target="_blank" rel="noopener">Logstash</a> or similar).</li>
+          <li><strong>Off-server backups:</strong> never keep the only backup on the same VPS. Use S3, Backblaze, or a managed backup serviceare containers healthy, is the host running out of resources, and can the team restore data after failure?</p>
         <ul>
           <li><strong>Uptime checks:</strong> test the public domain from outside the server.</li>
           <li><strong>Host metrics:</strong> watch CPU, RAM, disk, and restart behavior.</li>
@@ -565,14 +577,26 @@ docker exec startup-postgres-1 pg_dump -U startup startup | gzip > "$FILE"</code
           <li><strong>Least privilege:</strong> keep credentials scoped and avoid unnecessary root access.</li>
         </ul>
 
-        <h2>When to Move Beyond One VPS</h2>
-        <p>Scale past a single VPS when resource pressure becomes normal, downtime becomes expensive, services need independent scaling, or compliance needs stronger isolation. Let evidence drive that move, not hype.</p>
-
-        <h2>Technical Glossary</h2>
-        <div class="glossary-section">
-          <h3>Core Terms</h3>
-          <dl class="glossary-list">
-            <dt>VPS</dt>
+        <h2>When<strong>VPS (Virtual Private Server)</strong></dt>
+            <dd>A Virtual Private Serve:</p>
+        <ul>
+          <li><strong>Resource pressure is constant:</strong> you're regularly hitting CPU/RAM limits and vertical scaling (upgrading the VPS size) becomes expensive.</li>
+          <li><strong>Downtime is costly:</strong> a single-point failure causes significant business impact; you need multi-region or multi-VPS redundancy.</li>
+          <li><strong>Services need independent scaling:</strong> your worker queue outgrows your web tier, or certain services have very different traffic patterns.</li>
+          <li><strong>Compliance requires isolation:</strong> regulatory requirements (PCI-DSS, HIPAA, SOC 2) mandate separate environments or stronger security boundaries.</li>
+          <li><strong>Team expertise expands:</strong> your team now has dedicated DevOps engineers who can manage Kubernetes or multi-machine deployments.</li>
+        </ul>
+        <p>Let evidence drive that move, not hype. Many mature startups stay on well-managed VPS setups for years (Ubuntu, CentOS, Debian).</dd>
+            <dt><strong>Reverse Proxy</strong></dt>
+            <dd>A front-facing service such as <a href="https://nginx.org/" target="_blank" rel="noopener">Nginx</a> or <a href="https://caddyserver.com/" target="_blank" rel="noopener">Caddy</a> that receives public traffic and forwards it to internal services. Handles SSL termination, load balancing, and routing.</dd>
+            <dt><strong>CI/CD (Continuous Integration / Continuous Deployment)</strong></dt>
+            <dd>Automation that tests, builds, and deploys code through a repeatable pipeline. Popular choices: GitHub Actions, GitLab CI, Jenkins. Reduces manual deploy errors and shortens time-to-market.</dd>
+            <dt><strong>Container</strong></dt>
+            <dd>A lightweight, isolated runtime package (typically built with <a href="https://www.docker.com/" target="_blank" rel="noopener">Docker</a>) that includes application code, dependencies, and OS libraries. Ensures consistency across development, testing, and production.</dd>
+            <dt><strong>Rollback</strong></dt>
+            <dd>The ability to return to the last known-good version after a failed deploy. With Docker and tagged images, rollback is as simple as restarting the previous container version.</dd>
+            <dt><strong>Orchestration</strong></dt>
+            <dd>Automated management of containers across multiple machines (e.g., <a href="https://kubernetes.io/" target="_blank" rel="noopener">Kubernetes</a>, <a href="https://docs.docker.com/compose/" target="_blank" rel="noopener">Docker Compose</a>). Docker Compose handles single-VPS use cases; Kubernetes is needed at larger scale
             <dd>A Virtual Private Server with isolated compute resources that you manage at the operating system level.</dd>
             <dt>Reverse Proxy</dt>
             <dd>A front-facing service such as Nginx or Caddy that receives public traffic and forwards it to internal services.</dd>
