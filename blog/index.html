@@ -4,13 +4,33 @@
   <meta charset="UTF-8">
   <meta name="viewport" content="width=device-width, initial-scale=1.0">
 
-  <!-- Google tag (gtag.js) -->
-  <script async src="https://www.googletagmanager.com/gtag/js?id=G-HS3EJEQ16Q"></script>
+  <!-- Google tag (lazy-loaded for better initial paint) -->
   <script>
-    window.dataLayer = window.dataLayer || [];
-    function gtag(){dataLayer.push(arguments);}
-    gtag('js', new Date());
-    gtag('config', 'G-HS3EJEQ16Q');
+    (function () {
+      window.dataLayer = window.dataLayer || [];
+      window.gtag = window.gtag || function () { dataLayer.push(arguments); };
+
+      function loadAnalytics() {
+        if (window.__gtagLoaded) return;
+        window.__gtagLoaded = true;
+        var s = document.createElement('script');
+        s.async = true;
+        s.src = 'https://www.googletagmanager.com/gtag/js?id=G-HS3EJEQ16Q';
+        s.onload = function () {
+          gtag('js', new Date());
+          gtag('config', 'G-HS3EJEQ16Q');
+        };
+        document.head.appendChild(s);
+      }
+
+      window.addEventListener('load', function () {
+        if ('requestIdleCallback' in window) {
+          requestIdleCallback(loadAnalytics, { timeout: 3000 });
+        } else {
+          setTimeout(loadAnalytics, 1500);
+        }
+      });
+    })();
   </script>
   
   <!-- SEO & Primary Meta Tags -->
@@ -71,6 +91,28 @@
         "height": 120
       }
     }
+  }
+  </script>
+  
+  <!-- Structured Data: BreadcrumbList Schema -->
+  <script type="application/ld+json">
+  {
+    "@context": "https://schema.org",
+    "@type": "BreadcrumbList",
+    "itemListElement": [
+      {
+        "@type": "ListItem",
+        "position": 1,
+        "name": "Home",
+        "item": "https://aymen.benyedder.top/"
+      },
+      {
+        "@type": "ListItem",
+        "position": 2,
+        "name": "Blog",
+        "item": "https://aymen.benyedder.top/blog/"
+      }
+    ]
   }
   </script>
   
@@ -357,9 +399,9 @@
             TECHNICAL<br>
             <span class="text-stroke">BLOG</span>
           </h1>
-          <p class="hero-subtitle ghost-text delay-1 magnetic-text">
+          <h2 class="hero-subtitle ghost-text delay-1 magnetic-text" style="font-size: 1.1rem; font-weight: 400; letter-spacing: 0.05em;">
             DEEP DIVES INTO MODERN WEB DEVELOPMENT
-          </p>
+          </h2>
         </div>
 
         <!-- Bottom Control Deck (Glass Bar) -->
