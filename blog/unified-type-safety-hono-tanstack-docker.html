@@ -1,0 +1,634 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+
+  <!-- Google tag (gtag.js) -->
+  <script async src="https://www.googletagmanager.com/gtag/js?id=G-HS3EJEQ16Q"></script>
+  <script>
+    window.dataLayer = window.dataLayer || [];
+    function gtag(){dataLayer.push(arguments);}
+    gtag('js', new Date());
+    gtag('config', 'G-HS3EJEQ16Q');
+  </script>
+  <title>Type-Safe Stack: Hono, TanStack & Docker on a $5 VPS</title>
+  <meta name="description" content="Build a unified type-safe full-stack system with Hono, TanStack Query, Zod, and Docker on a $5/mo VPS. Zero technical debt, auto-healing infrastructure, and instant deployments.">
+  <meta name="keywords" content="hono framework, tanstack query, type-safe api, full-stack typescript, zod schema validation, docker compose, postgrest, github actions ci/cd, $5 vps infrastructure, schema-driven architecture, zero-touch auto-healing">
+  <meta name="author" content="Aymen ben Yedder">
+  <meta name="robots" content="index, follow">
+
+  <meta property="og:type" content="article">
+  <meta property="og:url" content="https://aymen.benyedder.top/blog/unified-type-safety-hono-tanstack-docker.html">
+  <meta property="og:title" content="Unified Type-Safety: Architecting a $5/mo High-Performance Stack with Hono, TanStack, and Docker">
+  <meta property="og:description" content="Schema-driven full-stack TypeScript architecture combining Hono, TanStack Query, Zod, PostgREST, and Docker for production-grade systems on standard Linux VPS.">
+  <meta property="og:image" content="https://aymen.benyedder.top/assets/img/preview.webp">
+  <meta property="og:image:secure_url" content="https://aymen.benyedder.top/assets/img/preview.webp">
+  <meta property="og:image:width" content="1136">
+  <meta property="og:image:height" content="600">
+  <meta property="og:image:type" content="image/webp">
+  <meta property="og:image:alt" content="Aymen.dev - Web and systems engineering portfolio">
+  <meta property="og:site_name" content="AYMEN.DEV">
+  <meta property="article:published_time" content="2026-05-03">
+  <meta property="article:modified_time" content="2026-05-03">
+  <meta property="article:author" content="Aymen ben Yedder">
+
+  <meta name="twitter:card" content="summary_large_image">
+  <meta name="twitter:url" content="https://aymen.benyedder.top/blog/unified-type-safety-hono-tanstack-docker.html">
+  <meta name="twitter:title" content="Unified Type-Safety: Architecting a $5/mo High-Performance Stack with Hono, TanStack, and Docker">
+  <meta name="twitter:description" content="Schema-driven TypeScript architecture with Hono, TanStack Query, Zod, and Docker Compose for production systems on $5/mo VPS infrastructure.">
+  <meta name="twitter:image" content="https://aymen.benyedder.top/assets/img/preview.webp">
+  <meta name="twitter:image:alt" content="Aymen.dev - Web and systems engineering portfolio">
+
+  <link rel="canonical" href="https://aymen.benyedder.top/blog/unified-type-safety-hono-tanstack-docker.html">
+  <link rel="stylesheet" href="../css/vars.css">
+  <link rel="stylesheet" href="../css/main.css">
+  <link rel="stylesheet" href="../css/components.css">
+
+  <script type="application/ld+json">
+  {
+    "@context": "https://schema.org",
+    "@type": "Article",
+    "headline": "Unified Type-Safety: Architecting a $5/mo High-Performance Stack with Hono, TanStack, and Docker",
+    "description": "Build a unified type-safe full-stack system with Hono, TanStack Query, Zod, and Docker on a $5/mo VPS. Zero technical debt, auto-healing infrastructure, and instant deployments.",
+    "author": {
+      "@type": "Person",
+      "name": "Aymen ben Yedder",
+      "url": "https://aymen.benyedder.top"
+    },
+    "datePublished": "2026-05-03",
+    "dateModified": "2026-05-03",
+    "image": {
+      "@type": "ImageObject",
+      "url": "https://aymen.benyedder.top/assets/img/preview.webp",
+      "width": 1136,
+      "height": 600
+    },
+    "publisher": {
+      "@type": "Organization",
+      "name": "Aymen.dev",
+      "url": "https://aymen.benyedder.top"
+    },
+    "mainEntityOfPage": {
+      "@type": "WebPage",
+      "@id": "https://aymen.benyedder.top/blog/unified-type-safety-hono-tanstack-docker.html"
+    }
+  }
+  </script>
+
+  <script type="application/ld+json">
+  {
+    "@context": "https://schema.org",
+    "@type": "BreadcrumbList",
+    "itemListElement": [
+      {"@type":"ListItem","position":1,"name":"Home","item":"https://aymen.benyedder.top/"},
+      {"@type":"ListItem","position":2,"name":"Blog","item":"https://aymen.benyedder.top/blog/"},
+      {"@type":"ListItem","position":3,"name":"Unified Type-Safety: Architecting a $5/mo High-Performance Stack with Hono, TanStack, and Docker","item":"https://aymen.benyedder.top/blog/unified-type-safety-hono-tanstack-docker.html"}
+    ]
+  }
+  </script>
+
+  <script type="application/ld+json">
+  {
+    "@context": "https://schema.org",
+    "@type": "FAQPage",
+    "mainEntity": [
+      {
+        "@type": "Question",
+        "name": "What is schema-driven architecture?",
+        "acceptedAnswer": {
+          "@type": "Answer",
+          "text": "Schema-driven architecture defines a single source of truth using Zod schemas that power database validation, backend type safety, and frontend form validation. When a schema changes, the entire stack automatically reflects the change, eliminating type mismatches."
+        }
+      },
+      {
+        "@type": "Question",
+        "name": "Can a $5/mo VPS run production workloads with this stack?",
+        "acceptedAnswer": {
+          "@type": "Answer",
+          "text": "Yes. Docker Compose with proper health checks and restart policies provides zero-touch auto-healing. For small to medium workloads (startup and SMB applications), a $5/mo Linux VPS with 1-2GB RAM is sufficient. Automated pg_dump backups to S3 ensure data durability."
+        }
+      },
+      {
+        "@type": "Question",
+        "name": "What is the benefit of Hono's RPC feature?",
+        "acceptedAnswer": {
+          "@type": "Answer",
+          "text": "Hono's RPC (Remote Procedure Call) feature automatically generates frontend client types from your backend route definitions. This eliminates manual API client code and ensures frontend types always match the backend exactly."
+        }
+      },
+      {
+        "@type": "Question",
+        "name": "Why PostgREST instead of building a REST API from scratch?",
+        "acceptedAnswer": {
+          "@type": "Answer",
+          "text": "PostgREST automatically generates a RESTful API directly from your PostgreSQL schema. Hono acts as a lightweight gateway in front of PostgREST, adding authentication, rate-limiting, and business logic without duplicating routing code."
+        }
+      },
+      {
+        "@type": "Question",
+        "name": "How does TanStack Query reduce API calls?",
+        "acceptedAnswer": {
+          "@type": "Answer",
+          "text": "TanStack Query manages browser caching and implements stale-while-revalidate logic automatically. It deduplicates simultaneous requests, caches responses, and intelligently refreshes data only when necessary, reducing backend load and improving perceived performance."
+        }
+      },
+      {
+        "@type": "Question",
+        "name": "What is the rollback strategy for bad deployments?",
+        "acceptedAnswer": {
+          "@type": "Answer",
+          "text": "To rollback a bad deployment, revert the Docker image tag in the docker-compose.yml file and execute docker-compose pull && docker-compose up -d. Docker Hub is the single source of truth for image versions, enabling one-command rollbacks."
+        }
+      }
+    ]
+  }
+  </script>
+
+  <style>
+    .skip-link {
+      position: fixed;
+      top: -120px;
+      left: 12px;
+      background: var(--accent-primary);
+      color: var(--bg-primary);
+      padding: var(--space-sm) var(--space-md);
+      text-decoration: none;
+      z-index: var(--z-modal);
+      border-radius: var(--radius-md);
+      opacity: 0;
+      pointer-events: none;
+      transition: top var(--transition-fast), opacity var(--transition-fast);
+    }
+
+    .skip-link:focus,
+    .skip-link:focus-visible {
+      top: 14px;
+      opacity: 1;
+      pointer-events: auto;
+    }
+
+    #reading-progress {
+      position: fixed;
+      top: 0;
+      left: 0;
+      height: 3px;
+      width: 0;
+      background: linear-gradient(90deg, var(--accent-primary), var(--accent-secondary));
+      z-index: var(--z-sticky);
+    }
+
+    article {
+      max-width: 900px;
+      margin: 0 auto;
+      padding: 0 var(--space-md);
+    }
+
+    .article-header {
+      text-align: center;
+      margin-bottom: var(--space-2xl);
+    }
+
+    .article-meta,
+    .article-badges,
+    .share-buttons {
+      display: flex;
+      justify-content: center;
+      gap: var(--space-sm);
+      flex-wrap: wrap;
+    }
+
+    .article-meta {
+      color: var(--text-secondary);
+      margin-bottom: var(--space-lg);
+      padding-bottom: var(--space-lg);
+      border-bottom: 1px solid var(--glass-border);
+    }
+
+    .article-content h2 {
+      margin-top: var(--space-2xl);
+      padding-top: var(--space-md);
+      border-top: 1px solid var(--glass-border);
+      color: var(--accent-primary);
+    }
+
+    .article-content p,
+    .article-content li {
+      color: var(--text-secondary);
+      line-height: 1.8;
+    }
+
+    .highlight-section,
+    #table-of-contents,
+    .glossary-section {
+      background: var(--glass-bg);
+      border: 1px solid var(--glass-border);
+      border-radius: var(--radius-md);
+      padding: var(--space-lg);
+      margin: var(--space-lg) 0;
+    }
+
+    .related-articles {
+      display: grid;
+      grid-template-columns: repeat(auto-fit, minmax(250px, 1fr));
+      gap: var(--space-lg);
+    }
+
+    /* Keep code snippets visually consistent across light/dark modes */
+    .code-block,
+    [data-theme="light"] .code-block {
+      position: relative;
+      background: linear-gradient(180deg, rgba(11, 15, 30, 0.96), rgba(7, 10, 20, 0.98));
+      border: 1px solid rgba(0, 229, 255, 0.24);
+      border-radius: 14px;
+      box-shadow: 0 12px 30px rgba(0, 0, 0, 0.35);
+      padding: 0;
+      overflow: hidden;
+      margin: var(--space-lg) 0;
+    }
+
+    .code-block-header,
+    [data-theme="light"] .code-block-header {
+      background: rgba(0, 229, 255, 0.1);
+      border-bottom: 1px solid rgba(0, 229, 255, 0.24);
+      padding: 10px 14px;
+    }
+
+    .code-language,
+    [data-theme="light"] .code-language {
+      color: #7befff;
+      font-weight: 700;
+      text-transform: uppercase;
+      letter-spacing: 0.06em;
+      font-size: 0.78rem;
+    }
+
+    .code-block pre,
+    [data-theme="light"] .code-block pre {
+      margin: 0;
+      padding: 18px 18px 20px;
+      background: transparent;
+      border: 0;
+      border-radius: 0;
+    }
+
+    .code-block code,
+    [data-theme="light"] .code-block code {
+      display: block;
+      background: transparent;
+      color: #e8eefc;
+      text-shadow: none;
+      font-family: var(--font-mono);
+      line-height: 1.65;
+    }
+
+    .code-block-copy,
+    [data-theme="light"] .code-block-copy {
+      background: rgba(0, 229, 255, 0.16);
+      border: 1px solid rgba(0, 229, 255, 0.38);
+      color: #9ff7ff;
+      border-radius: 10px;
+    }
+
+    .code-block-copy:hover,
+    [data-theme="light"] .code-block-copy:hover {
+      background: rgba(0, 229, 255, 0.26);
+      color: #dbfbff;
+    }
+
+    .page-breadcrumb {
+      margin-top: 108px;
+      background: var(--bg-secondary);
+      border-bottom: 1px solid var(--glass-border);
+      padding: var(--space-md) 0;
+    }
+
+    .breadcrumb-nav {
+      display: flex;
+      align-items: center;
+      flex-wrap: wrap;
+      gap: var(--space-sm);
+      font-size: var(--text-sm);
+      color: var(--text-secondary);
+    }
+
+    .breadcrumb-link {
+      display: inline-flex;
+      align-items: center;
+      height: auto;
+      padding: 0;
+      border: 0;
+      color: var(--accent-primary);
+      text-decoration: none;
+      font-weight: 500;
+    }
+
+    .breadcrumb-link:hover {
+      color: var(--accent-secondary);
+    }
+
+    .breadcrumb-separator {
+      color: var(--text-muted);
+      line-height: 1;
+    }
+
+    @media (max-width: 767px) {
+      .page-breadcrumb {
+        margin-top: 88px;
+      }
+    }
+  </style>
+</head>
+<body>
+  <a href="#main" class="skip-link">Skip to main content</a>
+  <div id="reading-progress"></div>
+
+  <div class="nav-container">
+      <nav class="nav-hub">
+          <div class="nav-logo-area">
+              <a href="../index.html" class="nav-logo">AYMEN<span>.DEV</span></a>
+          </div>
+
+          <ul class="nav-links">
+              <li class="nav-item"><a href="../index.html" class="nav-link">Home</a></li>
+              <li class="nav-item"><a href="../index.html#skills" class="nav-link">Skills</a></li>
+              <li class="nav-item"><a href="../index.html#experience" class="nav-link">Experience</a></li>
+              <li class="nav-item"><a href="../services/mern-development.html" class="nav-link">MERN</a></li>
+              <li class="nav-item"><a href="../services/wordpress-development.html" class="nav-link">WordPress</a></li>
+              <li class="nav-item"><a href="index.html" class="nav-link active">Blog</a></li>
+              <li class="nav-item"><a href="../index.html#contact" class="nav-link">Contact</a></li>
+              <li class="nav-item mobile-item"><a href="index.html" class="nav-link">Blog</a></li>
+          </ul>
+
+          <div class="nav-actions">
+              <button id="theme-toggle" class="theme-btn-mini desktop-only" aria-label="Toggle Dark Mode">
+                  <svg class="sun-icon" width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor"
+                      stroke-width="2" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true">
+                      <circle cx="12" cy="12" r="5"></circle>
+                      <line x1="12" y1="1" x2="12" y2="3"></line>
+                      <line x1="12" y1="21" x2="12" y2="23"></line>
+                      <line x1="4.22" y1="4.22" x2="5.64" y2="5.64"></line>
+                      <line x1="18.36" y1="18.36" x2="19.78" y2="19.78"></line>
+                      <line x1="1" y1="12" x2="3" y2="12"></line>
+                      <line x1="21" y1="12" x2="23" y2="12"></line>
+                      <line x1="4.22" y1="19.78" x2="5.64" y2="18.36"></line>
+                      <line x1="18.36" y1="5.64" x2="19.78" y2="4.22"></line>
+                  </svg>
+                  <svg class="moon-icon" width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor"
+                      stroke-width="2" stroke-linecap="round" stroke-linejoin="round" style="display:none;" aria-hidden="true">
+                      <path d="M21 12.79A9 9 0 1 1 11.21 3 7 7 0 0 0 21 12.79z"></path>
+                  </svg>
+              </button>
+
+              <button class="nav-toggle mobile-only" aria-label="Open Menu" aria-expanded="false">
+                  <svg width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" aria-hidden="true">
+                      <path d="M3 12h18M3 6h18M3 18h18" />
+                  </svg>
+              </button>
+          </div>
+
+          <div class="nav-cta desktop-only">
+              <a href="../index.html#contact" class="btn-spotlight">Let's Talk</a>
+          </div>
+      </nav>
+
+      <div class="nav-menu mobile-menu-dropdown">
+          <ul class="mobile-nav-links">
+              <li><a href="../index.html" class="nav-link">Home</a></li>
+              <li><a href="../index.html#skills" class="nav-link">Skills</a></li>
+              <li><a href="../index.html#experience" class="nav-link">Experience</a></li>
+              <li><a href="../services/mern-development.html" class="nav-link">MERN</a></li>
+              <li><a href="../services/wordpress-development.html" class="nav-link">WordPress</a></li>
+              <li><a href="index.html" class="nav-link">Blog</a></li>
+              <li><a href="../index.html#contact" class="nav-link">Contact</a></li>
+
+              <li style="border-top: 1px solid var(--border-light); margin: 8px 0; padding-top: 8px;"></li>
+
+              <li class="mobile-action-item">
+                  <button class="mobile-theme-toggle nav-link" style="justify-content: center; width: 100%;">
+                      <span style="margin-right: 8px;">Switch Theme</span>
+                      <svg class="sun-icon" width="18" height="18" viewBox="0 0 24 24" fill="none"
+                          stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true">
+                          <circle cx="12" cy="12" r="5"></circle>
+                          <line x1="12" y1="1" x2="12" y2="3"></line>
+                          <line x1="12" y1="21" x2="12" y2="23"></line>
+                          <line x1="4.22" y1="4.22" x2="5.64" y2="5.64"></line>
+                          <line x1="18.36" y1="18.36" x2="19.78" y2="19.78"></line>
+                          <line x1="1" y1="12" x2="3" y2="12"></line>
+                          <line x1="21" y1="12" x2="23" y2="12"></line>
+                          <line x1="4.22" y1="19.78" x2="5.64" y2="18.36"></line>
+                          <line x1="18.36" y1="5.64" x2="19.78" y2="4.22"></line>
+                      </svg>
+                      <svg class="moon-icon" width="18" height="18" viewBox="0 0 24 24" fill="none"
+                          stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"
+                          style="display:none;" aria-hidden="true">
+                          <path d="M21 12.79A9 9 0 1 1 11.21 3 7 9 0 0 0 21 12.79z"></path>
+                      </svg>
+                  </button>
+              </li>
+              <li>
+                  <a href="../index.html#contact" class="btn-spotlight" style="justify-content: center; width: 100%;">Let's Talk</a>
+              </li>
+          </ul>
+      </div>
+  </div>
+
+  <div class="page-breadcrumb">
+    <div class="container">
+      <nav class="breadcrumb-nav" aria-label="Breadcrumb">
+        <a href="../index.html" class="breadcrumb-link">Home</a>
+        <span class="breadcrumb-separator">&rsaquo;</span>
+        <a href="index.html" class="breadcrumb-link">Blog</a>
+        <span class="breadcrumb-separator">&rsaquo;</span>
+        <span>Unified Type-Safety Stack</span>
+      </nav>
+    </div>
+  </div>
+
+  <main id="main">
+    <article>
+      <header class="article-header">
+        <h1>Unified Type-Safety: Architecting a $5/mo High-Performance Stack with Hono, TanStack, and Docker</h1>
+        <p style="font-size: var(--text-lg); color: var(--text-secondary); margin-top: var(--space-md);">Schema-Driven Development, Zero Technical Debt, and Auto-Healing Infrastructure on Commodity Linux VPS</p>
+        <div class="article-meta">
+          <time datetime="2026-05-03">May 3, 2026</time>
+          <span>&bull;</span>
+          <span>12 min read</span>
+          <span>&bull;</span>
+          <span>By <strong>Aymen ben Yedder</strong></span>
+        </div>
+        <div class="article-badges">
+          <span class="badge">Type-Safety</span>
+          <span class="badge">Hono</span>
+          <span class="badge">TanStack Query</span>
+          <span class="badge">Docker</span>
+          <span class="badge">DevOps</span>
+        </div>
+      </header>
+
+      <div id="table-of-contents">
+        <h3>Table of Contents</h3>
+      </div>
+
+      <div class="article-content animate-on-scroll">
+        <h2>The Cost of Operational Friction</h2>
+        
+        <p>The wall between development and operations creates unacceptable financial and temporal bottlenecks. Many organizations waste cloud credits on over-provisioned serverless architectures while struggling with deployment velocity. Unlike monolithic frameworks like <strong>Next.js or traditional MERN stacks</strong> that bundle server rendering, API routes, and deployment complexity together, this approach isolates concerns: <strong>Zod schemas drive the contract</strong>, <strong>Hono operates as a thin type-safe gateway</strong>, and <strong>Docker Compose handles the entire DevOps lifecycle</strong>—from local development through production auto-healing.</p>
+
+        <p>By unifying frontend state management with edge-ready backend schemas and automated pipelines, engineering teams can deploy production-grade systems on standard Linux VPS environments with high security and minimal overhead. This methodology directly reduces time-to-market by eliminating the friction between code creation and infrastructure deployment. The DevOps lifecycle becomes predictable, testable, and repeatable—a critical requirement for teams scaling from proof-of-concept to production reliability.</p>
+
+        <h2>1. The Schema-Driven Architecture</h2>
+
+        <p><strong>Boilerplate code is a liability.</strong> A modern stack must strictly adhere to the DRY (Don't Repeat Yourself) principle—a core DevOps lifecycle tenet that reduces maintenance burden and synchronization failures. The solution is defining a single source of truth using <strong>Zod schemas.</strong></p>
+
+        <p>When you define a schema once, that exact logic powers:</p>
+        <ul>
+          <li>Database validation constraints</li>
+          <li>Hono backend type safety</li>
+          <li>Frontend form validation</li>
+          <li>API request/response contracts</li>
+        </ul>
+
+        <p>Using <strong>Hono's RPC feature</strong>, the frontend inherits these backend types automatically. If a database column is renamed, the frontend build fails instantly in the CI pipeline—no runtime surprises in production.</p>
+
+        <p>To accelerate the database layer, integrating <strong>PostgREST</strong> directly over PostgreSQL turns the database schema into a lightning-fast RESTful API. <strong>Hono</strong> then sits in front of PostgREST as a lightweight gateway to handle:</p>
+        <ul>
+          <li>Authentication and authorization</li>
+          <li>Rate-limiting and abuse prevention</li>
+          <li>Custom business logic</li>
+          <li>Request/response transformation</li>
+        </ul>
+
+        <p>This eliminates duplicating routing code. The database schema IS the API specification.</p>
+
+        <h2>2. Frontend Velocity and State Management</h2>
+
+        <p>Speed in the UI requires avoiding technical debt. Utilizing <strong>Tailwind</strong> alongside <strong>Shadcn</strong> allows developers to implement accessible, zero-dependency components directly into the codebase. You own the component logic, keeping the architecture aligned with the KISS (Keep It Simple, Stupid) principle—a DevOps best practice that maximizes system reliability by minimizing complexity in every layer of the stack.</p>
+
+        <p>When paired with <strong>TanStack Query</strong>, the frontend handles advanced caching and stale-while-revalidate logic automatically. The browser manages state intelligently:</p>
+        <ul>
+          <li>Deduplicates simultaneous identical requests</li>
+          <li>Caches responses with configurable TTL</li>
+          <li>Intelligently refreshes data only when stale</li>
+          <li>Reduces unnecessary API calls to the server</li>
+        </ul>
+
+        <p>This keeps the application feeling instant even on high-latency networks. Developers no longer hand-write fetch boilerplate or manage loading states manually.</p>
+
+        <h2>3. The CI/CD Pipeline: Building on GitHub</h2>
+
+        <p>Building Docker images on local machines leads to environment inconsistencies. <strong>The modern DevOps standard shifts this workload entirely to the CI/CD pipeline.</strong></p>
+
+        <p>Using <strong>GitHub Actions</strong>, a code push triggers a strict sequence:</p>
+
+        <ol>
+          <li><strong>Test Phase:</strong> The pipeline executes automated unit and integration tests against the unified Zod schemas. Type mismatches are caught before image build.</li>
+          <li><strong>Build Phase:</strong> GitHub runners execute a multi-stage Docker build. This strips out development dependencies, resulting in a minimal, secure image optimized for production.</li>
+          <li><strong>Push Phase:</strong> The action authenticates with Docker Hub and pushes the versioned artifact. Image tags match git commit SHAs for complete traceability.</li>
+        </ol>
+
+        <p><strong>The local machine is reserved strictly for writing code.</strong> All CI logic, testing, and packaging happens on deterministic GitHub infrastructure.</p>
+
+        <div class="highlight-section">
+          <strong>Key Principle:</strong> Once code is committed, humans do not touch deployment. Machines guarantee consistency.
+        </div>
+
+        <h2>4. Infrastructure: Auto-Healing and Rollbacks</h2>
+
+        <p>Complex container orchestration tools like <strong>Kubernetes</strong> are often unnecessary overhead for the DevOps lifecycle of early-stage teams. Applying the YAGNI (You Aren't Gonna Need It) principle—a discipline that ensures infrastructure matches actual operational demands—a properly configured <strong>$5 per month Linux VPS</strong> managed via <strong>Docker Compose</strong> provides massive scalability for small-to-medium workloads.</p>
+
+        <p><strong>Resilience is built into the configuration.</strong> The docker-compose.yml file includes strict health checks and restart policies:</p>
+
+        <div class="code-block">
+          <div class="code-block-header">
+            <span class="code-language">yaml</span>
+          </div>
+          <pre><code>services:
+  api:
+    image: registry.example.com/api:sha-abc123
+    healthcheck:
+      test: ["CMD", "curl", "-f", "http://localhost:3000/health"]
+      interval: 10s
+      timeout: 5s
+      retries: 3
+    restart: on-failure
+  postgres:
+    image: postgres:16-alpine
+    restart: unless-stopped
+    volumes:
+      - pgdata:/var/lib/postgresql/data</code></pre>
+        </div>
+
+        <p>If the API container fails to return an HTTP 200 status, the Docker daemon automatically kills and restarts the service, providing <strong>zero-touch auto-healing.</strong> No pagerduty alerts. No manual intervention. The system self-repairs.</p>
+
+        <p>For data security, automated cron jobs execute <code>pg_dump</code> on the PostgreSQL container, encrypting the output and piping backups to an external S3 bucket nightly. If a bad update reaches production, the rollback strategy requires exactly one command:</p>
+
+        <div class="code-block">
+          <div class="code-block-header">
+            <span class="code-language">bash</span>
+          </div>
+          <pre><code># Rollback to previous stable image
+docker-compose down
+sed -i 's/sha-abc123/sha-xyz789/g' docker-compose.yml
+docker-compose pull
+docker-compose up -d</code></pre>
+        </div>
+
+        <p><strong>Docker Hub is the single source of truth for image versions.</strong> Every stable build is tagged and immutable. A rollback is a git revert + one command.</p>
+
+        <h2>5. Operational Excellence</h2>
+
+        <p>Architecting a unified type-safe stack merges development speed with absolute operational stability. Engineers get:</p>
+
+        <ul>
+          <li><strong>Rapid iteration cycles</strong> of the modern TypeScript ecosystem</li>
+          <li><strong>Raw performance and data safety</strong> of automated Linux infrastructure</li>
+          <li><strong>Complete control</strong> over the application and runtime environment</li>
+          <li><strong>Cost efficiency</strong> of commodity VPS infrastructure</li>
+          <li><strong>Fault tolerance</strong> through automated health checks and self-healing</li>
+        </ul>
+
+        <p>The stack eliminates the false choice between developer velocity and operational stability. Both are achieved simultaneously through disciplined architecture.</p>
+
+        <div class="highlight-section">
+          <strong>The Stack Summary:</strong>
+          <ul style="margin: var(--space-md) 0;">
+            <li><strong>Zod:</strong> Single-source-of-truth schemas</li>
+            <li><strong>Hono:</strong> Lightweight, type-safe backend framework</li>
+            <li><strong>PostgREST:</strong> Automatic REST API from PostgreSQL</li>
+            <li><strong>TanStack Query:</strong> Smart browser-side caching and state</li>
+            <li><strong>Tailwind + Shadcn:</strong> Zero-dependency accessible components</li>
+            <li><strong>Docker Compose:</strong> Deterministic, self-healing infrastructure</li>
+            <li><strong>GitHub Actions:</strong> Automated testing and continuous deployment</li>
+          </ul>
+        </div>
+
+        <h2>Conclusion: Zero Technical Debt, Maximum Velocity</h2>
+
+        <p>The schema-driven approach eliminates entire categories of bugs before they reach production. Type mismatches are compile-time errors. Database migrations are coordinated through schema definitions. API contracts are enforced at the language level.</p>
+
+        <p>When paired with automated CI/CD and self-healing infrastructure, the result is a production system that developers can deploy and operate with confidence—on commodity hardware, at minimal cost, with maximum reliability.</p>
+
+        <p>This is not a theoretical exercise. This architecture powers small startups scaling to thousands of users while maintaining one-person deployments and zero operational overhead.</p>
+      </div>
+
+      <section style="margin-top: var(--space-3xl); padding-top: var(--space-2xl); border-top: 1px solid var(--glass-border);">
+        <h3 style="color: var(--accent-primary); margin-bottom: var(--space-md);">About the Author</h3>
+        <div style="display: flex; gap: var(--space-lg); align-items: flex-start;">
+          <div>
+            <p style="color: var(--text-secondary); line-height: 1.8; margin-bottom: var(--space-md);">
+              <strong>Aymen ben Yedder</strong> is a full-stack engineer and DevOps architect with over a decade of experience architecting resilient systems for startups and enterprise platforms. For the past 7+ years, he has specialized in schema-driven architecture, container orchestration, and CI/CD pipeline automation. His expertise spans type-safe TypeScript ecosystems, PostgreSQL optimization, and production-grade infrastructure on commodity hardware.
+            </p>
+            <p style="color: var(--text-secondary); line-height: 1.8;">
+              He regularly publishes articles on DevOps, full-stack development, and operational excellence at <a href="https://aymen.benyedder.top" style="color: var(--accent-primary);">aymen.benyedder.top</a>, where he shares battle-tested patterns for scaling systems without operational complexity.
+            </p>
+          </div>
+        </div>
+      </section>
+
+    </article>
+  </main>
+
+  <script src="../js/main.js"></script>
+</body>
+</html>
