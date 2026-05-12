@@ -473,13 +473,13 @@
       <div class="article-content animate-on-scroll">
         <h2>The Cost of Operational Friction</h2>
         
-        <p>The wall between development and operations creates unacceptable financial and temporal bottlenecks. Many organizations waste cloud credits on over-provisioned serverless architectures while struggling with deployment velocity. Unlike monolithic frameworks like <strong>Next.js or traditional MERN stacks</strong> that bundle server rendering, API routes, and deployment complexity together, this approach isolates concerns: <strong>Zod schemas drive the contract</strong>, <strong>Hono operates as a thin type-safe gateway</strong>, and <strong>Docker Compose handles the entire DevOps lifecycle</strong>—from local development through production auto-healing.</p>
+        <p>The wall between development and operations creates unacceptable financial and temporal bottlenecks. Many organizations waste cloud credits on over-provisioned serverless architectures while struggling with deployment velocity. Unlike monolithic frameworks like <strong><a href="https://nextjs.org/" target="_blank" rel="noopener">Next.js</a> or traditional MERN stacks</strong> that bundle server rendering, API routes, and deployment complexity together, this approach isolates concerns: <strong><a href="https://zod.dev/" target="_blank" rel="noopener">Zod</a> schemas drive the contract</strong>, <strong><a href="https://hono.dev/" target="_blank" rel="noopener">Hono</a> operates as a thin type-safe gateway</strong>, and <strong><a href="https://docs.docker.com/compose/" target="_blank" rel="noopener">Docker Compose</a> handles the entire DevOps lifecycle</strong>—from local development through production auto-healing.</p>
 
         <p>By unifying frontend state management with edge-ready backend schemas and automated pipelines, engineering teams can deploy production-grade systems on standard Linux VPS environments with high security and minimal overhead. This methodology directly reduces time-to-market by eliminating the friction between code creation and infrastructure deployment. The DevOps lifecycle becomes predictable, testable, and repeatable—a critical requirement for teams scaling from proof-of-concept to production reliability.</p>
 
         <h2>1. The Schema-Driven Architecture</h2>
 
-        <p><strong>Boilerplate code is a liability.</strong> A modern stack must strictly adhere to the DRY (Don't Repeat Yourself) principle—a core DevOps lifecycle tenet that reduces maintenance burden and synchronization failures. The solution is defining a single source of truth using <strong>Zod schemas.</strong></p>
+        <p><strong>Boilerplate code is a liability.</strong> A modern stack must strictly adhere to the DRY (Don't Repeat Yourself) principle—a core DevOps lifecycle tenet that reduces maintenance burden and synchronization failures. The solution is defining a single source of truth using <strong><a href="https://zod.dev/" target="_blank" rel="noopener">Zod</a> schemas.</strong></p>
 
         <p>When you define a schema once, that exact logic powers:</p>
         <ul>
@@ -489,9 +489,9 @@
           <li>API request/response contracts</li>
         </ul>
 
-        <p>Using <strong>Hono's RPC feature</strong>, the frontend inherits these backend types automatically. If a database column is renamed, the frontend build fails instantly in the CI pipeline—no runtime surprises in production.</p>
+        <p>Using <strong><a href="https://hono.dev/" target="_blank" rel="noopener">Hono</a>'s RPC feature</strong>, the frontend inherits these backend types automatically. If a database column is renamed, the frontend build fails instantly in the CI pipeline—no runtime surprises in production.</p>
 
-        <p>To accelerate the database layer, integrating <strong>PostgREST</strong> directly over PostgreSQL turns the database schema into a lightning-fast RESTful API. <strong>Hono</strong> then sits in front of PostgREST as a lightweight gateway to handle:</p>
+        <p>To accelerate the database layer, integrating <strong><a href="https://postgrest.org/" target="_blank" rel="noopener">PostgREST</a></strong> directly over <a href="https://www.postgresql.org/" target="_blank" rel="noopener">PostgreSQL</a> turns the database schema into a lightning-fast RESTful API. <strong><a href="https://hono.dev/" target="_blank" rel="noopener">Hono</a></strong> then sits in front of PostgREST as a lightweight gateway to handle:</p>
         <ul>
           <li>Authentication and authorization</li>
           <li>Rate-limiting and abuse prevention</li>
@@ -503,9 +503,9 @@
 
         <h2>2. Frontend Velocity and State Management</h2>
 
-        <p>Speed in the UI requires avoiding technical debt. Utilizing <strong>Tailwind</strong> alongside <strong>Shadcn</strong> allows developers to implement accessible, zero-dependency components directly into the codebase. You own the component logic, keeping the architecture aligned with the KISS (Keep It Simple, Stupid) principle—a DevOps best practice that maximizes system reliability by minimizing complexity in every layer of the stack.</p>
+        <p>Speed in the UI requires avoiding technical debt. Utilizing <strong><a href="https://tailwindcss.com/" target="_blank" rel="noopener">Tailwind</a></strong> alongside <strong><a href="https://ui.shadcn.com/" target="_blank" rel="noopener">Shadcn</a></strong> allows developers to implement accessible, zero-dependency components directly into the codebase. You own the component logic, keeping the architecture aligned with the KISS (Keep It Simple, Stupid) principle—a DevOps best practice that maximizes system reliability by minimizing complexity in every layer of the stack.</p>
 
-        <p>When paired with <strong>TanStack Query</strong>, the frontend handles advanced caching and stale-while-revalidate logic automatically. The browser manages state intelligently:</p>
+        <p>When paired with <strong><a href="https://tanstack.com/query/" target="_blank" rel="noopener">TanStack Query</a></strong>, the frontend handles advanced caching and stale-while-revalidate logic automatically. The browser manages state intelligently:</p>
         <ul>
           <li>Deduplicates simultaneous identical requests</li>
           <li>Caches responses with configurable TTL</li>
@@ -519,7 +519,7 @@
 
         <p>Building Docker images on local machines leads to environment inconsistencies. <strong>The modern DevOps standard shifts this workload entirely to the CI/CD pipeline.</strong></p>
 
-        <p>Using <strong>GitHub Actions</strong>, a code push triggers a strict sequence:</p>
+        <p>Using <strong><a href="https://docs.github.com/en/actions" target="_blank" rel="noopener">GitHub Actions</a></strong>, a code push triggers a strict sequence:</p>
 
         <ol>
           <li><strong>Test Phase:</strong> The pipeline executes automated unit and integration tests against the unified Zod schemas. Type mismatches are caught before image build.</li>
@@ -533,9 +533,35 @@
           <strong>Key Principle:</strong> Once code is committed, humans do not touch deployment. Machines guarantee consistency.
         </div>
 
+        <h2>Technical Glossary</h2>
+        <div class="glossary-section">
+          <dl class="glossary-list">
+            <dt><strong>Schema-Driven Architecture</strong></dt>
+            <dd>Design pattern where a single source of truth (e.g., <a href="https://zod.dev/" target="_blank" rel="noopener">Zod</a> schema) drives validation across database, backend, and frontend layers. Changes in the schema automatically propagate, eliminating type mismatches.</dd>
+            <dt><strong>Type Safety</strong></dt>
+            <dd>Programming practice where types are enforced at compile time, preventing runtime errors. Tools like <a href="https://www.typescriptlang.org/" target="_blank" rel="noopener">TypeScript</a> and <a href="https://zod.dev/" target="_blank" rel="noopener">Zod</a> provide type safety for APIs and data validation.</dd>
+            <dt><strong><a href="https://hono.dev/" target="_blank" rel="noopener">Hono</a> RPC Feature</strong></dt>
+            <dd>Automatic generation of type-safe frontend client from backend route definitions. Eliminates manual API client code and ensures frontend types always match backend exactly.</dd>
+            <dt><strong><a href="https://postgrest.org/" target="_blank" rel="noopener">PostgREST</a></strong></dt>
+            <dd>Automatic REST API generator for PostgreSQL databases. Converts database schema directly into HTTP endpoints, eliminating manual API code writing.</dd>
+            <dt><strong>Stale-While-Revalidate</strong></dt>
+            <dd>Caching strategy where cached data is returned immediately (stale) while a fresh copy is fetched in the background. <a href="https://tanstack.com/query/" target="_blank" rel="noopener">TanStack Query</a> implements this automatically.</dd>
+            <dt><strong>Health Check</strong></dt>
+            <dd>Automated test endpoint (e.g., <code>/health</code>) that returns HTTP 200 if a service is operational. Used by <a href="https://docs.docker.com/compose/" target="_blank" rel="noopener">Docker Compose</a> to detect and restart failed containers.</dd>
+            <dt><strong>Zero-Touch Auto-Healing</strong></dt>
+            <dd>Automated system recovery without manual intervention. <a href="https://docs.docker.com/compose/" target="_blank" rel="noopener">Docker Compose</a> health checks combined with restart policies enable this pattern.</dd>
+            <dt><strong>Container Orchestration</strong></dt>
+            <dd>Automated management of containerized applications. Tools like <a href="https://kubernetes.io/" target="_blank" rel="noopener">Kubernetes</a> handle scaling, deployment, and recovery at large scale; <a href="https://docs.docker.com/compose/" target="_blank" rel="noopener">Docker Compose</a> is suitable for small-to-medium workloads.</dd>
+            <dt><strong>Multi-Stage Docker Build</strong></dt>
+            <dd>Dockerfile technique using multiple <code>FROM</code> statements to reduce final image size. Development dependencies are included in early stages and stripped out in the final stage, creating lean production images.</dd>
+            <dt><strong>Git Commit SHA</strong></dt>
+            <dd>Unique identifier (hash) for each git commit. Used as immutable image tags in <a href="https://hub.docker.com/" target="_blank" rel="noopener">Docker Hub</a> for complete deployment traceability and reliable rollbacks.</dd>
+          </dl>
+        </div>
+
         <h2>4. Infrastructure: Auto-Healing and Rollbacks</h2>
 
-        <p>Complex container orchestration tools like <strong>Kubernetes</strong> are often unnecessary overhead for the DevOps lifecycle of early-stage teams. Applying the YAGNI (You Aren't Gonna Need It) principle—a discipline that ensures infrastructure matches actual operational demands—a properly configured <strong>$5 per month Linux VPS</strong> managed via <strong>Docker Compose</strong> provides massive scalability for small-to-medium workloads.</p>
+        <p>Complex container orchestration tools like <strong><a href="https://kubernetes.io/" target="_blank" rel="noopener">Kubernetes</a></strong> are often unnecessary overhead for the DevOps lifecycle of early-stage teams. Applying the YAGNI (You Aren't Gonna Need It) principle—a discipline that ensures infrastructure matches actual operational demands—a properly configured <strong>$5 per month Linux VPS</strong> managed via <strong><a href="https://docs.docker.com/compose/" target="_blank" rel="noopener">Docker Compose</a></strong> provides massive scalability for small-to-medium workloads.</p>
 
         <p><strong>Resilience is built into the configuration.</strong> The docker-compose.yml file includes strict health checks and restart policies:</p>
 
@@ -561,7 +587,7 @@
 
         <p>If the API container fails to return an HTTP 200 status, the Docker daemon automatically kills and restarts the service, providing <strong>zero-touch auto-healing.</strong> No pagerduty alerts. No manual intervention. The system self-repairs.</p>
 
-        <p>For data security, automated cron jobs execute <code>pg_dump</code> on the PostgreSQL container, encrypting the output and piping backups to an external S3 bucket nightly. If a bad update reaches production, the rollback strategy requires exactly one command:</p>
+        <p>For data security, automated cron jobs execute <code>pg_dump</code> on the PostgreSQL container, encrypting the output and piping backups to an external <a href="https://aws.amazon.com/s3/" target="_blank" rel="noopener">S3</a> bucket nightly. If a bad update reaches production, the rollback strategy requires exactly one command:</p>
 
         <div class="code-block">
           <div class="code-block-header">
@@ -574,7 +600,7 @@ docker-compose pull
 docker-compose up -d</code></pre>
         </div>
 
-        <p><strong>Docker Hub is the single source of truth for image versions.</strong> Every stable build is tagged and immutable. A rollback is a git revert + one command.</p>
+        <p><strong><a href="https://hub.docker.com/" target="_blank" rel="noopener">Docker Hub</a> is the single source of truth for image versions.</strong> Every stable build is tagged and immutable. A rollback is a git revert + one command.</p>
 
         <h2>5. Operational Excellence</h2>
 
@@ -593,13 +619,13 @@ docker-compose up -d</code></pre>
         <div class="highlight-section">
           <strong>The Stack Summary:</strong>
           <ul style="margin: var(--space-md) 0;">
-            <li><strong>Zod:</strong> Single-source-of-truth schemas</li>
-            <li><strong>Hono:</strong> Lightweight, type-safe backend framework</li>
-            <li><strong>PostgREST:</strong> Automatic REST API from PostgreSQL</li>
-            <li><strong>TanStack Query:</strong> Smart browser-side caching and state</li>
-            <li><strong>Tailwind + Shadcn:</strong> Zero-dependency accessible components</li>
-            <li><strong>Docker Compose:</strong> Deterministic, self-healing infrastructure</li>
-            <li><strong>GitHub Actions:</strong> Automated testing and continuous deployment</li>
+            <li><strong><a href="https://zod.dev/" target="_blank" rel="noopener">Zod</a>:</strong> Single-source-of-truth schemas</li>
+            <li><strong><a href="https://hono.dev/" target="_blank" rel="noopener">Hono</a>:</strong> Lightweight, type-safe backend framework</li>
+            <li><strong><a href="https://postgrest.org/" target="_blank" rel="noopener">PostgREST</a>:</strong> Automatic REST API from <a href="https://www.postgresql.org/" target="_blank" rel="noopener">PostgreSQL</a></li>
+            <li><strong><a href="https://tanstack.com/query/" target="_blank" rel="noopener">TanStack Query</a>:</strong> Smart browser-side caching and state</li>
+            <li><strong><a href="https://tailwindcss.com/" target="_blank" rel="noopener">Tailwind</a> + <a href="https://ui.shadcn.com/" target="_blank" rel="noopener">Shadcn</a>:</strong> Zero-dependency accessible components</li>
+            <li><strong><a href="https://docs.docker.com/compose/" target="_blank" rel="noopener">Docker Compose</a>:</strong> Deterministic, self-healing infrastructure</li>
+            <li><strong><a href="https://docs.github.com/en/actions" target="_blank" rel="noopener">GitHub Actions</a>:</strong> Automated testing and continuous deployment</li>
           </ul>
         </div>
 
