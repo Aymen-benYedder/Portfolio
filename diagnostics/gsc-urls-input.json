@@ -1,0 +1,114 @@
+[
+  {
+    "url": "https://aymen.benyedder.top/",
+    "status": 200,
+    "finalUrl": "https://aymen.benyedder.top/",
+    "canonical": "https://aymen.benyedder.top/",
+    "robots": "index, follow",
+    "notes": ""
+  },
+  {
+    "url": "https://aymen.benyedder.top/blog/",
+    "status": 200,
+    "finalUrl": "https://aymen.benyedder.top/blog/",
+    "canonical": "https://aymen.benyedder.top/blog/",
+    "robots": "index, follow",
+    "notes": ""
+  },
+  {
+    "url": "https://aymen.benyedder.top/blog/ai-powered-workflow-orchestration-stack.html",
+    "status": 200,
+    "finalUrl": "https://aymen.benyedder.top/blog/ai-powered-workflow-orchestration-stack.html",
+    "canonical": "https://aymen.benyedder.top/blog/ai-powered-workflow-orchestration-stack.html",
+    "robots": "index, follow",
+    "notes": ""
+  },
+  {
+    "url": "https://aymen.benyedder.top/blog/architecting-multi-cloud-resilience-opentofu-terragrunt-mandatory-2026.html",
+    "status": 200,
+    "finalUrl": "https://aymen.benyedder.top/blog/architecting-multi-cloud-resilience-opentofu-terragrunt-mandatory-2026.html",
+    "canonical": "https://aymen.benyedder.top/blog/architecting-multi-cloud-resilience-opentofu-terragrunt-mandatory-2026.html",
+    "robots": "index, follow",
+    "notes": ""
+  },
+  {
+    "url": "https://aymen.benyedder.top/blog/beyond-tutorial-web-resilience.html",
+    "status": 200,
+    "finalUrl": "https://aymen.benyedder.top/blog/beyond-tutorial-web-resilience.html",
+    "canonical": "https://aymen.benyedder.top/blog/beyond-tutorial-web-resilience.html",
+    "robots": "index, follow",
+    "notes": ""
+  },
+  {
+    "url": "https://aymen.benyedder.top/blog/devops-vps-startups.html",
+    "status": 200,
+    "finalUrl": "https://aymen.benyedder.top/blog/devops-vps-startups.html",
+    "canonical": "https://aymen.benyedder.top/blog/devops-vps-startups.html",
+    "robots": "index, follow",
+    "notes": ""
+  },
+  {
+    "url": "https://aymen.benyedder.top/blog/execution-layer-breach-hackerbot-claw-cicd-compromise.html",
+    "status": 200,
+    "finalUrl": "https://aymen.benyedder.top/blog/execution-layer-breach-hackerbot-claw-cicd-compromise.html",
+    "canonical": "https://aymen.benyedder.top/blog/execution-layer-breach-hackerbot-claw-cicd-compromise.html",
+    "robots": "index, follow",
+    "notes": ""
+  },
+  {
+    "url": "https://aymen.benyedder.top/blog/from-logs-to-logic-claude-real-time-visualization-observability.html",
+    "status": 200,
+    "finalUrl": "https://aymen.benyedder.top/blog/from-logs-to-logic-claude-real-time-visualization-observability.html",
+    "canonical": "https://aymen.benyedder.top/blog/from-logs-to-logic-claude-real-time-visualization-observability.html",
+    "robots": "index, follow",
+    "notes": ""
+  },
+  {
+    "url": "https://aymen.benyedder.top/blog/unified-type-safety-hono-tanstack-docker.html",
+    "status": 200,
+    "finalUrl": "https://aymen.benyedder.top/blog/unified-type-safety-hono-tanstack-docker.html",
+    "canonical": "https://aymen.benyedder.top/blog/unified-type-safety-hono-tanstack-docker.html",
+    "robots": "index, follow",
+    "notes": ""
+  },
+  {
+    "url": "https://aymen.benyedder.top/geo/france.html",
+    "status": 200,
+    "finalUrl": "https://aymen.benyedder.top/geo/france.html",
+    "canonical": "https://aymen.benyedder.top/geo/france.html",
+    "robots": "index, follow",
+    "notes": ""
+  },
+  {
+    "url": "https://aymen.benyedder.top/geo/tunisia.html",
+    "status": 200,
+    "finalUrl": "https://aymen.benyedder.top/geo/tunisia.html",
+    "canonical": "https://aymen.benyedder.top/geo/tunisia.html",
+    "robots": "index, follow",
+    "notes": ""
+  },
+  {
+    "url": "https://aymen.benyedder.top/services/",
+    "status": 200,
+    "finalUrl": "https://aymen.benyedder.top/services/",
+    "canonical": "https://aymen.benyedder.top/services/",
+    "robots": "index, follow",
+    "notes": ""
+  },
+  {
+    "url": "https://aymen.benyedder.top/services/mern-development.html",
+    "status": 200,
+    "finalUrl": "https://aymen.benyedder.top/services/mern-development.html",
+    "canonical": "https://aymen.benyedder.top/services/mern-development.html",
+    "robots": "index, follow",
+    "notes": ""
+  },
+  {
+    "url": "https://aymen.benyedder.top/services/wordpress-development.html",
+    "status": 200,
+    "finalUrl": "https://aymen.benyedder.top/services/wordpress-development.html",
+    "canonical": "https://aymen.benyedder.top/services/wordpress-development.html",
+    "robots": "index, follow",
+    "notes": ""
+  }
+]
