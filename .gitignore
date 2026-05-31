@@ -82,6 +82,10 @@ scripts/*
 !scripts/validate-jsonld.mjs
 !scripts/optimize-cwv.mjs
 assets/resume copy.md
+# Keep the assets folder ignored but allow PDF resumes to be tracked
+assets
+!assets/
+!assets/*.pdf
 TESTING_VERIFICATION_REPORT.md
 IMPLEMENTATION_COMPLETE.md
 OPTIMIZATION_REPORT.md
