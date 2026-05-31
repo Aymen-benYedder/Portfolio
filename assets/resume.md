@@ -15,7 +15,7 @@ CB Audit & Conseil, Tunis - IT Technician
 October 2016 - October 2020
 Providing IT support, maintained hardware, software, and network systems.
 
-EDUCATION
+EDUCATION 
 ISAMM, Mannouba - Master on Media’s Engineering
 Septembre 2013 - Juin 2015
 Advanced multimedia technology training with practical media production
