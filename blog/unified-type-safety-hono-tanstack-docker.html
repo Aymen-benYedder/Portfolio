@@ -1,4 +1,4 @@
-<!DOCTYPE html>
+﻿<!DOCTYPE html>
 <html lang="en">
 <head>
   <meta charset="UTF-8">
@@ -45,36 +45,39 @@
   <link rel="stylesheet" href="../css/main.css">
   <link rel="stylesheet" href="../css/components.css">
 
-  <script type="application/ld+json">
-  {
-    "@context": "https://schema.org",
-    "@type": "Article",
-    "headline": "Unified Type-Safety: Architecting a $5/mo High-Performance Stack with Hono, TanStack, and Docker",
-    "description": "Build a unified type-safe full-stack system with Hono, TanStack Query, Zod, and Docker on a $5/mo VPS. Zero technical debt, auto-healing infrastructure, and instant deployments.",
-    "author": {
-      "@type": "Person",
-      "name": "Aymen ben Yedder",
-      "url": "https://aymen.benyedder.top"
-    },
-    "datePublished": "2026-05-03",
-    "dateModified": "2026-05-03",
-    "image": {
-      "@type": "ImageObject",
-      "url": "https://aymen.benyedder.top/assets/img/preview.webp",
-      "width": 1136,
-      "height": 600
-    },
-    "publisher": {
-      "@type": "Organization",
-      "name": "Aymen.dev",
-      "url": "https://aymen.benyedder.top"
-    },
-    "mainEntityOfPage": {
-      "@type": "WebPage",
-      "@id": "https://aymen.benyedder.top/blog/unified-type-safety-hono-tanstack-docker.html"
-    }
-  }
+    <script type="application/ld+json">
+{
+  "@context": "https://schema.org",
+  "@type": "Article",
+  "@id": "https://aymen.benyedder.top/blog/unified-type-safety-hono-tanstack-docker.html#featured-article",
+  "headline": "Unified Type-Safety: Architecting a $5/mo High-Performance Stack with Hono, TanStack, and Docker",
+  "description": "Build a unified type-safe full-stack system with Hono, TanStack Query, Zod, and Docker on a $5/mo VPS. Zero technical debt, auto-healing infrastructure, and instant deployments.",
+  "image": "https://aymen.benyedder.top/assets/img/preview.webp",
+  "author": {
+    "@id": "https://aymen.benyedder.top/#person"
+  },
+  "publisher": {
+    "@id": "https://aymen.benyedder.top/#organization"
+  },
+  "mainEntityOfPage": {
+    "@id": "https://aymen.benyedder.top/blog/unified-type-safety-hono-tanstack-docker.html"
+  },
+  "datePublished": "2026-05-03",
+  "dateModified": "2026-05-03",
+  "keywords": "DevOps, CI/CD, Docker, MERN stack, infrastructure automation",
+  "articleSection": [
+    "DevOps",
+    "Infrastructure",
+    "CI/CD",
+    "Cloud Architecture"
+  ],
+  "inLanguage": "en",
+  "isAccessibleForFree": "True",
+  "author_name": "Aymen ben Yedder",
+  "publisher_name": "AYMEN.DEV"
+}
   </script>
+
 
   <script type="application/ld+json">
   {
@@ -473,13 +476,13 @@
       <div class="article-content animate-on-scroll">
         <h2>The Cost of Operational Friction</h2>
         
-        <p>The wall between development and operations creates unacceptable financial and temporal bottlenecks. Many organizations waste cloud credits on over-provisioned serverless architectures while struggling with deployment velocity. Unlike monolithic frameworks like <strong><a href="https://nextjs.org/" target="_blank" rel="noopener">Next.js</a> or traditional MERN stacks</strong> that bundle server rendering, API routes, and deployment complexity together, this approach isolates concerns: <strong><a href="https://zod.dev/" target="_blank" rel="noopener">Zod</a> schemas drive the contract</strong>, <strong><a href="https://hono.dev/" target="_blank" rel="noopener">Hono</a> operates as a thin type-safe gateway</strong>, and <strong><a href="https://docs.docker.com/compose/" target="_blank" rel="noopener">Docker Compose</a> handles the entire DevOps lifecycle</strong>—from local development through production auto-healing.</p>
+        <p>The wall between development and operations creates unacceptable financial and temporal bottlenecks. Many organizations waste cloud credits on over-provisioned serverless architectures while struggling with deployment velocity. Unlike monolithic frameworks like <strong><a href="https://nextjs.org/" target="_blank" rel="noopener">Next.js</a> or traditional MERN stacks</strong> that bundle server rendering, API routes, and deployment complexity together, this approach isolates concerns: <strong><a href="https://zod.dev/" target="_blank" rel="noopener">Zod</a> schemas drive the contract</strong>, <strong><a href="https://hono.dev/" target="_blank" rel="noopener">Hono</a> operates as a thin type-safe gateway</strong>, and <strong><a href="https://docs.docker.com/compose/" target="_blank" rel="noopener">Docker Compose</a> handles the entire DevOps lifecycle</strong>â€”from local development through production auto-healing.</p>
 
-        <p>By unifying frontend state management with edge-ready backend schemas and automated pipelines, engineering teams can deploy production-grade systems on standard Linux VPS environments with high security and minimal overhead. This methodology directly reduces time-to-market by eliminating the friction between code creation and infrastructure deployment. The DevOps lifecycle becomes predictable, testable, and repeatable—a critical requirement for teams scaling from proof-of-concept to production reliability.</p>
+        <p>By unifying frontend state management with edge-ready backend schemas and automated pipelines, engineering teams can deploy production-grade systems on standard Linux VPS environments with high security and minimal overhead. This methodology directly reduces time-to-market by eliminating the friction between code creation and infrastructure deployment. The DevOps lifecycle becomes predictable, testable, and repeatableâ€”a critical requirement for teams scaling from proof-of-concept to production reliability.</p>
 
         <h2>1. The Schema-Driven Architecture</h2>
 
-        <p><strong>Boilerplate code is a liability.</strong> A modern stack must strictly adhere to the DRY (Don't Repeat Yourself) principle—a core DevOps lifecycle tenet that reduces maintenance burden and synchronization failures. The solution is defining a single source of truth using <strong><a href="https://zod.dev/" target="_blank" rel="noopener">Zod</a> schemas.</strong></p>
+        <p><strong>Boilerplate code is a liability.</strong> A modern stack must strictly adhere to the DRY (Don't Repeat Yourself) principleâ€”a core DevOps lifecycle tenet that reduces maintenance burden and synchronization failures. The solution is defining a single source of truth using <strong><a href="https://zod.dev/" target="_blank" rel="noopener">Zod</a> schemas.</strong></p>
 
         <p>When you define a schema once, that exact logic powers:</p>
         <ul>
@@ -489,7 +492,7 @@
           <li>API request/response contracts</li>
         </ul>
 
-        <p>Using <strong><a href="https://hono.dev/" target="_blank" rel="noopener">Hono</a>'s RPC feature</strong>, the frontend inherits these backend types automatically. If a database column is renamed, the frontend build fails instantly in the CI pipeline—no runtime surprises in production.</p>
+        <p>Using <strong><a href="https://hono.dev/" target="_blank" rel="noopener">Hono</a>'s RPC feature</strong>, the frontend inherits these backend types automatically. If a database column is renamed, the frontend build fails instantly in the CI pipelineâ€”no runtime surprises in production.</p>
 
         <p>To accelerate the database layer, integrating <strong><a href="https://postgrest.org/" target="_blank" rel="noopener">PostgREST</a></strong> directly over <a href="https://www.postgresql.org/" target="_blank" rel="noopener">PostgreSQL</a> turns the database schema into a lightning-fast RESTful API. <strong><a href="https://hono.dev/" target="_blank" rel="noopener">Hono</a></strong> then sits in front of PostgREST as a lightweight gateway to handle:</p>
         <ul>
@@ -503,7 +506,7 @@
 
         <h2>2. Frontend Velocity and State Management</h2>
 
-        <p>Speed in the UI requires avoiding technical debt. Utilizing <strong><a href="https://tailwindcss.com/" target="_blank" rel="noopener">Tailwind</a></strong> alongside <strong><a href="https://ui.shadcn.com/" target="_blank" rel="noopener">Shadcn</a></strong> allows developers to implement accessible, zero-dependency components directly into the codebase. You own the component logic, keeping the architecture aligned with the KISS (Keep It Simple, Stupid) principle—a DevOps best practice that maximizes system reliability by minimizing complexity in every layer of the stack.</p>
+        <p>Speed in the UI requires avoiding technical debt. Utilizing <strong><a href="https://tailwindcss.com/" target="_blank" rel="noopener">Tailwind</a></strong> alongside <strong><a href="https://ui.shadcn.com/" target="_blank" rel="noopener">Shadcn</a></strong> allows developers to implement accessible, zero-dependency components directly into the codebase. You own the component logic, keeping the architecture aligned with the KISS (Keep It Simple, Stupid) principleâ€”a DevOps best practice that maximizes system reliability by minimizing complexity in every layer of the stack.</p>
 
         <p>When paired with <strong><a href="https://tanstack.com/query/" target="_blank" rel="noopener">TanStack Query</a></strong>, the frontend handles advanced caching and stale-while-revalidate logic automatically. The browser manages state intelligently:</p>
         <ul>
@@ -561,7 +564,7 @@
 
         <h2>4. Infrastructure: Auto-Healing and Rollbacks</h2>
 
-        <p>Complex container orchestration tools like <strong><a href="https://kubernetes.io/" target="_blank" rel="noopener">Kubernetes</a></strong> are often unnecessary overhead for the DevOps lifecycle of early-stage teams. Applying the YAGNI (You Aren't Gonna Need It) principle—a discipline that ensures infrastructure matches actual operational demands—a properly configured <strong>$5 per month Linux VPS</strong> managed via <strong><a href="https://docs.docker.com/compose/" target="_blank" rel="noopener">Docker Compose</a></strong> provides massive scalability for small-to-medium workloads.</p>
+        <p>Complex container orchestration tools like <strong><a href="https://kubernetes.io/" target="_blank" rel="noopener">Kubernetes</a></strong> are often unnecessary overhead for the DevOps lifecycle of early-stage teams. Applying the YAGNI (You Aren't Gonna Need It) principleâ€”a discipline that ensures infrastructure matches actual operational demandsâ€”a properly configured <strong>$5 per month Linux VPS</strong> managed via <strong><a href="https://docs.docker.com/compose/" target="_blank" rel="noopener">Docker Compose</a></strong> provides massive scalability for small-to-medium workloads.</p>
 
         <p><strong>Resilience is built into the configuration.</strong> The docker-compose.yml file includes strict health checks and restart policies:</p>
 
@@ -633,7 +636,7 @@ docker-compose up -d</code></pre>
 
         <p>The schema-driven approach eliminates entire categories of bugs before they reach production. Type mismatches are compile-time errors. Database migrations are coordinated through schema definitions. API contracts are enforced at the language level.</p>
 
-        <p>When paired with automated CI/CD and self-healing infrastructure, the result is a production system that developers can deploy and operate with confidence—on commodity hardware, at minimal cost, with maximum reliability.</p>
+        <p>When paired with automated CI/CD and self-healing infrastructure, the result is a production system that developers can deploy and operate with confidenceâ€”on commodity hardware, at minimal cost, with maximum reliability.</p>
 
         <p>This is not a theoretical exercise. This architecture powers small startups scaling to thousands of users while maintaining one-person deployments and zero operational overhead.</p>
       </div>
@@ -658,3 +661,4 @@ docker-compose up -d</code></pre>
   <script src="../js/main.js"></script>
 </body>
 </html>
+
