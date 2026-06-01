@@ -1,7 +1,21 @@
 User-agent: *
-Disallow:
+Allow: /
 
-# Crawl-delay and sitemap are optional. CI will replace https://aymen.benyedder.top/sitemap.xml with your BASE_URL.
-# If you want to block any paths, update this template before generating robots.txt
+# Explicitly open access to AI Retrieval and Answers (GEO/AEO)
+User-agent: ClaudeBot
+Allow: /
+
+User-agent: GPTBot
+Allow: /
+
+User-agent: Google-Extended
+Allow: /
+
+# Block resource-heavy scrapers with no search/AI value
+User-agent: Bytespider
+Disallow: /
+
+User-agent: CCBot
+Disallow: /
 
 Sitemap: https://aymen.benyedder.top/sitemap.xml
