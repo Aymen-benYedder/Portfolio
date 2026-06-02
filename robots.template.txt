@@ -1,7 +1,25 @@
+# Allow all bots by default
 User-agent: *
 Disallow:
 
-# Crawl-delay and sitemap are optional. CI will replace {{SITEMAP_URL}} with your BASE_URL.
-# If you want to block any paths, update this template before generating robots.txt
+# Explicitly allow AI crawlers for GEO/AEO indexing
+User-agent: GPTBot
+Allow: /
 
+User-agent: Google-Extended
+Allow: /
+
+User-agent: ClaudeBot
+Allow: /
+
+User-agent: CCBot
+Allow: /
+
+User-agent: Bytespider
+Allow: /
+
+User-agent: Amazonbot
+Allow: /
+
+# Sitemap location for search engine discovery
 Sitemap: {{SITEMAP_URL}}
