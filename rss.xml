@@ -5,8 +5,16 @@
     <link>https://aymen.benyedder.top/blog/</link>
     <description>Technical writing on DevOps, system resilience, observability, and full-stack engineering.</description>
     <language>en-us</language>
-    <lastBuildDate>Sat, 04 Apr 2026 08:18:10 GMT</lastBuildDate>
+    <lastBuildDate>Thu, 05 Jun 2026 00:00:00 GMT</lastBuildDate>
     <atom:link href="https://aymen.benyedder.top/rss.xml" rel="self" type="application/rss+xml" />
+
+    <item>
+      <title>GitOps in 2026: Why ArgoCD and FluxCD Are No Longer Just "Deployment Tools"</title>
+      <link>https://aymen.benyedder.top/blog/gitops-2026-argocd-fluxcd.html</link>
+      <guid isPermaLink="true">https://aymen.benyedder.top/blog/gitops-2026-argocd-fluxcd.html</guid>
+      <pubDate>Thu, 05 Jun 2026 00:00:00 GMT</pubDate>
+      <description>In 2026 GitOps has become the backbone of platform engineering. Learn why ArgoCD and FluxCD now shape security, delivery, and progressive delivery strategy.</description>
+    </item>
 
     <item>
       <title>Architecting Multi Cloud Resilience: Why OpenTofu and Terragrunt Are Mandatory in 2026</title>

@@ -2291,7 +2291,7 @@ select {
   position: absolute;
   top: var(--space-lg);
   right: var(--space-lg);
-  background: #dcfce7;
+  background: #dcfce700;
   color: #16a34a;
   padding: var(--space-xs) var(--space-md);
   border-radius: var(--radius-sm);
