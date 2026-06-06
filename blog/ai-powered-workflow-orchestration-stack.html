@@ -454,10 +454,10 @@
         <p>In this guide we will build a simple but powerful AI workflow orchestration system using open-source tools:</p>
         
         <ul>
-          <li><strong><a href="https://openwebui.com/" target="_blank" rel="noopener">Open WebUI</a></strong> â€” internal AI interface for employees</li>
-          <li><strong><a href="https://n8n.io/" target="_blank" rel="noopener">n8n</a></strong> â€” workflow orchestrator</li>
-          <li><strong><a href="https://qdrant.tech/" target="_blank" rel="noopener">Qdrant</a></strong> â€” semantic search database for AI knowledge</li>
-          <li><strong><a href="https://www.postgresql.org/" target="_blank" rel="noopener">PostgreSQL</a></strong> â€” structured data storage</li>
+          <li><strong><a href="https://openwebui.com/" target="_blank" rel="noopener">Open WebUI</a></strong> – internal AI interface for employees</li>
+          <li><strong><a href="https://n8n.io/" target="_blank" rel="noopener">n8n</a></strong> – workflow orchestrator</li>
+          <li><strong><a href="https://qdrant.tech/" target="_blank" rel="noopener">Qdrant</a></strong> – semantic search database for AI knowledge</li>
+          <li><strong><a href="https://www.postgresql.org/" target="_blank" rel="noopener">PostgreSQL</a></strong> – structured data storage</li>
         </ul>
 
         <p>This stack lets you build things like:</p>
@@ -486,15 +486,15 @@
 
         <p><strong>The workflow looks like this:</strong></p>
         <div class="highlight-section" style="font-family: monospace; white-space: pre; overflow-x: auto;">Customer request
-      â†“
+      →
 n8n receives webhook
-      â†“
+      →
 AI analysis (Open WebUI / local model)
-      â†“
+      →
 Knowledge search (Qdrant)
-      â†“
+      →
 Store data (PostgreSQL)
-      â†“
+      →
 Suggested response for support</div>
 
         <p>This is called <strong>workflow orchestration.</strong></p>
@@ -659,7 +659,7 @@ volumes:
         <h2>8. Creating the Workflow in n8n</h2>
         <p>Open the n8n dashboard. Create a new workflow.</p>
 
-        <p><strong>Example automation:</strong> Webhook â†’ AI Analysis â†’ Knowledge Search â†’ Store Ticket â†’ Suggest Reply</p>
+        <p><strong>Example automation:</strong> Webhook → AI Analysis → Knowledge Search → Store Ticket → Suggest Reply</p>
 
         <p><strong>Step 1: Webhook trigger</strong><br>POST /support-ticket</p>
 
@@ -713,10 +713,10 @@ Do not invent information.</code></pre>
         <h2>11. Why This Stack Works</h2>
         <p>This setup separates responsibilities:</p>
         <ul>
-          <li><strong>Open WebUI</strong> â€” Human interface to AI</li>
-          <li><strong>n8n</strong> â€” Automation and orchestration</li>
-          <li><strong>Qdrant</strong> â€” AI knowledge memory</li>
-          <li><strong>PostgreSQL</strong> â€” Structured business data</li>
+          <li><strong>Open WebUI</strong> – Human interface to AI</li>
+          <li><strong>n8n</strong> – Automation and orchestration</li>
+          <li><strong>Qdrant</strong> – AI knowledge memory</li>
+          <li><strong>PostgreSQL</strong> – Structured business data</li>
         </ul>
 
         <p>Together they form a modern AI workflow platform.</p>
