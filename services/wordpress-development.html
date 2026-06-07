@@ -54,55 +54,68 @@
   {
     "@context": "https://schema.org",
     "@type": "Service",
+    "@id": "https://aymen.benyedder.top/services/wordpress-development.html#service",
     "serviceType": "WordPress Development",
     "name": "Professional WordPress Development Services",
     "description": "Custom WordPress theme development, plugin development, WooCommerce setup, and performance optimization services. Delivering 100/100 Lighthouse scores and SEO-optimized solutions.",
+    "url": "https://aymen.benyedder.top/services/wordpress-development.html",
     "provider": {
       "@type": "Person",
       "name": "Aymen ben Yedder",
-      "url": "https://aymen.benyedder.top"
+      "url": "https://aymen.benyedder.top/",
+      "sameAs": [
+        "https://github.com/Aymen-benYedder",
+        "https://www.linkedin.com/in/aymenby"
+      ]
     },
     "areaServed": [
-      {
-        "@type": "Country",
-        "name": "Tunisia"
-      },
-      {
-        "@type": "Country",
-        "name": "France"
-      },
-      {
-        "@type": "Country",
-        "name": "International"
-      }
+      { "@type": "Country", "name": "Tunisia" },
+      { "@type": "Country", "name": "France" },
+      { "@type": "AdministrativeArea", "name": "International" }
     ],
     "offers": {
-      "@type": "Offer",
+      "@type": "AggregateOffer",
       "priceCurrency": "USD",
-      "price": "Starting from $250"
+      "lowPrice": "250",
+      "highPrice": "1400",
+      "offerCount": "3"
     },
     "aggregateRating": {
       "@type": "AggregateRating",
       "ratingValue": "4.9",
-      "reviewCount": "55"
+      "reviewCount": "55",
+      "bestRating": "5",
+      "worstRating": "1"
     },
     "review": [
       {
         "@type": "Review",
-        "author": {"@type": "Person", "name": "Leila Mansouri"},
+        "itemReviewed": {
+          "@type": "Service",
+          "@id": "https://aymen.benyedder.top/services/wordpress-development.html#service"
+        },
         "reviewRating": {"@type": "Rating", "ratingValue": "5", "bestRating": "5"},
+        "author": {"@type": "Person", "name": "Leila Mansouri"},
         "reviewBody": "Aymen rebuilt our WooCommerce storefront and streamlined checkout. Cart abandonment dropped 27%, and our conversion rate climbed 35% in the first month."
       },
       {
         "@type": "Review",
-        "author": {"@type": "Person", "name": "Sophie Martin"},
+        "itemReviewed": {
+          "@type": "Service",
+          "@id": "https://aymen.benyedder.top/services/wordpress-development.html#service"
+        },
         "reviewRating": {"@type": "Rating", "ratingValue": "5", "bestRating": "5"},
+        "author": {"@type": "Person", "name": "Sophie Martin"},
         "reviewBody": "The migration and SEO overhaul boosted our organic traffic by 45% and recovered lost rankings. The site is now faster, safer, and easier to manage."
       },
       {
         "@type": "Review",
-        "author": {"@type": "Organization", "name": "Local Retailer"},
+        "itemReviewed": {
+          "@type": "Service",
+          "@id": "https://aymen.benyedder.top/services/wordpress-development.html#service"
+        },
         "reviewRating": {"@type": "Rating", "ratingValue": "5", "bestRating": "5"},
+        "author": {"@type": "Organization", "name": "Local Retailer"},
         "reviewBody": "After the WordPress optimization, our product pages load in under 1.2s and revenue per visitor increased. Aymen also fixed long-standing security issues without downtime."
       }
     ]
@@ -954,33 +967,6 @@
             </div>
           </article>
         </div>
-
-        <!-- Structured Data: Reviews -->
-        <script type="application/ld+json">
-        {
-          "@context": "https://schema.org",
-          "@graph": [
-            {
-              "@type": "Review",
-              "reviewRating": {"@type": "Rating", "ratingValue": "5", "bestRating": "5"},
-              "author": {"@type": "Person", "name": "Leila Mansouri"},
-              "reviewBody": "Aymen rebuilt our WooCommerce storefront and streamlined checkout. Cart abandonment dropped 27%, and our conversion rate climbed 35% in the first month."
-            },
-            {
-              "@type": "Review",
-              "reviewRating": {"@type": "Rating", "ratingValue": "5", "bestRating": "5"},
-              "author": {"@type": "Person", "name": "Sophie Martin"},
-              "reviewBody": "The migration and SEO overhaul boosted our organic traffic by 45% and recovered lost rankings. The site is now faster, safer, and easier to manage."
-            },
-            {
-              "@type": "Review",
-              "reviewRating": {"@type": "Rating", "ratingValue": "5", "bestRating": "5"},
-              "author": {"@type": "Organization", "name": "Local Retailer"},
-              "reviewBody": "After the WordPress optimization, our product pages load in under 1.2s and revenue per visitor increased. Aymen also fixed long-standing security issues without downtime."
-            }
-          ]
-        }
-        </script>
 
         </div>
       </section>

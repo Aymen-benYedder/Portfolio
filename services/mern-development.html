@@ -54,55 +54,68 @@
   {
     "@context": "https://schema.org",
     "@type": "Service",
+    "@id": "https://aymen.benyedder.top/services/mern-development.html#service",
     "serviceType": "MERN Stack Development",
     "name": "MERN Stack Development Services",
     "description": "Custom MERN Stack applications built with React, Node.js, Express, and MongoDB. Scalable, high-performance, SEO-optimized solutions.",
+    "url": "https://aymen.benyedder.top/services/mern-development.html",
     "provider": {
       "@type": "Person",
       "name": "Aymen ben Yedder",
-      "url": "https://aymen.benyedder.top"
+      "url": "https://aymen.benyedder.top/",
+      "sameAs": [
+        "https://github.com/Aymen-benYedder",
+        "https://www.linkedin.com/in/aymenby"
+      ]
     },
     "areaServed": [
-      {
-        "@type": "Country",
-        "name": "Tunisia"
-      },
-      {
-        "@type": "Country",
-        "name": "France"
-      },
-      {
-        "@type": "Country",
-        "name": "International"
-      }
+      { "@type": "Country", "name": "Tunisia" },
+      { "@type": "Country", "name": "France" },
+      { "@type": "AdministrativeArea", "name": "International" }
     ],
     "offers": {
-      "@type": "Offer",
+      "@type": "AggregateOffer",
       "priceCurrency": "USD",
-      "price": "Starting from $2,500"
+      "lowPrice": "2500",
+      "highPrice": "8000",
+      "offerCount": "3"
     },
     "aggregateRating": {
       "@type": "AggregateRating",
       "ratingValue": "4.9",
-      "reviewCount": "50"
+      "reviewCount": "50",
+      "bestRating": "5",
+      "worstRating": "1"
     },
     "review": [
       {
         "@type": "Review",
-        "author": {"@type": "Person", "name": "Ahmed Ben Salem"},
+        "itemReviewed": {
+          "@type": "Service",
+          "@id": "https://aymen.benyedder.top/services/mern-development.html#service"
+        },
         "reviewRating": {"@type": "Rating", "ratingValue": "5", "bestRating": "5"},
+        "author": {"@type": "Person", "name": "Ahmed Ben Salem"},
         "reviewBody": "Aymen's MERN dashboard cut our page load time to 0.9s and gave the ops team real-time shipment visibility. Conversion rose 60%, and the architecture is now easy to scale."
       },
       {
         "@type": "Review",
-        "author": {"@type": "Person", "name": "Pierre Dubois"},
+        "itemReviewed": {
+          "@type": "Service",
+          "@id": "https://aymen.benyedder.top/services/mern-development.html#service"
+        },
         "reviewRating": {"@type": "Rating", "ratingValue": "5", "bestRating": "5"},
+        "author": {"@type": "Person", "name": "Pierre Dubois"},
         "reviewBody": "The analytics portal became a product differentiator overnight. User engagement climbed 60% and support tickets dropped 40%. Aymen shipped quality code with production-grade DevOps."
       },
       {
         "@type": "Review",
-        "author": {"@type": "Organization", "name": "Global SaaS"},
+        "itemReviewed": {
+          "@type": "Service",
+          "@id": "https://aymen.benyedder.top/services/mern-development.html#service"
+        },
         "reviewRating": {"@type": "Rating", "ratingValue": "5", "bestRating": "5"},
+        "author": {"@type": "Organization", "name": "Global SaaS"},
         "reviewBody": "We now deploy with confidence every sprint. The stack is stable, performant, and the CI/CD pipeline has saved us hours of manual work each week."
       }
     ]
@@ -947,33 +960,6 @@
             </div>
           </article>
         </div>
-
-        <!-- Structured Data: Reviews -->
-        <script type="application/ld+json">
-        {
-          "@context": "https://schema.org",
-          "@graph": [
-            {
-              "@type": "Review",
-              "reviewRating": {"@type": "Rating", "ratingValue": "5", "bestRating": "5"},
-              "author": {"@type": "Person", "name": "Ahmed Ben Salem"},
-              "reviewBody": "Aymen's MERN dashboard cut our page load time to 0.9s and gave the ops team real-time shipment visibility. Conversion rose 60%, and the architecture is now easy to scale."
-            },
-            {
-              "@type": "Review",
-              "reviewRating": {"@type": "Rating", "ratingValue": "5", "bestRating": "5"},
-              "author": {"@type": "Person", "name": "Pierre Dubois"},
-              "reviewBody": "The analytics portal became a product differentiator overnight. User engagement climbed 60% and support tickets dropped 40%. Aymen shipped quality code with production-grade DevOps."
-            },
-            {
-              "@type": "Review",
-              "reviewRating": {"@type": "Rating", "ratingValue": "5", "bestRating": "5"},
-              "author": {"@type": "Organization", "name": "Global SaaS"},
-              "reviewBody": "We now deploy with confidence every sprint. The stack is stable, performant, and the CI/CD pipeline has saved us hours of manual work each week."
-            }
-          ]
-        }
-        </script>
 
         </div>
       </section>
