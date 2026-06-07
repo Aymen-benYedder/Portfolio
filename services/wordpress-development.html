@@ -49,17 +49,16 @@
   <link rel="icon" type="image/png" sizes="32x32" href="data:image/svg+xml,<svg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 100 100'><rect fill='%2300d4ff' width='100' height='100'/><text x='50' y='65' font-size='70' font-weight='bold' text-anchor='middle' fill='%230a0a0f' font-family='system-ui'>D</text></svg>">
   <link rel="apple-touch-icon" href="data:image/svg+xml,<svg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 180 180'><rect fill='%2300d4ff' width='180' height='180'/><text x='90' y='130' font-size='130' font-weight='bold' text-anchor='middle' fill='%230a0a0f' font-family='system-ui'>D</text></svg>">
   
-  <!-- Structured Data: Service Schema -->
+  <!-- Structured Data: Service/Product Schema -->
   <script type="application/ld+json">
   {
     "@context": "https://schema.org",
-    "@type": "Service",
+    "@type": "Product",
     "@id": "https://aymen.benyedder.top/services/wordpress-development.html#service",
-    "serviceType": "WordPress Development",
     "name": "Professional WordPress Development Services",
     "description": "Custom WordPress theme development, plugin development, WooCommerce setup, and performance optimization services. Delivering 100/100 Lighthouse scores and SEO-optimized solutions.",
     "url": "https://aymen.benyedder.top/services/wordpress-development.html",
-    "provider": {
+    "brand": {
       "@type": "Person",
       "name": "Aymen ben Yedder",
       "url": "https://aymen.benyedder.top/",
@@ -68,41 +67,37 @@
         "https://www.linkedin.com/in/aymenby"
       ]
     },
-    "areaServed": [
-      { "@type": "Country", "name": "Tunisia" },
-      { "@type": "Country", "name": "France" },
-      { "@type": "AdministrativeArea", "name": "International" }
-    ],
     "offers": {
       "@type": "AggregateOffer",
       "priceCurrency": "USD",
-      "lowPrice": 250,
-      "highPrice": 1400,
-      "offerCount": 3
+      "lowPrice": "250",
+      "highPrice": "1400",
+      "offerCount": "3",
+      "availability": "https://schema.org/InStock"
     },
     "aggregateRating": {
       "@type": "AggregateRating",
-      "ratingValue": 4.9,
-      "reviewCount": 55,
-      "bestRating": 5,
-      "worstRating": 1
+      "ratingValue": "4.9",
+      "reviewCount": "55",
+      "bestRating": "5",
+      "worstRating": "1"
     },
     "review": [
       {
         "@type": "Review",
-        "reviewRating": {"@type": "Rating", "ratingValue": 5, "bestRating": 5},
+        "reviewRating": {"@type": "Rating", "ratingValue": "5", "bestRating": "5"},
         "author": {"@type": "Person", "name": "Leila Mansouri"},
         "reviewBody": "Aymen rebuilt our WooCommerce storefront and streamlined checkout. Cart abandonment dropped 27%, and our conversion rate climbed 35% in the first month."
       },
       {
         "@type": "Review",
-        "reviewRating": {"@type": "Rating", "ratingValue": 5, "bestRating": 5},
+        "reviewRating": {"@type": "Rating", "ratingValue": "5", "bestRating": "5"},
         "author": {"@type": "Person", "name": "Sophie Martin"},
         "reviewBody": "The migration and SEO overhaul boosted our organic traffic by 45% and recovered lost rankings. The site is now faster, safer, and easier to manage."
       },
       {
         "@type": "Review",
-        "reviewRating": {"@type": "Rating", "ratingValue": 5, "bestRating": 5},
+        "reviewRating": {"@type": "Rating", "ratingValue": "5", "bestRating": "5"},
         "author": {"@type": "Organization", "name": "Local Retailer"},
         "reviewBody": "After the WordPress optimization, our product pages load in under 1.2s and revenue per visitor increased. Aymen also fixed long-standing security issues without downtime."
       }
