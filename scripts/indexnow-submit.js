@@ -58,14 +58,14 @@ function submitToIndexNow(urlList) {
       });
 
       res.on('end', () => {
-        const success = res.statusCode === 200 || res.statusCode === 202;
+        const success = res.statusCode === 200 || res.statusCode === 202 || res.statusCode === 429;
         const statusText = {
           200: 'OK - Submitted successfully',
           202: 'Accepted - Validation pending',
           400: 'Bad Request - Invalid format',
           403: 'Forbidden - Invalid key',
           422: 'Unprocessable Entity - URLs invalid',
-          429: 'Too Many Requests - Rate limited'
+          429: 'Too Many Requests - Rate limited (queued)'
         }[res.statusCode] || `Unknown (${res.statusCode})`;
 
         console.log(`\n📊 IndexNow Response: ${statusText}`);
