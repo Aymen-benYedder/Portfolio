@@ -41,7 +41,7 @@ function submitToIndexNow(urlList) {
 
   return new Promise((resolve, reject) => {
     const options = {
-      hostname: 'www.bing-webmaster.com',
+      hostname: 'www.bing.com',
       path: '/indexnow',
       method: 'POST',
       headers: {
