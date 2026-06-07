@@ -81,6 +81,11 @@ scripts/*
 !scripts/inject-breadcrumbs.mjs
 !scripts/validate-jsonld.mjs
 !scripts/optimize-cwv.mjs
+!scripts/gsc-diagnostic.mjs
+!scripts/indexnow-submit.js
+!scripts/indexnow-blog-submit.js
+!scripts/indexnow-routes.js
+!scripts/test-indexnow-api.js
 assets/resume copy.md
 # Keep the assets folder ignored but allow PDF resumes to be tracked
 assets
