@@ -1,87 +1,86 @@
 <?xml version="1.0" encoding="UTF-8"?>
-<?xml-stylesheet type="text/xsl" href="/sitemap.xsl"?>
 <urlset xmlns="http://www.sitemaps.org/schemas/sitemap/0.9">
   <url>
     <loc>https://aymen.benyedder.top/</loc>
-    <lastmod>2026-06-06T21:31:33.584Z</lastmod>
+    <lastmod>2026-06-07T14:55:49.645Z</lastmod>
     <changefreq>daily</changefreq>
     <priority>1.0</priority>
   </url>
   <url>
     <loc>https://aymen.benyedder.top/blog/</loc>
-    <lastmod>2026-06-06T21:31:33.582Z</lastmod>
+    <lastmod>2026-06-07T14:55:49.643Z</lastmod>
     <changefreq>weekly</changefreq>
     <priority>0.8</priority>
   </url>
   <url>
     <loc>https://aymen.benyedder.top/blog/ai-powered-workflow-orchestration-stack.html</loc>
-    <lastmod>2026-06-06T21:31:33.582Z</lastmod>
+    <lastmod>2026-06-07T14:55:49.642Z</lastmod>
     <changefreq>weekly</changefreq>
     <priority>0.8</priority>
   </url>
   <url>
     <loc>https://aymen.benyedder.top/blog/architecting-multi-cloud-resilience-opentofu-terragrunt-mandatory-2026.html</loc>
-    <lastmod>2026-06-06T21:31:33.582Z</lastmod>
+    <lastmod>2026-06-07T14:55:49.643Z</lastmod>
     <changefreq>weekly</changefreq>
     <priority>0.8</priority>
   </url>
   <url>
     <loc>https://aymen.benyedder.top/blog/beyond-tutorial-web-resilience.html</loc>
-    <lastmod>2026-06-06T21:31:33.582Z</lastmod>
+    <lastmod>2026-06-07T14:55:49.643Z</lastmod>
     <changefreq>weekly</changefreq>
     <priority>0.8</priority>
   </url>
   <url>
     <loc>https://aymen.benyedder.top/blog/devops-vps-startups.html</loc>
-    <lastmod>2026-06-06T21:31:33.582Z</lastmod>
+    <lastmod>2026-06-07T14:55:49.643Z</lastmod>
     <changefreq>weekly</changefreq>
     <priority>0.8</priority>
   </url>
   <url>
     <loc>https://aymen.benyedder.top/blog/execution-layer-breach-hackerbot-claw-cicd-compromise.html</loc>
-    <lastmod>2026-06-06T21:31:33.582Z</lastmod>
+    <lastmod>2026-06-07T14:55:49.643Z</lastmod>
     <changefreq>weekly</changefreq>
     <priority>0.8</priority>
   </url>
   <url>
     <loc>https://aymen.benyedder.top/blog/from-logs-to-logic-claude-real-time-visualization-observability.html</loc>
-    <lastmod>2026-06-06T21:31:33.582Z</lastmod>
+    <lastmod>2026-06-07T14:55:49.643Z</lastmod>
     <changefreq>weekly</changefreq>
     <priority>0.8</priority>
   </url>
   <url>
     <loc>https://aymen.benyedder.top/blog/gitops-2026-argocd-fluxcd.html</loc>
-    <lastmod>2026-06-06T21:31:33.582Z</lastmod>
+    <lastmod>2026-06-07T14:55:49.643Z</lastmod>
     <changefreq>weekly</changefreq>
     <priority>0.8</priority>
   </url>
   <url>
     <loc>https://aymen.benyedder.top/blog/sample-post.html</loc>
-    <lastmod>2026-06-06T21:31:33.582Z</lastmod>
+    <lastmod>2026-06-07T14:55:49.643Z</lastmod>
     <changefreq>weekly</changefreq>
     <priority>0.8</priority>
   </url>
   <url>
     <loc>https://aymen.benyedder.top/blog/unified-type-safety-hono-tanstack-docker.html</loc>
-    <lastmod>2026-06-06T21:31:33.583Z</lastmod>
+    <lastmod>2026-06-07T14:55:49.643Z</lastmod>
     <changefreq>weekly</changefreq>
     <priority>0.8</priority>
   </url>
   <url>
     <loc>https://aymen.benyedder.top/services/</loc>
-    <lastmod>2026-06-06T21:31:33.587Z</lastmod>
+    <lastmod>2026-06-07T14:55:49.647Z</lastmod>
     <changefreq>monthly</changefreq>
     <priority>0.7</priority>
   </url>
   <url>
     <loc>https://aymen.benyedder.top/services/mern-development.html</loc>
-    <lastmod>2026-06-06T21:31:33.587Z</lastmod>
+    <lastmod>2026-06-07T14:55:49.647Z</lastmod>
     <changefreq>monthly</changefreq>
     <priority>0.7</priority>
   </url>
   <url>
     <loc>https://aymen.benyedder.top/services/wordpress-development.html</loc>
-    <lastmod>2026-06-06T21:31:33.587Z</lastmod>
+    <lastmod>2026-06-07T14:55:49.647Z</lastmod>
     <changefreq>monthly</changefreq>
     <priority>0.7</priority>
   </url>
