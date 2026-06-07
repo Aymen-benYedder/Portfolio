@@ -340,7 +340,7 @@
 
         <h2>ArgoCD and FluxCD in 2026: Mature, Battle-Tested, and Diverging</h2>
 
-        <p>Both tools graduated from the CNCF — meaning they're production-proven, well-maintained, and trusted by major organizations. But in 2026, their philosophies have grown further apart, and that divergence is actually useful for making the right architectural choice.</p>
+        <p>Both <a href="https://argoproj.github.io/cd/" target="_blank" rel="noopener">ArgoCD</a> and <a href="https://fluxcd.io/" target="_blank" rel="noopener">FluxCD</a> graduated from the CNCF — meaning they're production-proven, well-maintained, and trusted by major organizations. But in 2026, their philosophies have grown further apart, and that divergence is actually useful for making the right architectural choice.</p>
 
         <h3>ArgoCD: Visibility-First, GitOps as a Product</h3>
 
@@ -396,7 +396,7 @@
 
         <h2>The Pattern I Use in Production: GitOps + Progressive Delivery</h2>
 
-        <p>Both tools integrate with Flagger — and this combination is, in my opinion, the most powerful pattern in GitOps today.</p>
+        <p>Both tools integrate with <a href="https://flagger.app/" target="_blank" rel="noopener">Flagger</a> — and this combination is, in my opinion, the most powerful pattern in GitOps today.</p>
 
         <p>Here's the flow:</p>
         <ol>
@@ -405,7 +405,7 @@
           <li>Flux/ArgoCD detects the new image tag (via Image Automation or a registry webhook)</li>
           <li>The reconciler applies the updated manifest to the cluster</li>
           <li>Flagger takes over and starts a canary release — routing 10% of traffic to the new version</li>
-          <li>Prometheus metrics are monitored continuously against predefined thresholds (error rate, latency)</li>
+          <li><a href="https://prometheus.io/" target="_blank" rel="noopener">Prometheus</a> metrics are monitored continuously against predefined thresholds (error rate, latency)</li>
           <li>If metrics stay healthy, Flagger automatically promotes to 100% traffic</li>
           <li>If metrics degrade, Flagger rolls back — and because the desired state is still in Git, the rollback is clean and auditable</li>
         </ol>
@@ -469,7 +469,7 @@
   <footer class="footer-industrial">
     <div class="container">
       <div class="footer-bottom">
-        <div class="footer-legal">&copy; 2024 Aymen ben Yedder. All rights reserved.</div>
+        <div class="footer-legal">&copy; 2026 Aymen ben Yedder. All rights reserved.</div>
       </div>
     </div>
   </footer>
