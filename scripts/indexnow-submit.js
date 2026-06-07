@@ -88,7 +88,12 @@ function submitToIndexNow(urlList) {
     });
 
     const payloadStr = JSON.stringify(payload);
-    req.write(payloadStr);
+    const payloadBuffer = Buffer.from(payloadStr, 'utf-8');
+    
+    // Set Content-Length header
+    req.setHeader('Content-Length', payloadBuffer.length);
+    
+    req.write(payloadBuffer);
     req.end();
   });
 }
