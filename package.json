@@ -8,6 +8,9 @@
     "inject-breadcrumbs": "node scripts/inject-breadcrumbs.mjs",
     "validate-jsonld": "node scripts/validate-jsonld.mjs",
     "optimize-cwv": "node scripts/optimize-cwv.mjs",
-    "gsc-diagnostic": "node scripts/gsc-diagnostic.mjs"
+    "gsc-diagnostic": "node scripts/gsc-diagnostic.mjs",
+    "indexnow-submit": "node scripts/indexnow-submit.js",
+    "indexnow-blog": "node scripts/indexnow-blog-submit.js",
+    "indexnow-test": "node scripts/test-indexnow-api.js"
   }
 }

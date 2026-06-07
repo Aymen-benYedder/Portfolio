@@ -1,0 +1,46 @@
+name: Submit to IndexNow on Deploy
+
+# Trigger on successful deployment or manual workflow dispatch
+on:
+  workflow_dispatch:
+    inputs:
+      urls:
+        description: 'Comma-separated URLs to submit'
+        required: true
+        type: string
+  # Uncomment to auto-trigger after main branch pushes
+  # push:
+  #   branches: [main]
+  #   paths:
+  #     - 'blog/**'
+  #     - 'index.html'
+
+jobs:
+  indexnow:
+    runs-on: ubuntu-latest
+    steps:
+      - uses: actions/checkout@v4
+
+      - name: Set up Node.js
+        uses: actions/setup-node@v4
+        with:
+          node-version: '18'
+
+      - name: Submit URLs to IndexNow
+        env:
+          INDEX_NOW_KEY: ${{ secrets.INDEX_NOW_KEY }}
+        run: |
+          if [ "${{ github.event_name }}" == "workflow_dispatch" ]; then
+            # Manual submission with custom URLs
+            URLS="${{ github.event.inputs.urls }}"
+            IFS=',' read -ra URL_ARRAY <<< "$URLS"
+            node scripts/indexnow-submit.js "${URL_ARRAY[@]}"
+          else
+            # Auto-submit homepage + recently modified blog posts
+            node scripts/indexnow-submit.js \
+              https://aymen.benyedder.top/ \
+              https://aymen.benyedder.top/blog/
+          fi
+
+      - name: Log submission result
+        run: echo "✅ IndexNow submission completed"
