@@ -1,0 +1,33 @@
+mcpServers:
+  # 1. The Explorer: Scans and reads files across your workspace.
+  - name: Local Filesystem
+    command: npx
+    args:
+      - -y
+      - "@modelcontextprotocol/server-filesystem"
+      - "/path/to/your/projects" # Important: Change this to your actual project folder path
+    env: {}
+
+  # 2. The Historian: Reads git logs, diffs, and branch status.
+  - name: Git Repository Context
+    command: npx
+    args:
+      - -y
+      - "@modelcontextprotocol/server-git"
+    env: {}
+
+  # 3. The Doc Fetcher: Downloads clean markdown documentation from any URL you provide.
+  - name: Fetch Documentation
+    command: npx
+    args:
+      - -y
+      - "@modelcontextprotocol/server-fetch"
+    env: {}
+
+  # 4. The Eyes: Opens a headless browser to inspect DOM, test UI clicks, and read console errors.
+  - name: Browser Automation (Puppeteer)
+    command: npx
+    args:
+      - -y
+      - "@modelcontextprotocol/server-puppeteer"
+    env: {}

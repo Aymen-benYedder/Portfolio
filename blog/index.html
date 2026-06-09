@@ -115,8 +115,85 @@
     ]
   }
   </script>
-  
-  <!-- CSS Files -->
+
+  <!-- Structured Data: CollectionPage for Blog Index -->
+  <script type="application/ld+json">
+  {
+    "@context": "https://schema.org",
+    "@type": "CollectionPage",
+    "name": "Technical Blog | DevOps, Infrastructure, and Web Development Articles",
+    "description": "In-depth technical articles on DevOps, infrastructure automation, CI/CD pipelines, MERN stack development, and web systems engineering.",
+    "url": "https://aymen.benyedder.top/blog/",
+    "isPartOf": {
+      "@type": "WebSite",
+      "name": "AYMEN.DEV",
+      "url": "https://aymen.benyedder.top"
+    },
+    "mainEntity": {
+      "@type": "ItemList",
+      "name": "Technical Articles",
+      "description": "Articles on DevOps, infrastructure, CI/CD, and web development"
+    },
+    "about": [
+      {
+        "@type": "Thing",
+        "name": "DevOps Engineering",
+        "description": "Infrastructure automation, CI/CD pipelines, and production operations"
+      },
+      {
+        "@type": "Thing",
+        "name": "Infrastructure as Code",
+        "description": "Terraform, OpenTofu, Terragrunt, and declarative infrastructure"
+      },
+      {
+        "@type": "Thing",
+        "name": "Kubernetes & Orchestration",
+        "description": "Container orchestration, GitOps, ArgoCD, and FluxCD"
+      },
+      {
+        "@type": "Thing",
+        "name": "Web Resilience",
+        "description": "99.9% uptime architecture, load balancing, and disaster recovery"
+      }
+    ]
+  }
+  </script>
+
+  <!-- Structured Data: FAQPage for Blog Index -->
+  <script type="application/ld+json">
+  {
+    "@context": "https://schema.org",
+    "@type": "FAQPage",
+    "name": "Technical Blog FAQ",
+    "url": "https://aymen.benyedder.top/blog/",
+    "mainEntity": [
+      {
+        "@type": "Question",
+        "name": "What topics does this technical blog cover?",
+        "acceptedAnswer": {
+          "@type": "Answer",
+          "text": "This blog covers DevOps engineering, infrastructure automation, CI/CD pipelines, Kubernetes, MERN stack development, web systems architecture, and modern production engineering practices. Articles focus on practical, production-grade solutions with deep technical analysis."
+        }
+      },
+      {
+        "@type": "Question",
+        "name": "Who writes these technical articles?",
+        "acceptedAnswer": {
+          "@type": "Answer",
+          "text": "Aymen ben Yedder, a DevOps Engineer and Web Systems Architect with 8+ years of experience building scalable production infrastructure, CI/CD pipelines, and full-stack web applications. Based in Tunisia and available for freelance and consulting work."
+        }
+      },
+      {
+        "@type": "Question",
+        "name": "How frequently are new articles published?",
+        "acceptedAnswer": {
+          "@type": "Answer",
+          "text": "New technical articles are published on a regular basis, focusing on emerging DevOps practices, infrastructure trends, and production engineering insights. Subscribe to stay updated on new content."
+        }
+      }
+    ]
+  }
+  </script>
   <link rel="stylesheet" href="../css/vars.css">
   <link rel="stylesheet" href="../css/main.css">
   <link rel="stylesheet" href="../css/components.css">
