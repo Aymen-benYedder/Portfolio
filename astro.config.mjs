@@ -3,16 +3,11 @@ import { defineConfig } from 'astro/config';
 import sanity from '@sanity/astro';
 import tailwindcss from '@tailwindcss/vite';
 import sitemap from '@astrojs/sitemap';
-import cloudflare from '@astrojs/cloudflare';
 import react from '@astrojs/react';
 
 export default defineConfig({
   site: 'https://aymen.benyedder.top',
   output: 'static',
-  adapter: cloudflare({
-    imageService: true,
-    platformProxy: { enabled: true },
-  }),
   integrations: [
     react(),
     sanity({
