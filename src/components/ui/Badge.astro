@@ -1,0 +1,22 @@
+---
+export interface Props {
+  variant?: 'green' | 'yellow' | 'red' | 'blue' | 'ghost';
+  live?: boolean;
+  class?: string;
+}
+
+const { variant = 'ghost', live = false, class: className = '' } = Astro.props;
+
+const variantClasses: Record<string, string> = {
+  green: 'text-[var(--success)] border-[rgba(16,185,129,0.4)] bg-[rgba(16,185,129,0.08)]',
+  yellow: 'text-[var(--warning)] border-[var(--warning)] bg-[rgba(245,158,11,0.08)]',
+  red: 'text-[var(--error)] border-[var(--error)] bg-[rgba(239,68,68,0.08)]',
+  blue: 'text-[var(--info)] border-[var(--info)] bg-[rgba(59,130,246,0.08)]',
+  ghost: 'text-[var(--text-3)] border-[var(--border)] bg-transparent',
+};
+---
+
+<span class="label-caps px-[8px] py-[3px] border inline-flex items-center gap-[5px] {variantClasses[variant]} {className}">
+  {live && <span class="w-[5px] h-[5px] bg-current" style="box-shadow: 0 0 6px currentColor;"></span>}
+  <slot />
+</span>

@@ -1,0 +1,52 @@
+---
+import BaseSeo from '@components/seo/BaseSeo.astro';
+import HeadSchema from '@components/seo/HeadSchema.astro';
+import Navbar from '@components/layout/Navbar.astro';
+import Footer from '@components/layout/Footer.astro';
+import Gtag from '@components/analytics/Gtag.astro';
+import NavbarIsland from '@components/islands/NavbarIsland.tsx';
+import CommandPalette from '@components/islands/CommandPalette.tsx';
+import '@styles/globals.css';
+
+export interface Props {
+  title: string;
+  description: string;
+  canonical?: string;
+  image?: string;
+  ogType?: string;
+  noIndex?: boolean;
+}
+
+const { title, description, canonical, image, ogType, noIndex } = Astro.props;
+---
+
+<!DOCTYPE html>
+<html lang="en">
+  <head>
+    <meta charset="UTF-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <meta name="msvalidate.01" content="61B543554A1E46310B22E3208A7075DD" />
+    <BaseSeo {title} {description} {canonical} {image} {ogType} {noIndex} />
+    <HeadSchema />
+    <Gtag />
+    <link rel="icon" href="/favicon.ico" type="image/x-icon" />
+    <link rel="shortcut icon" href="/favicon.ico" type="image/x-icon" />
+    <slot name="head" />
+  </head>
+  <body class="bg-[var(--void)] text-[var(--text-2)]">
+    <a href="#main-content" class="skip-link absolute -top-10 left-0 bg-[var(--accent)] text-[var(--void)] px-[var(--spacing-gap-sm)] py-[var(--spacing-gap-xs)] no-underline z-50 focus:top-0">Skip to main content</a>
+    <div class="scanline-overlay" aria-hidden="true"></div>
+    <Navbar />
+    <NavbarIsland client:only />
+    <CommandPalette client:only />
+    <main id="main-content" class="pt-[52px]">
+      <slot />
+    </main>
+    <Footer />
+    <slot name="after-footer" />
+  </body>
+</html>
+
+<style>
+.skip-link { transition: top 150ms ease; }
+</style>

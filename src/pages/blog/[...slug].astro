@@ -1,0 +1,221 @@
+---
+import BlogLayout from '@layouts/BlogLayout.astro';
+import ArticleSchema from '@components/seo/ArticleSchema.astro';
+import BreadcrumbSchema from '@components/seo/BreadcrumbSchema.astro';
+import FAQPageSchema from '@components/seo/FAQPageSchema.astro';
+import DeployMeta from '@components/ui/DeployMeta.astro';
+import Badge from '@components/ui/Badge.astro';
+import CodeBlockInjector from '@components/islands/CodeBlockInjector.tsx';
+import { PortableText } from 'astro-portabletext';
+import { urlFor, fetchSanityApi } from '@lib/sanity';
+import { getNormalizedPosts, getNormalizedPost, getAllNormalizedSlugs, getCanonicalUrl, getRelatedPosts } from '@lib/blog';
+import { staticPosts } from '@data/posts';
+
+export async function getStaticPaths() {
+  console.log('[getStaticPaths] Running...');
+  const staticPaths = staticPosts.map(p => ({ params: { slug: p.slug } }));
+
+  try {
+    const token = import.meta.env.SANITY_API_READ_TOKEN;
+    console.log('[getStaticPaths] Token exists:', !!token);
+    
+    const query = `*[_type == "post" && status == "published" && defined(slug.current)]{"slug": slug.current}`;
+    const data = await fetchSanityApi(query);
+    console.log('[getStaticPaths] Sanity result:', data);
+    const sanitySlugs = data.result;
+    
+    if (sanitySlugs && sanitySlugs.length > 0) {
+      const existingSlugs = new Set(staticPosts.map(p => p.slug));
+      const sanityOnlyPaths = sanitySlugs
+        .filter((s: any) => s.slug && !existingSlugs.has(s.slug))
+        .map((s: any) => ({ params: { slug: s.slug } }));
+      
+      console.log('[getStaticPaths] Returning combined paths:', staticPaths.length + sanityOnlyPaths.length);
+      return [...staticPaths, ...sanityOnlyPaths];
+    }
+  } catch (e) {
+    console.error('[getStaticPaths] Error:', e);
+  }
+  
+  console.log('[getStaticPaths] Returning static only');
+  return staticPaths;
+}
+
+const { slug } = Astro.params;
+console.log('[page] Rendering for slug:', slug);
+
+let post = null;
+try {
+  post = await getNormalizedPost(slug as string);
+  console.log('[page] Post title:', post?.title);
+  console.log('[page] Post isSanity:', post?.isSanity);
+  console.log('[page] Post body type:', typeof post?.body);
+  console.log('[page] Post body isArray:', Array.isArray(post?.body));
+  console.log('[page] Post body length:', post?.body?.length);
+} catch (e) {
+  console.error('[page] Error fetching post:', e);
+  const staticPost = staticPosts.find(p => p.slug === slug);
+  if (staticPost) {
+    post = {
+      id: staticPost.id,
+      title: staticPost.title,
+      slug: staticPost.slug,
+      description: staticPost.description,
+      publishedAt: staticPost.publishedAt,
+      updatedAt: staticPost.updatedAt,
+      readingTime: staticPost.readingTime,
+      body: staticPost.body,
+      categories: staticPost.categories,
+      tags: staticPost.tags,
+      isSanity: false,
+    };
+  }
+}
+
+console.log('[page] Final post:', post ? post.title : 'null');
+
+if (!post) {
+  console.log('[page] Redirecting to 404');
+  return Astro.redirect('/404');
+}
+
+const allPosts = await getNormalizedPosts();
+const relatedPosts = getRelatedPosts(allPosts, slug as string, 3);
+const canonicalUrl = getCanonicalUrl(slug as string, post.canonicalUrl);
+---
+
+<BlogLayout
+  title={post.seoTitle || post.title}
+  description={post.seoDescription || post.description || `Read about ${post.title}`}
+  canonical={canonicalUrl}
+  image={post.image?.url}
+  noIndex={post.noIndex}
+  breadcrumbItems={[
+    { name: 'Home', url: 'https://aymen.benyedder.top/' },
+    { name: 'Blog', url: 'https://aymen.benyedder.top/blog/' },
+    { name: post.title, url: canonicalUrl },
+  ]}
+  author={post.author?.name}
+  publishedAt={post.publishedAt}
+  modifiedAt={post.updatedAt || post.publishedAt}
+  tags={post.tags}
+>
+  <ArticleSchema
+    headline={post.title}
+    description={post.seoDescription || post.description || ''}
+    url={canonicalUrl}
+    image={post.image?.url}
+    datePublished={post.publishedAt}
+    dateModified={post.updatedAt || post.publishedAt}
+    keywords={post.tags}
+    authorName={post.author?.name}
+    authorUrl={post.author?.slug ? `https://aymen.benyedder.top/author/${post.author.slug}/` : undefined}
+    section={post.categories[0]}
+    wordCount={post.body ? (typeof post.body === 'string' ? post.body.replace(/<[^>]*>/g, '').split(/\s+/).length : 0) : 0}
+  />
+  {post.faq && post.faq.length > 0 && <FAQPageSchema items={post.faq} url={canonicalUrl} />}
+
+  <article class="max-w-[var(--container-max)] mx-auto px-[var(--section-px)] pt-[var(--section-gap)]">
+    <header class="mb-[var(--spacing-gap-lg)]">
+      <div class="flex items-center gap-[var(--spacing-gap-sm)] mb-[var(--spacing-gap-sm)] flex-wrap">
+        {post.categories.map((cat: string) => <Badge variant="ghost">{cat}</Badge>)}
+      </div>
+      <h1 class="font-[family-name:var(--font-mono)] text-[var(--heading-md)] max-md:text-[22px] font-bold leading-[1.2] text-[var(--text-1)] m-0">{post.title}</h1>
+      <div class="flex items-center gap-[var(--spacing-gap-md)] mt-[var(--spacing-gap-sm)] flex-wrap">
+        {post.publishedAt && <time datetime={post.publishedAt} class="font-[family-name:var(--font-mono)] text-[var(--text-2xs)] text-[var(--text-3)]">{new Date(post.publishedAt).toLocaleDateString('en-US', { year: 'numeric', month: 'long', day: 'numeric' })}</time>}
+        {post.readingTime && <span class="font-[family-name:var(--font-mono)] text-[var(--text-2xs)] text-[var(--text-3)]">{post.readingTime} min read</span>}
+        {post.author && (
+          <span class="font-[family-name:var(--font-mono)] text-[var(--text-2xs)] text-[var(--accent)]">
+            By <a href={`/author/${post.author.slug}/`} class="text-[var(--accent)] hover:underline">{post.author.name}</a>
+          </span>
+        )}
+      </div>
+    </header>
+
+    {post.image && (
+      <figure class="mb-[var(--spacing-gap-lg)] border border-[var(--border)]">
+        <img src={post.image.url} alt={post.image.alt} class="w-full h-auto" loading="lazy" decoding="async" />
+        {post.image.caption && <figcaption class="text-[var(--text-2)] text-[var(--text-small)] mt-[var(--spacing-gap-xs)] text-center">{post.image.caption}</figcaption>}
+      </figure>
+    )}
+
+    {post.directAnswer && (
+      <div class="mb-[var(--spacing-gap-lg)] p-[var(--card-px)] bg-[rgba(16,185,129,0.05)] border-l-2 border-[var(--accent)]">
+        <h2 class="font-[family-name:var(--font-mono)] text-[var(--text-small)] font-bold text-[var(--accent)] mb-[var(--spacing-gap-xs)]">Direct Answer</h2>
+        <p class="text-[var(--text-base)] text-[var(--text-2)] leading-relaxed">{post.directAnswer}</p>
+      </div>
+    )}
+
+    {post.keyTakeaways && post.keyTakeaways.length > 0 && (
+      <div class="mb-[var(--spacing-gap-lg)] p-[var(--card-px)] border border-[var(--border)]">
+        <h2 class="font-[family-name:var(--font-mono)] text-[var(--text-small)] font-bold text-[var(--text-1)] mb-[var(--spacing-gap-sm)]">Key Takeaways</h2>
+        <ul class="space-y-[var(--spacing-gap-xs)]">
+          {post.keyTakeaways.map((takeaway: string) => (
+            <li class="text-[var(--text-small)] text-[var(--text-2)] flex items-start gap-[8px]">
+              <span class="text-[var(--accent)] mt-[3px]">→</span>
+              <span>{takeaway}</span>
+            </li>
+          ))}
+        </ul>
+      </div>
+    )}
+
+    <div class="prose prose-invert max-w-none text-[var(--text-base)] leading-relaxed text-[var(--text-2)]"
+      style="--tw-prose-body: var(--text-2); --tw-prose-headings: var(--text-1); --tw-prose-links: var(--accent); --tw-prose-bold: var(--text-1); --tw-prose-code: var(--accent-glow); --tw-prose-pre-bg: var(--inset); --tw-prose-quotes: var(--text-2);">
+      {post.body ? (
+        post.isSanity ? (
+          Array.isArray(post.body) && post.body.length > 0 
+            ? <PortableText value={post.body} />
+            : <div class="text-[var(--text-3)] text-sm">Sanity body is not PortableText array</div>
+        ) : (
+          <Fragment set:html={post.body} />
+        )
+      ) : (
+        <div class="text-[var(--text-3)] p-4 border border-red-500 bg-red-500/10">
+          <p class="font-bold">No body content found</p>
+          <p class="text-sm">isSanity: {String(post.isSanity)}</p>
+        </div>
+      )}
+    </div>
+
+    {post.faq && post.faq.length > 0 && (
+      <section class="mt-[var(--spacing-gap-lg)]">
+        <h2 class="font-[family-name:var(--font-mono)] text-[var(--heading-sm)] font-bold text-[var(--text-1)] mb-[var(--spacing-gap-md)]">Frequently Asked Questions</h2>
+        <div class="space-y-[var(--spacing-gap-md)]">
+          {post.faq.map((faqItem: { question: string; answer: string }) => (
+            <div class="p-[var(--card-px)] border border-[var(--border)]">
+              <h3 class="font-[family-name:var(--font-mono)] text-[var(--text-small)] font-bold text-[var(--text-1)] mb-[var(--spacing-gap-xs)]">{faqItem.question}</h3>
+              <p class="text-[var(--text-small)] text-[var(--text-2)] leading-relaxed">{faqItem.answer}</p>
+            </div>
+          ))}
+        </div>
+      </section>
+    )}
+
+    {post.tags && post.tags.length > 0 && (
+      <div class="flex flex-wrap gap-[var(--spacing-gap-xs)] mt-[var(--spacing-gap-lg)] pt-[var(--spacing-gap-md)] border-t border-[var(--border)]">
+        {post.tags.map((tag: string) => (
+          <span class="font-[family-name:var(--font-mono)] text-[10px] px-[10px] py-[4px] border border-[var(--border)] text-[var(--text-2)]">{tag}</span>
+        ))}
+      </div>
+    )}
+
+    {relatedPosts.length > 0 && (
+      <section class="mt-[var(--spacing-gap-lg)] pt-[var(--spacing-gap-md)] border-t border-[var(--border)]">
+        <h2 class="font-[family-name:var(--font-mono)] text-[var(--text-small)] font-bold text-[var(--text-1)] mb-[var(--spacing-gap-md)]">Related Articles</h2>
+        <div class="grid gap-[var(--spacing-gap-sm)]">
+          {relatedPosts.map(related => (
+            <a href={`/blog/${related.slug}/`} class="block p-[var(--card-px)] border border-[var(--border)] hover:border-[var(--accent)] transition-colors no-underline">
+              <h3 class="font-[family-name:var(--font-mono)] text-[var(--text-small)] font-bold text-[var(--text-1)] hover:text-[var(--accent)]">{related.title}</h3>
+              <p class="text-[var(--text-xs)] text-[var(--text-2)] mt-[4px]">{related.description}</p>
+            </a>
+          ))}
+        </div>
+      </section>
+    )}
+
+    <CodeBlockInjector client:visible />
+
+    <DeployMeta hash={`sha: ${post.id?.slice(0, 7) || 'a3f7bc2'}`} date={post.updatedAt || post.publishedAt} branch="main" message={`feat: ${post.title?.toLowerCase().replace(/\s+/g, '-').slice(0, 40) || 'update'}`} class="mt-[var(--spacing-gap-lg)]" />
+  </article>
+</BlogLayout>

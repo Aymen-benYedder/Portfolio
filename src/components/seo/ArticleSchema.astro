@@ -1,0 +1,36 @@
+---
+import { generateBlogPosting } from '@lib/schema';
+
+export interface Props {
+  headline: string;
+  description: string;
+  url: string;
+  image?: string;
+  datePublished: string;
+  dateModified?: string;
+  keywords?: string[];
+  authorName?: string;
+  authorUrl?: string;
+  section?: string;
+  wordCount?: number;
+}
+
+const { headline, description, url, image = 'https://aymen.benyedder.top/assets/img/preview.webp', datePublished, dateModified = datePublished, keywords, authorName = 'Aymen ben Yedder', authorUrl, section, wordCount } = Astro.props;
+
+const article = generateBlogPosting({
+  headline,
+  description,
+  url,
+  image,
+  datePublished,
+  dateModified,
+  authorName,
+  authorUrl,
+  publisherId: 'https://aymen.benyedder.top/#organization',
+  keywords,
+  section,
+  wordCount,
+});
+---
+
+<script type="application/ld+json" set:html={JSON.stringify(article)} />

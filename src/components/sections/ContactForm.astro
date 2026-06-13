@@ -1,0 +1,29 @@
+---
+import Button from '@components/ui/Button.astro';
+import Input from '@components/ui/Input.astro';
+---
+
+<section id="contact" class="max-w-[600px] mx-auto px-[var(--spacing-gap-2xl)]">
+  <div class="section-header mb-[var(--spacing-gap-lg)]">
+    <span class="section-eyebrow font-[family-name:var(--font-mono)] text-[11px] font-bold tracking-[0.10em] text-[var(--accent)]">Get in Touch</span>
+    <h2 class="font-[family-name:var(--font-mono)] text-[18px] font-bold text-[var(--text-1)] mt-[var(--spacing-gap-xs)]">Let's build something reliable</h2>
+  </div>
+  <p class="text-[14px] text-[var(--text-2)] text-center mb-[var(--spacing-gap-lg)]">Have a project or a quick question? Drop a message and I'll get back shortly.</p>
+
+  <form id="contact-form" class="glass-panel px-[var(--card-px)] py-[var(--card-py)]" action="https://api.web3forms.com/submit" method="POST">
+    <input type="hidden" name="access_key" value="0888c0d1-a716-4c5d-a271-733bfb3be2bc">
+    <input type="hidden" name="subject" value="New Contact Form Submission from Portfolio">
+    <input type="hidden" name="from_name" value="Portfolio Contact Form">
+
+    <div class="space-y-[var(--spacing-gap-md)]">
+      <Input label="Full Name" type="text" placeholder="Your Name" required={true} />
+      <Input label="Email Address" type="email" placeholder="aymen@benyedder.top" required={true} />
+      <Input label="Message" type="textarea" placeholder="Tell me about your project..." required={true} />
+      <Button variant="primary" class="w-full justify-center">Send Message</Button>
+    </div>
+
+    <p class="text-center text-[var(--text-3)] text-[12px] mt-[var(--spacing-gap-md)]">
+      Or email me directly at <a href="mailto:aymen@benyedder.top" class="text-[var(--accent)] no-underline hover:underline">aymen@benyedder.top</a>
+    </p>
+  </form>
+</section>

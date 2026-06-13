@@ -1,0 +1,11 @@
+---
+import { generateBreadcrumbList } from '@lib/schema';
+
+export interface Props {
+  items: { name: string; url: string }[];
+}
+const { items } = Astro.props;
+const breadcrumb = generateBreadcrumbList(items);
+---
+
+<script type="application/ld+json" set:html={JSON.stringify(breadcrumb)} />

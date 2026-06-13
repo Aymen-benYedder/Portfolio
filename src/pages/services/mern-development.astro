@@ -1,0 +1,44 @@
+---
+import BaseLayout from '@layouts/BaseLayout.astro';
+import BreadcrumbSchema from '@components/seo/BreadcrumbSchema.astro';
+import DeployMeta from '@components/ui/DeployMeta.astro';
+---
+
+<BaseLayout title="MERN Stack Development" description="Expert MERN Stack development delivering scalable, high-performance web applications with React, Node.js, MongoDB, and Express.js." canonical="https://aymen.benyedder.top/services/mern-development">
+  <BreadcrumbSchema items={[{ name: 'Home', url: 'https://aymen.benyedder.top/' }, { name: 'Services', url: 'https://aymen.benyedder.top/services/' }, { name: 'MERN Stack Development', url: 'https://aymen.benyedder.top/services/mern-development' }]} />
+
+  <div class="max-w-[var(--container-max)] mx-auto px-[var(--section-px)] pt-[var(--section-gap)]">
+    <div class="section-header mb-[var(--spacing-gap-lg)]">
+      <span class="font-[family-name:var(--font-mono)] text-[var(--text-2xs)] font-bold tracking-[0.10em] text-[var(--accent)]">Service</span>
+      <h1 class="font-[family-name:var(--font-mono)] text-[var(--heading-md)] font-bold text-[var(--text-1)] mt-[var(--spacing-gap-xs)]">MERN Stack Development</h1>
+    </div>
+
+    <div class="card px-[var(--card-px)] py-[var(--card-py)] space-y-[var(--spacing-gap-md)]">
+      <p class="text-[var(--text-base)] text-[var(--text-2)] leading-relaxed">Full-stack JavaScript applications built with MongoDB, Express.js, React, and Node.js. Delivering scalable, maintainable web applications with modern architecture patterns.</p>
+
+      <h2 class="font-[family-name:var(--font-mono)] text-[14px] max-md:text-[var(--text-small)] font-bold text-[var(--text-1)]">What I deliver</h2>
+      <ul class="space-y-[var(--spacing-gap-sm)]">
+        <li class="text-[var(--text-small)] text-[var(--text-2)]"><strong class="text-[var(--text-1)]">Full-Stack Architecture</strong> — From database schema design to API layer to responsive UI.</li>
+        <li class="text-[var(--text-small)] text-[var(--text-2)]"><strong class="text-[var(--text-1)]">RESTful & GraphQL APIs</strong> — Type-safe, documented, and testable API endpoints.</li>
+        <li class="text-[var(--text-small)] text-[var(--text-2)]"><strong class="text-[var(--text-1)]">Authentication & Authorization</strong> — JWT, OAuth, session management, role-based access.</li>
+        <li class="text-[var(--text-small)] text-[var(--text-2)]"><strong class="text-[var(--text-1)]">Deployment & DevOps</strong> — Docker, CI/CD, VPS or cloud deployment included.</li>
+      </ul>
+
+      <h2 class="font-[family-name:var(--font-mono)] text-[14px] max-md:text-[var(--text-small)] font-bold text-[var(--text-1)]">Tech Stack</h2>
+      <div class="flex flex-wrap gap-[var(--spacing-gap-xs)]">
+        <span class="font-[family-name:var(--font-mono)] text-[var(--text-2xs)] px-[10px] py-[4px] border border-[var(--border)] text-[var(--text-2)]">MongoDB</span>
+        <span class="font-[family-name:var(--font-mono)] text-[var(--text-2xs)] px-[10px] py-[4px] border border-[var(--border)] text-[var(--text-2)]">Express.js</span>
+        <span class="font-[family-name:var(--font-mono)] text-[var(--text-2xs)] px-[10px] py-[4px] border border-[var(--border)] text-[var(--text-2)]">React</span>
+        <span class="font-[family-name:var(--font-mono)] text-[var(--text-2xs)] px-[10px] py-[4px] border border-[var(--border)] text-[var(--text-2)]">Node.js</span>
+        <span class="font-[family-name:var(--font-mono)] text-[var(--text-2xs)] px-[10px] py-[4px] border border-[var(--border)] text-[var(--text-2)]">Docker</span>
+        <span class="font-[family-name:var(--font-mono)] text-[var(--text-2xs)] px-[10px] py-[4px] border border-[var(--border)] text-[var(--text-2)]">GitHub Actions</span>
+      </div>
+    </div>
+
+    <div class="text-center mt-[var(--spacing-gap-lg)]">
+      <a href="/#contact" class="font-[family-name:var(--font-mono)] text-[var(--text-2xs)] font-bold tracking-[0.06em] px-[18px] py-[9px] border border-[var(--accent)] bg-[var(--accent)] text-[var(--void)] no-underline inline-flex items-center gap-[8px] hover:bg-transparent hover:text-[var(--accent)] transition-[background_80ms,color_80ms]">Start a project →</a>
+    </div>
+
+    <DeployMeta hash="sha: a3f7bc2" date="2025-01-15T14:32:07Z" branch="main" message="feat: add mern service page" class="mt-[var(--section-gap)]" />
+  </div>
+</BaseLayout>

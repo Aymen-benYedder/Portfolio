@@ -1,0 +1,110 @@
+---
+import BaseLayout from '@layouts/BaseLayout.astro';
+import BreadcrumbSchema from '@components/seo/BreadcrumbSchema.astro';
+import BlogFilterIsland from '@components/islands/BlogFilterIsland.tsx';
+import ItemListSchema from '@components/seo/ItemListSchema.astro';
+import { getNormalizedPosts } from '@lib/blog';
+
+const posts = await getNormalizedPosts();
+
+const postCards = posts.map(p => ({
+  id: p.id,
+  title: p.title,
+  slug: p.slug,
+  description: p.description,
+  publishedAt: p.publishedAt,
+  categories: p.categories,
+  tags: p.tags,
+  image: p.image,
+  author: p.author,
+  readingTime: p.readingTime,
+}));
+
+const categories = ['all', ...new Set(posts.flatMap(p => p.categories).filter(Boolean))];
+---
+
+<BaseLayout
+  title="Technical Blog"
+  description="In-depth technical articles on DevOps, infrastructure automation, CI/CD, and full-stack engineering by Aymen ben Yedder."
+  canonical="https://aymen.benyedder.top/blog/"
+>
+  <BreadcrumbSchema items={[
+    { name: 'Home', url: 'https://aymen.benyedder.top/' },
+    { name: 'Blog', url: 'https://aymen.benyedder.top/blog/' },
+  ]} />
+  <ItemListSchema posts={posts.map((p, i) => ({ position: i + 1, url: `https://aymen.benyedder.top/blog/${p.slug}/`, name: p.title }))} />
+  <link rel="alternate" type="application/rss+xml" title="AYMEN.DEV Technical Blog" href="https://aymen.benyedder.top/rss.xml" slot="head" />
+
+  <div class="max-w-[var(--container-max)] mx-auto px-[var(--section-px)] pt-[var(--section-gap)]">
+    <div class="section-header mb-[var(--spacing-gap-lg)]">
+      <span class="font-[family-name:var(--font-mono)] text-[var(--text-2xs)] font-bold tracking-[0.10em] text-[var(--accent)]">Blog</span>
+      <h1 class="font-[family-name:var(--font-mono)] text-[var(--heading-md)] max-md:text-[var(--heading-sm)] font-bold text-[var(--text-1)] mt-[var(--spacing-gap-xs)]">Technical Writing</h1>
+      <p class="text-[var(--text-base)] text-[var(--text-2)] mt-[var(--spacing-gap-sm)]">DevOps, infrastructure, and systems engineering.</p>
+    </div>
+
+    {posts.length > 0 ? (
+      <div class="mb-[var(--spacing-gap-lg)]">
+        <div class="flex flex-wrap gap-[var(--spacing-gap-sm)] mb-[var(--spacing-gap-lg)]" role="toolbar" aria-label="Filter blog posts">
+          {categories.map(cat => (
+            <button
+              data-category={cat === 'all' ? '' : cat}
+              class="filter-btn label-caps px-[12px] py-[8px] min-h-[36px] border cursor-pointer transition-all duration-200 border-[var(--border)] text-[var(--text-2)] hover:border-[var(--accent)] hover:text-[var(--accent)]"
+            >
+              {cat === 'all' ? 'ALL' : cat.toUpperCase()}
+            </button>
+          ))}
+        </div>
+
+        <div class="grid gap-[1px] bg-[rgba(16,185,129,0.06)]" data-post-list>
+          {postCards.map(post => (
+            <article 
+              data-categories={JSON.stringify(post.categories)} 
+              class="post-card glass-panel px-[var(--card-px)] py-[var(--card-py)] hover:bg-[rgba(16,185,129,0.03)] transition-[background_120ms_ease] rounded-none"
+            >
+              <a href={`/blog/${post.slug}/`} class="no-underline min-h-[44px] flex flex-col justify-center">
+                <h2 class="font-[family-name:var(--font-mono)] text-[14px] max-md:text-[var(--text-small)] font-bold text-[var(--text-1)] hover:text-[var(--accent)] hover:drop-shadow-[0_0_5px_rgba(16,185,129,0.3)] transition-all duration-200">{post.title}</h2>
+                {post.description && <p class="text-[var(--text-small)] text-[var(--text-2)] mt-[var(--spacing-gap-xs)]">{post.description}</p>}
+                <div class="flex items-center gap-[var(--spacing-gap-md)] mt-[var(--spacing-gap-sm)] flex-wrap">
+                  {post.publishedAt && <time datetime={post.publishedAt} class="font-[family-name:var(--font-mono)] text-[var(--text-2xs)] text-[var(--text-3)]">{new Date(post.publishedAt).toLocaleDateString('en-US', { year: 'numeric', month: 'long', day: 'numeric' })}</time>}
+                  {post.readingTime && <span class="font-[family-name:var(--font-mono)] text-[var(--text-2xs)] text-[var(--text-3)]">{post.readingTime} min read</span>}
+                  {post.categories.length > 0 && (
+                    <span class="font-[family-name:var(--font-mono)] text-[var(--text-2xs)] text-[var(--accent)]">{post.categories[0]}</span>
+                  )}
+                </div>
+              </a>
+            </article>
+          ))}
+        </div>
+      </div>
+    ) : (
+      <p class="text-[var(--text-2)] text-[var(--text-base)] px-[var(--card-px)] py-[40px] text-center">No posts yet. Check back soon.</p>
+    )}
+
+    <div class="mt-[var(--spacing-gap-lg)] text-center">
+      <a href="https://aymen.benyedder.top/rss.xml" class="font-[family-name:var(--font-mono)] text-[var(--text-2xs)] text-[var(--accent)] no-underline hover:underline">Subscribe via RSS</a>
+    </div>
+  </div>
+
+  <script>
+    document.querySelectorAll('.filter-btn').forEach(btn => {
+      btn.addEventListener('click', () => {
+        const category = btn.getAttribute('data-category') || '';
+        document.querySelectorAll('.filter-btn').forEach(b => {
+          b.classList.remove('border-[var(--accent)]', 'text-[var(--accent)]', 'bg-[rgba(16,185,129,0.08)]', 'shadow-[0_0_8px_rgba(16,185,129,0.1)]');
+          b.classList.add('border-[var(--border)]', 'text-[var(--text-2)]');
+        });
+        btn.classList.remove('border-[var(--border)]', 'text-[var(--text-2)]');
+        btn.classList.add('border-[var(--accent)]', 'text-[var(--accent)]', 'bg-[rgba(16,185,129,0.08)]', 'shadow-[0_0_8px_rgba(16,185,129,0.1)]');
+
+        document.querySelectorAll('.post-card').forEach(card => {
+          if (!category) {
+            (card as HTMLElement).style.display = 'block';
+          } else {
+            const categories = JSON.parse(card.getAttribute('data-categories') || '[]');
+            (card as HTMLElement).style.display = categories.includes(category) ? 'block' : 'none';
+          }
+        });
+      });
+    });
+  </script>
+</BaseLayout>

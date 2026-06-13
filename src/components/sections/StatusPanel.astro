@@ -1,0 +1,50 @@
+---
+import Badge from '@components/ui/Badge.astro';
+
+interface StatusItem {
+  name: string;
+  status: 'healthy' | 'degraded' | 'error';
+  time: string;
+  live?: boolean;
+}
+
+export interface Props {
+  items: StatusItem[];
+  class?: string;
+}
+const { items, class: className = '' } = Astro.props;
+
+const statusConfig = {
+  healthy: { dotClass: 'bg-[var(--accent)]', badge: 'green' as const, label: 'HEALTHY' },
+  degraded: { dotClass: 'bg-[var(--warning)]', badge: 'yellow' as const, label: 'DEGRADED' },
+  error: { dotClass: 'bg-[var(--error)]', badge: 'red' as const, label: 'INCIDENT' },
+};
+---
+
+<div class="card {className}">
+  <div class="px-[var(--card-px)] py-[12px] border-b border-[rgba(16,185,129,0.1)]">
+    <span class="label-caps text-[var(--text-3)]">System Health</span>
+  </div>
+  {items.map((item) => {
+    const config = statusConfig[item.status];
+    return (
+      <div class="flex items-center gap-[10px] px-[var(--card-px)] py-[10px] border-b border-[rgba(16,185,129,0.06)] font-[family-name:var(--font-mono)] text-[11px] max-sm:text-[10px] transition-[background_80ms] last:border-b-0 hover:bg-[rgba(255,255,255,0.02)]">
+        <span class="w-[6px] h-[6px] flex-shrink-0 {config.dotClass} {item.live ? 'live' : ''}" style={item.live ? { boxShadow: '0 0 6px var(--accent)' } : {}}></span>
+        <span class="flex-1 text-[var(--text-1)] truncate">{item.name}</span>
+        <Badge variant={config.badge}>{config.label}</Badge>
+        <span class="text-[10px] max-sm:text-[9px] text-[var(--text-3)] whitespace-nowrap">{item.time}</span>
+      </div>
+    );
+  })}
+</div>
+
+<style>
+@keyframes livePulse {
+  0%,100% { box-shadow: 0 0 0 0 rgba(16,185,129,0.6); }
+  50%     { box-shadow: 0 0 0 5px rgba(16,185,129,0); }
+}
+.live { animation: livePulse 2.5s ease-in-out infinite; }
+@media (prefers-reduced-motion: reduce) {
+  .live { animation: none !important; }
+}
+</style>

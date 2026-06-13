@@ -1,0 +1,24 @@
+---
+import { generateHeadGraph, type PersonData, type SiteData } from '@lib/schema';
+
+const person: PersonData = {
+  name: 'Aymen ben Yedder',
+  jobTitle: 'DevOps & Cloud Infrastructure Engineer',
+  description: 'Freelance DevOps engineer specializing in Kubernetes, Terraform, ArgoCD, FluxCD, and cloud-native infrastructure. Available for remote contracts.',
+  url: 'https://aymen.benyedder.top',
+  image: 'https://aymen.benyedder.top/assets/img/preview.webp',
+  sameAs: ['https://github.com/Aymen-benYedder', 'https://www.linkedin.com/in/aymenby'],
+  knowsAbout: ['Kubernetes', 'Terraform', 'ArgoCD', 'FluxCD', 'Prometheus', 'Grafana', 'Docker', 'GitOps', 'CI/CD', 'MERN Stack', 'NGINX', 'Linux', 'PostgreSQL', 'MongoDB', 'React', 'Node.js', 'GitHub Actions', 'OpenTofu', 'Terragrunt', 'DevSecOps'],
+  address: { addressLocality: 'Medenine', addressRegion: 'Medenine', country: 'TN' },
+};
+
+const site: SiteData = {
+  url: 'https://aymen.benyedder.top',
+  name: 'AYMEN.DEV — DevOps & Cloud Infrastructure Engineering',
+  description: 'Portfolio of Aymen ben Yedder, DevOps Engineer specializing in Kubernetes, Terraform, GitOps, and cloud-native infrastructure.',
+};
+
+const graph = generateHeadGraph(person, site);
+---
+
+<script type="application/ld+json" set:html={JSON.stringify(graph)} />

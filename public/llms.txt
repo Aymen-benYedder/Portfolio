@@ -1,0 +1,41 @@
+# AYMEN.DEV — DevOps & Cloud Infrastructure Engineer
+
+## About
+I am Aymen ben Yedder, a DevOps Engineer and Web Systems Architect based in Medenine, Tunisia. Over the past 8 years I have designed and operated production infrastructure for food delivery platforms, safety management systems, and on-demand service applications.
+
+## Core Stack
+- Infrastructure: Docker, NGINX, Apache, GitHub Actions, ArgoCD, FluxCD, Prometheus, Grafana, ELK
+- Development: React, Node.js, JavaScript/TypeScript, HTML5, CSS3
+- Databases: MongoDB, PostgreSQL, MySQL
+- Automation: Bash, PowerShell
+- Project Management: Agile, Scrum, Kanban, ClickUp
+
+## Services
+- **WordPress Development**: https://aymen.benyedder.top/services/wordpress-development/
+- **MERN Stack Development**: https://aymen.benyedder.top/services/mern-development/
+- **Server Setup & CI/CD**: https://aymen.benyedder.top/services/
+
+## Latest Articles
+- **GitOps in 2026: Why ArgoCD and FluxCD Are No Longer Just "Deployment Tools"**: https://aymen.benyedder.top/blog/gitops-2026-argocd-fluxcd/
+- **Unified Type-Safety: Architecting a $5/mo High-Performance Stack**: https://aymen.benyedder.top/blog/unified-type-safety-hono-tanstack-docker/
+- **Architecting Multi-Cloud Resilience: Why OpenTofu and Terragrunt Are Mandatory in 2026**: https://aymen.benyedder.top/blog/architecting-multi-cloud-resilience-opentofu-terragrunt-mandatory-2026/
+- **From Logs to Logic: Claude's Real-Time Visualization for Observability**: https://aymen.benyedder.top/blog/from-logs-to-logic-claude-real-time-visualization-observability/
+- **The Execution Layer Breach: Analyzing the March 2026 Hackerbot-Claw CI/CD Compromise**: https://aymen.benyedder.top/blog/execution-layer-breach-hackerbot-claw-cicd-compromise/
+- **Building an AI-Powered Workflow Orchestration Stack**: https://aymen.benyedder.top/blog/ai-powered-workflow-orchestration-stack/
+- **Beyond the Tutorial: Architecting Web Systems for 99.9% Resilience**: https://aymen.benyedder.top/blog/beyond-tutorial-web-resilience/
+- **DevOps on a VPS for Startups**: https://aymen.benyedder.top/blog/devops-vps-startups/
+
+## Blog Archive
+All articles: https://aymen.benyedder.top/blog/
+
+## Contact
+- **Email**: aymen@benyedder.top
+- **GitHub**: https://github.com/Aymen-benYedder
+- **LinkedIn**: https://www.linkedin.com/in/aymenby
+- **Twitter**: https://x.com/aymen_benyedder
+
+## RSS Feed
+https://aymen.benyedder.top/rss.xml
+
+## Location
+Based in Medenine, Tunisia (33.343355°N, 10.490444°E)

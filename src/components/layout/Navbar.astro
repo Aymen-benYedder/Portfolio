@@ -1,0 +1,22 @@
+---
+import Badge from '@components/ui/Badge.astro';
+---
+
+<header class="navbar flex items-center justify-between px-[var(--section-px)] h-[52px] bg-[rgba(5,5,5,0.9)] border-b border-[rgba(16,185,129,0.15)] backdrop-blur-[20px] fixed top-0 left-0 right-0 z-50" role="banner">
+  <nav class="flex items-center justify-between w-full" role="navigation" aria-label="Main navigation">
+    <a href="/" class="nav-logo font-[family-name:var(--font-mono)] text-[var(--text-xs)] font-bold tracking-[0.1em] text-[var(--accent)] no-underline min-h-[44px] flex items-center drop-shadow-[0_0_8px_rgba(16,185,129,0.3)]">
+      AYMEN.DEV
+    </a>
+
+    <ul class="nav-links hidden md:flex gap-0 list-none m-0 p-0">
+      <li><a href="/" class="font-[family-name:var(--font-mono)] text-[var(--text-2xs)] tracking-[0.1em] text-[var(--text-2)] px-[14px] h-[52px] flex items-center no-underline uppercase hover:text-[var(--accent)] hover:drop-shadow-[0_0_5px_rgba(16,185,129,0.3)] transition-all duration-200 hover-lift">Home</a></li>
+          <li><a href="/blog/" class="font-[family-name:var(--font-mono)] text-[var(--text-2xs)] tracking-[0.1em] text-[var(--text-2)] px-[14px] h-[52px] flex items-center no-underline uppercase hover:text-[var(--accent)] hover:drop-shadow-[0_0_5px_rgba(16,185,129,0.3)] transition-all duration-200 hover-lift">Blog</a></li>
+          <li><a href="/services/" class="font-[family-name:var(--font-mono)] text-[var(--text-2xs)] tracking-[0.1em] text-[var(--text-2)] px-[14px] h-[52px] flex items-center no-underline uppercase hover:text-[var(--accent)] hover:drop-shadow-[0_0_5px_rgba(16,185,129,0.3)] transition-all duration-200 hover-lift">Services</a></li>
+    </ul>
+
+    <div class="nav-status flex items-center gap-[8px] max-md:hidden">
+      <span class="w-[6px] h-[6px] bg-[var(--accent)]" style="box-shadow: 0 0 8px var(--accent);"></span>
+      <Badge variant="green" live={false}>AVAILABLE</Badge>
+    </div>
+  </nav>
+</header>

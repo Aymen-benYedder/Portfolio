@@ -1,0 +1,42 @@
+---
+import BaseLayout from '@layouts/BaseLayout.astro';
+import BreadcrumbSchema from '@components/seo/BreadcrumbSchema.astro';
+import DeployMeta from '@components/ui/DeployMeta.astro';
+---
+
+<BaseLayout title="WordPress Development" description="Professional WordPress development including custom themes, plugin development, WooCommerce setup, and performance optimization." canonical="https://aymen.benyedder.top/services/wordpress-development">
+  <BreadcrumbSchema items={[{ name: 'Home', url: 'https://aymen.benyedder.top/' }, { name: 'Services', url: 'https://aymen.benyedder.top/services/' }, { name: 'WordPress Development', url: 'https://aymen.benyedder.top/services/wordpress-development' }]} />
+
+  <div class="max-w-[var(--container-max)] mx-auto px-[var(--section-px)] pt-[var(--section-gap)]">
+    <div class="section-header mb-[var(--spacing-gap-lg)]">
+      <span class="font-[family-name:var(--font-mono)] text-[var(--text-2xs)] font-bold tracking-[0.10em] text-[var(--accent)]">Service</span>
+      <h1 class="font-[family-name:var(--font-mono)] text-[var(--heading-md)] max-md:text-[var(--heading-sm)] font-bold text-[var(--text-1)] mt-[var(--spacing-gap-xs)]">WordPress Development</h1>
+    </div>
+
+    <div class="card px-[var(--card-px)] py-[var(--card-py)] space-y-[var(--spacing-gap-md)]">
+      <p class="text-[var(--text-base)] text-[var(--text-2)] leading-relaxed">Professional WordPress development services including custom themes, plugin development, WooCommerce setup, and performance optimization for businesses of all sizes.</p>
+
+      <h2 class="font-[family-name:var(--font-mono)] text-[14px] max-md:text-[var(--text-small)] font-bold text-[var(--text-1)]">What I deliver</h2>
+      <ul class="space-y-[var(--spacing-gap-sm)]">
+        <li class="text-[var(--text-small)] text-[var(--text-2)]"><strong class="text-[var(--text-1)]">Custom Theme Development</strong> — Bespoke WordPress themes from design to deployment.</li>
+        <li class="text-[var(--text-small)] text-[var(--text-2)]"><strong class="text-[var(--text-1)]">Plugin Development</strong> — Custom functionality plugins for unique business requirements.</li>
+        <li class="text-[var(--text-small)] text-[var(--text-2)]"><strong class="text-[var(--text-1)]">WooCommerce Integration</strong> — Full e-commerce setup with payment gateways and inventory.</li>
+        <li class="text-[var(--text-small)] text-[var(--text-2)]"><strong class="text-[var(--text-1)]">Performance Optimization</strong> — Caching, CDN, image optimization, and database tuning.</li>
+      </ul>
+
+      <h2 class="font-[family-name:var(--font-mono)] text-[14px] max-md:text-[var(--text-small)] font-bold text-[var(--text-1)]">Includes</h2>
+      <div class="flex flex-wrap gap-[var(--spacing-gap-xs)]">
+        <span class="font-[family-name:var(--font-mono)] text-[var(--text-2xs)] px-[10px] py-[4px] border border-[var(--border)] text-[var(--text-2)]">SEO Optimization</span>
+        <span class="font-[family-name:var(--font-mono)] text-[var(--text-2xs)] px-[10px] py-[4px] border border-[var(--border)] text-[var(--text-2)]">Security Hardening</span>
+        <span class="font-[family-name:var(--font-mono)] text-[var(--text-2xs)] px-[10px] py-[4px] border border-[var(--border)] text-[var(--text-2)]">Backup & Recovery</span>
+        <span class="font-[family-name:var(--font-mono)] text-[var(--text-2xs)] px-[10px] py-[4px] border border-[var(--border)] text-[var(--text-2)]">SSL & CDN Setup</span>
+      </div>
+    </div>
+
+    <div class="text-center mt-[var(--spacing-gap-lg)]">
+      <a href="/#contact" class="font-[family-name:var(--font-mono)] text-[var(--text-2xs)] font-bold tracking-[0.06em] px-[18px] py-[9px] border border-[var(--accent)] bg-[var(--accent)] text-[var(--void)] no-underline inline-flex items-center gap-[8px] hover:bg-transparent hover:text-[var(--accent)] transition-[background_80ms,color_80ms]">Start a project →</a>
+    </div>
+
+    <DeployMeta hash="sha: a3f7bc2" date="2025-01-15T14:32:07Z" branch="main" message="feat: add wordpress service page" class="mt-[var(--section-gap)]" />
+  </div>
+</BaseLayout>

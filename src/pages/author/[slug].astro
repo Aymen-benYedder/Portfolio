@@ -1,0 +1,109 @@
+---
+import BaseLayout from '@layouts/BaseLayout.astro';
+import BreadcrumbSchema from '@components/seo/BreadcrumbSchema.astro';
+import { getNormalizedPosts, getAuthors } from '@lib/blog';
+import { urlFor } from '@lib/sanity';
+import type { Author } from '@lib/blog';
+
+export async function getStaticPaths() {
+  const authors = await getAuthors();
+  return authors.map(author => ({ params: { slug: author.slug } }));
+}
+
+const { slug } = Astro.params;
+const { sanityClient } = await import('sanity:client');
+const { AUTHOR_QUERY, CATEGORIES_QUERY, TAGS_QUERY } = await import('@lib/sanity');
+
+let author: any = null;
+let posts: any[] = [];
+
+try {
+  author = await sanityClient.fetch(AUTHOR_QUERY, { slug });
+  const allPosts = await getNormalizedPosts();
+  posts = allPosts.filter(p => p.author?.slug === slug);
+} catch (e) {
+  console.warn('Failed to fetch author:', e);
+}
+
+if (!author) {
+  return Astro.redirect('/404');
+}
+
+const canonicalUrl = `https://aymen.benyedder.top/author/${slug}/`;
+const authorImage = author.image?.asset ? urlFor(author.image.asset).width(200).height(200).url() : undefined;
+---
+
+<BaseLayout
+  title={`${author.name} - AYMEN.DEV`}
+  description={author.bio || `Articles by ${author.name}, ${author.jobTitle}`}
+  canonical={canonicalUrl}
+  image={authorImage}
+  ogType="profile"
+>
+  <BreadcrumbSchema items={[
+    { name: 'Home', url: 'https://aymen.benyedder.top/' },
+    { name: 'Author', url: 'https://aymen.benyedder.top/author/' },
+    { name: author.name, url: canonicalUrl },
+  ]} />
+
+  <script type="application/ld+json" set:html={JSON.stringify({
+    '@context': 'https://schema.org',
+    '@type': 'Person',
+    '@id': canonicalUrl,
+    name: author.name,
+    jobTitle: author.jobTitle,
+    description: author.bio,
+    url: canonicalUrl,
+    ...(authorImage && { image: authorImage }),
+    sameAs: author.sameAs || [],
+    knowsAbout: author.knowsAbout || [],
+    address: author.address ? {
+      '@type': 'PostalAddress',
+      addressLocality: author.address.addressLocality,
+      addressRegion: author.address.addressRegion,
+      addressCountry: author.address.addressCountry,
+    } : undefined,
+  })} />
+
+  <div class="max-w-[var(--container-max)] mx-auto px-[var(--section-px)] pt-[var(--section-gap)]">
+    <div class="glass-panel px-[var(--card-px)] py-[var(--card-py)] mb-[var(--spacing-gap-lg)]">
+      <div class="flex items-start gap-[var(--spacing-gap-lg)] max-md:flex-col">
+        {authorImage && (
+          <img src={authorImage} alt={author.name} class="w-[150px] h-[150px] object-cover rounded-full border-2 border-[var(--accent)]" />
+        )}
+        <div class="flex-1">
+          <h1 class="font-[family-name:var(--font-mono)] text-[var(--heading-md)] font-bold text-[var(--text-1)]">{author.name}</h1>
+          {author.jobTitle && <p class="text-[var(--text-base)] text-[var(--accent)] mt-[var(--spacing-gap-xs)]">{author.jobTitle}</p>}
+          {author.bio && <p class="text-[var(--text-base)] text-[var(--text-2)] mt-[var(--spacing-gap-sm)] leading-relaxed">{author.bio}</p>}
+          {author.sameAs && author.sameAs.length > 0 && (
+            <div class="flex gap-[var(--spacing-gap-sm)] mt-[var(--spacing-gap-md)]">
+              {author.sameAs.map((link: string) => (
+                <a href={link} target="_blank" rel="noopener noreferrer" class="font-[family-name:var(--font-mono)] text-[var(--text-2xs)] text-[var(--accent)] hover:underline">{new URL(link).hostname}</a>
+              ))}
+            </div>
+          )}
+        </div>
+      </div>
+    </div>
+
+    <div class="section-header mb-[var(--spacing-gap-lg)]">
+      <span class="font-[family-name:var(--font-mono)] text-[var(--text-2xs)] font-bold tracking-[0.10em] text-[var(--accent)]">Articles</span>
+      <h2 class="font-[family-name:var(--font-mono)] text-[var(--heading-sm)] font-bold text-[var(--text-1)] mt-[var(--spacing-gap-xs)]">Latest by {author.name}</h2>
+    </div>
+
+    <div class="grid gap-[1px] bg-[rgba(16,185,129,0.06)]">
+      {posts.map(post => (
+        <article class="glass-panel px-[var(--card-px)] py-[var(--card-py)] hover:bg-[rgba(16,185,129,0.03)] transition-[background_120ms_ease]">
+          <a href={`/blog/${post.slug}/`} class="no-underline">
+            <h3 class="font-[family-name:var(--font-mono)] text-[14px] max-md:text-[var(--text-small)] font-bold text-[var(--text-1)] hover:text-[var(--accent)]">{post.title}</h3>
+            {post.description && <p class="text-[var(--text-small)] text-[var(--text-2)] mt-[var(--spacing-gap-xs)]">{post.description}</p>}
+            <div class="flex items-center gap-[var(--spacing-gap-md)] mt-[var(--spacing-gap-sm)]">
+              {post.publishedAt && <time datetime={post.publishedAt} class="font-[family-name:var(--font-mono)] text-[var(--text-2xs)] text-[var(--text-3)]">{new Date(post.publishedAt).toLocaleDateString('en-US', { year: 'numeric', month: 'long', day: 'numeric' })}</time>}
+              {post.readingTime && <span class="font-[family-name:var(--font-mono)] text-[var(--text-2xs)] text-[var(--text-3)]">{post.readingTime} min read</span>}
+            </div>
+          </a>
+        </article>
+      ))}
+    </div>
+  </div>
+</BaseLayout>

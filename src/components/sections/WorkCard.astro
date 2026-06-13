@@ -1,0 +1,27 @@
+---
+export interface Props {
+  company: string;
+  location: string;
+  period: string;
+  role: string;
+  description: string;
+  highlight: string;
+  skills: string[];
+  class?: string;
+}
+const { company, location, period, role, description, highlight, skills, class: className = '' } = Astro.props;
+---
+
+<article class="card glass-hover hover-lift px-[var(--card-px)] py-[var(--card-py)] {className}">
+  <span class="label-caps text-[var(--accent)] block mb-[var(--spacing-gap-sm)]">{highlight}</span>
+  <div class="flex items-center justify-between mb-[4px] gap-[var(--spacing-gap-xs)]">
+    <h3 class="font-[family-name:var(--font-mono)] text-[14px] max-md:text-[var(--text-small)] font-bold text-[var(--text-1)] m-0">{company}</h3>
+    <span class="font-[family-name:var(--font-mono)] text-[var(--text-2xs)] text-[var(--text-3)] border border-[var(--border)] px-[6px] py-[2px] whitespace-nowrap">{location}</span>
+  </div>
+  <p class="font-[family-name:var(--font-mono)] text-[var(--text-2xs)] text-[var(--text-3)] mt-[4px]">{period}</p>
+  <p class="font-[family-name:var(--font-mono)] text-[var(--text-xs)] font-bold text-[var(--text-2)]">{role}</p>
+  <p class="text-[var(--text-small)] text-[var(--text-2)] leading-relaxed mt-[var(--spacing-gap-sm)]">{description}</p>
+  <div class="flex flex-wrap gap-[var(--spacing-gap-xs)] mt-[var(--spacing-gap-sm)]">
+    {skills.map(skill => <span class="font-[family-name:var(--font-mono)] text-[var(--text-2xs)] text-[var(--text-3)] px-[6px] py-[2px] border border-[var(--border)]">{skill}</span>)}
+  </div>
+</article>

@@ -1,0 +1,17 @@
+---
+export interface Props {
+  title: string;
+  skills: string[];
+  class?: string;
+}
+const { title, skills, class: className = '' } = Astro.props;
+---
+
+<div class="card glass-hover px-[var(--card-px)] py-[var(--card-py)] {className}">
+  <h3 class="label-caps text-[var(--accent)] mb-[var(--spacing-gap-sm)]">{title}</h3>
+  <div class="flex flex-wrap gap-[var(--spacing-gap-xs)]">
+    {skills.map(skill => (
+      <span class="font-[family-name:var(--font-mono)] text-[var(--text-2xs)] font-medium tracking-[0.04em] px-[10px] py-[4px] border border-[var(--border)] text-[var(--text-2)] transition-all duration-200 hover:border-[var(--accent)] hover:text-[var(--accent)] hover:bg-[rgba(16,185,129,0.08)]">{skill}</span>
+    ))}
+  </div>
+</div>

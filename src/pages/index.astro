@@ -1,11 +1,357 @@
 ---
-import Welcome from '../components/Welcome.astro';
-import Layout from '../layouts/Layout.astro';
+import BaseLayout from '@layouts/BaseLayout.astro';
+import BentoGrid from '@components/layout/BentoGrid.astro';
+import HeroCard from '@components/sections/HeroCard.astro';
+import TerminalCard from '@components/sections/TerminalCard.astro';
+import StatusPanel from '@components/sections/StatusPanel.astro';
+import WorkCard from '@components/sections/WorkCard.astro';
+import ProjectCard from '@components/sections/ProjectCard.astro';
+import SkillCategory from '@components/sections/SkillCategory.astro';
+import FAQAccordion from '@components/islands/FAQAccordion.tsx';
+import ContactFormIsland from '@components/islands/ContactFormIsland.tsx';
+import DeployMeta from '@components/ui/DeployMeta.astro';
+import FAQPageSchema from '@components/seo/FAQPageSchema.astro';
+import BreadcrumbSchema from '@components/seo/BreadcrumbSchema.astro';
+import { sanityClient } from 'sanity:client';
+import { SITE_SETTINGS_QUERY, EXPERIENCES_QUERY, PROJECTS_QUERY, SKILLS_QUERY, FAQS_QUERY, EDUCATION_QUERY } from '@lib/sanity';
 
-// Welcome to Astro! Wondering what to do next? Check out the Astro documentation at https://docs.astro.build
-// Don't want to use any of this? Delete everything in this file, the `assets`, `components`, and `layouts` directories, and start fresh.
+const siteSettings = await sanityClient.fetch(SITE_SETTINGS_QUERY);
+const experiences = await sanityClient.fetch(EXPERIENCES_QUERY);
+const projects = await sanityClient.fetch(PROJECTS_QUERY);
+const skills = await sanityClient.fetch(SKILLS_QUERY);
+const faqs = await sanityClient.fetch(FAQS_QUERY);
+const education = await sanityClient.fetch(EDUCATION_QUERY);
+
+const statusItems = [
+  { name: 'api.aymen.dev', status: 'healthy' as const, time: '47ms · now', live: true },
+  { name: 'k8s-cluster-eu · 3 nodes', status: 'healthy' as const, time: '2m ago' },
+  { name: 'redis-cache-01', status: 'degraded' as const, time: 'CPU 87%' },
+];
 ---
 
-<Layout>
-	<Welcome />
-</Layout>
+<BaseLayout
+  title="Aymen ben Yedder — DevOps & Cloud Infrastructure Engineer"
+  description="Expert DevOps engineer specializing in Kubernetes, Terraform, GitOps, and cloud infrastructure. Available for remote contracts globally."
+  canonical="https://aymen.benyedder.top/"
+  ogType="profile"
+>
+  <BreadcrumbSchema items={[{ name: 'Home', url: 'https://aymen.benyedder.top/' }]} />
+  {faqs?.length > 0 && <FAQPageSchema items={faqs.map((f: any) => ({ question: f.question, answer: f.answer }))} />}
+
+  <!-- Hero Section -->
+  <HeroCard />
+
+  <!-- Terminal + Status -->
+  <div class="max-w-[var(--container-max)] mx-auto px-[var(--section-px)] mt-[var(--section-gap)]">
+    <BentoGrid columns="2">
+      <TerminalCard />
+      <StatusPanel items={statusItems} />
+    </BentoGrid>
+  </div>
+
+  <!-- About Section -->
+  <section id="about" class="max-w-[var(--container-max)] mx-auto px-[var(--section-px)] mt-[var(--section-gap)]">
+    <div class="section-header mb-[var(--spacing-gap-lg)]">
+      <span class="font-[family-name:var(--font-mono)] text-[var(--text-2xs)] font-bold tracking-[0.10em] text-[var(--accent)]">About</span>
+      <h2 class="font-[family-name:var(--font-mono)] text-[var(--heading-sm)] font-bold text-[var(--text-1)] mt-[var(--spacing-gap-xs)]">DevOps engineer with 8+ years in production infrastructure</h2>
+    </div>
+    <div class="card px-[var(--card-px)] py-[var(--card-py)]">
+      <p class="text-[var(--text-base)] text-[var(--text-2)] leading-relaxed mb-[var(--spacing-gap-md)]">
+        I am <strong class="text-[var(--text-1)]">Aymen ben Yedder</strong>, a DevOps Engineer and Web Systems Architect based in Medenine, Tunisia. Over the past 8 years I have designed and operated production infrastructure for food delivery platforms, safety management systems, and on-demand service applications — environments where downtime is expensive and reliability is non-negotiable.
+      </p>
+      <p class="text-[var(--text-base)] text-[var(--text-2)] leading-relaxed mb-[var(--spacing-gap-md)]">
+        My core stack includes <strong class="text-[var(--text-1)]">Docker, NGINX, GitHub Actions, ArgoCD, FluxCD, Prometheus, and Grafana</strong> for infrastructure, and <strong class="text-[var(--text-1)]">React, Node.js, MongoDB, and PostgreSQL</strong> for full-stack development. I write about CI/CD patterns, type-safe API design with Hono and TanStack, and practical DevOps for startup teams on my <a href="/blog/" class="text-[var(--accent)] no-underline hover:underline">technical blog</a>.
+      </p>
+      <p class="text-[var(--text-base)] text-[var(--text-2)] leading-relaxed">
+        Currently at <strong class="text-[var(--text-1)]">Alizeth</strong> as DevOps Engineer and Project Manager, leading infrastructure automation and delivery pipelines. Available for freelance consulting and remote contract work in 2026. Fluent in Arabic (native), English (advanced), and French.
+      </p>
+    </div>
+    <DeployMeta hash="sha: a3f7bc2" date="2025-01-15T14:32:07Z" branch="main" message="docs: update about section" />
+  </section>
+
+  <!-- Services Section -->
+  <section id="services" class="max-w-[var(--container-max)] mx-auto px-[var(--section-px)] mt-[var(--section-gap)]">
+    <div class="section-header mb-[var(--spacing-gap-lg)]">
+      <span class="font-[family-name:var(--font-mono)] text-[var(--text-2xs)] font-bold tracking-[0.10em] text-[var(--accent)]">Services</span>
+      <h2 class="font-[family-name:var(--font-mono)] text-[var(--heading-sm)] font-bold text-[var(--text-1)] mt-[var(--spacing-gap-xs)]">Expert Solutions for Modern Development</h2>
+    </div>
+    <BentoGrid columns="3">
+      <article class="card glass-hover hover-lift px-[var(--card-px)] py-[var(--card-py)]">
+        <h3 class="font-[family-name:var(--font-mono)] text-[14px] max-md:text-[var(--text-small)] font-bold text-[var(--text-1)]">WordPress Development</h3>
+        <p class="text-[var(--text-small)] text-[var(--text-2)] mt-[var(--spacing-gap-sm)]">Professional WordPress development including custom themes, plugins, WooCommerce, and performance optimization.</p>
+        <ul class="list-none p-0 mt-[var(--spacing-gap-sm)] space-y-[4px]">
+          <li class="text-[var(--text-xs)] text-[var(--text-3)] font-[family-name:var(--font-mono)]">→ Custom Theme Development</li>
+          <li class="text-[var(--text-xs)] text-[var(--text-3)] font-[family-name:var(--font-mono)]">→ Plugin Development</li>
+          <li class="text-[var(--text-xs)] text-[var(--text-3)] font-[family-name:var(--font-mono)]">→ WooCommerce Integration</li>
+        </ul>
+        <a href="/services/wordpress-development" class="font-[family-name:var(--font-mono)] text-[var(--text-2xs)] text-[var(--accent)] mt-[var(--spacing-gap-sm)] inline-block no-underline hover:underline">Learn More →</a>
+      </article>
+      <article class="card glass-hover hover-lift px-[var(--card-px)] py-[var(--card-py)]">
+        <h3 class="font-[family-name:var(--font-mono)] text-[14px] max-md:text-[var(--text-small)] font-bold text-[var(--text-1)]">MERN Stack Development</h3>
+        <p class="text-[var(--text-small)] text-[var(--text-2)] mt-[var(--spacing-gap-sm)]">Scalable, high-performance web applications with React, Node.js, MongoDB, and Express.js.</p>
+        <ul class="list-none p-0 mt-[var(--spacing-gap-sm)] space-y-[4px]">
+          <li class="text-[var(--text-xs)] text-[var(--text-3)] font-[family-name:var(--font-mono)]">→ Full-Stack JavaScript</li>
+          <li class="text-[var(--text-xs)] text-[var(--text-3)] font-[family-name:var(--font-mono)]">→ React Development</li>
+          <li class="text-[var(--text-xs)] text-[var(--text-3)] font-[family-name:var(--font-mono)]">→ Node.js & Express</li>
+        </ul>
+        <a href="/services/mern-development" class="font-[family-name:var(--font-mono)] text-[var(--text-2xs)] text-[var(--accent)] mt-[var(--spacing-gap-sm)] inline-block no-underline hover:underline">Learn More →</a>
+      </article>
+      <article class="card glass-hover hover-lift px-[var(--card-px)] py-[var(--card-py)]">
+        <h3 class="font-[family-name:var(--font-mono)] text-[14px] max-md:text-[var(--text-small)] font-bold text-[var(--text-1)]">Production Server Setup & CI/CD</h3>
+        <p class="text-[var(--text-small)] text-[var(--text-2)] mt-[var(--spacing-gap-sm)]">Secure VPS configuration, NGINX, PM2, SSL certificates, and automated GitHub Actions deployment pipelines.</p>
+        <ul class="list-none p-0 mt-[var(--spacing-gap-sm)] space-y-[4px]">
+          <li class="text-[var(--text-xs)] text-[var(--text-3)] font-[family-name:var(--font-mono)]">→ Secure VPS Configuration</li>
+          <li class="text-[var(--text-xs)] text-[var(--text-3)] font-[family-name:var(--font-mono)]">→ NGINX & PM2 Setup</li>
+          <li class="text-[var(--text-xs)] text-[var(--text-3)] font-[family-name:var(--font-mono)]">→ GitHub Actions Automation</li>
+        </ul>
+        <a href="/#contact" class="font-[family-name:var(--font-mono)] text-[var(--text-2xs)] text-[var(--accent)] mt-[var(--spacing-gap-sm)] inline-block no-underline hover:underline">Get Started →</a>
+      </article>
+    </BentoGrid>
+  </section>
+
+  <!-- Latest Writing -->
+  <section id="insights" class="max-w-[var(--container-max)] mx-auto px-[var(--section-px)] mt-[var(--section-gap)]">
+    <div class="section-header mb-[var(--spacing-gap-lg)]">
+      <span class="font-[family-name:var(--font-mono)] text-[var(--text-2xs)] font-bold tracking-[0.10em] text-[var(--accent)]">Latest Writing</span>
+      <h2 class="font-[family-name:var(--font-mono)] text-[var(--heading-sm)] font-bold text-[var(--text-1)] mt-[var(--spacing-gap-xs)]">Fresh paths into your highest-priority pages</h2>
+    </div>
+    <BentoGrid columns="3">
+      <article class="card glass-hover hover-lift px-[var(--card-px)] py-[var(--card-py)]">
+        <h3 class="font-[family-name:var(--font-mono)] text-[14px] max-md:text-[var(--text-small)] font-bold text-[var(--text-1)]">Technical Blog Archive</h3>
+        <p class="text-[var(--text-small)] text-[var(--text-2)] mt-[var(--spacing-gap-sm)]">Use the primary blog landing page to reach every live post on DevOps, AI workflow orchestration, observability, and production resilience.</p>
+        <ul class="list-none p-0 mt-[var(--spacing-gap-sm)] space-y-[4px]">
+          <li class="text-[var(--text-xs)] text-[var(--text-3)] font-[family-name:var(--font-mono)]">→ Primary blog landing page</li>
+          <li class="text-[var(--text-xs)] text-[var(--text-3)] font-[family-name:var(--font-mono)]">→ Links to every live article</li>
+          <li class="text-[var(--text-xs)] text-[var(--text-3)] font-[family-name:var(--font-mono)]">→ Clean crawl path from the homepage</li>
+        </ul>
+        <a href="/blog/" class="font-[family-name:var(--font-mono)] text-[var(--text-2xs)] text-[var(--accent)] mt-[var(--spacing-gap-sm)] inline-block no-underline hover:underline">Open the blog archive →</a>
+      </article>
+      <article class="card glass-hover hover-lift px-[var(--card-px)] py-[var(--card-py)]">
+        <h3 class="font-[family-name:var(--font-mono)] text-[14px] max-md:text-[var(--text-small)] font-bold text-[var(--text-1)]">Multi-Cloud Resilience Guide</h3>
+        <p class="text-[var(--text-small)] text-[var(--text-2)] mt-[var(--spacing-gap-sm)]">A featured article on OpenTofu, Terragrunt, and provider-neutral infrastructure patterns for reliable delivery at scale.</p>
+        <ul class="list-none p-0 mt-[var(--spacing-gap-sm)] space-y-[4px]">
+          <li class="text-[var(--text-xs)] text-[var(--text-3)] font-[family-name:var(--font-mono)]">→ OpenTofu and Terragrunt</li>
+          <li class="text-[var(--text-xs)] text-[var(--text-3)] font-[family-name:var(--font-mono)]">→ Portable infrastructure patterns</li>
+          <li class="text-[var(--text-xs)] text-[var(--text-3)] font-[family-name:var(--font-mono)]">→ Architecture-level reliability</li>
+        </ul>
+        <a href="/blog/architecting-multi-cloud-resilience-opentofu-terragrunt-mandatory-2026/" class="font-[family-name:var(--font-mono)] text-[var(--text-2xs)] text-[var(--accent)] mt-[var(--spacing-gap-sm)] inline-block no-underline hover:underline">Read the resilience article →</a>
+      </article>
+      <article class="card glass-hover hover-lift px-[var(--card-px)] py-[var(--card-py)]">
+        <h3 class="font-[family-name:var(--font-mono)] text-[14px] max-md:text-[var(--text-small)] font-bold text-[var(--text-1)]">CI/CD Breach Analysis</h3>
+        <p class="text-[var(--text-small)] text-[var(--text-2)] mt-[var(--spacing-gap-sm)]">A direct link into the Hackerbot-Claw post covering trust-boundary failures, supply-chain risk, and practical DevSecOps hardening moves.</p>
+        <ul class="list-none p-0 mt-[var(--spacing-gap-sm)] space-y-[4px]">
+          <li class="text-[var(--text-xs)] text-[var(--text-3)] font-[family-name:var(--font-mono)]">→ Supply-chain security review</li>
+          <li class="text-[var(--text-xs)] text-[var(--text-3)] font-[family-name:var(--font-mono)]">→ CI/CD trust boundary analysis</li>
+          <li class="text-[var(--text-xs)] text-[var(--text-3)] font-[family-name:var(--font-mono)]">→ Hardening actions for teams</li>
+        </ul>
+        <a href="/blog/execution-layer-breach-hackerbot-claw-cicd-compromise/" class="font-[family-name:var(--font-mono)] text-[var(--text-2xs)] text-[var(--accent)] mt-[var(--spacing-gap-sm)] inline-block no-underline hover:underline">Read the breach analysis →</a>
+      </article>
+    </BentoGrid>
+  </section>
+
+  <!-- Executive Summary -->
+  <section id="executive-summary" class="max-w-[var(--container-max)] mx-auto px-[var(--section-px)] mt-[var(--section-gap)]">
+    <div class="section-header mb-[var(--spacing-gap-lg)]">
+      <span class="font-[family-name:var(--font-mono)] text-[var(--text-2xs)] font-bold tracking-[0.10em] text-[var(--accent)]">Executive Summary</span>
+      <h2 class="font-[family-name:var(--font-mono)] text-[var(--heading-sm)] font-bold text-[var(--text-1)] mt-[var(--spacing-gap-xs)]">Strategic leadership &amp; stability</h2>
+    </div>
+    <div class="glass-panel px-[var(--card-px)] py-[var(--card-py)] terminal-corner">
+      <h3 class="font-[family-name:var(--font-mono)] text-[var(--text-base)] font-bold text-[var(--text-1)] mb-[var(--spacing-gap-md)]">I bridge complex infrastructure with a calm, reliable product experience.</h3>
+      <p class="text-[var(--text-base)] text-[var(--text-2)] leading-relaxed mb-[var(--spacing-gap-lg)]">I reduce system friction, align teams, and remove noise from your delivery pipeline so your product stays stable at scale.</p>
+      <div class="grid grid-cols-1 md:grid-cols-2 gap-[var(--spacing-gap-lg)]">
+        <div>
+          <h4 class="label-caps text-[var(--accent)] mb-[var(--spacing-gap-sm)]">The Result</h4>
+          <p class="text-[var(--text-small)] text-[var(--text-2)] leading-relaxed">Production systems stay up. Teams move faster. Leadership has clarity on delivery timelines and infrastructure health.</p>
+        </div>
+        <div>
+          <h4 class="label-caps text-[var(--accent)] mb-[var(--spacing-gap-sm)]">The Approach</h4>
+          <p class="text-[var(--text-small)] text-[var(--text-2)] leading-relaxed">I audit existing systems, identify friction points, and build automation that reduces manual toil. Then I document and train teams.</p>
+        </div>
+      </div>
+      <div class="mt-[var(--spacing-gap-md)]">
+        <h4 class="label-caps text-[var(--accent)] mb-[var(--spacing-gap-sm)]">The Promise</h4>
+        <p class="text-[var(--text-small)] text-[var(--text-2)] leading-relaxed">Your infrastructure becomes an asset, not a liability. Deployments are calm. Incidents are rare. Your team can focus on building.</p>
+      </div>
+      <div class="flex flex-wrap gap-[var(--spacing-gap-xs)] mt-[var(--spacing-gap-md)]">
+        <span class="font-[family-name:var(--font-mono)] text-[var(--text-2xs)] px-[8px] py-[3px] border border-[var(--border)] text-[var(--text-2)]">DevOps orchestration</span>
+        <span class="font-[family-name:var(--font-mono)] text-[var(--text-2xs)] px-[8px] py-[3px] border border-[var(--border)] text-[var(--text-2)]">Project leadership</span>
+        <span class="font-[family-name:var(--font-mono)] text-[var(--text-2xs)] px-[8px] py-[3px] border border-[var(--border)] text-[var(--text-2)]">Release reliability</span>
+        <span class="font-[family-name:var(--font-mono)] text-[var(--text-2xs)] px-[8px] py-[3px] border border-[var(--border)] text-[var(--text-2)]">System automation</span>
+      </div>
+    </div>
+  </section>
+
+  <!-- Work Experience -->
+  <section id="experience" class="max-w-[var(--container-max)] mx-auto px-[var(--section-px)] mt-[var(--section-gap)]">
+    <div class="section-header mb-[var(--spacing-gap-lg)]">
+      <span class="font-[family-name:var(--font-mono)] text-[var(--text-2xs)] font-bold tracking-[0.10em] text-[var(--accent)]">Experience</span>
+      <h2 class="font-[family-name:var(--font-mono)] text-[var(--heading-sm)] font-bold text-[var(--text-1)] mt-[var(--spacing-gap-xs)]">Execution that survives production</h2>
+    </div>
+    <BentoGrid columns="3">
+      {experiences?.length > 0 ? experiences.map((exp: any) => (
+        <WorkCard
+          company={exp.company}
+          location={exp.location}
+          period={exp.period}
+          role={exp.role}
+          description={exp.description}
+          highlight={exp.highlight}
+          skills={exp.skills || []}
+        />
+      )) : (
+        <>
+          <WorkCard company="Alizeth" location="Medenine" period="Mar 2023 - Present" role="DevOps Engineer & Project Manager" description="Handling project management and DevOps with a focus on infrastructure automation, deployments, and scalable architecture." highlight="Overseeing automation, deployments, and infrastructure" skills={['Infrastructure', 'DevOps', 'Project Management']} />
+          <WorkCard company="DevCom" location="Medenine" period="Mar 2021 - Feb 2023" role="Tech Support" description="Provided technical support and troubleshooting to ensure system reliability and resolve critical issues efficiently." highlight="Ensuring system reliability and uptime" skills={['Technical Support', 'System Reliability', 'Troubleshooting']} />
+          <WorkCard company="CB Audit & Conseil" location="Tunis" period="Oct 2016 - Oct 2020" role="IT Technician" description="Provided IT support with focus on maintaining hardware, software, and network systems." highlight="Maintained hardware, software, and network systems" skills={['IT Support', 'System Maintenance', 'Networking']} />
+        </>
+      )}
+    </BentoGrid>
+    <DeployMeta hash="sha: a3f7bc2" date="2025-01-15T14:32:07Z" branch="main" message="feat: add work experience section" />
+  </section>
+
+  <!-- Education -->
+  <section id="education" class="max-w-[var(--container-max)] mx-auto px-[var(--section-px)] mt-[var(--section-gap)]">
+    <div class="section-header mb-[var(--spacing-gap-lg)]">
+      <span class="font-[family-name:var(--font-mono)] text-[var(--text-2xs)] font-bold tracking-[0.10em] text-[var(--accent)]">Education</span>
+      <h2 class="font-[family-name:var(--font-mono)] text-[var(--heading-sm)] font-bold text-[var(--text-1)] mt-[var(--spacing-gap-xs)]">Technical depth with a media edge</h2>
+    </div>
+    <BentoGrid columns="2">
+      {education?.length > 0 ? education.map((edu: any) => (
+        <div class="card px-[var(--card-px)] py-[var(--card-py)]">
+          <h3 class="font-[family-name:var(--font-mono)] text-[14px] max-md:text-[var(--text-small)] font-bold text-[var(--text-1)]">{edu.school}</h3>
+          <p class="font-[family-name:var(--font-mono)] text-[var(--text-2xs)] text-[var(--accent)] mt-[4px]">{edu.degree}</p>
+          <p class="font-[family-name:var(--font-mono)] text-[var(--text-2xs)] text-[var(--text-3)]">{edu.period}</p>
+          <p class="text-[var(--text-small)] text-[var(--text-2)] mt-[var(--spacing-gap-sm)]">{edu.description}</p>
+        </div>
+      )) : (
+        <>
+          <div class="card px-[var(--card-px)] py-[var(--card-py)]">
+            <h3 class="font-[family-name:var(--font-mono)] text-[14px] max-md:text-[var(--text-small)] font-bold text-[var(--text-1)]">ISAMM Mannouba (Master's Program)</h3>
+            <p class="font-[family-name:var(--font-mono)] text-[var(--text-2xs)] text-[var(--accent)] mt-[4px]">Master on Media's Engineering</p>
+            <p class="font-[family-name:var(--font-mono)] text-[var(--text-2xs)] text-[var(--text-3)]">September 2013 - June 2015</p>
+            <p class="text-[var(--text-small)] text-[var(--text-2)] mt-[var(--spacing-gap-sm)]">Advanced multimedia technology training with practical media production expertise.</p>
+          </div>
+          <div class="card px-[var(--card-px)] py-[var(--card-py)]">
+            <h3 class="font-[family-name:var(--font-mono)] text-[14px] max-md:text-[var(--text-small)] font-bold text-[var(--text-1)]">ISAMM Mannouba (Bachelor's Program)</h3>
+            <p class="font-[family-name:var(--font-mono)] text-[var(--text-2xs)] text-[var(--accent)] mt-[4px]">Fundamental Bachelor's Degree in Computer Science</p>
+            <p class="font-[family-name:var(--font-mono)] text-[var(--text-2xs)] text-[var(--text-3)]">September 2008 - June 2011</p>
+            <p class="text-[var(--text-small)] text-[var(--text-2)] mt-[var(--spacing-gap-sm)]">Extensive training in programming, algorithms, data structures, and software engineering.</p>
+          </div>
+        </>
+      )}
+    </BentoGrid>
+  </section>
+
+  <!-- Projects -->
+  <section id="projects" class="max-w-[var(--container-max)] mx-auto px-[var(--section-px)] mt-[var(--section-gap)]">
+    <div class="section-header mb-[var(--spacing-gap-lg)]">
+      <span class="font-[family-name:var(--font-mono)] text-[var(--text-2xs)] font-bold tracking-[0.10em] text-[var(--accent)]">Selected Work</span>
+      <h2 class="font-[family-name:var(--font-mono)] text-[var(--heading-sm)] font-bold text-[var(--text-1)] mt-[var(--spacing-gap-xs)]">Systems that stay calm under pressure</h2>
+    </div>
+    <BentoGrid columns="3">
+      {projects?.length > 0 ? projects.map((proj: any) => (
+        <ProjectCard title={proj.title} badge={proj.badge} description={proj.description} tags={proj.tags || []} link={proj.link} linkText={proj.linkText} meta={proj.meta} />
+      )) : (
+        <>
+          <ProjectCard title="Eatorder" badge="Food Ordering Platform" description="Food ordering and restaurant management platform. Handled project management and DevOps infrastructure for scalable deployments." tags={['PM', 'DevOps', 'Infrastructure']} link="https://market.eatorder.fr" linkText="View Eatorder project →" meta="Alizeth · Medenine · Ongoing" />
+          <ProjectCard title="Riskvision" badge="Safety Management Platform" description="Safety and risk management platform. Developed full-stack features and managed deployments for production reliability." tags={['Full Stack', 'Deployments', 'DevOps']} link="/#contact" linkText="View Riskvision project →" meta="DevCom · Medenine · Ongoing" />
+          <ProjectCard title="Lavocato" badge="On-Demand Services Platform" description="On-demand services platform. Developed frontend features and managed applications to production." tags={['Frontend', 'Deployments', 'DevOps']} link="/#contact" linkText="View Lavocato project →" meta="CB Audit · Medenine · Ongoing" />
+        </>
+      )}
+    </BentoGrid>
+  </section>
+
+  <!-- Skills -->
+  <section id="skills" class="max-w-[var(--container-max)] mx-auto px-[var(--section-px)] mt-[var(--section-gap)]">
+    <div class="section-header mb-[var(--spacing-gap-lg)]">
+      <span class="font-[family-name:var(--font-mono)] text-[var(--text-2xs)] font-bold tracking-[0.10em] text-[var(--accent)]">Capabilities</span>
+      <h2 class="font-[family-name:var(--font-mono)] text-[var(--heading-sm)] font-bold text-[var(--text-1)] mt-[var(--spacing-gap-xs)]">What I bring into your team</h2>
+    </div>
+    <BentoGrid columns="2">
+      {skills?.length > 0 ? skills.map((skill: any) => (
+        <SkillCategory title={skill.title} skills={skill.skills || []} />
+      )) : (
+        <>
+          <SkillCategory title="Infrastructure & DevOps" skills={['Linux', 'NGINX', 'Apache', 'Docker', 'CI/CD', 'Git', 'GitHub Actions', 'ArgoCD', 'FluxCD', 'PM2']} />
+          <SkillCategory title="Monitoring & Security" skills={['Prometheus', 'Grafana', 'ELK', 'SSL/TLS', 'Fail2Ban']} />
+          <SkillCategory title="Development" skills={['React', 'Node.js', 'JavaScript', 'HTML5', 'CSS3']} />
+          <SkillCategory title="Automation & Scripting" skills={['Bash', 'PowerShell']} />
+          <SkillCategory title="Databases" skills={['MongoDB', 'PostgreSQL', 'MySQL']} />
+          <SkillCategory title="Project Management" skills={['Agile', 'Scrum', 'Kanban', 'ClickUp']} />
+        </>
+      )}
+    </BentoGrid>
+  </section>
+
+  <!-- Languages -->
+  <section id="languages" class="max-w-[var(--container-max)] mx-auto px-[var(--section-px)] mt-[var(--section-gap)]">
+    <div class="section-header mb-[var(--spacing-gap-lg)]">
+      <span class="font-[family-name:var(--font-mono)] text-[var(--text-2xs)] font-bold tracking-[0.10em] text-[var(--accent)]">Communication</span>
+      <h2 class="font-[family-name:var(--font-mono)] text-[var(--heading-sm)] font-bold text-[var(--text-1)] mt-[var(--spacing-gap-xs)]">Languages</h2>
+    </div>
+    <div class="grid grid-cols-3 gap-[1px] max-md:grid-cols-1">
+      <div class="card px-[var(--card-px)] py-[var(--card-py)] flex items-center justify-between max-md:flex-row">
+        <span class="text-[var(--text-1)] font-[family-name:var(--font-mono)] text-[14px] max-md:text-[var(--text-small)]">Arabic</span>
+        <span class="text-[var(--text-3)] font-[family-name:var(--font-mono)] text-[var(--text-2xs)]">Native</span>
+      </div>
+      <div class="card px-[var(--card-px)] py-[var(--card-py)] flex items-center justify-between max-md:flex-row">
+        <span class="text-[var(--text-1)] font-[family-name:var(--font-mono)] text-[14px] max-md:text-[var(--text-small)]">English</span>
+        <span class="text-[var(--text-3)] font-[family-name:var(--font-mono)] text-[var(--text-2xs)]">Advanced</span>
+      </div>
+      <div class="card px-[var(--card-px)] py-[var(--card-py)] flex items-center justify-between max-md:flex-row">
+        <span class="text-[var(--text-1)] font-[family-name:var(--font-mono)] text-[14px] max-md:text-[var(--text-small)]">French</span>
+        <span class="text-[var(--text-3)] font-[family-name:var(--font-mono)] text-[var(--text-2xs)]">Fluent</span>
+      </div>
+    </div>
+  </section>
+
+  <!-- FAQ -->
+  <section id="faq" aria-label="Frequently asked questions" class="max-w-[var(--container-max)] mx-auto px-[var(--section-px)] mt-[var(--section-gap)]">
+    <div class="section-header mb-[var(--spacing-gap-lg)]">
+      <span class="font-[family-name:var(--font-mono)] text-[var(--text-2xs)] font-bold tracking-[0.10em] text-[var(--accent)]">FAQ</span>
+      <h2 class="font-[family-name:var(--font-mono)] text-[var(--heading-sm)] font-bold text-[var(--text-1)] mt-[var(--spacing-gap-xs)]">Common questions</h2>
+    </div>
+    <FAQAccordion items={faqs?.length > 0 ? faqs.map((f: any) => ({ question: f.question, answer: f.answer })) : [
+      { question: 'What DevOps services do you offer?', answer: 'VPS server setup and hardening, CI/CD pipelines with GitHub Actions and ArgoCD, Docker containerisation, NGINX reverse proxy, Prometheus and Grafana monitoring, and infrastructure automation for production environments. Available for freelance and consulting engagements internationally.' },
+      { question: 'How do you set up a CI/CD pipeline with GitHub Actions and Docker?', answer: 'A production CI/CD pipeline involves: (1) writing a Dockerfile for your application, (2) a GitHub Actions workflow that builds and pushes the image to a registry, (3) configuring your VPS with Docker Compose or ArgoCD to pull and redeploy on new pushes, and (4) NGINX as a reverse proxy with SSL via Certbot. This delivers zero-downtime deployments on every push to main.' },
+      { question: 'What is the difference between DevOps and Project Manager roles?', answer: 'A DevOps engineer automates builds, deployments, monitoring, and infrastructure. A Project Manager aligns timelines, resources, and stakeholder expectations. Combining both roles reduces handoff friction and accelerates release cycles — one person owns both the delivery plan and the technical pipeline.' },
+      { question: 'Are you available for freelance DevOps work?', answer: 'Yes. Currently open for freelance and consulting work in 2026, accepting projects in web systems architecture, infrastructure automation, CI/CD, and MERN stack development for clients in Tunisia, France, and internationally. Get in touch to discuss your project.' },
+    ]} client:only />
+  </section>
+
+  <!-- Contact -->
+  <section id="contact" class="max-w-[var(--container-max)] mx-auto px-[var(--section-px)] mt-[var(--section-gap)]">
+    <div class="section-header mb-[var(--spacing-gap-lg)]">
+      <span class="font-[family-name:var(--font-mono)] text-[var(--text-2xs)] font-bold tracking-[0.10em] text-[var(--accent)]">Contact</span>
+      <h2 class="font-[family-name:var(--font-mono)] text-[var(--heading-sm)] font-bold text-[var(--text-1)] mt-[var(--spacing-gap-xs)]">Let's build something stable</h2>
+    </div>
+    <div class="grid grid-cols-1 md:grid-cols-2 gap-[var(--spacing-gap-lg)]">
+      <ContactFormIsland client:only />
+      <div class="card px-[var(--card-px)] py-[var(--card-py)]">
+        <div class="flex flex-col gap-[var(--spacing-gap-md)]">
+          <p class="text-[var(--text-small)] text-[var(--text-2)] leading-relaxed">Prefer instant messaging? Reach out directly on WhatsApp or give me a call.</p>
+          <a href="https://wa.me/21622942005" target="_blank" rel="noopener noreferrer" class="card glass-hover px-[var(--spacing-gap-md)] py-[var(--spacing-gap-md)] flex items-center gap-[var(--spacing-gap-sm)] no-underline hover-lift transition-all duration-200">
+            <span class="text-[var(--text-base)]">WhatsApp</span>
+            <span class="text-[var(--text-2xs)] text-[var(--text-3)] font-[family-name:var(--font-mono)] ml-auto">+216 22 942 005</span>
+          </a>
+          <a href="tel:+21622942005" class="card glass-hover px-[var(--spacing-gap-md)] py-[var(--spacing-gap-md)] flex items-center gap-[var(--spacing-gap-sm)] no-underline hover-lift transition-all duration-200">
+            <span class="text-[var(--text-base)]">Phone Call</span>
+            <span class="text-[var(--text-2xs)] text-[var(--text-3)] font-[family-name:var(--font-mono)] ml-auto">+216 22 942 005</span>
+          </a>
+        </div>
+      </div>
+    </div>
+  </section>
+</BaseLayout>
+
+<template slot="after-footer">
+  <DeployMeta hash="sha: a3f7bc2" date="2025-01-15T14:32:07Z" branch="main" message="feat: obsidian command design" class="max-w-[var(--container-max)] mx-auto px-[var(--spacing-gap-2xl)]" />
+</template>
+
+<style>
+.tag-like { transition: border-color 80ms, color 80ms, background 80ms; cursor: default; }
+.tag-like:hover { border-color: var(--accent); color: var(--accent); background: rgba(16,185,129,0.08); }
+@media (prefers-reduced-motion: reduce) {
+  .tag-like { transition: none !important; }
+}
+</style>

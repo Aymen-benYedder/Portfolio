@@ -1,0 +1,12 @@
+---
+import { generateItemList } from '@lib/schema';
+
+export interface Props {
+  posts: { position: number; url: string; name: string }[];
+}
+
+const { posts } = Astro.props;
+const itemList = generateItemList(posts, 'https://aymen.benyedder.top/blog');
+---
+
+<script type="application/ld+json" set:html={JSON.stringify(itemList)} />

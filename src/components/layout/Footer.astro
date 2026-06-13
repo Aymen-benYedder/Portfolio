@@ -1,0 +1,60 @@
+---
+import DeployMeta from '@components/ui/DeployMeta.astro';
+---
+
+<footer class="border-t border-[rgba(16,185,129,0.12)] mt-[var(--section-gap)]" role="contentinfo">
+  <div class="max-w-[var(--container-max)] mx-auto px-[var(--section-px)] py-[var(--section-gap)]">
+    <div class="grid grid-cols-4 gap-[var(--spacing-gap-lg)] max-md:grid-cols-2 max-sm:grid-cols-1">
+      <div>
+        <a href="/" class="font-[family-name:var(--font-mono)] text-[var(--text-xs)] font-bold tracking-[0.1em] text-[var(--accent)] no-underline drop-shadow-[0_0_8px_rgba(16,185,129,0.25)]">AYMEN.DEV</a>
+        <p class="text-[var(--text-3)] text-[var(--text-xs)] mt-[var(--spacing-gap-sm)] leading-relaxed">Engineering stability for complex systems. Specialized in high-scale infrastructure and operational resilience.</p>
+        <div class="flex gap-[var(--spacing-gap-sm)] mt-[var(--spacing-gap-md)]">
+          <a href="https://github.com/Aymen-benYedder" target="_blank" rel="noopener noreferrer" aria-label="GitHub" class="text-[var(--text-3)] hover:text-[var(--accent)] hover:drop-shadow-[0_0_5px_rgba(16,185,129,0.3)] transition-all duration-200 min-h-[44px] min-w-[44px] flex items-center justify-center">
+            <svg width="20" height="20" viewBox="0 0 24 24" fill="currentColor"><path d="M12 0c-6.626 0-12 5.373-12 12 0 5.302 3.438 9.8 8.207 11.387.599.111.793-.261.793-.577v-2.234c-3.338.726-4.033-1.416-4.033-1.416-.546-1.387-1.333-1.756-1.333-1.756-1.089-.745.083-.729.083-.729 1.205.084 1.839 1.237 1.839 1.237 1.07 1.834 2.807 1.304 3.492.997.107-.775.418-1.305.762-1.604-2.665-.305-5.467-1.334-5.467-5.931 0-1.311.469-2.381 1.236-3.221-.124-.303-.535-1.524.117-3.176 0 0 1.008-.322 3.301 1.23.957-.266 1.983-.399 3.003-.404 1.02.005 2.047.138 3.006.404 2.291-1.552 3.297-1.23 3.297-1.23.653 1.653.242 2.874.118 3.176.77.84 1.235 1.911 1.235 3.221 0 4.609-2.807 5.624-5.479 5.921.43.372.823 1.102.823 2.222v3.293c0 .319.192.694.801.576 4.765-1.589 8.199-6.086 8.199-11.386 0-6.627-5.373-12-12-12z"/></svg>
+          </a>
+          <a href="https://linkedin.com/in/aymenby" target="_blank" rel="noopener noreferrer" aria-label="LinkedIn" class="text-[var(--text-3)] hover:text-[var(--accent)] hover:drop-shadow-[0_0_5px_rgba(16,185,129,0.3)] transition-all duration-200 min-h-[44px] min-w-[44px] flex items-center justify-center">
+            <svg width="20" height="20" viewBox="0 0 24 24" fill="currentColor"><path d="M20.447 20.452h-3.554v-5.569c0-1.328-.475-2.236-1.986-2.236-1.081 0-1.722.731-2.004 1.438-.103.25-.129.599-.129.948v5.419h-3.554s.05-8.736 0-9.646h3.554v1.364c.429-.658 1.196-1.593 2.905-1.593 2.12 0 3.714 1.39 3.714 4.376v5.499zM5.337 8.855c-1.144 0-1.915-.759-1.915-1.71 0-.956.768-1.71 1.959-1.71 1.19 0 1.916.754 1.939 1.71 0 .951-.749 1.71-1.983 1.71zm1.946 11.597H3.392V9.26h3.891v11.192zM22.225 0H1.771C.792 0 0 .774 0 1.729v20.542C0 23.227.792 24 1.771 24h20.451C23.2 24 24 23.227 24 22.271V1.729C24 .774 23.2 0 22.225 0z"/></svg>
+          </a>
+        </div>
+      </div>
+
+      <div>
+        <h3 class="font-[family-name:var(--font-mono)] text-[var(--text-2xs)] font-bold tracking-[0.14em] text-[var(--text-3)] mb-[var(--spacing-gap-sm)] uppercase">Home Base</h3>
+        <ul class="list-none p-0 m-0 space-y-[6px]">
+          <li><a href="/" class="text-[var(--text-2)] text-[var(--text-xs)] no-underline hover:text-[var(--accent)] transition-colors duration-200 min-h-[44px] flex items-center">Home</a></li>
+          <li><a href="/services/" class="text-[var(--text-2)] text-[var(--text-xs)] no-underline hover:text-[var(--accent)] transition-colors duration-200 min-h-[44px] flex items-center">Capabilities</a></li>
+          <li><a href="/#experience" class="text-[var(--text-2)] text-[var(--text-xs)] no-underline hover:text-[var(--accent)] transition-colors duration-200 min-h-[44px] flex items-center">Track Record</a></li>
+          <li><a href="/#projects" class="text-[var(--text-2)] text-[var(--text-xs)] no-underline hover:text-[var(--accent)] transition-colors duration-200 min-h-[44px] flex items-center">Case Studies</a></li>
+        </ul>
+      </div>
+
+      <div>
+        <h3 class="font-[family-name:var(--font-mono)] text-[var(--text-2xs)] font-bold tracking-[0.14em] text-[var(--text-3)] mb-[var(--spacing-gap-sm)] uppercase">Services</h3>
+        <ul class="list-none p-0 m-0 space-y-[6px]">
+          <li><a href="/services/mern-development" class="text-[var(--text-2)] text-[var(--text-xs)] no-underline hover:text-[var(--accent)] transition-colors duration-200 min-h-[44px] flex items-center">MERN Stack</a></li>
+          <li><a href="/services/wordpress-development" class="text-[var(--text-2)] text-[var(--text-xs)] no-underline hover:text-[var(--accent)] transition-colors duration-200 min-h-[44px] flex items-center">WordPress</a></li>
+          <li><a href="/#contact" class="text-[var(--text-2)] text-[var(--text-xs)] no-underline hover:text-[var(--accent)] transition-colors duration-200 min-h-[44px] flex items-center">Consulting</a></li>
+          <li><a href="/services/" class="text-[var(--text-2)] text-[var(--text-xs)] no-underline hover:text-[var(--accent)] transition-colors duration-200 min-h-[44px] flex items-center">System Audits</a></li>
+        </ul>
+      </div>
+
+      <div>
+        <h3 class="font-[family-name:var(--font-mono)] text-[var(--text-2xs)] font-bold tracking-[0.14em] text-[var(--text-3)] mb-[var(--spacing-gap-sm)] uppercase">Status</h3>
+        <div class="flex items-center gap-[8px] mb-[var(--spacing-gap-sm)]">
+          <span class="w-[6px] h-[6px] bg-[var(--success)]" style="box-shadow: 0 0 8px var(--success); animation: livePulse 2.5s ease-in-out infinite;"></span>
+          <span class="text-[var(--text-1)] text-[var(--text-2xs)] font-[family-name:var(--font-mono)]">Open for work</span>
+        </div>
+        <p class="text-[var(--text-3)] text-[var(--text-2xs)]">Currently accepting new projects for 2026.</p>
+      </div>
+    </div>
+
+    <DeployMeta hash="sha: a3f7bc2" date="2025-01-15T14:32:07Z" branch="main" message="feat: obsidian command design" />
+  </div>
+</footer>
+
+<style>
+@keyframes livePulse {
+  0%, 100% { box-shadow: 0 0 0 0 rgba(16,185,129,0.6); }
+  50% { box-shadow: 0 0 0 6px rgba(16,185,129,0); }
+}
+</style>

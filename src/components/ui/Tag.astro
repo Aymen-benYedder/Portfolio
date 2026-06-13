@@ -1,0 +1,12 @@
+---
+export interface Props {
+  elevated?: boolean;
+  class?: string;
+}
+
+const { elevated = false, class: className = '' } = Astro.props;
+---
+
+<span class="tag font-[family-name:var(--font-mono)] text-[10px] font-medium tracking-[0.04em] px-[10px] py-[4px] border inline-block transition-[border-color_80ms,color_80ms,background_80ms] cursor-default {elevated ? 'border-[var(--border-hi)] text-[var(--text-1)]' : 'border-[var(--border)] text-[var(--text-2)] hover:border-[var(--accent)] hover:text-[var(--accent)] hover:bg-[var(--accent-glass)]'} {className}">
+  <slot />
+</span>

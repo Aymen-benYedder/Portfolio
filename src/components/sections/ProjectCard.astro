@@ -1,0 +1,28 @@
+---
+import Badge from '@components/ui/Badge.astro';
+
+export interface Props {
+  title: string;
+  badge: string;
+  description: string;
+  tags: string[];
+  link: string;
+  linkText?: string;
+  meta?: string;
+  class?: string;
+}
+const { title, badge: badgeText, description, tags, link, linkText = 'View project →', meta = '', class: className = '' } = Astro.props;
+---
+
+<article class="card glass-hover hover-lift px-[var(--card-px)] py-[var(--card-py)] {className}">
+  <div class="flex items-start justify-between mb-[var(--spacing-gap-sm)]">
+    <h3 class="font-[family-name:var(--font-mono)] text-[14px] font-bold text-[var(--text-1)] m-0">{title}</h3>
+    <Badge variant="blue">{badgeText}</Badge>
+  </div>
+  <p class="text-[13px] text-[var(--text-2)] leading-relaxed">{description}</p>
+  {meta && <p class="font-[family-name:var(--font-mono)] text-[var(--text-2xs)] text-[var(--text-3)] mt-[var(--spacing-gap-xs)]">{meta}</p>}
+  <div class="flex flex-wrap gap-[var(--spacing-gap-xs)] mt-[var(--spacing-gap-sm)]">
+    {tags.map(tag => <span class="font-[family-name:var(--font-mono)] text-[var(--text-2xs)] text-[var(--text-3)] px-[6px] py-[2px] border border-[var(--border)]">{tag}</span>)}
+  </div>
+  <a href={link} class="font-[family-name:var(--font-mono)] text-[var(--text-2xs)] text-[var(--text-3)] mt-[var(--spacing-gap-sm)] inline-block no-underline uppercase tracking-[0.1em] hover:text-[var(--accent)] hover:drop-shadow-[0_0_4px_rgba(16,185,129,0.3)] transition-all duration-200">{linkText}</a>
+</article>

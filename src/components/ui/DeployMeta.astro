@@ -1,0 +1,21 @@
+---
+export interface Props {
+  hash?: string;
+  date?: string;
+  branch?: string;
+  message?: string;
+  class?: string;
+}
+
+const { hash = 'a3f7bc2', date = '2025-01-15T14:32:07Z', branch = 'main', message = 'feat: obsidian command design', class: className = '' } = Astro.props;
+---
+
+<footer class="label-caps pt-[8px] border-t border-[rgba(16,185,129,0.1)] flex gap-[8px] flex-wrap {className}">
+  <span class="text-[var(--accent-dim)]">{hash}</span>
+  <span class="text-[var(--text-3)] opacity-40">·</span>
+  <span class="text-[var(--text-3)]">{date}</span>
+  <span class="text-[var(--text-3)] opacity-40">·</span>
+  <span class="text-[var(--info)] drop-shadow-[0_0_4px_rgba(59,130,246,0.3)]">{branch}</span>
+  <span class="text-[var(--text-3)] opacity-40">·</span>
+  <span class="text-[var(--text-3)]">{message}</span>
+</footer>

@@ -1,0 +1,64 @@
+---
+import Badge from '@components/ui/Badge.astro';
+---
+
+<section id="hero" class="max-w-[var(--container-max)] mx-auto px-[var(--section-px)] pt-[100px] max-md:pt-[var(--section-gap)]" aria-labelledby="hero-heading">
+  <div class="hero-card glass-panel terminal-corner p-[var(--card-px)] md:p-[32px]">
+    <div class="flex items-center gap-[var(--spacing-gap-sm)] mb-[var(--spacing-gap-md)]">
+      <span class="glow-dot block"></span>
+      <span class="label-caps text-[var(--accent)] animate-flicker">System Status: Active</span>
+      <span class="ml-auto hidden md:flex items-center gap-[6px]">
+        <span class="w-[5px] h-[5px] bg-[var(--success)]" style="box-shadow: 0 0 6px var(--success);"></span>
+        <span class="font-[family-name:var(--font-mono)] text-[var(--text-2xs)] text-[var(--text-3)]">Open for remote work</span>
+      </span>
+    </div>
+    <div class="flex max-md:flex-col gap-[var(--spacing-gap-lg)]">
+      <div class="flex-1">
+        <h1 id="hero-heading" class="font-[family-name:var(--font-sans)] text-[64px] md:text-[72px] font-[800] leading-[1.0] tracking-[-0.04em] text-[var(--text-1)] m-0 uppercase">Aymen ben <span class="block text-[var(--text-3)] font-[family-name:var(--font-mono)] text-[var(--heading-sm)] font-normal tracking-[-0.02em] mt-[6px]">// Architecting Stability</span></h1>
+        <p class="font-[family-name:var(--font-mono)] text-[var(--text-base)] text-[var(--text-2)] leading-relaxed mt-[var(--spacing-gap-md)] max-w-3xl">
+          DevOps Engineer &amp; Web Systems Architect based in Tunisia. Specializing in CI/CD pipelines, Docker infrastructure, and resilient production systems where downtime is expensive.
+        </p>
+        <div class="flex flex-wrap gap-x-[var(--spacing-gap-lg)] gap-y-[var(--spacing-gap-xs)] mt-[var(--spacing-gap-md)]">
+          <div class="flex items-center gap-[6px]">
+            <span class="font-[family-name:var(--font-mono)] text-[var(--heading-md)] font-bold text-[var(--accent)]">24</span>
+            <span class="font-[family-name:var(--font-mono)] text-[var(--text-2xs)] text-[var(--text-3)]">projects deployed</span>
+          </div>
+          <div class="flex items-center gap-[6px]">
+            <span class="font-[family-name:var(--font-mono)] text-[var(--heading-md)] font-bold text-[var(--text-1)]">6+</span>
+            <span class="font-[family-name:var(--font-mono)] text-[var(--text-2xs)] text-[var(--text-3)]">production years</span>
+          </div>
+          <div class="flex items-center gap-[6px]">
+            <span class="font-[family-name:var(--font-mono)] text-[var(--heading-md)] font-bold text-[var(--accent)]">99.9%</span>
+            <span class="font-[family-name:var(--font-mono)] text-[var(--text-2xs)] text-[var(--text-3)]">uptime average</span>
+          </div>
+        </div>
+        <div class="flex gap-[var(--spacing-gap-sm)] mt-[var(--spacing-gap-lg)] max-md:flex-col">
+          <a href="/assets/resume.pdf" class="font-[family-name:var(--font-mono)] text-[var(--text-2xs)] font-bold tracking-[0.1em] px-[24px] py-[12px] bg-[var(--accent)] text-[var(--void)] no-underline inline-flex items-center gap-[8px] justify-center min-h-[44px] uppercase hover:bg-transparent hover:text-[var(--accent)] hover:shadow-[0_0_15px_rgba(16,185,129,0.3)] transition-all duration-200 border border-[var(--accent)] hover-lift">[ Deploy to Production ]</a>
+          <a href="/#contact" class="font-[family-name:var(--font-mono)] text-[var(--text-2xs)] font-bold tracking-[0.1em] px-[24px] py-[12px] border border-[var(--border-hi)] text-[var(--text-2)] no-underline inline-flex items-center gap-[8px] justify-center min-h-[44px] uppercase hover:border-[var(--accent)] hover:text-[var(--accent)] transition-all duration-200 hover-lift">&lt; Initiate Contact &gt;</a>
+        </div>
+      </div>
+      <div class="flex flex-col items-end justify-center max-md:items-start min-w-[140px]">
+        <Badge variant="green" live={true}>ACTIVE</Badge>
+        <div class="text-right max-md:text-left mt-[var(--spacing-gap-sm)]">
+          <div class="font-[family-name:var(--font-mono)] text-[var(--text-2xs)] text-[var(--text-3)]">UPTIME 99.9%</div>
+          <div class="font-[family-name:var(--font-mono)] text-[var(--text-2xs)] text-[var(--text-3)]">47MS AVG RESPONSE</div>
+        </div>
+        <div class="flex flex-wrap gap-[var(--spacing-gap-xs)] mt-[var(--spacing-gap-md)] justify-end max-md:justify-start">
+          <span class="tag-like font-[family-name:var(--font-mono)] text-[var(--text-2xs)] px-[8px] py-[3px] border border-[var(--border)] text-[var(--text-2)]">k8s</span>
+          <span class="tag-like font-[family-name:var(--font-mono)] text-[var(--text-2xs)] px-[8px] py-[3px] border border-[var(--border)] text-[var(--text-2)]">tf</span>
+          <span class="tag-like font-[family-name:var(--font-mono)] text-[var(--text-2xs)] px-[8px] py-[3px] border border-[var(--border)] text-[var(--text-2)]">argo</span>
+          <span class="tag-like font-[family-name:var(--font-mono)] text-[var(--text-2xs)] px-[8px] py-[3px] border border-[var(--border)] text-[var(--text-2)]">flux</span>
+          <span class="tag-like font-[family-name:var(--font-mono)] text-[var(--text-2xs)] px-[8px] py-[3px] border border-[var(--border)] text-[var(--text-2)]">prom</span>
+        </div>
+      </div>
+    </div>
+  </div>
+</section>
+
+<style>
+.tag-like { transition: border-color 80ms, color 80ms; }
+.tag-like:hover { border-color: var(--accent); color: var(--accent); background: var(--accent-glass); }
+@media (prefers-reduced-motion: reduce) {
+  .tag-like { transition: none !important; }
+}
+</style>

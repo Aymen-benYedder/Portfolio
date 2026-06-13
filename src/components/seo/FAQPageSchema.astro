@@ -1,0 +1,12 @@
+---
+import { generateFAQPage } from '@lib/schema';
+
+export interface Props {
+  items: { question: string; answer: string }[];
+  url?: string;
+}
+const { items, url } = Astro.props;
+const faq = generateFAQPage(items, url);
+---
+
+<script type="application/ld+json" set:html={JSON.stringify(faq)} />

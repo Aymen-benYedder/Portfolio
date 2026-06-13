@@ -1,0 +1,16 @@
+---
+export interface Props {
+  label: string;
+  value: string;
+  detail?: string;
+  neutral?: boolean;
+  class?: string;
+}
+const { label, value, detail = '', neutral = false, class: className = '' } = Astro.props;
+---
+
+<div class="glass-panel px-[var(--card-px)] py-[var(--card-py)] {className}">
+  <div class="label-caps text-[var(--text-3)] mb-[10px]">{label}</div>
+  <div class="font-[family-name:var(--font-mono)] text-[36px] max-md:text-[28px] font-bold leading-[1] mb-[6px] {neutral ? 'text-[var(--text-1)]' : 'text-[var(--accent)]'} drop-shadow-[0_0_8px_rgba(16,185,129,0.2)]">{value}</div>
+  {detail && <div class="font-[family-name:var(--font-sans)] text-[var(--text-xs)] text-[var(--text-2)]">{detail}</div>}
+</div>
