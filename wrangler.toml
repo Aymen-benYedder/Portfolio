@@ -1,3 +1,4 @@
-name = "aymen-dev-portfolio"
+# wrangler.toml
+name = 'new-portfolio'
 compatibility_date = "2026-06-01"
 pages_build_output_dir = "dist"
