@@ -263,11 +263,12 @@ export function getRelatedPosts(posts: BlogPost[], currentSlug: string, limit = 
 }
 
 export async function getAuthors(): Promise<Author[]> {
-  const { sanityClient } = await import('sanity:client');
-  const { AUTHORS_QUERY, urlFor } = await import('./sanity');
-  
   try {
-    const authors = await sanityClient.fetch(AUTHORS_QUERY);
+    const query = `*[_type == "author"] | order(name asc) {
+      _id, name, slug, jobTitle, bio, image { asset->{ _id, url }, alt }, email, sameAs, knowsAbout, address
+    }`;
+    const data = await fetchSanityApi(query);
+    const authors = data.result || [];
     return authors.map((a: any) => ({
       id: a._id,
       name: a.name,

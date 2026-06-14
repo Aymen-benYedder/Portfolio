@@ -1,4 +1,3 @@
-import { sanityClient } from 'sanity:client';
 import type { SanityDocument } from 'sanity';
 import createImageUrlBuilder from '@sanity/image-url';
 import type { SanityImageSource } from '@sanity/image-url/lib/types/types';
@@ -206,23 +205,3 @@ export const AUTHOR_QUERY = `*[_type == "author" && slug.current == $slug][0] {
 export const CATEGORIES_QUERY = `*[_type == "category"] | order(title asc) { _id, title, slug, description }`;
 
 export const TAGS_QUERY = `*[_type == "tag"] | order(title asc) { _id, title, slug }`;
-
-export async function getPosts(): Promise<SanityDocument[]> {
-  return await sanityClient.fetch(POSTS_QUERY);
-}
-
-export async function getPost(slug: string): Promise<SanityDocument | null> {
-  return await sanityClient.fetch(POST_QUERY, { slug });
-}
-
-export async function getAllSlugs(): Promise<{ slug: string }[]> {
-  return await sanityClient.fetch(ALL_SLUGS_QUERY);
-}
-
-export async function getAuthors(): Promise<SanityDocument[]> {
-  return await sanityClient.fetch(AUTHORS_QUERY);
-}
-
-export async function getAuthor(slug: string): Promise<SanityDocument | null> {
-  return await sanityClient.fetch(AUTHOR_QUERY, { slug });
-}

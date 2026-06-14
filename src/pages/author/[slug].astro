@@ -2,7 +2,7 @@
 import BaseLayout from '@layouts/BaseLayout.astro';
 import BreadcrumbSchema from '@components/seo/BreadcrumbSchema.astro';
 import { getNormalizedPosts, getAuthors } from '@lib/blog';
-import { urlFor } from '@lib/sanity';
+import { urlFor, fetchSanityApi } from '@lib/sanity';
 import type { Author } from '@lib/blog';
 
 export async function getStaticPaths() {
@@ -11,14 +11,17 @@ export async function getStaticPaths() {
 }
 
 const { slug } = Astro.params;
-const { sanityClient } = await import('sanity:client');
-const { AUTHOR_QUERY, CATEGORIES_QUERY, TAGS_QUERY } = await import('@lib/sanity');
 
 let author: any = null;
 let posts: any[] = [];
 
 try {
-  author = await sanityClient.fetch(AUTHOR_QUERY, { slug });
+  const query = `*[_type == "author" && slug.current == "${slug}"][0] {
+    _id, name, slug, jobTitle, bio, image { asset->{ _id, url }, alt }, email, sameAs, knowsAbout
+  }`;
+  const data = await fetchSanityApi(query);
+  author = data.result;
+  
   const allPosts = await getNormalizedPosts();
   posts = allPosts.filter(p => p.author?.slug === slug);
 } catch (e) {
@@ -30,7 +33,7 @@ if (!author) {
 }
 
 const canonicalUrl = `https://aymen.benyedder.top/author/${slug}/`;
-const authorImage = author.image?.asset ? urlFor(author.image.asset).width(200).height(200).url() : undefined;
+const authorImage = author.image?.asset?.url || undefined;
 ---
 
 <BaseLayout
