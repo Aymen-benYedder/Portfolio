@@ -12,15 +12,44 @@ import ContactFormIsland from '@components/islands/ContactFormIsland.tsx';
 import DeployMeta from '@components/ui/DeployMeta.astro';
 import FAQPageSchema from '@components/seo/FAQPageSchema.astro';
 import BreadcrumbSchema from '@components/seo/BreadcrumbSchema.astro';
-import { sanityClient } from 'sanity:client';
-import { SITE_SETTINGS_QUERY, EXPERIENCES_QUERY, PROJECTS_QUERY, SKILLS_QUERY, FAQS_QUERY, EDUCATION_QUERY } from '@lib/sanity';
+import { fetchSanityApi } from '@lib/sanity';
 
-const siteSettings = await sanityClient.fetch(SITE_SETTINGS_QUERY);
-const experiences = await sanityClient.fetch(EXPERIENCES_QUERY);
-const projects = await sanityClient.fetch(PROJECTS_QUERY);
-const skills = await sanityClient.fetch(SKILLS_QUERY);
-const faqs = await sanityClient.fetch(FAQS_QUERY);
-const education = await sanityClient.fetch(EDUCATION_QUERY);
+let siteSettings = null;
+let experiences = [];
+let projects = [];
+let skills = [];
+let faqs = [];
+let education = [];
+
+try {
+  const siteData = await fetchSanityApi('*[_type == "siteSettings"][0]');
+  siteSettings = siteData.result;
+} catch (e) { console.warn('No site settings'); }
+
+try {
+  const expData = await fetchSanityApi('*[_type == "experience"] | order(order asc)');
+  experiences = expData.result || [];
+} catch (e) { console.warn('No experiences'); }
+
+try {
+  const projData = await fetchSanityApi('*[_type == "project"] | order(order asc)');
+  projects = projData.result || [];
+} catch (e) { console.warn('No projects'); }
+
+try {
+  const skillData = await fetchSanityApi('*[_type == "skill"] | order(order asc)');
+  skills = skillData.result || [];
+} catch (e) { console.warn('No skills'); }
+
+try {
+  const faqData = await fetchSanityApi('*[_type == "faq"] | order(order asc)');
+  faqs = faqData.result || [];
+} catch (e) { console.warn('No faqs'); }
+
+try {
+  const eduData = await fetchSanityApi('*[_type == "education"] | order(order asc)');
+  education = eduData.result || [];
+} catch (e) { console.warn('No education'); }
 
 const statusItems = [
   { name: 'api.aymen.dev', status: 'healthy' as const, time: '47ms · now', live: true },
