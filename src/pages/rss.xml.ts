@@ -39,7 +39,7 @@ export async function GET() {
   let sanityPosts: any[] = [];
   try {
     const query = `*[_type == "post" && status == "published" && defined(slug.current) && defined(publishedAt)] | order(publishedAt desc) {
-      _id, title, slug, excerpt, publishedAt, updatedAt, tags[]->{title}, categories[]->{title}, body
+      _id, title, slug, description, publishedAt, categories[]->{title}
     }`;
     const data = await fetchSanityApi(query);
     sanityPosts = data.result || [];
@@ -53,30 +53,24 @@ export async function GET() {
     slug: p.slug,
     description: p.description,
     publishedAt: p.publishedAt,
-    updatedAt: p.updatedAt,
     categories: p.categories,
-    tags: p.tags,
-    body: p.body,
-    status: 'published',
   }));
 
   const posts = sanityPosts.length > 0 ? sanityPosts : staticFallback;
 
   const items = posts.map((post: any) => {
-    const slug = post.slug?.current || post.slug;
-    const bodyHtml = post.body ? serializePortableText(post.body) : '';
+    // Extract category titles from objects if needed
+    const categoryTitles = post.categories?.map((cat: any) => 
+      cat && cat.title ? cat.title : String(cat)
+    ).filter(Boolean) || [];
     
     return {
-      title: post.title,
-      link: `/blog/${slug}/`,
+      title: post.title || 'Untitled',
+      link: `/blog/${post.slug?.current || post.slug}/`,
       pubDate: new Date(post.publishedAt),
-      description: post.description || post.excerpt || '',
-      categories: post.categories || [],
+      description: post.description || '',
+      categories: categoryTitles,
       author: 'Aymen ben Yedder',
-      customData: `
-        <content:encoded><![CDATA[${bodyHtml}]]></content:encoded>
-        ${post.tags?.length ? post.tags.map((t: any) => `<category>${t.title || t}</category>`).join('') : ''}
-      `,
     };
   });
 
@@ -84,11 +78,6 @@ export async function GET() {
     title: 'AYMEN.DEV Technical Blog',
     description: 'Technical writing on DevOps, system resilience, observability, and full-stack engineering.',
     site: 'https://aymen.benyedder.top',
-    xmlns: { 
-      atom: 'http://www.w3.org/2005/Atom',
-      content: 'http://purl.org/rss/1.0/modules/content/',
-    },
-    customData: `<language>en-us</language><lastBuildDate>${new Date().toUTCString()}</lastBuildDate><atom:link href="https://aymen.benyedder.top/rss.xml" rel="self" type="application/rss+xml"/>`,
     items,
   });
 }
