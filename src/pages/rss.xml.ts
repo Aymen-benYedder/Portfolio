@@ -1,8 +1,6 @@
 import rss from '@astrojs/rss';
-import { sanityClient } from 'sanity:client';
-import { POSTS_QUERY } from '@lib/sanity';
+import { fetchSanityApi, urlFor } from '@lib/sanity';
 import { staticPosts } from '@data/posts';
-import { urlFor } from '@lib/sanity';
 
 export const prerender = true;
 
@@ -40,7 +38,11 @@ function serializePortableText(body: any): string {
 export async function GET() {
   let sanityPosts: any[] = [];
   try {
-    sanityPosts = await sanityClient.fetch(POSTS_QUERY);
+    const query = `*[_type == "post" && status == "published" && defined(slug.current) && defined(publishedAt)] | order(publishedAt desc) {
+      _id, title, slug, excerpt, publishedAt, updatedAt, tags[]->{title}, categories[]->{title}, body
+    }`;
+    const data = await fetchSanityApi(query);
+    sanityPosts = data.result || [];
   } catch (e) {
     console.warn('Failed to fetch Sanity posts for RSS:', e);
   }
@@ -56,28 +58,24 @@ export async function GET() {
     tags: p.tags,
     body: p.body,
     status: 'published',
-    author: null,
-    image: null,
   }));
 
   const posts = sanityPosts.length > 0 ? sanityPosts : staticFallback;
 
   const items = posts.map((post: any) => {
     const slug = post.slug?.current || post.slug;
-    const bodyHtml = post.body 
-      ? (post.isSanity ? serializePortableText(post.body) : post.body)
-      : '';
+    const bodyHtml = post.body ? serializePortableText(post.body) : '';
     
     return {
       title: post.title,
       link: `/blog/${slug}/`,
       pubDate: new Date(post.publishedAt),
-      description: post.description,
+      description: post.description || post.excerpt || '',
       categories: post.categories || [],
       author: 'Aymen ben Yedder',
       customData: `
         <content:encoded><![CDATA[${bodyHtml}]]></content:encoded>
-        ${post.tags?.length ? post.tags.map((t: string) => `<category>${t}</category>`).join('') : ''}
+        ${post.tags?.length ? post.tags.map((t: any) => `<category>${t.title || t}</category>`).join('') : ''}
       `,
     };
   });
