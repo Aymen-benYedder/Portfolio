@@ -11,6 +11,12 @@ const imageBuilder = createImageUrlBuilder({
 
 export const urlFor = (source: SanityImageSource) => imageBuilder.image(source).auto('format').fit('max');
 
+/**
+ * Fetch data from Sanity API directly (bypassing the sanity:client virtual module)
+ * This ensures compatibility with static site generation on Cloudflare Pages
+ * @param query - GROQ query string
+ * @returns Parsed JSON response from Sanity API
+ */
 export async function fetchSanityApi(query: string): Promise<any> {
   const token = import.meta.env.SANITY_API_READ_TOKEN;
   if (!token) {
