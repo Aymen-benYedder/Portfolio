@@ -1,7 +1,7 @@
 import { staticPosts, type StaticPost } from '@data/posts';
 import type { SanityDocument } from 'sanity';
 import { urlFor, fetchSanityApi } from './sanity';
-//+++---
+//+++---++
 export interface BlogPost {
   id: string;
   title: string;
