@@ -8,15 +8,66 @@ import Badge from '@components/ui/Badge.astro';
       AYMEN.DEV
     </a>
 
+    <!-- Desktop nav links -->
     <ul class="nav-links hidden md:flex gap-0 list-none m-0 p-0">
       <li><a href="/" class="font-[family-name:var(--font-mono)] text-[var(--text-2xs)] tracking-[0.1em] text-[var(--text-2)] px-[14px] h-[52px] flex items-center no-underline uppercase hover:text-[var(--accent)] hover:drop-shadow-[0_0_5px_rgba(16,185,129,0.3)] transition-all duration-200 hover-lift">Home</a></li>
-          <li><a href="/blog/" class="font-[family-name:var(--font-mono)] text-[var(--text-2xs)] tracking-[0.1em] text-[var(--text-2)] px-[14px] h-[52px] flex items-center no-underline uppercase hover:text-[var(--accent)] hover:drop-shadow-[0_0_5px_rgba(16,185,129,0.3)] transition-all duration-200 hover-lift">Blog</a></li>
-          <li><a href="/services/" class="font-[family-name:var(--font-mono)] text-[var(--text-2xs)] tracking-[0.1em] text-[var(--text-2)] px-[14px] h-[52px] flex items-center no-underline uppercase hover:text-[var(--accent)] hover:drop-shadow-[0_0_5px_rgba(16,185,129,0.3)] transition-all duration-200 hover-lift">Services</a></li>
+      <li><a href="/#experience" class="font-[family-name:var(--font-mono)] text-[var(--text-2xs)] tracking-[0.1em] text-[var(--text-2)] px-[14px] h-[52px] flex items-center no-underline uppercase hover:text-[var(--accent)] hover:drop-shadow-[0_0_5px_rgba(16,185,129,0.3)] transition-all duration-200 hover-lift">Experience</a></li>
+      <li><a href="/#education" class="font-[family-name:var(--font-mono)] text-[var(--text-2xs)] tracking-[0.1em] text-[var(--text-2)] px-[14px] h-[52px] flex items-center no-underline uppercase hover:text-[var(--accent)] hover:drop-shadow-[0_0_5px_rgba(16,185,129,0.3)] transition-all duration-200 hover-lift">Education</a></li>
+      <li><a href="/#projects" class="font-[family-name:var(--font-mono)] text-[var(--text-2xs)] tracking-[0.1em] text-[var(--text-2)] px-[14px] h-[52px] flex items-center no-underline uppercase hover:text-[var(--accent)] hover:drop-shadow-[0_0_5px_rgba(16,185,129,0.3)] transition-all duration-200 hover-lift">Projects</a></li>
+      <li><a href="/#skills" class="font-[family-name:var(--font-mono)] text-[var(--text-2xs)] tracking-[0.1em] text-[var(--text-2)] px-[14px] h-[52px] flex items-center no-underline uppercase hover:text-[var(--accent)] hover:drop-shadow-[0_0_5px_rgba(16,185,129,0.3)] transition-all duration-200 hover-lift">Skills</a></li>
+      <li><a href="/blog/" class="font-[family-name:var(--font-mono)] text-[var(--text-2xs)] tracking-[0.1em] text-[var(--text-2)] px-[14px] h-[52px] flex items-center no-underline uppercase hover:text-[var(--accent)] hover:drop-shadow-[0_0_5px_rgba(16,185,129,0.3)] transition-all duration-200 hover-lift">Blog</a></li>
+      <li><a href="/#contact" class="font-[family-name:var(--font-mono)] text-[var(--text-2xs)] tracking-[0.1em] text-[var(--text-2)] px-[14px] h-[52px] flex items-center no-underline uppercase hover:text-[var(--accent)] hover:drop-shadow-[0_0_5px_rgba(16,185,129,0.3)] transition-all duration-200 hover-lift">Contact</a></li>
     </ul>
 
-    <div class="nav-status flex items-center gap-[8px] max-md:hidden">
-      <span class="w-[6px] h-[6px] bg-[var(--accent)]" style="box-shadow: 0 0 8px var(--accent);"></span>
-      <Badge variant="green" live={false}>AVAILABLE</Badge>
+    <div class="flex items-center gap-[8px]">
+      <div class="nav-status hidden md:flex items-center gap-[8px]">
+        <span class="w-[6px] h-[6px] bg-[var(--accent)]" style="box-shadow: 0 0 8px var(--accent);"></span>
+        <Badge variant="green" live={false}>AVAILABLE</Badge>
+      </div>
+
+      <!-- Mobile hamburger -->
+      <button class="nav-toggle md:hidden min-h-[44px] min-w-[44px] flex items-center justify-center text-[var(--text-2)] hover:text-[var(--accent)] transition-colors duration-200" aria-label="Toggle menu" aria-expanded="false" aria-controls="mobile-menu">
+        <svg width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
+          <path d="M3 12h18M3 6h18M3 18h18" id="menu-icon-open" />
+          <path d="M6 18L18 6M6 6l12 12" id="menu-icon-close" style="display:none" />
+        </svg>
+      </button>
     </div>
   </nav>
+
+  <!-- Mobile dropdown menu -->
+  <div id="mobile-menu" class="mobile-menu-dropdown hidden md:hidden">
+    <ul class="mobile-nav-links list-none m-0 p-0">
+      <li><a href="/" class="font-[family-name:var(--font-mono)] text-[var(--text-2xs)] tracking-[0.1em] text-[var(--text-2)] px-[var(--section-px)] h-[44px] flex items-center no-underline uppercase hover:text-[var(--accent)] transition-colors duration-200">Home</a></li>
+      <li><a href="/#experience" class="font-[family-name:var(--font-mono)] text-[var(--text-2xs)] tracking-[0.1em] text-[var(--text-2)] px-[var(--section-px)] h-[44px] flex items-center no-underline uppercase hover:text-[var(--accent)] transition-colors duration-200">Experience</a></li>
+      <li><a href="/#education" class="font-[family-name:var(--font-mono)] text-[var(--text-2xs)] tracking-[0.1em] text-[var(--text-2)] px-[var(--section-px)] h-[44px] flex items-center no-underline uppercase hover:text-[var(--accent)] transition-colors duration-200">Education</a></li>
+      <li><a href="/#projects" class="font-[family-name:var(--font-mono)] text-[var(--text-2xs)] tracking-[0.1em] text-[var(--text-2)] px-[var(--section-px)] h-[44px] flex items-center no-underline uppercase hover:text-[var(--accent)] transition-colors duration-200">Projects</a></li>
+      <li><a href="/#skills" class="font-[family-name:var(--font-mono)] text-[var(--text-2xs)] tracking-[0.1em] text-[var(--text-2)] px-[var(--section-px)] h-[44px] flex items-center no-underline uppercase hover:text-[var(--accent)] transition-colors duration-200">Skills</a></li>
+      <li><a href="/blog/" class="font-[family-name:var(--font-mono)] text-[var(--text-2xs)] tracking-[0.1em] text-[var(--text-2)] px-[var(--section-px)] h-[44px] flex items-center no-underline uppercase hover:text-[var(--accent)] transition-colors duration-200">Blog</a></li>
+      <li><a href="/#contact" class="font-[family-name:var(--font-mono)] text-[var(--text-2xs)] tracking-[0.1em] text-[var(--text-2)] px-[var(--section-px)] h-[44px] flex items-center no-underline uppercase hover:text-[var(--accent)] transition-colors duration-200">Contact</a></li>
+    </ul>
+  </div>
 </header>
+
+<style>
+  .mobile-menu-dropdown {
+    position: absolute;
+    top: 52px;
+    left: 0;
+    right: 0;
+    background: rgba(5,5,5,0.98);
+    backdrop-filter: blur(20px);
+    -webkit-backdrop-filter: blur(20px);
+    border-bottom: 1px solid rgba(16,185,129,0.15);
+    padding: var(--spacing-gap-md) 0;
+  }
+  .mobile-menu-dropdown a {
+    border-left: 2px solid transparent;
+    transition: border-color 200ms, color 200ms;
+  }
+  .mobile-menu-dropdown a:hover,
+  .mobile-menu-dropdown a:focus {
+    border-left-color: var(--accent);
+    color: var(--accent);
+  }
+</style>

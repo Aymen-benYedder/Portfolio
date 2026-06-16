@@ -27,10 +27,23 @@ const { title, description, canonical, image, ogType, noIndex } = Astro.props;
     <meta name="viewport" content="width=device-width, initial-scale=1.0" />
     <meta name="msvalidate.01" content="61B543554A1E46310B22E3208A7075DD" />
     <BaseSeo {title} {description} {canonical} {image} {ogType} {noIndex} />
-    <HeadSchema />
+    <HeadSchema pageUrl={canonical} pageName={title} pageDescription={description} />
     <Gtag />
     <link rel="icon" href="/favicon.ico" type="image/x-icon" />
     <link rel="shortcut icon" href="/favicon.ico" type="image/x-icon" />
+    <!-- Preconnect hints for critical third-party origins -->
+    <link rel="preconnect" href="https://fonts.googleapis.com" crossorigin />
+    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin />
+    <link rel="preconnect" href="https://kv8mx0wv.api.sanity.io" crossorigin />
+    <link rel="dns-prefetch" href="https://fonts.googleapis.com" />
+    <link rel="dns-prefetch" href="https://fonts.gstatic.com" />
+    <link rel="dns-prefetch" href="https://kv8mx0wv.api.sanity.io" />
+    <!-- Google Fonts: non-blocking load pattern -->
+    <link rel="preload" as="style" href="https://fonts.googleapis.com/css2?family=Hanken+Grotesque:wght@400;600;700;800&family=JetBrains+Mono:wght@400;500;700&display=swap" />
+    <link rel="stylesheet" href="https://fonts.googleapis.com/css2?family=Hanken+Grotesque:wght@400;600;700;800&family=JetBrains+Mono:wght@400;500;700&display=swap" media="print" onload="this.media='all'" />
+    <noscript>
+      <link rel="stylesheet" href="https://fonts.googleapis.com/css2?family=Hanken+Grotesque:wght@400;600;700;800&family=JetBrains+Mono:wght@400;500;700&display=swap" />
+    </noscript>
     <slot name="head" />
   </head>
   <body class="bg-[var(--void)] text-[var(--text-2)]">

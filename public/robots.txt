@@ -1,4 +1,40 @@
+# ─── SEO / GEO / AEO robots.txt — Tiered AI Crawler Architecture ───
+# Blocked: training crawlers (GPTBot, ClaudeBot) + aggressive scrapers
+# Allowed: search/answer crawlers (OAI-SearchBot, Google-Extended, etc.)
+
+# ── Allow search/AI-answer crawlers ──
+User-agent: OAI-SearchBot
+Allow: /
+User-agent: Google-Extended
+Allow: /
+User-agent: Applebot-Extended
+Allow: /
+User-agent: PerplexityBot
+Allow: /
+
+# ── Block training crawlers ──
+User-agent: GPTBot
+Disallow: /
+User-agent: ClaudeBot
+Disallow: /
+User-agent: meta-externalagent
+Disallow: /
+User-agent: anthropic-ai
+Disallow: /
+
+# ── Block aggressive data scrapers ──
+User-agent: Bytespider
+Disallow: /
+User-agent: CCBot
+Disallow: /
+User-agent: Amazonbot
+Disallow: /
+
+# ── Default: allow everything else ──
 User-agent: *
 Allow: /
+Disallow: /admin/
+Disallow: /sample-post/
+Disallow: /template/
 
 Sitemap: https://aymen.benyedder.top/sitemap-index.xml

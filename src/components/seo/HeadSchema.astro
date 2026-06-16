@@ -1,6 +1,14 @@
 ---
 import { generateHeadGraph, type PersonData, type SiteData } from '@lib/schema';
 
+export interface Props {
+  pageUrl?: string;
+  pageName?: string;
+  pageDescription?: string;
+}
+
+const { pageUrl, pageName, pageDescription } = Astro.props;
+
 const person: PersonData = {
   name: 'Aymen ben Yedder',
   jobTitle: 'DevOps & Cloud Infrastructure Engineer',
@@ -18,7 +26,7 @@ const site: SiteData = {
   description: 'Portfolio of Aymen ben Yedder, DevOps Engineer specializing in Kubernetes, Terraform, GitOps, and cloud-native infrastructure.',
 };
 
-const graph = generateHeadGraph(person, site);
+const graph = generateHeadGraph(person, site, { url: pageUrl, name: pageName, description: pageDescription });
 ---
 
 <script type="application/ld+json" set:html={JSON.stringify(graph)} />

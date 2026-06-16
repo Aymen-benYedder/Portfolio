@@ -263,13 +263,53 @@ export function generateAuthor(data: { name: string; url: string; jobTitle?: str
   };
 }
 
-export function generateHeadGraph(person: PersonData, site: SiteData) {
+export function generateTechArticle(data: {
+  headline: string;
+  description: string;
+  url: string;
+  image?: string;
+  datePublished: string;
+  dateModified: string;
+  authorName: string;
+  authorUrl?: string;
+  publisherId: string;
+  keywords?: string[];
+  proficiencyLevel?: 'Beginner' | 'Intermediate' | 'Advanced';
+  dependencies?: string[];
+}) {
+  return {
+    '@type': 'TechArticle',
+    '@id': `${data.url}/#techarticle`,
+    headline: data.headline,
+    description: data.description,
+    ...(data.image && { image: data.image }),
+    author: data.authorUrl
+      ? { '@type': 'Person', '@id': data.authorUrl, name: data.authorName }
+      : { '@type': 'Person', name: data.authorName },
+    publisher: { '@id': data.publisherId },
+    mainEntityOfPage: { '@id': data.url },
+    datePublished: data.datePublished,
+    dateModified: data.dateModified,
+    ...(data.keywords && { keywords: data.keywords.join(', ') }),
+    ...(data.proficiencyLevel && { proficiencyLevel: data.proficiencyLevel }),
+    ...(data.dependencies && { dependencies: data.dependencies }),
+  };
+}
+
+export function generateHeadGraph(
+  person: PersonData,
+  site: SiteData,
+  page?: { url?: string; name?: string; description?: string }
+) {
   const personObj = generatePerson(person);
   const personId = personObj['@id'];
   const siteObj = generateWebSite(site, personId);
   const siteId = siteObj['@id'];
-  const page = generateWebPage(
-    { url: site.url, name: site.name, description: site.description, dateModified: new Date().toISOString().split('T')[0] },
+  const pageUrl = page?.url || site.url;
+  const pageName = page?.name || site.name;
+  const pageDescription = page?.description || site.description;
+  const pageObj = generateWebPage(
+    { url: pageUrl, name: pageName, description: pageDescription, dateModified: new Date().toISOString().split('T')[0] },
     siteId,
     personId
   );
@@ -298,6 +338,6 @@ export function generateHeadGraph(person: PersonData, site: SiteData) {
 
   return {
     '@context': 'https://schema.org',
-    '@graph': [personObj, siteObj, page, org, lb, service, app],
+    '@graph': [personObj, siteObj, pageObj, org, lb, service, app],
   };
 }

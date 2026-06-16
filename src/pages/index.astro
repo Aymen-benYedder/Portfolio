@@ -8,7 +8,6 @@ import WorkCard from '@components/sections/WorkCard.astro';
 import ProjectCard from '@components/sections/ProjectCard.astro';
 import SkillCategory from '@components/sections/SkillCategory.astro';
 import FAQAccordion from '@components/islands/FAQAccordion.tsx';
-import ContactFormIsland from '@components/islands/ContactFormIsland.tsx';
 import DeployMeta from '@components/ui/DeployMeta.astro';
 import FAQPageSchema from '@components/seo/FAQPageSchema.astro';
 import BreadcrumbSchema from '@components/seo/BreadcrumbSchema.astro';
@@ -106,32 +105,60 @@ const statusItems = [
     </div>
     <BentoGrid columns="3">
       <article class="card glass-hover hover-lift px-[var(--card-px)] py-[var(--card-py)]">
+        <div class="service-icon mb-[var(--spacing-gap-sm)] text-[var(--accent)]" aria-hidden="true">
+          <svg width="36" height="36" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.5" stroke-linecap="round" stroke-linejoin="round">
+            <path d="M3 12a9 9 0 0 1 9-9 9.75 9.75 0 0 1 6.74 2.74L21 8" />
+            <path d="M21 3v5h-5" />
+            <path d="M21 12a9 9 0 0 1-9 9 9.75 9.75 0 0 1-6.74-2.74L3 16" />
+            <path d="M3 21v-5h5" />
+          </svg>
+        </div>
         <h3 class="font-[family-name:var(--font-mono)] text-[14px] max-md:text-[var(--text-small)] font-bold text-[var(--text-1)]">WordPress Development</h3>
         <p class="text-[var(--text-small)] text-[var(--text-2)] mt-[var(--spacing-gap-sm)]">Professional WordPress development including custom themes, plugins, WooCommerce, and performance optimization.</p>
         <ul class="list-none p-0 mt-[var(--spacing-gap-sm)] space-y-[4px]">
           <li class="text-[var(--text-xs)] text-[var(--text-3)] font-[family-name:var(--font-mono)]">→ Custom Theme Development</li>
           <li class="text-[var(--text-xs)] text-[var(--text-3)] font-[family-name:var(--font-mono)]">→ Plugin Development</li>
           <li class="text-[var(--text-xs)] text-[var(--text-3)] font-[family-name:var(--font-mono)]">→ WooCommerce Integration</li>
+          <li class="text-[var(--text-xs)] text-[var(--text-3)] font-[family-name:var(--font-mono)]">→ Performance Optimization</li>
         </ul>
         <a href="/services/wordpress-development" class="font-[family-name:var(--font-mono)] text-[var(--text-2xs)] text-[var(--accent)] mt-[var(--spacing-gap-sm)] inline-block no-underline hover:underline">Learn More →</a>
       </article>
       <article class="card glass-hover hover-lift px-[var(--card-px)] py-[var(--card-py)]">
+        <div class="service-icon mb-[var(--spacing-gap-sm)] text-[var(--accent)]" aria-hidden="true">
+          <svg width="36" height="36" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.5" stroke-linecap="round" stroke-linejoin="round">
+            <circle cx="12" cy="12" r="1" />
+            <circle cx="19" cy="12" r="1" />
+            <circle cx="5" cy="12" r="1" />
+            <path d="M12 5v14" />
+            <path d="M5 5l14 14" />
+            <path d="M5 19l14-14" />
+          </svg>
+        </div>
         <h3 class="font-[family-name:var(--font-mono)] text-[14px] max-md:text-[var(--text-small)] font-bold text-[var(--text-1)]">MERN Stack Development</h3>
         <p class="text-[var(--text-small)] text-[var(--text-2)] mt-[var(--spacing-gap-sm)]">Scalable, high-performance web applications with React, Node.js, MongoDB, and Express.js.</p>
         <ul class="list-none p-0 mt-[var(--spacing-gap-sm)] space-y-[4px]">
           <li class="text-[var(--text-xs)] text-[var(--text-3)] font-[family-name:var(--font-mono)]">→ Full-Stack JavaScript</li>
           <li class="text-[var(--text-xs)] text-[var(--text-3)] font-[family-name:var(--font-mono)]">→ React Development</li>
           <li class="text-[var(--text-xs)] text-[var(--text-3)] font-[family-name:var(--font-mono)]">→ Node.js & Express</li>
+          <li class="text-[var(--text-xs)] text-[var(--text-3)] font-[family-name:var(--font-mono)]">→ MongoDB Integration</li>
         </ul>
         <a href="/services/mern-development" class="font-[family-name:var(--font-mono)] text-[var(--text-2xs)] text-[var(--accent)] mt-[var(--spacing-gap-sm)] inline-block no-underline hover:underline">Learn More →</a>
       </article>
       <article class="card glass-hover hover-lift px-[var(--card-px)] py-[var(--card-py)]">
+        <div class="service-icon mb-[var(--spacing-gap-sm)] text-[var(--accent)]" aria-hidden="true">
+          <svg width="36" height="36" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.5" stroke-linecap="round" stroke-linejoin="round">
+            <rect x="2" y="7" width="20" height="14" rx="2" ry="2" />
+            <path d="M16 21V5a2 2 0 0 0-2-2h-4a2 2 0 0 0-2 2v16" />
+            <line x1="2" y1="11" x2="22" y2="11" />
+          </svg>
+        </div>
         <h3 class="font-[family-name:var(--font-mono)] text-[14px] max-md:text-[var(--text-small)] font-bold text-[var(--text-1)]">Production Server Setup & CI/CD</h3>
         <p class="text-[var(--text-small)] text-[var(--text-2)] mt-[var(--spacing-gap-sm)]">Secure VPS configuration, NGINX, PM2, SSL certificates, and automated GitHub Actions deployment pipelines.</p>
         <ul class="list-none p-0 mt-[var(--spacing-gap-sm)] space-y-[4px]">
           <li class="text-[var(--text-xs)] text-[var(--text-3)] font-[family-name:var(--font-mono)]">→ Secure VPS Configuration</li>
           <li class="text-[var(--text-xs)] text-[var(--text-3)] font-[family-name:var(--font-mono)]">→ NGINX & PM2 Setup</li>
           <li class="text-[var(--text-xs)] text-[var(--text-3)] font-[family-name:var(--font-mono)]">→ GitHub Actions Automation</li>
+          <li class="text-[var(--text-xs)] text-[var(--text-3)] font-[family-name:var(--font-mono)]">→ SSL/TLS Certificates</li>
         </ul>
         <a href="/#contact" class="font-[family-name:var(--font-mono)] text-[var(--text-2xs)] text-[var(--accent)] mt-[var(--spacing-gap-sm)] inline-block no-underline hover:underline">Get Started →</a>
       </article>
@@ -320,15 +347,24 @@ const statusItems = [
     </div>
     <div class="grid grid-cols-3 gap-[1px] max-md:grid-cols-1">
       <div class="card px-[var(--card-px)] py-[var(--card-py)] flex items-center justify-between max-md:flex-row">
-        <span class="text-[var(--text-1)] font-[family-name:var(--font-mono)] text-[14px] max-md:text-[var(--text-small)]">Arabic</span>
+        <span class="flex items-center gap-[10px]">
+          <img src="/assets/flags/sa.svg" alt="Arabic language flag" width="24" height="18" class="language-flag" loading="lazy" />
+          <span class="text-[var(--text-1)] font-[family-name:var(--font-mono)] text-[14px] max-md:text-[var(--text-small)]">Arabic</span>
+        </span>
         <span class="text-[var(--text-3)] font-[family-name:var(--font-mono)] text-[var(--text-2xs)]">Native</span>
       </div>
       <div class="card px-[var(--card-px)] py-[var(--card-py)] flex items-center justify-between max-md:flex-row">
-        <span class="text-[var(--text-1)] font-[family-name:var(--font-mono)] text-[14px] max-md:text-[var(--text-small)]">English</span>
+        <span class="flex items-center gap-[10px]">
+          <img src="/assets/flags/gb.svg" alt="English language flag" width="24" height="18" class="language-flag" loading="lazy" />
+          <span class="text-[var(--text-1)] font-[family-name:var(--font-mono)] text-[14px] max-md:text-[var(--text-small)]">English</span>
+        </span>
         <span class="text-[var(--text-3)] font-[family-name:var(--font-mono)] text-[var(--text-2xs)]">Advanced</span>
       </div>
       <div class="card px-[var(--card-px)] py-[var(--card-py)] flex items-center justify-between max-md:flex-row">
-        <span class="text-[var(--text-1)] font-[family-name:var(--font-mono)] text-[14px] max-md:text-[var(--text-small)]">French</span>
+        <span class="flex items-center gap-[10px]">
+          <img src="/assets/flags/fr.svg" alt="French language flag" width="24" height="18" class="language-flag" loading="lazy" />
+          <span class="text-[var(--text-1)] font-[family-name:var(--font-mono)] text-[14px] max-md:text-[var(--text-small)]">French</span>
+        </span>
         <span class="text-[var(--text-3)] font-[family-name:var(--font-mono)] text-[var(--text-2xs)]">Fluent</span>
       </div>
     </div>
@@ -355,7 +391,52 @@ const statusItems = [
       <h2 class="font-[family-name:var(--font-mono)] text-[var(--heading-sm)] font-bold text-[var(--text-1)] mt-[var(--spacing-gap-xs)]">Let's build something stable</h2>
     </div>
     <div class="grid grid-cols-1 md:grid-cols-2 gap-[var(--spacing-gap-lg)]">
-      <ContactFormIsland client:only />
+      <form id="contact-form" class="card glass-hover px-[var(--card-px)] py-[var(--card-py)]" action="https://api.web3forms.com/submit" method="POST">
+        <input type="hidden" name="access_key" value="0888c0d1-a716-4c5d-a271-733bfb3be2bc" />
+        <input type="hidden" name="subject" value="New Contact Form Submission from Portfolio" />
+        <input type="hidden" name="from_name" value="Portfolio Contact Form" />
+
+        <div class="flex flex-col gap-[var(--spacing-gap-md)]">
+          <div class="form-group">
+            <label for="name" class="label-caps text-[var(--text-3)] mb-[6px] block">Full Name</label>
+            <input type="text" id="name" name="name" placeholder="Your Name" required
+              class="font-[family-name:var(--font-mono)] text-[var(--text-xs)] text-[var(--text-1)] bg-[var(--inset)] border border-[var(--border)] px-[14px] py-[12px] min-h-[44px] outline-none w-full transition-all duration-200 placeholder:text-[var(--text-3)] focus:border-[var(--accent)] focus:shadow-[0_0_8px_rgba(16,185,129,0.15)]" />
+          </div>
+
+          <div class="form-group">
+            <label for="email" class="label-caps text-[var(--text-3)] mb-[6px] block">Email Address</label>
+            <input type="email" id="email" name="email" placeholder="you@example.com" required
+              class="font-[family-name:var(--font-mono)] text-[var(--text-xs)] text-[var(--text-1)] bg-[var(--inset)] border border-[var(--border)] px-[14px] py-[12px] min-h-[44px] outline-none w-full transition-all duration-200 placeholder:text-[var(--text-3)] focus:border-[var(--accent)] focus:shadow-[0_0_8px_rgba(16,185,129,0.15)]" />
+          </div>
+
+          <div class="form-group">
+            <label for="project_type" class="label-caps text-[var(--text-3)] mb-[6px] block">Project Type</label>
+            <div class="relative">
+              <select id="project_type" name="project_type" required
+                class="font-[family-name:var(--font-mono)] text-[var(--text-xs)] text-[var(--text-1)] bg-[var(--inset)] border border-[var(--border)] px-[14px] py-[12px] min-h-[44px] outline-none w-full transition-all duration-200 focus:border-[var(--accent)] focus:shadow-[0_0_8px_rgba(16,185,129,0.15)] appearance-none pr-[36px]">
+                <option value="">Select Project Type</option>
+                <option value="mern">MERN Stack</option>
+                <option value="wordpress">WordPress</option>
+                <option value="custom">Custom Development</option>
+                <option value="optimization">Optimization &amp; Maintenance</option>
+                <option value="other">Other</option>
+              </select>
+              <svg class="absolute right-[12px] top-1/2 -translate-y-1/2 pointer-events-none text-[var(--text-3)]" width="12" height="12" viewBox="0 0 12 12" fill="currentColor"><path d="M2 4l4 4 4-4" stroke="currentColor" stroke-width="1.5" fill="none"/></svg>
+            </div>
+          </div>
+
+          <div class="form-group">
+            <label for="message" class="label-caps text-[var(--text-3)] mb-[6px] block">Message</label>
+            <textarea id="message" name="message" placeholder="Tell me about your project..." required rows="4"
+              class="font-[family-name:var(--font-mono)] text-[var(--text-xs)] text-[var(--text-1)] bg-[var(--inset)] border border-[var(--border)] px-[14px] py-[12px] min-h-[44px] outline-none w-full transition-all duration-200 placeholder:text-[var(--text-3)] focus:border-[var(--accent)] focus:shadow-[0_0_8px_rgba(16,185,129,0.15)]"></textarea>
+          </div>
+
+          <button type="submit"
+            class="w-full font-[family-name:var(--font-mono)] text-[var(--text-2xs)] font-bold tracking-[0.1em] px-[20px] py-[12px] min-h-[44px] uppercase border cursor-pointer transition-all duration-200 bg-[var(--accent)] border-[var(--accent)] text-[var(--void)] hover:bg-transparent hover:text-[var(--accent)] hover:shadow-[0_0_15px_rgba(16,185,129,0.3)]">
+            [ SEND MESSAGE ]
+          </button>
+        </div>
+      </form>
       <div class="card px-[var(--card-px)] py-[var(--card-py)]">
         <div class="flex flex-col gap-[var(--spacing-gap-md)]">
           <p class="text-[var(--text-small)] text-[var(--text-2)] leading-relaxed">Prefer instant messaging? Reach out directly on WhatsApp or give me a call.</p>
@@ -380,7 +461,12 @@ const statusItems = [
 <style>
 .tag-like { transition: border-color 80ms, color 80ms, background 80ms; cursor: default; }
 .tag-like:hover { border-color: var(--accent); color: var(--accent); background: rgba(16,185,129,0.08); }
+.service-icon { opacity: 0.8; transition: opacity 200ms, transform 200ms; }
+article.card:hover .service-icon { opacity: 1; transform: scale(1.05); }
+.language-flag { border-radius: 3px; border: 1px solid var(--border); flex-shrink: 0; opacity: 0.9; transition: opacity 200ms, transform 200ms; object-fit: cover; }
+article.card:hover .language-flag { opacity: 1; transform: scale(1.15); }
 @media (prefers-reduced-motion: reduce) {
-  .tag-like { transition: none !important; }
+  .tag-like, .service-icon, .language-flag { transition: none !important; }
+  article.card:hover .service-icon, article.card:hover .language-flag { transform: none; }
 }
 </style>

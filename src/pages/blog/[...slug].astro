@@ -1,6 +1,7 @@
 ---
 import BlogLayout from '@layouts/BlogLayout.astro';
 import ArticleSchema from '@components/seo/ArticleSchema.astro';
+import TechArticleSchema from '@components/seo/TechArticleSchema.astro';
 import BreadcrumbSchema from '@components/seo/BreadcrumbSchema.astro';
 import FAQPageSchema from '@components/seo/FAQPageSchema.astro';
 import DeployMeta from '@components/ui/DeployMeta.astro';
@@ -112,6 +113,17 @@ const canonicalUrl = getCanonicalUrl(slug as string, post.canonicalUrl);
     authorUrl={post.author?.slug ? `https://aymen.benyedder.top/author/${post.author.slug}/` : undefined}
     section={post.categories[0]}
     wordCount={post.body ? (typeof post.body === 'string' ? post.body.replace(/<[^>]*>/g, '').split(/\s+/).length : 0) : 0}
+  />
+  <TechArticleSchema
+    headline={post.title}
+    description={post.seoDescription || post.description || ''}
+    url={canonicalUrl}
+    image={post.image?.url}
+    datePublished={post.publishedAt}
+    dateModified={post.updatedAt || post.publishedAt}
+    keywords={post.tags}
+    authorName={post.author?.name}
+    authorUrl={post.author?.slug ? `https://aymen.benyedder.top/author/${post.author.slug}/` : undefined}
   />
   {post.faq && post.faq.length > 0 && <FAQPageSchema items={post.faq} url={canonicalUrl} />}
 
