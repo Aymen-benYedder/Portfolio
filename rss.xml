@@ -5,8 +5,16 @@
     <link>https://aymen.benyedder.top/blog/</link>
     <description>Technical writing on DevOps, system resilience, observability, and full-stack engineering.</description>
     <language>en-us</language>
-    <lastBuildDate>Thu, 05 Jun 2026 00:00:00 GMT</lastBuildDate>
+    <lastBuildDate>Tue, 16 Jun 2026 00:00:00 GMT</lastBuildDate>
     <atom:link href="https://aymen.benyedder.top/rss.xml" rel="self" type="application/rss+xml" />
+
+    <item>
+      <title>C16 Francophone Mobility: How Canadian Employers Hire Foreign Workers Without an LMIA</title>
+      <link>https://aymen.benyedder.top/blog/c16-francophone-mobility-lmia-exemption-canada.html</link>
+      <guid isPermaLink="true">https://aymen.benyedder.top/blog/c16-francophone-mobility-lmia-exemption-canada.html</guid>
+      <pubDate>Tue, 16 Jun 2026 00:00:00 GMT</pubDate>
+      <description>Complete guide to Canada's C16 Francophone Mobility work permit. No LMIA, NCLC 5 French, any TEER category, 4-12 week processing. Includes 2026 CRS draw data, refusal traps, and PR pathway.</description>
+    </item>
 
     <item>
       <title>GitOps in 2026: Why ArgoCD and FluxCD Are No Longer Just "Deployment Tools"</title>

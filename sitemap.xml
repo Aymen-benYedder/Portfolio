@@ -2,13 +2,19 @@
 <urlset xmlns="http://www.sitemaps.org/schemas/sitemap/0.9">
   <url>
     <loc>https://aymen.benyedder.top/</loc>
-    <lastmod>2026-06-09T12:45:57.558Z</lastmod>
+    <lastmod>2026-06-16T12:00:00.000Z</lastmod>
     <changefreq>daily</changefreq>
     <priority>1.0</priority>
   </url>
   <url>
     <loc>https://aymen.benyedder.top/blog/</loc>
-    <lastmod>2026-06-09T12:45:57.556Z</lastmod>
+    <lastmod>2026-06-16T12:00:00.000Z</lastmod>
+    <changefreq>weekly</changefreq>
+    <priority>0.8</priority>
+  </url>
+  <url>
+    <loc>https://aymen.benyedder.top/blog/c16-francophone-mobility-lmia-exemption-canada.html</loc>
+    <lastmod>2026-06-16T12:00:00.000Z</lastmod>
     <changefreq>weekly</changefreq>
     <priority>0.8</priority>
   </url>
