@@ -1027,11 +1027,13 @@
   font-size: var(--text-xl);
   padding: var(--space-sm);
   transition: color var(--transition-base);
+  -webkit-tap-highlight-color: transparent;
 }
 
 @media (max-width: 767px) {
   .nav-toggle {
     display: block;
+    touch-action: manipulation;
   }
 }
 

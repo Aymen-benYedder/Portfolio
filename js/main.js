@@ -30,20 +30,10 @@
         const target = document.querySelector(href);
         if (target) {
           e.preventDefault();
-          
-          // For contact section, scroll to show it at the bottom of viewport
-          if (href === '#contact') {
-            const targetPosition = target.offsetTop + target.offsetHeight - window.innerHeight;
-            window.scrollTo({
-              top: targetPosition,
-              behavior: 'smooth'
-            });
-          } else {
-            target.scrollIntoView({
-              behavior: 'smooth',
-              block: 'start'
-            });
-          }
+          target.scrollIntoView({
+            behavior: 'smooth',
+            block: 'start'
+          });
         }
       });
     });
