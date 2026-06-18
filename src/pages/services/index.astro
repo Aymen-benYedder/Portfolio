@@ -28,7 +28,7 @@ const services = [
           <ul class="list-none p-0 mt-[var(--spacing-gap-sm)] space-y-[4px]">
             {s.features.map((f) => <li class="text-[var(--text-xs)] text-[var(--text-3)] font-[family-name:var(--font-mono)]">→ {f}</li>)}
           </ul>
-          <a href={s.link} class="font-[family-name:var(--font-mono)] text-[var(--text-2xs)] text-[var(--accent)] mt-[var(--spacing-gap-sm)] inline-block no-underline hover:underline">Learn More →</a>
+          <a href={s.link} class="font-[family-name:var(--font-mono)] text-[var(--text-2xs)] text-[var(--accent)] mt-[var(--spacing-gap-sm)] inline-block underline" aria-label={`Learn more about ${s.title}`}>Learn More →</a>
         </div>
       ))}
     </BentoGrid>

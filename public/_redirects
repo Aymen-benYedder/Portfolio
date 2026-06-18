@@ -1,0 +1,3 @@
+# ─── SEO redirects ───
+# Convention: /sitemap.xml should resolve to the sitemap index
+/sitemap.xml  /sitemap-index.xml  301
