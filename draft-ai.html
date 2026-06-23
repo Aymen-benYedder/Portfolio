@@ -1,0 +1,173 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+</head>
+<body>
+  <!-- FRONTMATTER -->
+  <div id="frontmatter">
+    <div class="meta-title">Deploying and Scaling LLMs in Production: A DevOps Guide to Self-Hosted AI Inference</div>
+    <div class="meta-slug">deploying-scaling-llms-production-devops-guide-self-hosted-ai-inference</div>
+    <div class="meta-description">A DevOps engineer's practical guide to deploying, scaling, and monitoring self-hosted LLMs in production—covering vLLM, Kubernetes, GPU architecture, break-even costs, and observability.</div>
+    <div class="meta-categories">AI</div>
+    <div class="meta-tags">LLM Inference, Self-Hosted AI, vLLM, GPU Deployment, AI DevOps, Kubernetes, PagedAttention, AI Observability</div>
+    <div class="meta-reading-time">12</div>
+    <div class="meta-published-date">2026-06-20</div>
+    <div class="meta-direct-answer">
+      <p>Deploying LLMs in production requires selecting an inference engine (vLLM for high-throughput serving, Ollama for development, SGLang for GPU clusters), provisioning adequate GPU VRAM (roughly 2 GB per billion parameters at FP16, or 0.5 GB with INT4 quantization), and orchestrating with Kubernetes using the vLLM Production Stack Helm chart. Scaling is achieved through continuous batching with PagedAttention, tensor/pipeline parallelism across multiple GPUs, disaggregated prefill/decode pools to prevent throughput collapse, and speculative decoding (EAGLE, MTP, PARD) to reduce inter-token latency by 2–4×. For DevOps teams, the operational stack must include Prometheus/Grafana monitoring of TTFT, TPOT, KV cache usage, and queue depth; JWT-authenticated API gateways with token-aware rate limiting; and GitOps-driven CI/CD for model updates—all while maintaining the 20–30% GPU memory headroom required for production stability.</p>
+    </div>
+    <div class="meta-key-takeaways">
+      <div class="takeaway">
+        <strong>vLLM is the production standard in 2026</strong> — its PagedAttention delivers 19× higher throughput than Ollama at scale (793 vs 41 TPS) and sub-100ms P99 latency under 128 concurrent users. Use Ollama only for development and single-user scenarios.
+      </div>
+      <div class="takeaway">
+        <strong>Self-hosting breaks even at ~100M tokens/month or $20K API spend</strong> — below that, APIs (DeepSeek V4 at $0.30/M tokens, Groq Llama 4 Scout at $0.11/M) are cheaper. Above it, self-hosting saves 40–60%, but only after accounting for 20–40 hours of engineering setup and actual GPU utilization averaging 20–40%.
+      </div>
+      <div class="takeaway">
+        <strong>Disaggregated prefill/decode is the single most important architectural decision</strong> — colocating both phases on the same GPU causes throughput collapse at high concurrency. Separating them into dedicated GPU pools with 40 Gbps+ interconnect prevents p50 latency from exceeding 200ms.
+      </div>
+      <div class="takeaway">
+        <strong>Monitor KV cache pressure, not just GPU utilization</strong> — the KV cache is the hidden memory consumer that grows with context length and batch size. A 70B model with 32K context × 8 concurrent requests adds 40+ GB of KV cache. Set alerts at 85% cache usage, not 90% GPU memory.
+      </div>
+      <div class="takeaway">
+        <strong>Security is non-negotiable for self-hosted inference</strong> — protect against prompt injection, weight exfiltration, and GPU resource exhaustion with JWT auth, mTLS segmentation, encrypted-at-rest weights, rate limiting at the API gateway, and container hardening (non-root, seccomp, dropped capabilities).
+      </div>
+    </div>
+    <div class="meta-faq">
+      <div class="faq-item">
+        <div class="faq-question">What's the cheapest way to get started self-hosting LLMs in production?</div>
+        <div class="faq-answer">Start with a single RTX 4090 (24 GB VRAM, ~$1,600) running quantized models via vLLM or Ollama. A 7B model at Q4 fits in ~5 GB and can serve internal tools at 40–80 TPS. For cloud, rent a single L4 or A100 on RunPod or Vast.ai ($0.50–$1.50/hr). Expect to handle 1–10 concurrent users on this setup before needing multi-GPU scaling.</div>
+      </div>
+      <div class="faq-item">
+        <div class="faq-question">When should I use vLLM vs Ollama vs SGLang for my project?</div>
+        <div class="faq-answer">Use Ollama for local development, prototyping, and single-user tools (setup: 10 min). Use vLLM for production workloads serving 10+ concurrent users—it is the only engine with PagedAttention, continuous batching, and full speculative decoding support. Use SGLang as a vLLM alternative on GPU clusters where you need its native /generate path and YAML-based server configuration.</div>
+      </div>
+      <div class="faq-item">
+        <div class="faq-question">Can I self-host LLMs on CPU-only hardware?</div>
+        <div class="faq-answer">Yes, but performance is 10–30× slower than GPU inference. A 7B model at Q4 on a modern 16-core CPU achieves roughly 2–5 TPS—usable for batch processing but not interactive applications. Tools like llama.cpp and Ollama support CPU inference with AVX2 and NEON optimizations. For interactive use, even a consumer GPU (RTX 3060 12GB) is strongly recommended.</div>
+      </div>
+      <div class="faq-item">
+        <div class="faq-question">How do I handle model updates without downtime in production?</div>
+        <div class="faq-answer">Use Kubernetes with the vLLM Production Stack Helm chart. Deploy a new model version as a separate deployment, warm it up (15–60 seconds for model loading), then shift traffic via Envoy weighted routing. Implement canary releases with Flagger—route 10% traffic, monitor TTFT and error rate for 5 minutes, then gradual rollout. Always keep the previous model version as a rollback target.</div>
+      </div>
+      <div class="faq-item">
+        <div class="faq-question">What are the most important metrics to alert on for LLM inference?</div>
+        <div class="faq-answer">Alert on: (1) TTFT p95 > 500ms—indicates prefill bottleneck or queue buildup; (2) KV cache usage > 85%—imminent OOM risk for new requests; (3) GPU memory bandwidth > 85%—true throughput bottleneck; (4) Error rate > 5%—model corruption or configuration issues; (5) Queue depth > 2× GPU count—need to scale horizontally. Start with these five; add GPU temperature and power draw for on-premise hardware.</div>
+      </div>
+    </div>
+  </div>
+
+  <!-- ARTICLE BODY -->
+  <article class="blog-article">
+
+    <h1>Deploying and Scaling LLMs in Production: A DevOps Guide to Self-Hosted AI Inference</h1>
+
+    <p class="byline">By Aymen Ben Yedder — June 20, 2026</p>
+
+    <p>Self-hosting large language models in production has crossed the threshold from experimental curiosity to operational necessity. In 2026, open-weight models—Llama 4, DeepSeek V3.2 and V4, Qwen 3.5, Mistral Large—match or exceed GPT-4-class performance on most benchmarks, while inference engines like vLLM, SGLang, and Ollama have matured into production-grade serving stacks <a href="https://dev.to/pooyagolchian" target="_blank" rel="noopener">(Ollama hit 52M monthly downloads in Q1 2026)</a>. The decision to self-host versus consume APIs now hinges on three factors: token volume, data sovereignty requirements, and latency control. For DevOps engineers, the operational surface has expanded to include GPU cluster architecture on Kubernetes, real-time observability with Prometheus and Grafana, continuous batching via PagedAttention, and horizontal scaling through tensor and pipeline parallelism. This guide walks through every layer of the stack—hardware, engine selection, deployment patterns, monitoring, cost analysis, and security—drawing on real benchmarks and production-tested configurations.</p>
+
+    <h2>Why Self-Hosted LLMs Now?</h2>
+
+    <p>The market signals are unambiguous. Model API costs doubled to <strong>$8.4 billion</strong> in 2025 <a href="https://blog.premai.io/self-hosted-llm-guide-2026" target="_blank" rel="noopener">(PremAI, 2026)</a>, while 72% of companies plan to increase AI budgets this year and 44% cite data privacy as the top barrier to adoption <a href="https://konghq.com" target="_blank" rel="noopener">(Kong 2025 Enterprise AI Report)</a>. Open-weight models have closed the quality gap: Llama 4 Scout via Groq API costs just $0.11 per million tokens, while DeepSeek V4 Flash runs at $0.30 per million input tokens with a 1-million-token context window <a href="https://agentdeals.dev/llm-api-pricing" target="_blank" rel="noopener">(AgentDeals, June 2026)</a>. Meanwhile, enterprise AI workloads are increasingly governed by regulations ranging from GDPR and HIPAA to Tunisia's LOPD 2004-63, which mandates data localization and explicit consent for processing. Self-hosting is no longer just a cost play—it is a compliance and sovereignty play.</p>
+
+    <h2>The Inference Engine Decision</h2>
+
+    <p>The single most consequential technical decision you will make is which inference engine to run. The gap between engines is not marginal—it is an order of magnitude.</p>
+
+    <h3>vLLM: The Production Standard</h3>
+
+    <p>vLLM delivers <strong>793 tokens per second</strong> on identical hardware where Ollama manages 41 TPS—a <strong>19× throughput gap</strong> at scale <a href="https://dev.to/jaipalsingh" target="_blank" rel="noopener">(Jaipal Singh, 2026 benchmarks)</a>. At 128 concurrent users, vLLM maintains sub-100ms P99 latency; Ollama spikes to 673ms under the same load. This performance comes from three architectural innovations: PagedAttention, which reduces memory fragmentation by over 40%; continuous batching, which dynamically groups incoming requests into optimal batches; and native speculative decoding with EAGLE, MTP, and PARD methods delivering 2–4× speedups <a href="https://arxiv.org/html/2504.18583v3" target="_blank" rel="noopener">(PARD achieves up to 4.87× acceleration, reaching 381.7 tokens/sec on Qwen2.5 7B)</a>.</p>
+
+    <p>vLLM also exposes <strong>20+ Prometheus metrics</strong> via its <code>/metrics</code> endpoint with a <code>vllm:</code> prefix, covering request counts, KV cache usage, TTFT histograms, TPOT histograms, and end-to-end latency distributions <a href="https://docs.vllm.ai/en/latest/design/metrics" target="_blank" rel="noopener">(vLLM Metrics Design)</a>. For any deployment serving 10 or more concurrent users, vLLM is the default choice.</p>
+
+    <h3>When Ollama Makes Sense</h3>
+
+    <p>Ollama dominates developer mindshare—<strong>95K+ GitHub stars</strong> as of June 2026 and 52M monthly downloads—and its 10-minute setup is unmatched for prototyping <a href="https://github.com" target="_blank" rel="noopener">(GitHub)</a>. But it lacks PagedAttention, tensor parallelism, multi-node support, and performs poorly under concurrent load. Use Ollama for local development, single-user tools, and quick experimentation. Do not use it for production workloads.</p>
+
+    <h3>SGLang and TGI</h3>
+
+    <p>SGLang (8K+ stars) provides a native <code>/generate</code> path and offline Engine for in-process batch work, making it a strong vLLM alternative on GPU clusters. Hugging Face's TGI, meanwhile, entered <strong>maintenance mode in December 2025</strong> <a href="https://huggingface.co" target="_blank" rel="noopener">(Hugging Face)</a>. It is not recommended for new deployments.</p>
+
+    <h2>Hardware: Sizing GPUs for Your Model</h2>
+
+    <p>The VRAM equation is straightforward: roughly <strong>2 GB per 1 billion parameters at FP16</strong>, and <strong>~0.5 GB per 1B at INT4</strong> quantization <a href="https://www.spheron.network/blog/gpu-memory-requirements-llm/" target="_blank" rel="noopener">(Spheron Network)</a>. A 7B model requires 14 GB at FP16 or roughly 3.5 GB at INT4. A 70B model demands 140 GB at FP16 or about 35 GB quantized—requiring two A100s or H100s for production serving. The KV cache adds <strong>20–40% overhead</strong>: at 32K context with a batch of 8, the cache alone consumes 40+ GB on a 70B model <a href="https://inferbase.ai/blog/gpu-sizing-guide-for-llm-inference" target="_blank" rel="noopener">(Inferbase GPU Sizing Guide)</a>.</p>
+
+    <p>For production, the GPU tier ladder in 2026 looks like this: enterprise deployments target the <strong>B200</strong> (FP4 Tensor Cores, ~15× faster inference than H200), <strong>H200</strong> (141 GB HBM3e at 4.8 TB/s), and <strong>H100</strong> (3,958 TFLOPS at FP8). Professional tiers use the L40S or RTX 6000 Ada (48 GB each). The consumer standout is the <strong>RTX 5090</strong> with 1.8 TB/s bandwidth and native NVFP4 support. On the AMD side, the <strong>MI300X</strong> delivers 192 GB HBM3 at 5.3 TB/s and 1,307 TFLOPS FP16—a legitimate alternative if you want to avoid NVIDIA lock-in.</p>
+
+    <p>Beyond GPUs, budget for <strong>32–64 GB system RAM</strong> for KV cache offloading, an NVMe SSD with 100–500 GB free for model files, and <strong>40 Gbps minimum networking</strong> between GPU nodes if you plan to use tensor parallelism.</p>
+
+    <h2>Architectural Patterns That Scale</h2>
+
+    <h3>Disaggregated Prefill and Decode</h3>
+
+    <p>This is the single most impactful architectural decision you can make. Colocating prefill (compute-bound, processes the prompt) and decode (memory-bandwidth-bound, generates tokens one by one) on the same GPU causes throughput collapse under high concurrency. Separating them into dedicated GPU pools—prefill GPUs sized for compute throughput, decode GPUs sized for memory bandwidth—with a 40 Gbps+ interconnect prevents p50 latency from exceeding <strong>200ms</strong> <a href="https://markaicode.com/architecture/production-gpu-cluster-architecture" target="_blank" rel="noopener">(Markaicode GPU Cluster Architecture)</a>.</p>
+
+    <h3>Parallelism Strategies</h3>
+
+    <p>You have five levers for scaling across GPUs. <strong>Tensor parallelism</strong> splits individual layer matrices across GPUs and delivers the lowest latency—roughly 3× TTFT improvement—but requires NVLink or 40 Gbps+ interconnect. <strong>Pipeline parallelism</strong> splits layers across GPUs and works well for models that do not fit on a single GPU, delivering 2.5–3× TTFT reduction at high concurrency with moderate interconnect requirements. <strong>Data parallelism</strong> replicates the full model across GPUs and splits incoming requests, yielding roughly 50% throughput gain at moderate concurrency. <strong>Expert parallelism</strong> targets mixture-of-experts models like Mixtral and DeepSeek by distributing experts across GPUs. <strong>Context parallelism</strong> splits long sequences across GPUs for 128K+ token context windows.</p>
+
+    <h3>Speculative Decoding</h3>
+
+    <p>Speculative decoding methods in vLLM reduce inter-token latency by having a lightweight draft model propose candidate tokens that the target model then verifies in parallel. <strong>EAGLE</strong> delivers 2–3× speedup with a draft-model approach. <strong>MTP (Multi-Token Prediction)</strong> reaches 2–4× using an internal drafter head. <strong>PARD</strong> achieves 1.78–4.87× acceleration at low cost via parallel draft model adaptation <a href="https://arxiv.org/html/2504.18583v3" target="_blank" rel="noopener">(arXiv 2504.18583v3)</a>. Even simple <strong>n-gram</strong> speculative decoding yields 1.2–1.5× with zero additional model overhead.</p>
+
+    <h2>Kubernetes Deployment: The Production Playbook</h2>
+
+    <p>Deploying vLLM on Kubernetes is the reference architecture for production self-hosted inference. The <a href="https://docs.vllm.ai/projects/production-stack/" target="_blank" rel="noopener"><strong>vLLM Production Stack</strong></a> provides a complete Helm chart with autoscaling (HPA based on <code>vllm:num_requests_waiting</code> and <code>vllm:kv_cache_usage_perc</code>), GPU scheduling with node selectors, Pod Disruption Budgets, Persistent Volume Claims for model weights, and ConfigMap-driven configuration.</p>
+
+    <p>A production values file configures the model, replica count, GPU requirements, tensor parallel size, and autoscaling thresholds. The HPA should scale on inference-specific metrics, not CPU or memory—traditional scaling rules fail with LLM cold starts lasting 15–60 seconds for model loading. Set queue depth triggers: scale when waiting requests exceed <strong>2× the GPU count</strong>.</p>
+
+    <p>For the broader Kubernetes ecosystem, integration options include <strong>KServe</strong> for serverless inference, <strong>Kaito</strong> for automated GPU node provisioning, <strong>NVIDIA Dynamo</strong> for multi-node inferencing, and <strong>Flagger</strong> or <strong>Argo Rollouts</strong> for canary deployments during model updates.</p>
+
+    <p>Your CI/CD pipeline for model updates should follow a GitOps workflow: Git push triggers GitHub Actions or GitLab CI, which runs benchmark evaluations, containerizes the model, pushes to a registry, then syncs via ArgoCD or Flux. The rollout uses canary traffic shifting via Envoy—route 10% of requests to the new model version, monitor TTFT and error rate for 5 minutes, then proceed with the full rollout. Always maintain the previous version as a rollback target.</p>
+
+    <h2>Observability: What to Measure and Alert On</h2>
+
+    <p>LLM inference observability requires metrics beyond standard application monitoring. The five critical metrics are:</p>
+
+    <ul>
+      <li><strong>TTFT (Time to First Token)</strong> — latency from request receipt to first token generation. Alert at p95 > 500ms. This indicates a prefill bottleneck or queue buildup.</li>
+      <li><strong>TPOT (Time Per Output Token)</strong> — inter-token latency during the decode phase. Alert at p95 > 100ms.</li>
+      <li><strong>KV Cache Usage</strong> — the percentage of KV cache blocks consumed. Alert at > 85%. This is the hidden memory consumer; at 32K context with batch 8 on a 70B model, the cache alone adds 40+ GB.</li>
+      <li><strong>GPU Memory Bandwidth Utilization</strong> — the true throughput bottleneck. When utilization exceeds 85%, latency spikes follow <a href="https://markaicode.com/architecture/production-gpu-cluster-architecture" target="_blank" rel="noopener">(Markaicode)</a>.</li>
+      <li><strong>Queue Depth</strong> — the number of waiting requests. When it exceeds 2× the GPU count, it is time to scale horizontally.</li>
+    </ul>
+
+    <p>The vLLM v1 engine exposes all of these as Prometheus metrics. Set up a <strong>Prometheus scrape job</strong> targeting the vLLM <code>/metrics</code> endpoint, then use <strong>Grafana dashboard ID 25263</strong> (vLLM Metrics, updated May 2026) for visualization. Add <strong>DCGM Exporter</strong> for NVIDIA GPU-level metrics, <strong>OpenTelemetry</strong> for distributed tracing across the inference chain (<code>--otlp-traces-endpoint</code> and <code>--collect-detailed-traces</code>), and <strong>Alertmanager</strong> rules for TTFT, queue depth, and out-of-memory conditions.</p>
+
+    <h2>Cost Analysis: When Self-Hosting Makes Financial Sense</h2>
+
+    <p>Self-hosting breaks even at roughly <strong>$20K per month in API spend</strong> or <strong>~100M tokens per month</strong> <a href="https://tokenmix.ai/blog/self-host-llm-vs-api" target="_blank" rel="noopener">(TokenMix)</a>. Below 10M tokens per month, APIs are cheaper by a wide margin. Between 10M and 100M tokens, a hybrid approach works best. Above 100M tokens per month, self-hosting saves <strong>40–60%</strong> compared to equivalent API consumption.</p>
+
+    <p>Running a 70B model on 2× A100 80GB GPUs in the cloud costs <strong>$3,000–$5,000 per month</strong> for GPU rental alone. Adding storage, networking, and ongoing engineering maintenance (5–10 hours per month), total operational costs land at <strong>$3,725–$7,600 per month</strong>. The equivalent API cost at 100M+ tokens per month runs <strong>$8,000–$15,000</strong> <a href="https://tokenmix.ai/blog/self-host-llm-vs-api" target="_blank" rel="noopener">(TokenMix)</a>. The first month includes 20–40 hours of engineering setup, adding $1,500–$6,000 in one-time costs.</p>
+
+    <p>But teams consistently underestimate three hidden costs. First, <strong>actual GPU utilization averages 20–40%</strong> for most inference workloads—you are paying for compute you do not use. Second, <strong>initial deployment timelines run 12–16 weeks</strong>, not the 8 weeks most teams plan for—a 200% overrun. Third, <strong>GPU and inference specialists command a 20–30% salary premium</strong> over general DevOps engineers. Budget for these before committing to self-hosting.</p>
+
+    <h2>Security: The Non-Negotiable Baseline</h2>
+
+    <p>Self-hosted inference introduces a threat surface that includes prompt injection, model weight exfiltration, unauthorized inference access, GPU resource exhaustion, and model jailbreaking. The baseline mitigations are well-established:</p>
+
+    <ul>
+      <li><strong>Never expose inference ports directly.</strong> Always terminate TLS at a reverse proxy (NGINX or Envoy) with rate limiting. Configure token-aware rate limiting: 10 requests per second per client with a burst of 5, and 5 concurrent connections per client.</li>
+      <li><strong>Authenticate every request.</strong> JWT authentication with scoped claims, short expiration, and separate roles for inference consumers, prompt engineers, model administrators, and auditors.</li>
+      <li><strong>Segment your network with mTLS.</strong> Isolate inference, vector database, and orchestrator networks. This prevents a compromised service from accessing model weights or RAG data.</li>
+      <li><strong>Encrypt model weights at rest</strong> on read-only mounted volumes with restricted file system permissions. Verify checksums and signatures before loading.</li>
+      <li><strong>Harden containers.</strong> Drop all capabilities, run as non-root, apply seccomp profiles, and never use privileged mode.</li>
+      <li><strong>Audit request metadata</strong> (not prompt content) for compliance with GDPR, HIPAA, SOC 2, and EU AI Act requirements.</li>
+    </ul>
+
+    <p>For Tunisian readers specifically: <strong>LOPD 2004-63</strong> requires data localization, explicit consent for processing, and a maintained processing registry. Self-hosting on local infrastructure is often the only way to comply with these requirements when processing sensitive data through LLMs.</p>
+
+    <h2>The DevOps Toolchain</h2>
+
+    <p>A production self-hosted LLM stack integrates into the existing DevOps toolchain at every layer. <strong>ArgoCD and FluxCD</strong> handle GitOps sync for model deployment manifests. <strong>Terraform or OpenTofu</strong> provisions GPU nodes, VPCs, and firewall rules. <strong>HashiCorp Vault or External Secrets</strong> manages Hugging Face tokens, API keys, and model registry credentials. <strong>Flagger or Argo Rollouts</strong> orchestrates canary deployments for model updates. <strong>ELK or Loki</strong> handles inference request logging and audit trails. <strong>PagerDuty or OpsGenie</strong> routes alerts for SLO breaches. And a <strong>model registry on S3-compatible storage</strong> (MinIO, Cloudflare R2) with versioned paths, checksum-verified references, and automated benchmark gates ensures that no model version ships without passing evaluation thresholds.</p>
+
+    <h2>Conclusion</h2>
+
+    <p>Self-hosting LLMs in production is operationally viable in 2026, but it demands a new layer of DevOps capability. The stack spans hardware provisioning, inference engine configuration, Kubernetes orchestration with GPU-aware scheduling, real-time observability of KV cache and TTFT metrics, and security controls that address a threat model specific to AI workloads. The financial case is clear above 100M tokens per month, and the compliance case is clear wherever data sovereignty regulations apply.</p>
+
+    <p>Start small. A single RTX 4090 running a quantized 7B model via vLLM will serve internal tools at 40–80 TPS and teach you the operational patterns. From there, the path to multi-GPU, multi-node production inference is a matter of scaling what you have already learned—adding tensor parallelism, disaggregating prefill and decode, instrumenting with Prometheus and Grafana, and tightening the security baseline. The tools are production-ready. The models are competitive. The rest is DevOps.</p>
+
+  </article>
+</body>
+</html>

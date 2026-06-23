@@ -1,0 +1,56 @@
+---
+import BaseLayout from '@layouts/BaseLayout.astro';
+import BreadcrumbSchema from '@components/seo/BreadcrumbSchema.astro';
+import DeployMeta from '@components/ui/DeployMeta.astro';
+---
+
+<BaseLayout title="Production Server Setup & CI/CD" description="Secure VPS configuration, NGINX, Docker, automated CI/CD pipelines with GitHub Actions, and production infrastructure automation." canonical="https://aymen.benyedder.top/services/ci-cd-infrastructure">
+  <BreadcrumbSchema items={[{ name: 'Home', url: 'https://aymen.benyedder.top/' }, { name: 'Services', url: 'https://aymen.benyedder.top/services/' }, { name: 'Production Server Setup & CI/CD', url: 'https://aymen.benyedder.top/services/ci-cd-infrastructure' }]} />
+
+  <div class="max-w-[var(--container-max)] mx-auto px-[var(--section-px)] pt-[var(--section-gap)]">
+    <div class="section-header mb-[var(--spacing-gap-lg)]">
+      <span class="font-[family-name:var(--font-mono)] text-[var(--text-2xs)] font-bold tracking-[0.10em] text-[var(--accent)]">Service</span>
+      <h1 class="font-[family-name:var(--font-mono)] text-[var(--heading-md)] font-bold text-[var(--text-1)] mt-[var(--spacing-gap-xs)]">Production Server Setup &amp; CI/CD</h1>
+    </div>
+
+    <div class="card px-[var(--card-px)] py-[var(--card-py)] space-y-[var(--spacing-gap-md)]">
+      <p class="text-[var(--text-base)] text-[var(--text-2)] leading-relaxed">Secure, automated production infrastructure for startups and scale-ups. From bare VPS to fully automated CI/CD pipelines with zero-downtime deployments, monitoring, and incident response.</p>
+
+      <h2 class="font-[family-name:var(--font-mono)] text-[14px] max-md:text-[var(--text-small)] font-bold text-[var(--text-1)]">What I deliver</h2>
+      <ul class="space-y-[var(--spacing-gap-sm)]">
+        <li class="text-[var(--text-small)] text-[var(--text-2)]"><strong class="text-[var(--text-1)]">Secure VPS Configuration</strong> — Hardened Linux servers with firewall, fail2ban, automatic security updates, and SSH key-only access.</li>
+        <li class="text-[var(--text-small)] text-[var(--text-2)]"><strong class="text-[var(--text-1)]">CI/CD Pipeline Automation</strong> — GitHub Actions, ArgoCD, or FluxCD pipelines that build, test, and deploy on every push with rollback capability.</li>
+        <li class="text-[var(--text-small)] text-[var(--text-2)]"><strong class="text-[var(--text-1)]">Docker Containerization</strong> — Application containerization with Docker Compose, multi-stage builds, and image registry management.</li>
+        <li class="text-[var(--text-small)] text-[var(--text-2)]"><strong class="text-[var(--text-1)]">NGINX Reverse Proxy &amp; SSL</strong> — Load-balanced, SSL-terminated proxy with automatic certificate renewal via Certbot.</li>
+        <li class="text-[var(--text-small)] text-[var(--text-2)]"><strong class="text-[var(--text-1)]">Monitoring &amp; Observability</strong> — Prometheus + Grafana stack with uptime monitoring, alerting, and centralized logging via ELK.</li>
+      </ul>
+
+      <h2 class="font-[family-name:var(--font-mono)] text-[14px] max-md:text-[var(--text-small)] font-bold text-[var(--text-1)]">Tools I use</h2>
+      <div class="flex flex-wrap gap-[var(--spacing-gap-xs)]">
+        <span class="font-[family-name:var(--font-mono)] text-[var(--text-2xs)] px-[10px] py-[4px] border border-[var(--border)] text-[var(--text-2)]">Linux</span>
+        <span class="font-[family-name:var(--font-mono)] text-[var(--text-2xs)] px-[10px] py-[4px] border border-[var(--border)] text-[var(--text-2)]">NGINX</span>
+        <span class="font-[family-name:var(--font-mono)] text-[var(--text-2xs)] px-[10px] py-[4px] border border-[var(--border)] text-[var(--text-2)]">Docker</span>
+        <span class="font-[family-name:var(--font-mono)] text-[var(--text-2xs)] px-[10px] py-[4px] border border-[var(--border)] text-[var(--text-2)]">Kubernetes</span>
+        <span class="font-[family-name:var(--font-mono)] text-[var(--text-2xs)] px-[10px] py-[4px] border border-[var(--border)] text-[var(--text-2)]">GitHub Actions</span>
+        <span class="font-[family-name:var(--font-mono)] text-[var(--text-2xs)] px-[10px] py-[4px] border border-[var(--border)] text-[var(--text-2)]">ArgoCD</span>
+        <span class="font-[family-name:var(--font-mono)] text-[var(--text-2xs)] px-[10px] py-[4px] border border-[var(--border)] text-[var(--text-2)]">Prometheus</span>
+        <span class="font-[family-name:var(--font-mono)] text-[var(--text-2xs)] px-[10px] py-[4px] border border-[var(--border)] text-[var(--text-2)]">Grafana</span>
+        <span class="font-[family-name:var(--font-mono)] text-[var(--text-2xs)] px-[10px] py-[4px] border border-[var(--border)] text-[var(--text-2)]">Terraform</span>
+      </div>
+
+      <h2 class="font-[family-name:var(--font-mono)] text-[14px] max-md:text-[var(--text-small)] font-bold text-[var(--text-1)]">Process</h2>
+      <ol class="space-y-[var(--spacing-gap-sm)] list-decimal list-inside">
+        <li class="text-[var(--text-small)] text-[var(--text-2)]"><strong class="text-[var(--text-1)]">Audit</strong> — I review your current infrastructure, deployment process, and security posture.</li>
+        <li class="text-[var(--text-small)] text-[var(--text-2)]"><strong class="text-[var(--text-1)]">Architecture</strong> — I design the infrastructure stack with documentation and runbooks.</li>
+        <li class="text-[var(--text-small)] text-[var(--text-2)]"><strong class="text-[var(--text-1)]">Build</strong> — I configure servers, set up CI/CD, containerize applications, and deploy monitoring.</li>
+        <li class="text-[var(--text-small)] text-[var(--text-2)]"><strong class="text-[var(--text-1)]">Handoff</strong> — I train your team and provide documentation for ongoing operations.</li>
+      </ol>
+    </div>
+
+    <div class="text-center mt-[var(--spacing-gap-lg)]">
+      <a href="/#contact" class="font-[family-name:var(--font-mono)] text-[var(--text-2xs)] font-bold tracking-[0.06em] px-[18px] py-[9px] border border-[var(--accent)] bg-[var(--accent)] text-[var(--void)] no-underline inline-flex items-center gap-[8px] hover:bg-transparent hover:text-[var(--accent)] transition-[background_80ms,color_80ms]">Start a project →</a>
+    </div>
+
+    <DeployMeta hash="sha: a3f7bc2" date="2025-01-15T14:32:07Z" branch="main" message="feat: add ci-cd service page" class="mt-[var(--section-gap)]" />
+  </div>
+</BaseLayout>

@@ -70,13 +70,13 @@ export async function GET() {
       pubDate: new Date(post.publishedAt),
       description: post.description || '',
       categories: categoryTitles,
-      author: 'Aymen ben Yedder',
+      author: 'Aymen Ben Yedder — DevOps & Systems Engineering',
     };
   });
 
   return rss({
     title: 'AYMEN.DEV Technical Blog',
-    description: 'Technical writing on DevOps, system resilience, observability, and full-stack engineering.',
+    description: 'Technical writing by Aymen Ben Yedder — DevOps & Systems Engineering. Articles on CI/CD, infrastructure automation, observability, and production systems.',
     site: 'https://aymen.benyedder.top',
     items,
   });

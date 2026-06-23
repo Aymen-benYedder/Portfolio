@@ -25,7 +25,7 @@ const categories = ['all', ...new Set(posts.flatMap(p => p.categories).filter(Bo
 
 <BaseLayout
   title="Technical Blog"
-  description="In-depth technical articles on DevOps, infrastructure automation, CI/CD, and full-stack engineering by Aymen ben Yedder."
+  description="In-depth technical articles on DevOps, infrastructure automation, CI/CD, and systems engineering by Aymen Ben Yedder."
   canonical="https://aymen.benyedder.top/blog/"
 >
   <BreadcrumbSchema items={[
@@ -39,7 +39,7 @@ const categories = ['all', ...new Set(posts.flatMap(p => p.categories).filter(Bo
     <div class="section-header mb-[var(--spacing-gap-lg)]">
       <span class="font-[family-name:var(--font-mono)] text-[var(--text-2xs)] font-bold tracking-[0.10em] text-[var(--accent)]">Blog</span>
       <h1 class="font-[family-name:var(--font-mono)] text-[var(--heading-md)] max-md:text-[var(--heading-sm)] font-bold text-[var(--text-1)] mt-[var(--spacing-gap-xs)]">Technical Writing</h1>
-      <p class="text-[var(--text-base)] text-[var(--text-2)] mt-[var(--spacing-gap-sm)]">DevOps, infrastructure, and systems engineering.</p>
+      <p class="text-[var(--text-base)] text-[var(--text-2)] mt-[var(--spacing-gap-sm)]">Aymen Ben Yedder — DevOps &amp; Systems Engineering<br />8 years in production infrastructure. Writing about CI/CD, GitOps, Docker, and systems architecture for startup teams.</p>
     </div>
 
     {posts.length > 0 ? (

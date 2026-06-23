@@ -2,8 +2,6 @@
 import BaseLayout from '@layouts/BaseLayout.astro';
 import BentoGrid from '@components/layout/BentoGrid.astro';
 import HeroCard from '@components/sections/HeroCard.astro';
-import TerminalCard from '@components/sections/TerminalCard.astro';
-import StatusPanel from '@components/sections/StatusPanel.astro';
 import WorkCard from '@components/sections/WorkCard.astro';
 import ProjectCard from '@components/sections/ProjectCard.astro';
 import SkillCategory from '@components/sections/SkillCategory.astro';
@@ -50,11 +48,6 @@ try {
   education = eduData.result || [];
 } catch (e) { console.warn('No education'); }
 
-const statusItems = [
-  { name: 'api.aymen.dev', status: 'healthy' as const, time: '47ms · now', live: true },
-  { name: 'k8s-cluster-eu · 3 nodes', status: 'healthy' as const, time: '2m ago' },
-  { name: 'redis-cache-01', status: 'degraded' as const, time: 'CPU 87%' },
-];
 ---
 
 <BaseLayout
@@ -69,147 +62,185 @@ const statusItems = [
   <!-- Hero Section -->
   <HeroCard />
 
-  <!-- Terminal + Status -->
-  <div class="max-w-[var(--container-max)] mx-auto px-[var(--section-px)] mt-[var(--section-gap)]">
-    <BentoGrid columns="2">
-      <TerminalCard />
-      <StatusPanel items={statusItems} />
-    </BentoGrid>
-  </div>
-
-  <!-- About Section -->
-  <section id="about" class="max-w-[var(--container-max)] mx-auto px-[var(--section-px)] mt-[var(--section-gap)]">
-    <div class="section-header mb-[var(--spacing-gap-lg)]">
-      <span class="font-[family-name:var(--font-mono)] text-[var(--text-2xs)] font-bold tracking-[0.10em] text-[var(--accent)]">About</span>
-      <h2 class="font-[family-name:var(--font-mono)] text-[var(--heading-sm)] font-bold text-[var(--text-1)] mt-[var(--spacing-gap-xs)]">DevOps engineer with 8+ years in production infrastructure</h2>
-    </div>
-    <div class="card px-[var(--card-px)] py-[var(--card-py)]">
-      <p class="text-[var(--text-base)] text-[var(--text-2)] leading-relaxed mb-[var(--spacing-gap-md)]">
-        I am <strong class="text-[var(--text-1)]">Aymen ben Yedder</strong>, a DevOps Engineer and Web Systems Architect based in Medenine, Tunisia. Over the past 8 years I have designed and operated production infrastructure for food delivery platforms, safety management systems, and on-demand service applications — environments where downtime is expensive and reliability is non-negotiable.
-      </p>
-      <p class="text-[var(--text-base)] text-[var(--text-2)] leading-relaxed mb-[var(--spacing-gap-md)]">
-        My core stack includes <strong class="text-[var(--text-1)]">Docker, NGINX, GitHub Actions, ArgoCD, FluxCD, Prometheus, and Grafana</strong> for infrastructure, and <strong class="text-[var(--text-1)]">React, Node.js, MongoDB, and PostgreSQL</strong> for full-stack development. I write about CI/CD patterns, type-safe API design with Hono and TanStack, and practical DevOps for startup teams on my <a href="/blog/" class="text-[var(--accent)] underline decoration-1 underline-offset-2">technical blog</a>.
-      </p>
-      <p class="text-[var(--text-base)] text-[var(--text-2)] leading-relaxed">
-        Currently at <strong class="text-[var(--text-1)]">Alizeth</strong> as DevOps Engineer and Project Manager, leading infrastructure automation and delivery pipelines. Available for freelance consulting and remote contract work in 2026. Fluent in Arabic (native), English (advanced), and French.
-      </p>
-    </div>
-    <DeployMeta hash="sha: a3f7bc2" date="2025-01-15T14:32:07Z" branch="main" message="docs: update about section" />
-  </section>
-
   <!-- Services Section -->
   <section id="services" class="max-w-[var(--container-max)] mx-auto px-[var(--section-px)] mt-[var(--section-gap)]">
-    <div class="section-header mb-[var(--spacing-gap-lg)]">
-      <span class="font-[family-name:var(--font-mono)] text-[var(--text-2xs)] font-bold tracking-[0.10em] text-[var(--accent)]">Services</span>
-      <h2 class="font-[family-name:var(--font-mono)] text-[var(--heading-sm)] font-bold text-[var(--text-1)] mt-[var(--spacing-gap-xs)]">Expert Solutions for Modern Development</h2>
+    <div class="terminal-section-header mb-[var(--spacing-gap-xl)]">
+      <span class="label-caps text-[var(--accent)]">Services</span>
+      <h2 class="font-[family-name:var(--font-mono)] text-[var(--heading-sm)] font-bold text-[var(--text-1)]">Expert Solutions for Modern Development</h2>
     </div>
-    <BentoGrid columns="3">
-      <article class="card glass-hover hover-lift px-[var(--card-px)] py-[var(--card-py)]">
-        <div class="service-icon mb-[var(--spacing-gap-sm)] text-[var(--accent)]" aria-hidden="true">
-          <svg width="36" height="36" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.5" stroke-linecap="round" stroke-linejoin="round">
-            <path d="M3 12a9 9 0 0 1 9-9 9.75 9.75 0 0 1 6.74 2.74L21 8" />
-            <path d="M21 3v5h-5" />
-            <path d="M21 12a9 9 0 0 1-9 9 9.75 9.75 0 0 1-6.74-2.74L3 16" />
-            <path d="M3 21v-5h5" />
+    <div class="grid grid-cols-1 md:grid-cols-3 gap-[var(--spacing-gap-lg)]">
+      <details class="collapsible-section card glass-hover px-[var(--card-px)] py-0">
+        <summary class="collapsible-trigger">
+          <svg class="collapsible-chevron" width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round">
+            <polyline points="6 9 12 15 18 9"></polyline>
           </svg>
+          <div class="service-icon text-[var(--accent)] shrink-0" aria-hidden="true">
+            <svg width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.5" stroke-linecap="round" stroke-linejoin="round">
+              <path d="M3 12a9 9 0 0 1 9-9 9.75 9.75 0 0 1 6.74 2.74L21 8" />
+              <path d="M21 3v5h-5" />
+              <path d="M21 12a9 9 0 0 1-9 9 9.75 9.75 0 0 1-6.74-2.74L3 16" />
+              <path d="M3 21v-5h5" />
+            </svg>
+          </div>
+          <span class="font-[family-name:var(--font-mono)] text-[var(--text-small)] font-bold text-[var(--text-1)]">WordPress Development</span>
+        </summary>
+        <div class="collapsible-reveal">
+          <div class="collapsible-reveal-inner">
+            <div class="pb-[var(--card-py)]">
+              <p class="text-[var(--text-small)] text-[var(--text-2)]">Professional WordPress development including custom themes, plugins, WooCommerce, and performance optimization.</p>
+              <ul class="list-none p-0 mt-[var(--spacing-gap-sm)] space-y-[4px]">
+                <li class="text-[var(--text-xs)] text-[var(--text-3)] font-[family-name:var(--font-mono)]">→ Custom Theme Development</li>
+                <li class="text-[var(--text-xs)] text-[var(--text-3)] font-[family-name:var(--font-mono)]">→ Plugin Development</li>
+                <li class="text-[var(--text-xs)] text-[var(--text-3)] font-[family-name:var(--font-mono)]">→ WooCommerce Integration</li>
+                <li class="text-[var(--text-xs)] text-[var(--text-3)] font-[family-name:var(--font-mono)]">→ Performance Optimization</li>
+              </ul>
+              <a href="/services/wordpress-development" class="font-[family-name:var(--font-mono)] text-[var(--text-2xs)] text-[var(--accent)] mt-[var(--spacing-gap-sm)] inline-block underline" aria-label="Learn more about WordPress development services">Learn More →</a>
+            </div>
+          </div>
         </div>
-        <h3 class="font-[family-name:var(--font-mono)] text-[14px] max-md:text-[var(--text-small)] font-bold text-[var(--text-1)]">WordPress Development</h3>
-        <p class="text-[var(--text-small)] text-[var(--text-2)] mt-[var(--spacing-gap-sm)]">Professional WordPress development including custom themes, plugins, WooCommerce, and performance optimization.</p>
-        <ul class="list-none p-0 mt-[var(--spacing-gap-sm)] space-y-[4px]">
-          <li class="text-[var(--text-xs)] text-[var(--text-3)] font-[family-name:var(--font-mono)]">→ Custom Theme Development</li>
-          <li class="text-[var(--text-xs)] text-[var(--text-3)] font-[family-name:var(--font-mono)]">→ Plugin Development</li>
-          <li class="text-[var(--text-xs)] text-[var(--text-3)] font-[family-name:var(--font-mono)]">→ WooCommerce Integration</li>
-          <li class="text-[var(--text-xs)] text-[var(--text-3)] font-[family-name:var(--font-mono)]">→ Performance Optimization</li>
-        </ul>
-        <a href="/services/wordpress-development" class="font-[family-name:var(--font-mono)] text-[var(--text-2xs)] text-[var(--accent)] mt-[var(--spacing-gap-sm)] inline-block underline" aria-label="Learn more about WordPress development services">Learn More →</a>
-      </article>
-      <article class="card glass-hover hover-lift px-[var(--card-px)] py-[var(--card-py)]">
-        <div class="service-icon mb-[var(--spacing-gap-sm)] text-[var(--accent)]" aria-hidden="true">
-          <svg width="36" height="36" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.5" stroke-linecap="round" stroke-linejoin="round">
-            <circle cx="12" cy="12" r="1" />
-            <circle cx="19" cy="12" r="1" />
-            <circle cx="5" cy="12" r="1" />
-            <path d="M12 5v14" />
-            <path d="M5 5l14 14" />
-            <path d="M5 19l14-14" />
+      </details>
+      <details class="collapsible-section card glass-hover px-[var(--card-px)] py-0">
+        <summary class="collapsible-trigger">
+          <svg class="collapsible-chevron" width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round">
+            <polyline points="6 9 12 15 18 9"></polyline>
           </svg>
+          <div class="service-icon text-[var(--accent)] shrink-0" aria-hidden="true">
+            <svg width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.5" stroke-linecap="round" stroke-linejoin="round">
+              <circle cx="12" cy="12" r="1" />
+              <circle cx="19" cy="12" r="1" />
+              <circle cx="5" cy="12" r="1" />
+              <path d="M12 5v14" />
+              <path d="M5 5l14 14" />
+              <path d="M5 19l14-14" />
+            </svg>
+          </div>
+          <span class="font-[family-name:var(--font-mono)] text-[var(--text-small)] font-bold text-[var(--text-1)]">MERN Stack Development</span>
+        </summary>
+        <div class="collapsible-reveal">
+          <div class="collapsible-reveal-inner">
+            <div class="pb-[var(--card-py)]">
+              <p class="text-[var(--text-small)] text-[var(--text-2)]">Scalable, high-performance web applications with React, Node.js, MongoDB, and Express.js.</p>
+              <ul class="list-none p-0 mt-[var(--spacing-gap-sm)] space-y-[4px]">
+                <li class="text-[var(--text-xs)] text-[var(--text-3)] font-[family-name:var(--font-mono)]">→ Full-Stack JavaScript</li>
+                <li class="text-[var(--text-xs)] text-[var(--text-3)] font-[family-name:var(--font-mono)]">→ React Development</li>
+                <li class="text-[var(--text-xs)] text-[var(--text-3)] font-[family-name:var(--font-mono)]">→ Node.js & Express</li>
+                <li class="text-[var(--text-xs)] text-[var(--text-3)] font-[family-name:var(--font-mono)]">→ MongoDB Integration</li>
+              </ul>
+              <a href="/services/mern-development" class="font-[family-name:var(--font-mono)] text-[var(--text-2xs)] text-[var(--accent)] mt-[var(--spacing-gap-sm)] inline-block underline" aria-label="Learn more about MERN stack development services">Learn More →</a>
+            </div>
+          </div>
         </div>
-        <h3 class="font-[family-name:var(--font-mono)] text-[14px] max-md:text-[var(--text-small)] font-bold text-[var(--text-1)]">MERN Stack Development</h3>
-        <p class="text-[var(--text-small)] text-[var(--text-2)] mt-[var(--spacing-gap-sm)]">Scalable, high-performance web applications with React, Node.js, MongoDB, and Express.js.</p>
-        <ul class="list-none p-0 mt-[var(--spacing-gap-sm)] space-y-[4px]">
-          <li class="text-[var(--text-xs)] text-[var(--text-3)] font-[family-name:var(--font-mono)]">→ Full-Stack JavaScript</li>
-          <li class="text-[var(--text-xs)] text-[var(--text-3)] font-[family-name:var(--font-mono)]">→ React Development</li>
-          <li class="text-[var(--text-xs)] text-[var(--text-3)] font-[family-name:var(--font-mono)]">→ Node.js & Express</li>
-          <li class="text-[var(--text-xs)] text-[var(--text-3)] font-[family-name:var(--font-mono)]">→ MongoDB Integration</li>
-        </ul>
-        <a href="/services/mern-development" class="font-[family-name:var(--font-mono)] text-[var(--text-2xs)] text-[var(--accent)] mt-[var(--spacing-gap-sm)] inline-block underline" aria-label="Learn more about MERN stack development services">Learn More →</a>
-      </article>
-      <article class="card glass-hover hover-lift px-[var(--card-px)] py-[var(--card-py)]">
-        <div class="service-icon mb-[var(--spacing-gap-sm)] text-[var(--accent)]" aria-hidden="true">
-          <svg width="36" height="36" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.5" stroke-linecap="round" stroke-linejoin="round">
-            <rect x="2" y="7" width="20" height="14" rx="2" ry="2" />
-            <path d="M16 21V5a2 2 0 0 0-2-2h-4a2 2 0 0 0-2 2v16" />
-            <line x1="2" y1="11" x2="22" y2="11" />
+      </details>
+      <details class="collapsible-section card glass-hover px-[var(--card-px)] py-0">
+        <summary class="collapsible-trigger">
+          <svg class="collapsible-chevron" width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round">
+            <polyline points="6 9 12 15 18 9"></polyline>
           </svg>
+          <div class="service-icon text-[var(--accent)] shrink-0" aria-hidden="true">
+            <svg width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.5" stroke-linecap="round" stroke-linejoin="round">
+              <rect x="2" y="7" width="20" height="14" rx="2" ry="2" />
+              <path d="M16 21V5a2 2 0 0 0-2-2h-4a2 2 0 0 0-2 2v16" />
+              <line x1="2" y1="11" x2="22" y2="11" />
+            </svg>
+          </div>
+          <span class="font-[family-name:var(--font-mono)] text-[var(--text-small)] font-bold text-[var(--text-1)]">Production Server Setup & CI/CD</span>
+        </summary>
+        <div class="collapsible-reveal">
+          <div class="collapsible-reveal-inner">
+            <div class="pb-[var(--card-py)]">
+              <p class="text-[var(--text-small)] text-[var(--text-2)]">Secure VPS configuration, NGINX, PM2, SSL certificates, and automated GitHub Actions deployment pipelines.</p>
+              <ul class="list-none p-0 mt-[var(--spacing-gap-sm)] space-y-[4px]">
+                <li class="text-[var(--text-xs)] text-[var(--text-3)] font-[family-name:var(--font-mono)]">→ Secure VPS Configuration</li>
+                <li class="text-[var(--text-xs)] text-[var(--text-3)] font-[family-name:var(--font-mono)]">→ NGINX & PM2 Setup</li>
+                <li class="text-[var(--text-xs)] text-[var(--text-3)] font-[family-name:var(--font-mono)]">→ GitHub Actions Automation</li>
+                <li class="text-[var(--text-xs)] text-[var(--text-3)] font-[family-name:var(--font-mono)]">→ SSL/TLS Certificates</li>
+              </ul>
+              <a href="/#contact" class="font-[family-name:var(--font-mono)] text-[var(--text-2xs)] text-[var(--accent)] mt-[var(--spacing-gap-sm)] inline-block no-underline hover:underline">Get Started →</a>
+            </div>
+          </div>
         </div>
-        <h3 class="font-[family-name:var(--font-mono)] text-[14px] max-md:text-[var(--text-small)] font-bold text-[var(--text-1)]">Production Server Setup & CI/CD</h3>
-        <p class="text-[var(--text-small)] text-[var(--text-2)] mt-[var(--spacing-gap-sm)]">Secure VPS configuration, NGINX, PM2, SSL certificates, and automated GitHub Actions deployment pipelines.</p>
-        <ul class="list-none p-0 mt-[var(--spacing-gap-sm)] space-y-[4px]">
-          <li class="text-[var(--text-xs)] text-[var(--text-3)] font-[family-name:var(--font-mono)]">→ Secure VPS Configuration</li>
-          <li class="text-[var(--text-xs)] text-[var(--text-3)] font-[family-name:var(--font-mono)]">→ NGINX & PM2 Setup</li>
-          <li class="text-[var(--text-xs)] text-[var(--text-3)] font-[family-name:var(--font-mono)]">→ GitHub Actions Automation</li>
-          <li class="text-[var(--text-xs)] text-[var(--text-3)] font-[family-name:var(--font-mono)]">→ SSL/TLS Certificates</li>
-        </ul>
-        <a href="/#contact" class="font-[family-name:var(--font-mono)] text-[var(--text-2xs)] text-[var(--accent)] mt-[var(--spacing-gap-sm)] inline-block no-underline hover:underline">Get Started →</a>
-      </article>
-    </BentoGrid>
+      </details>
+    </div>
   </section>
 
   <!-- Latest Writing -->
   <section id="insights" class="max-w-[var(--container-max)] mx-auto px-[var(--section-px)] mt-[var(--section-gap)]">
-    <div class="section-header mb-[var(--spacing-gap-lg)]">
-      <span class="font-[family-name:var(--font-mono)] text-[var(--text-2xs)] font-bold tracking-[0.10em] text-[var(--accent)]">Latest Writing</span>
-      <h2 class="font-[family-name:var(--font-mono)] text-[var(--heading-sm)] font-bold text-[var(--text-1)] mt-[var(--spacing-gap-xs)]">Fresh paths into your highest-priority pages</h2>
+    <div class="terminal-section-header mb-[var(--spacing-gap-xl)]">
+      <span class="label-caps text-[var(--accent)]">Latest Writing</span>
+      <h2 class="font-[family-name:var(--font-mono)] text-[var(--heading-sm)] font-bold text-[var(--text-1)]">Fresh paths into your highest-priority pages</h2>
     </div>
-    <BentoGrid columns="3">
-      <article class="card glass-hover hover-lift px-[var(--card-px)] py-[var(--card-py)]">
-        <h3 class="font-[family-name:var(--font-mono)] text-[14px] max-md:text-[var(--text-small)] font-bold text-[var(--text-1)]">Technical Blog Archive</h3>
-        <p class="text-[var(--text-small)] text-[var(--text-2)] mt-[var(--spacing-gap-sm)]">Use the primary blog landing page to reach every live post on DevOps, AI workflow orchestration, observability, and production resilience.</p>
-        <ul class="list-none p-0 mt-[var(--spacing-gap-sm)] space-y-[4px]">
-          <li class="text-[var(--text-xs)] text-[var(--text-3)] font-[family-name:var(--font-mono)]">→ Primary blog landing page</li>
-          <li class="text-[var(--text-xs)] text-[var(--text-3)] font-[family-name:var(--font-mono)]">→ Links to every live article</li>
-          <li class="text-[var(--text-xs)] text-[var(--text-3)] font-[family-name:var(--font-mono)]">→ Clean crawl path from the homepage</li>
-        </ul>
-        <a href="/blog/" class="font-[family-name:var(--font-mono)] text-[var(--text-2xs)] text-[var(--accent)] mt-[var(--spacing-gap-sm)] inline-block no-underline hover:underline">Open the blog archive →</a>
-      </article>
-      <article class="card glass-hover hover-lift px-[var(--card-px)] py-[var(--card-py)]">
-        <h3 class="font-[family-name:var(--font-mono)] text-[14px] max-md:text-[var(--text-small)] font-bold text-[var(--text-1)]">Multi-Cloud Resilience Guide</h3>
-        <p class="text-[var(--text-small)] text-[var(--text-2)] mt-[var(--spacing-gap-sm)]">A featured article on OpenTofu, Terragrunt, and provider-neutral infrastructure patterns for reliable delivery at scale.</p>
-        <ul class="list-none p-0 mt-[var(--spacing-gap-sm)] space-y-[4px]">
-          <li class="text-[var(--text-xs)] text-[var(--text-3)] font-[family-name:var(--font-mono)]">→ OpenTofu and Terragrunt</li>
-          <li class="text-[var(--text-xs)] text-[var(--text-3)] font-[family-name:var(--font-mono)]">→ Portable infrastructure patterns</li>
-          <li class="text-[var(--text-xs)] text-[var(--text-3)] font-[family-name:var(--font-mono)]">→ Architecture-level reliability</li>
-        </ul>
-        <a href="/blog/architecting-multi-cloud-resilience-opentofu-terragrunt-mandatory-2026/" class="font-[family-name:var(--font-mono)] text-[var(--text-2xs)] text-[var(--accent)] mt-[var(--spacing-gap-sm)] inline-block no-underline hover:underline">Read the resilience article →</a>
-      </article>
-      <article class="card glass-hover hover-lift px-[var(--card-px)] py-[var(--card-py)]">
-        <h3 class="font-[family-name:var(--font-mono)] text-[14px] max-md:text-[var(--text-small)] font-bold text-[var(--text-1)]">CI/CD Breach Analysis</h3>
-        <p class="text-[var(--text-small)] text-[var(--text-2)] mt-[var(--spacing-gap-sm)]">A direct link into the Hackerbot-Claw post covering trust-boundary failures, supply-chain risk, and practical DevSecOps hardening moves.</p>
-        <ul class="list-none p-0 mt-[var(--spacing-gap-sm)] space-y-[4px]">
-          <li class="text-[var(--text-xs)] text-[var(--text-3)] font-[family-name:var(--font-mono)]">→ Supply-chain security review</li>
-          <li class="text-[var(--text-xs)] text-[var(--text-3)] font-[family-name:var(--font-mono)]">→ CI/CD trust boundary analysis</li>
-          <li class="text-[var(--text-xs)] text-[var(--text-3)] font-[family-name:var(--font-mono)]">→ Hardening actions for teams</li>
-        </ul>
-        <a href="/blog/execution-layer-breach-hackerbot-claw-cicd-compromise/" class="font-[family-name:var(--font-mono)] text-[var(--text-2xs)] text-[var(--accent)] mt-[var(--spacing-gap-sm)] inline-block no-underline hover:underline">Read the breach analysis →</a>
-      </article>
-    </BentoGrid>
+    <div class="grid grid-cols-1 md:grid-cols-3 gap-[var(--spacing-gap-lg)]">
+      <details class="collapsible-section card glass-hover px-[var(--card-px)] py-0">
+        <summary class="collapsible-trigger">
+          <svg class="collapsible-chevron" width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round">
+            <polyline points="6 9 12 15 18 9"></polyline>
+          </svg>
+          <span class="font-[family-name:var(--font-mono)] text-[var(--text-small)] font-bold text-[var(--text-1)]">Technical Blog Archive</span>
+        </summary>
+        <div class="collapsible-reveal">
+          <div class="collapsible-reveal-inner">
+            <div class="pb-[var(--card-py)]">
+              <p class="text-[var(--text-small)] text-[var(--text-2)]">Use the primary blog landing page to reach every live post on DevOps, AI workflow orchestration, observability, and production resilience.</p>
+              <ul class="list-none p-0 mt-[var(--spacing-gap-sm)] space-y-[4px]">
+                <li class="text-[var(--text-xs)] text-[var(--text-3)] font-[family-name:var(--font-mono)]">→ Primary blog landing page</li>
+                <li class="text-[var(--text-xs)] text-[var(--text-3)] font-[family-name:var(--font-mono)]">→ Links to every live article</li>
+                <li class="text-[var(--text-xs)] text-[var(--text-3)] font-[family-name:var(--font-mono)]">→ Clean crawl path from the homepage</li>
+              </ul>
+              <a href="/blog/" class="font-[family-name:var(--font-mono)] text-[var(--text-2xs)] text-[var(--accent)] mt-[var(--spacing-gap-sm)] inline-block no-underline hover:underline">Open the blog archive →</a>
+            </div>
+          </div>
+        </div>
+      </details>
+      <details class="collapsible-section card glass-hover px-[var(--card-px)] py-0">
+        <summary class="collapsible-trigger">
+          <svg class="collapsible-chevron" width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round">
+            <polyline points="6 9 12 15 18 9"></polyline>
+          </svg>
+          <span class="font-[family-name:var(--font-mono)] text-[var(--text-small)] font-bold text-[var(--text-1)]">Multi-Cloud Resilience Guide</span>
+        </summary>
+        <div class="collapsible-reveal">
+          <div class="collapsible-reveal-inner">
+            <div class="pb-[var(--card-py)]">
+              <p class="text-[var(--text-small)] text-[var(--text-2)]">A featured article on OpenTofu, Terragrunt, and provider-neutral infrastructure patterns for reliable delivery at scale.</p>
+              <ul class="list-none p-0 mt-[var(--spacing-gap-sm)] space-y-[4px]">
+                <li class="text-[var(--text-xs)] text-[var(--text-3)] font-[family-name:var(--font-mono)]">→ OpenTofu and Terragrunt</li>
+                <li class="text-[var(--text-xs)] text-[var(--text-3)] font-[family-name:var(--font-mono)]">→ Portable infrastructure patterns</li>
+                <li class="text-[var(--text-xs)] text-[var(--text-3)] font-[family-name:var(--font-mono)]">→ Architecture-level reliability</li>
+              </ul>
+              <a href="/blog/architecting-multi-cloud-resilience-opentofu-terragrunt-mandatory-2026/" class="font-[family-name:var(--font-mono)] text-[var(--text-2xs)] text-[var(--accent)] mt-[var(--spacing-gap-sm)] inline-block no-underline hover:underline">Read the resilience article →</a>
+            </div>
+          </div>
+        </div>
+      </details>
+      <details class="collapsible-section card glass-hover px-[var(--card-px)] py-0">
+        <summary class="collapsible-trigger">
+          <svg class="collapsible-chevron" width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round">
+            <polyline points="6 9 12 15 18 9"></polyline>
+          </svg>
+          <span class="font-[family-name:var(--font-mono)] text-[var(--text-small)] font-bold text-[var(--text-1)]">CI/CD Breach Analysis</span>
+        </summary>
+        <div class="collapsible-reveal">
+          <div class="collapsible-reveal-inner">
+            <div class="pb-[var(--card-py)]">
+              <p class="text-[var(--text-small)] text-[var(--text-2)]">A direct link into the Hackerbot-Claw post covering trust-boundary failures, supply-chain risk, and practical DevSecOps hardening moves.</p>
+              <ul class="list-none p-0 mt-[var(--spacing-gap-sm)] space-y-[4px]">
+                <li class="text-[var(--text-xs)] text-[var(--text-3)] font-[family-name:var(--font-mono)]">→ Supply-chain security review</li>
+                <li class="text-[var(--text-xs)] text-[var(--text-3)] font-[family-name:var(--font-mono)]">→ CI/CD trust boundary analysis</li>
+                <li class="text-[var(--text-xs)] text-[var(--text-3)] font-[family-name:var(--font-mono)]">→ Hardening actions for teams</li>
+              </ul>
+              <a href="/blog/execution-layer-breach-hackerbot-claw-cicd-compromise/" class="font-[family-name:var(--font-mono)] text-[var(--text-2xs)] text-[var(--accent)] mt-[var(--spacing-gap-sm)] inline-block no-underline hover:underline">Read the breach analysis →</a>
+            </div>
+          </div>
+        </div>
+      </details>
+    </div>
   </section>
 
   <!-- Executive Summary -->
   <section id="executive-summary" class="max-w-[var(--container-max)] mx-auto px-[var(--section-px)] mt-[var(--section-gap)]">
-    <div class="section-header mb-[var(--spacing-gap-lg)]">
-      <span class="font-[family-name:var(--font-mono)] text-[var(--text-2xs)] font-bold tracking-[0.10em] text-[var(--accent)]">Executive Summary</span>
-      <h2 class="font-[family-name:var(--font-mono)] text-[var(--heading-sm)] font-bold text-[var(--text-1)] mt-[var(--spacing-gap-xs)]">Strategic leadership &amp; stability</h2>
+    <div class="terminal-section-header mb-[var(--spacing-gap-xl)]">
+      <span class="label-caps text-[var(--accent)]">Executive Summary</span>
+      <h2 class="font-[family-name:var(--font-mono)] text-[var(--heading-sm)] font-bold text-[var(--text-1)]">Strategic leadership &amp; stability</h2>
     </div>
     <div class="glass-panel px-[var(--card-px)] py-[var(--card-py)] terminal-corner">
       <h3 class="font-[family-name:var(--font-mono)] text-[var(--text-base)] font-bold text-[var(--text-1)] mb-[var(--spacing-gap-md)]">I bridge complex infrastructure with a calm, reliable product experience.</h3>
@@ -239,11 +270,11 @@ const statusItems = [
 
   <!-- Work Experience -->
   <section id="experience" class="max-w-[var(--container-max)] mx-auto px-[var(--section-px)] mt-[var(--section-gap)]">
-    <div class="section-header mb-[var(--spacing-gap-lg)]">
-      <span class="font-[family-name:var(--font-mono)] text-[var(--text-2xs)] font-bold tracking-[0.10em] text-[var(--accent)]">Experience</span>
-      <h2 class="font-[family-name:var(--font-mono)] text-[var(--heading-sm)] font-bold text-[var(--text-1)] mt-[var(--spacing-gap-xs)]">Execution that survives production</h2>
+    <div class="terminal-section-header mb-[var(--spacing-gap-xl)]">
+      <span class="label-caps text-[var(--accent)]">Experience</span>
+      <h2 class="font-[family-name:var(--font-mono)] text-[var(--heading-sm)] font-bold text-[var(--text-1)]">Execution that survives production</h2>
     </div>
-    <BentoGrid columns="3">
+    <div class="timeline-track">
       {experiences?.length > 0 ? experiences.map((exp: any) => (
         <WorkCard
           company={exp.company}
@@ -253,23 +284,24 @@ const statusItems = [
           description={exp.description}
           highlight={exp.highlight}
           skills={exp.skills || []}
+          collapsible={true}
         />
       )) : (
         <>
-          <WorkCard company="Alizeth" location="Medenine" period="Mar 2023 - Present" role="DevOps Engineer & Project Manager" description="Handling project management and DevOps with a focus on infrastructure automation, deployments, and scalable architecture." highlight="Overseeing automation, deployments, and infrastructure" skills={['Infrastructure', 'DevOps', 'Project Management']} />
-          <WorkCard company="DevCom" location="Medenine" period="Mar 2021 - Feb 2023" role="Tech Support" description="Provided technical support and troubleshooting to ensure system reliability and resolve critical issues efficiently." highlight="Ensuring system reliability and uptime" skills={['Technical Support', 'System Reliability', 'Troubleshooting']} />
-          <WorkCard company="CB Audit & Conseil" location="Tunis" period="Oct 2016 - Oct 2020" role="IT Technician" description="Provided IT support with focus on maintaining hardware, software, and network systems." highlight="Maintained hardware, software, and network systems" skills={['IT Support', 'System Maintenance', 'Networking']} />
+          <WorkCard company="Alizeth" location="Medenine" period="Mar 2023 - Present" role="DevOps Engineer & Project Manager" description="Handling project management and DevOps with a focus on infrastructure automation, deployments, and scalable architecture." highlight="Overseeing automation, deployments, and infrastructure" skills={['Infrastructure', 'DevOps', 'Project Management']} collapsible={true} />
+          <WorkCard company="DevCom" location="Medenine" period="Mar 2021 - Feb 2023" role="Tech Support" description="Provided technical support and troubleshooting to ensure system reliability and resolve critical issues efficiently." highlight="Ensuring system reliability and uptime" skills={['Technical Support', 'System Reliability', 'Troubleshooting']} collapsible={true} />
+          <WorkCard company="CB Audit & Conseil" location="Tunis" period="Oct 2016 - Oct 2020" role="IT Technician" description="Provided IT support with focus on maintaining hardware, software, and network systems." highlight="Maintained hardware, software, and network systems" skills={['IT Support', 'System Maintenance', 'Networking']} collapsible={true} />
         </>
       )}
-    </BentoGrid>
+    </div>
     <DeployMeta hash="sha: a3f7bc2" date="2025-01-15T14:32:07Z" branch="main" message="feat: add work experience section" />
   </section>
 
   <!-- Education -->
   <section id="education" class="max-w-[var(--container-max)] mx-auto px-[var(--section-px)] mt-[var(--section-gap)]">
-    <div class="section-header mb-[var(--spacing-gap-lg)]">
-      <span class="font-[family-name:var(--font-mono)] text-[var(--text-2xs)] font-bold tracking-[0.10em] text-[var(--accent)]">Education</span>
-      <h2 class="font-[family-name:var(--font-mono)] text-[var(--heading-sm)] font-bold text-[var(--text-1)] mt-[var(--spacing-gap-xs)]">Technical depth with a media edge</h2>
+    <div class="terminal-section-header mb-[var(--spacing-gap-xl)]">
+      <span class="label-caps text-[var(--accent)]">Education</span>
+      <h2 class="font-[family-name:var(--font-mono)] text-[var(--heading-sm)] font-bold text-[var(--text-1)]">Technical depth with a media edge</h2>
     </div>
     <BentoGrid columns="2">
       {education?.length > 0 ? education.map((edu: any) => (
@@ -300,50 +332,50 @@ const statusItems = [
 
   <!-- Projects -->
   <section id="projects" class="max-w-[var(--container-max)] mx-auto px-[var(--section-px)] mt-[var(--section-gap)]">
-    <div class="section-header mb-[var(--spacing-gap-lg)]">
-      <span class="font-[family-name:var(--font-mono)] text-[var(--text-2xs)] font-bold tracking-[0.10em] text-[var(--accent)]">Selected Work</span>
-      <h2 class="font-[family-name:var(--font-mono)] text-[var(--heading-sm)] font-bold text-[var(--text-1)] mt-[var(--spacing-gap-xs)]">Systems that stay calm under pressure</h2>
+    <div class="terminal-section-header mb-[var(--spacing-gap-xl)]">
+      <span class="label-caps text-[var(--accent)]">Selected Work</span>
+      <h2 class="font-[family-name:var(--font-mono)] text-[var(--heading-sm)] font-bold text-[var(--text-1)]">Systems that stay calm under pressure</h2>
     </div>
-    <BentoGrid columns="3">
+    <div class="grid grid-cols-1 md:grid-cols-3 gap-[var(--spacing-gap-lg)]">
       {projects?.length > 0 ? projects.map((proj: any) => (
-        <ProjectCard title={proj.title} badge={proj.badge} description={proj.description} tags={proj.tags || []} link={proj.link} linkText={proj.linkText} meta={proj.meta} />
+        <ProjectCard title={proj.title} badge={proj.badge} description={proj.description} tags={proj.tags || []} link={proj.link} linkText={proj.linkText} meta={proj.meta} collapsible={true} />
       )) : (
         <>
-          <ProjectCard title="Eatorder" badge="Food Ordering Platform" description="Food ordering and restaurant management platform. Handled project management and DevOps infrastructure for scalable deployments." tags={['PM', 'DevOps', 'Infrastructure']} link="https://market.eatorder.fr" linkText="View Eatorder project →" meta="Alizeth · Medenine · Ongoing" />
-          <ProjectCard title="Riskvision" badge="Safety Management Platform" description="Safety and risk management platform. Developed full-stack features and managed deployments for production reliability." tags={['Full Stack', 'Deployments', 'DevOps']} link="/#contact" linkText="View Riskvision project →" meta="DevCom · Medenine · Ongoing" />
-          <ProjectCard title="Lavocato" badge="On-Demand Services Platform" description="On-demand services platform. Developed frontend features and managed applications to production." tags={['Frontend', 'Deployments', 'DevOps']} link="/#contact" linkText="View Lavocato project →" meta="CB Audit · Medenine · Ongoing" />
+          <ProjectCard title="Eatorder" badge="Food Ordering Platform" description="Food ordering and restaurant management platform. Handled project management and DevOps infrastructure for scalable deployments." tags={['PM', 'DevOps', 'Infrastructure']} link="https://market.eatorder.fr" linkText="View Eatorder project →" meta="Alizeth · Medenine · Ongoing" collapsible={true} />
+          <ProjectCard title="Riskvision" badge="Safety Management Platform" description="Safety and risk management platform. Developed full-stack features and managed deployments for production reliability." tags={['Full Stack', 'Deployments', 'DevOps']} link="/#contact" linkText="View Riskvision project →" meta="DevCom · Medenine · Ongoing" collapsible={true} />
+          <ProjectCard title="Lavocato" badge="On-Demand Services Platform" description="On-demand services platform. Developed frontend features and managed applications to production." tags={['Frontend', 'Deployments', 'DevOps']} link="/#contact" linkText="View Lavocato project →" meta="CB Audit · Medenine · Ongoing" collapsible={true} />
         </>
       )}
-    </BentoGrid>
+    </div>
   </section>
 
   <!-- Skills -->
   <section id="skills" class="max-w-[var(--container-max)] mx-auto px-[var(--section-px)] mt-[var(--section-gap)]">
-    <div class="section-header mb-[var(--spacing-gap-lg)]">
-      <span class="font-[family-name:var(--font-mono)] text-[var(--text-2xs)] font-bold tracking-[0.10em] text-[var(--accent)]">Capabilities</span>
-      <h2 class="font-[family-name:var(--font-mono)] text-[var(--heading-sm)] font-bold text-[var(--text-1)] mt-[var(--spacing-gap-xs)]">What I bring into your team</h2>
+    <div class="terminal-section-header mb-[var(--spacing-gap-xl)]">
+      <span class="label-caps text-[var(--accent)]">Capabilities</span>
+      <h2 class="font-[family-name:var(--font-mono)] text-[var(--heading-sm)] font-bold text-[var(--text-1)]">What I bring into your team</h2>
     </div>
-    <BentoGrid columns="2">
+    <div class="grid grid-cols-1 md:grid-cols-2 gap-[var(--spacing-gap-lg)]">
       {skills?.length > 0 ? skills.map((skill: any) => (
-        <SkillCategory title={skill.title} skills={skill.skills || []} />
+        <SkillCategory title={skill.title} skills={skill.skills || []} collapsible={true} />
       )) : (
         <>
-          <SkillCategory title="Infrastructure & DevOps" skills={['Linux', 'NGINX', 'Apache', 'Docker', 'CI/CD', 'Git', 'GitHub Actions', 'ArgoCD', 'FluxCD', 'PM2']} />
-          <SkillCategory title="Monitoring & Security" skills={['Prometheus', 'Grafana', 'ELK', 'SSL/TLS', 'Fail2Ban']} />
-          <SkillCategory title="Development" skills={['React', 'Node.js', 'JavaScript', 'HTML5', 'CSS3']} />
-          <SkillCategory title="Automation & Scripting" skills={['Bash', 'PowerShell']} />
-          <SkillCategory title="Databases" skills={['MongoDB', 'PostgreSQL', 'MySQL']} />
-          <SkillCategory title="Project Management" skills={['Agile', 'Scrum', 'Kanban', 'ClickUp']} />
+          <SkillCategory title="Infrastructure & DevOps" skills={['Linux', 'NGINX', 'Apache', 'Docker', 'CI/CD', 'Git', 'GitHub Actions', 'ArgoCD', 'FluxCD', 'PM2']} collapsible={true} />
+          <SkillCategory title="Monitoring & Security" skills={['Prometheus', 'Grafana', 'ELK', 'SSL/TLS', 'Fail2Ban']} collapsible={true} />
+          <SkillCategory title="Development" skills={['React', 'Node.js', 'JavaScript', 'HTML5', 'CSS3']} collapsible={true} />
+          <SkillCategory title="Automation & Scripting" skills={['Bash', 'PowerShell']} collapsible={true} />
+          <SkillCategory title="Databases" skills={['MongoDB', 'PostgreSQL', 'MySQL']} collapsible={true} />
+          <SkillCategory title="Project Management" skills={['Agile', 'Scrum', 'Kanban', 'ClickUp']} collapsible={true} />
         </>
       )}
-    </BentoGrid>
+    </div>
   </section>
 
   <!-- Languages -->
   <section id="languages" class="max-w-[var(--container-max)] mx-auto px-[var(--section-px)] mt-[var(--section-gap)]">
-    <div class="section-header mb-[var(--spacing-gap-lg)]">
-      <span class="font-[family-name:var(--font-mono)] text-[var(--text-2xs)] font-bold tracking-[0.10em] text-[var(--accent)]">Communication</span>
-      <h2 class="font-[family-name:var(--font-mono)] text-[var(--heading-sm)] font-bold text-[var(--text-1)] mt-[var(--spacing-gap-xs)]">Languages</h2>
+    <div class="terminal-section-header mb-[var(--spacing-gap-xl)]">
+      <span class="label-caps text-[var(--accent)]">Communication</span>
+      <h2 class="font-[family-name:var(--font-mono)] text-[var(--heading-sm)] font-bold text-[var(--text-1)]">Languages</h2>
     </div>
     <div class="grid grid-cols-3 gap-[1px] max-md:grid-cols-1">
       <div class="card px-[var(--card-px)] py-[var(--card-py)] flex items-center justify-between max-md:flex-row">
@@ -372,9 +404,9 @@ const statusItems = [
 
   <!-- FAQ -->
   <section id="faq" aria-label="Frequently asked questions" class="max-w-[var(--container-max)] mx-auto px-[var(--section-px)] mt-[var(--section-gap)]">
-    <div class="section-header mb-[var(--spacing-gap-lg)]">
-      <span class="font-[family-name:var(--font-mono)] text-[var(--text-2xs)] font-bold tracking-[0.10em] text-[var(--accent)]">FAQ</span>
-      <h2 class="font-[family-name:var(--font-mono)] text-[var(--heading-sm)] font-bold text-[var(--text-1)] mt-[var(--spacing-gap-xs)]">Common questions</h2>
+    <div class="terminal-section-header mb-[var(--spacing-gap-xl)]">
+      <span class="label-caps text-[var(--accent)]">FAQ</span>
+      <h2 class="font-[family-name:var(--font-mono)] text-[var(--heading-sm)] font-bold text-[var(--text-1)]">Common questions</h2>
     </div>
     <FAQAccordion items={faqs?.length > 0 ? faqs.map((f: any) => ({ question: f.question, answer: f.answer })) : [
       { question: 'What DevOps services do you offer?', answer: 'VPS server setup and hardening, CI/CD pipelines with GitHub Actions and ArgoCD, Docker containerisation, NGINX reverse proxy, Prometheus and Grafana monitoring, and infrastructure automation for production environments. Available for freelance and consulting engagements internationally.' },
@@ -386,9 +418,9 @@ const statusItems = [
 
   <!-- Contact -->
   <section id="contact" class="max-w-[var(--container-max)] mx-auto px-[var(--section-px)] mt-[var(--section-gap)]">
-    <div class="section-header mb-[var(--spacing-gap-lg)]">
-      <span class="font-[family-name:var(--font-mono)] text-[var(--text-2xs)] font-bold tracking-[0.10em] text-[var(--accent)]">Contact</span>
-      <h2 class="font-[family-name:var(--font-mono)] text-[var(--heading-sm)] font-bold text-[var(--text-1)] mt-[var(--spacing-gap-xs)]">Let's build something stable</h2>
+    <div class="terminal-section-header mb-[var(--spacing-gap-xl)]">
+      <span class="label-caps text-[var(--accent)]">Contact</span>
+      <h2 class="font-[family-name:var(--font-mono)] text-[var(--heading-sm)] font-bold text-[var(--text-1)]">Let's build something stable</h2>
     </div>
     <div class="grid grid-cols-1 md:grid-cols-2 gap-[var(--spacing-gap-lg)]">
       <form id="contact-form" class="card glass-hover px-[var(--card-px)] py-[var(--card-py)]" action="https://api.web3forms.com/submit" method="POST">
@@ -462,11 +494,33 @@ const statusItems = [
 .tag-like { transition: border-color 80ms, color 80ms, background 80ms; cursor: default; }
 .tag-like:hover { border-color: var(--accent); color: var(--accent); background: rgba(16,185,129,0.08); }
 .service-icon { opacity: 0.8; transition: opacity 200ms, transform 200ms; }
-article.card:hover .service-icon { opacity: 1; transform: scale(1.05); }
+details.collapsible-section.card:hover .service-icon { opacity: 1; transform: scale(1.05); }
 .language-flag { border-radius: 3px; border: 1px solid var(--border); flex-shrink: 0; opacity: 0.9; transition: opacity 200ms, transform 200ms; object-fit: cover; }
 article.card:hover .language-flag { opacity: 1; transform: scale(1.15); }
+
+/* Item-level collapsible card padding */
+.collapsible-section.card {
+  border-radius: 0;
+  transition: border-color 400ms ease;
+}
+.collapsible-section.card[open] {
+  border-color: rgba(16, 185, 129, 0.3);
+}
+.collapsible-section.card .collapsible-trigger {
+  padding: var(--card-py) 0;
+}
+.collapsible-section.card[open] .collapsible-trigger {
+  padding-bottom: var(--spacing-gap-sm);
+  border-bottom: 1px solid rgba(16, 185, 129, 0.08);
+  margin-bottom: 0;
+}
+.collapsible-section.card .collapsible-chevron {
+  flex-shrink: 0;
+}
+
 @media (prefers-reduced-motion: reduce) {
   .tag-like, .service-icon, .language-flag { transition: none !important; }
   article.card:hover .service-icon, article.card:hover .language-flag { transform: none; }
+  details.collapsible-section.card:hover .service-icon { transform: none; }
 }
 </style>

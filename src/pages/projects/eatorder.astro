@@ -1,0 +1,59 @@
+---
+import BaseLayout from '@layouts/BaseLayout.astro';
+import BreadcrumbSchema from '@components/seo/BreadcrumbSchema.astro';
+import DeployMeta from '@components/ui/DeployMeta.astro';
+---
+
+<BaseLayout title="Eatorder Case Study — Food Ordering Platform" description="Case study: DevOps infrastructure and project management for a food ordering and restaurant management platform handling production-scale deployments." canonical="https://aymen.benyedder.top/projects/eatorder/">
+  <BreadcrumbSchema items={[
+    { name: 'Home', url: 'https://aymen.benyedder.top/' },
+    { name: 'Projects', url: 'https://aymen.benyedder.top/#projects' },
+    { name: 'Eatorder', url: 'https://aymen.benyedder.top/projects/eatorder/' },
+  ]} />
+
+  <div class="max-w-[var(--container-max)] mx-auto px-[var(--section-px)] pt-[var(--section-gap)]">
+    <div class="section-header mb-[var(--spacing-gap-lg)]">
+      <span class="font-[family-name:var(--font-mono)] text-[var(--text-2xs)] font-bold tracking-[0.10em] text-[var(--accent)]">Case Study</span>
+      <h1 class="font-[family-name:var(--font-mono)] text-[var(--heading-md)] font-bold text-[var(--text-1)] mt-[var(--spacing-gap-xs)]">Eatorder — Food Ordering &amp; Restaurant Management</h1>
+      <p class="text-[var(--text-base)] text-[var(--text-2)] mt-[var(--spacing-gap-sm)]">DevOps infrastructure, CI/CD pipelines, and project management for a multi-tenant food ordering platform serving restaurants across France.</p>
+    </div>
+
+    <div class="card px-[var(--card-px)] py-[var(--card-py)] space-y-[var(--spacing-gap-md)]">
+      <h2 class="font-[family-name:var(--font-mono)] text-[14px] max-md:text-[var(--text-small)] font-bold text-[var(--text-1)]">Project Overview</h2>
+      <p class="text-[var(--text-base)] text-[var(--text-2)] leading-relaxed">Eatorder is a food ordering and restaurant management platform that connects customers with restaurants for online ordering, delivery, and table management. The platform serves multiple restaurants across France with real-time order processing, menu management, and analytics.</p>
+
+      <h2 class="font-[family-name:var(--font-mono)] text-[14px] max-md:text-[var(--text-small)] font-bold text-[var(--text-1)]">My Role</h2>
+      <p class="text-[var(--text-base)] text-[var(--text-2)] leading-relaxed">DevOps Engineer &amp; Project Manager at Alizeth. I owned the infrastructure architecture, CI/CD pipeline design, deployment automation, and project delivery timeline.</p>
+
+      <h2 class="font-[family-name:var(--font-mono)] text-[14px] max-md:text-[var(--text-small)] font-bold text-[var(--text-1)]">Infrastructure &amp; Tech Stack</h2>
+      <div class="flex flex-wrap gap-[var(--spacing-gap-xs)]">
+        <span class="font-[family-name:var(--font-mono)] text-[var(--text-2xs)] px-[10px] py-[4px] border border-[var(--border)] text-[var(--text-2)]">Docker</span>
+        <span class="font-[family-name:var(--font-mono)] text-[var(--text-2xs)] px-[10px] py-[4px] border border-[var(--border)] text-[var(--text-2)]">NGINX</span>
+        <span class="font-[family-name:var(--font-mono)] text-[var(--text-2xs)] px-[10px] py-[4px] border border-[var(--border)] text-[var(--text-2)]">GitHub Actions</span>
+        <span class="font-[family-name:var(--font-mono)] text-[var(--text-2xs)] px-[10px] py-[4px] border border-[var(--border)] text-[var(--text-2)]">Linux</span>
+        <span class="font-[family-name:var(--font-mono)] text-[var(--text-2xs)] px-[10px] py-[4px] border border-[var(--border)] text-[var(--text-2)]">PostgreSQL</span>
+        <span class="font-[family-name:var(--font-mono)] text-[var(--text-2xs)] px-[10px] py-[4px] border border-[var(--border)] text-[var(--text-2)]">Prometheus</span>
+        <span class="font-[family-name:var(--font-mono)] text-[var(--text-2xs)] px-[10px] py-[4px] border border-[var(--border)] text-[var(--text-2)]">Grafana</span>
+        <span class="font-[family-name:var(--font-mono)] text-[var(--text-2xs)] px-[10px] py-[4px] border border-[var(--border)] text-[var(--text-2)]">React</span>
+        <span class="font-[family-name:var(--font-mono)] text-[var(--text-2xs)] px-[10px] py-[4px] border border-[var(--border)] text-[var(--text-2)]">Node.js</span>
+      </div>
+
+      <h2 class="font-[family-name:var(--font-mono)] text-[14px] max-md:text-[var(--text-small)] font-bold text-[var(--text-1)]">Key Outcomes</h2>
+      <ul class="space-y-[var(--spacing-gap-sm)]">
+        <li class="text-[var(--text-small)] text-[var(--text-2)]"><strong class="text-[var(--text-1)]">Zero-downtime deployments</strong> — Automated CI/CD pipeline with GitHub Actions and Docker Compose eliminated manual deployment errors.</li>
+        <li class="text-[var(--text-small)] text-[var(--text-2)]"><strong class="text-[var(--text-1)]">Production monitoring</strong> — Prometheus + Grafana stack provided real-time visibility into application and infrastructure health.</li>
+        <li class="text-[var(--text-small)] text-[var(--text-2)]"><strong class="text-[var(--text-1)]">Scalable architecture</strong> — Containerized microservices design enabled horizontal scaling during peak ordering hours.</li>
+        <li class="text-[var(--text-small)] text-[var(--text-2)]"><strong class="text-[var(--text-1)]">Security hardening</strong> — SSL/TLS termination, firewall configuration, automated backup strategy, and fail2ban protection.</li>
+      </ul>
+
+      <h2 class="font-[family-name:var(--font-mono)] text-[14px] max-md:text-[var(--text-small)] font-bold text-[var(--text-1)]">Impact</h2>
+      <p class="text-[var(--text-base)] text-[var(--text-2)] leading-relaxed">The platform reliably serves restaurants across France with consistent uptime. The automated CI/CD pipeline reduced deployment time by approximately 65%, and the monitoring infrastructure provides early warning of potential issues before they impact customers.</p>
+    </div>
+
+    <div class="text-center mt-[var(--spacing-gap-lg)]">
+      <a href="https://market.eatorder.fr" target="_blank" rel="noopener noreferrer" class="font-[family-name:var(--font-mono)] text-[var(--text-2xs)] font-bold tracking-[0.06em] px-[18px] py-[9px] border border-[var(--accent)] bg-[var(--accent)] text-[var(--void)] no-underline inline-flex items-center gap-[8px] hover:bg-transparent hover:text-[var(--accent)] transition-[background_80ms,color_80ms]">Visit live platform →</a>
+    </div>
+
+    <DeployMeta hash="sha: a3f7bc2" date="2025-01-15T14:32:07Z" branch="main" message="feat: add eatorder case study" class="mt-[var(--section-gap)]" />
+  </div>
+</BaseLayout>

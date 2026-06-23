@@ -1,3 +1,2 @@
-# ─── SEO redirects ───
-# Convention: /sitemap.xml should resolve to the sitemap index
-/sitemap.xml  /sitemap-index.xml  301
+# Redirect old fraudulent LMIA post to C16 article
+/blog/how-i-help-canadian-startups-skip-lmia-headache/ /blog/c16-francophone-mobility-lmia-exemption-canada/ 301

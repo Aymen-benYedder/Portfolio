@@ -5,6 +5,7 @@ import Footer from '@components/layout/Footer.astro';
 import Gtag from '@components/analytics/Gtag.astro';
 import NavbarIsland from '@components/islands/NavbarIsland.tsx';
 import CommandPalette from '@components/islands/CommandPalette.tsx';
+import CustomCursor from '@components/islands/CustomCursor.tsx';
 import '@styles/globals.css';
 
 export interface Props {
@@ -20,7 +21,7 @@ const { title, description, canonical, image, ogType, noIndex } = Astro.props;
 ---
 
 <!DOCTYPE html>
-<html lang="en">
+<html lang="en" data-cursor="true">
   <head>
     <meta charset="UTF-8" />
     <meta name="viewport" content="width=device-width, initial-scale=1.0" />
@@ -37,17 +38,24 @@ const { title, description, canonical, image, ogType, noIndex } = Astro.props;
     <link rel="dns-prefetch" href="https://fonts.googleapis.com" />
     <link rel="dns-prefetch" href="https://fonts.gstatic.com" />
     <link rel="dns-prefetch" href="https://kv8mx0wv.api.sanity.io" />
+    <!-- ViewTransitions will be added after cursor + animations are stable -->
     <!-- Google Fonts: non-blocking load pattern -->
-    <link rel="preload" as="style" href="https://fonts.googleapis.com/css2?family=Hanken+Grotesque:wght@400;600;700;800&family=JetBrains+Mono:wght@400;500;700&display=optional" />
-    <link rel="stylesheet" href="https://fonts.googleapis.com/css2?family=Hanken+Grotesque:wght@400;600;700;800&family=JetBrains+Mono:wght@400;500;700&display=optional" media="print" onload="this.media='all'" />
+    <link rel="preload" as="style" href="https://fonts.googleapis.com/css2?family=Geist:wght@400;500;600;700&family=Hanken+Grotesque:wght@400;600;700;800&family=JetBrains+Mono:wght@400;500;700&display=optional" />
+    <link rel="stylesheet" href="https://fonts.googleapis.com/css2?family=Geist:wght@400;500;600;700&family=Hanken+Grotesque:wght@400;600;700;800&family=JetBrains+Mono:wght@400;500;700&display=optional" media="print" onload="this.media='all'" />
     <noscript>
-      <link rel="stylesheet" href="https://fonts.googleapis.com/css2?family=Hanken+Grotesque:wght@400;600;700;800&family=JetBrains+Mono:wght@400;500;700&display=optional" />
+      <link rel="stylesheet" href="https://fonts.googleapis.com/css2?family=Geist:wght@400;500;600;700&family=Hanken+Grotesque:wght@400;600;700;800&family=JetBrains+Mono:wght@400;500;700&display=optional" />
     </noscript>
     <slot name="head" />
   </head>
   <body class="bg-[var(--void)] text-[var(--text-2)]">
     <a href="#main-content" class="skip-link absolute -top-10 left-0 bg-[var(--accent)] text-[var(--void)] px-[var(--spacing-gap-sm)] py-[var(--spacing-gap-xs)] no-underline z-50 focus:top-0">Skip to main content</a>
-    <div class="scanline-overlay" aria-hidden="true"></div>
+    <!-- Volumetric light follows mouse position -->
+    <div id="volumetric-light" aria-hidden="true"></div>
+    <!-- Scroll progress bar -->
+    <div id="scroll-progress" aria-hidden="true"></div>
+    <!-- CRT terminal overlay: scanline + dither grain -->
+    <div class="crt-overlay" aria-hidden="true"></div>
+    <CustomCursor client:load />
     <NavbarIsland client:load />
     <CommandPalette client:idle />
     <main id="main-content" class="pt-[52px]">
@@ -55,6 +63,139 @@ const { title, description, canonical, image, ogType, noIndex } = Astro.props;
     </main>
     <Footer />
     <slot name="after-footer" />
+    <script>
+      document.addEventListener('DOMContentLoaded', () => {
+        // ── Observer Options ──
+        const observerOptions = { 
+          threshold: 0.1,
+          rootMargin: '0px 0px -40px 0px'
+        };
+
+        // ── Scroll Reveal (existing) ──
+        const revealObserver = new IntersectionObserver((entries) => {
+          entries.forEach(entry => {
+            if (entry.isIntersecting) {
+              entry.target.classList.add('revealed');
+              revealObserver.unobserve(entry.target);
+            }
+          });
+        }, observerOptions);
+
+        document.querySelectorAll('[data-reveal]').forEach(el => revealObserver.observe(el));
+
+        // ── Staggered Reveal ──
+        document.querySelectorAll('[data-stagger]').forEach((el, i) => {
+          const parent = el.parentElement;
+          const siblings = parent ? Array.from(parent.querySelectorAll('[data-stagger]')) : [el];
+          const index = siblings.indexOf(el);
+          const staggerDelay = index * 80;
+          el.style.setProperty('--stagger-delay', `${staggerDelay}ms`);
+          revealObserver.observe(el);
+        });
+
+        // ── Blur Reveal (sections) ──
+        document.querySelectorAll('[data-reveal-blur]').forEach(el => revealObserver.observe(el));
+
+        // ── Staggered Blur Reveal ──
+        document.querySelectorAll('[data-stagger-blur]').forEach((el, i) => {
+          const parent = el.parentElement;
+          const siblings = parent ? Array.from(parent.querySelectorAll('[data-stagger-blur]')) : [el];
+          const index = siblings.indexOf(el);
+          el.style.setProperty('--stagger-delay', `${index * 80}ms`);
+          revealObserver.observe(el);
+        });
+
+        // ── Hero Staggered Entrance ──
+        document.querySelectorAll('[data-stagger-hero]').forEach((el, i) => {
+          revealObserver.observe(el);
+        });
+
+        // ── Scroll Progress Bar ──
+        const progressBar = document.getElementById('scroll-progress');
+        if (progressBar) {
+          const updateProgress = () => {
+            const scrollTop = window.scrollY;
+            const docHeight = document.documentElement.scrollHeight - window.innerHeight;
+            const progress = docHeight > 0 ? (scrollTop / docHeight) * 100 : 0;
+            progressBar.style.width = Math.min(progress, 100) + '%';
+          };
+          window.addEventListener('scroll', updateProgress, { passive: true });
+          updateProgress();
+        }
+
+        // ── Parallax Scroll Effect ──
+        const parallaxElements = document.querySelectorAll('[data-parallax]');
+        if (parallaxElements.length > 0) {
+          const updateParallax = () => {
+            const scrolled = window.scrollY;
+            parallaxElements.forEach(el => {
+              const speed = parseFloat(el.getAttribute('data-parallax')) || 0.1;
+              const yPos = -(scrolled * speed);
+              el.style.transform = `translate3d(0, ${yPos}px, 0)`;
+            });
+          };
+          window.addEventListener('scroll', updateParallax, { passive: true });
+        }
+
+        // ── Enhanced Magnetic Effect (with 3D follow) ──
+        document.querySelectorAll('.btn-magnetic, [data-magnetic]').forEach(el => {
+          el.addEventListener('mousemove', (e) => {
+            const rect = el.getBoundingClientRect();
+            const x = ((e.clientX - rect.left) / rect.width) * 100;
+            const y = ((e.clientY - rect.top) / rect.height) * 100;
+            el.style.setProperty('--mouse-x', x + '%');
+            el.style.setProperty('--mouse-y', y + '%');
+
+            // Subtle 3D displacement toward cursor
+            const relX = (e.clientX - rect.left) / rect.width - 0.5;
+            const relY = (e.clientY - rect.top) / rect.height - 0.5;
+            const moveX = relX * 6;
+            const moveY = relY * 6;
+            el.style.transform = `translate3d(${moveX}px, ${moveY}px, 0)`;
+          });
+          el.addEventListener('mouseleave', () => {
+            el.style.transform = 'translate3d(0, 0, 0)';
+          });
+        });
+
+        // ── 3D Card Tilt Effect ──
+        document.querySelectorAll('.card-tilt').forEach(card => {
+          card.addEventListener('mousemove', (e) => {
+            const rect = card.getBoundingClientRect();
+            const x = (e.clientX - rect.left) / rect.width;
+            const y = (e.clientY - rect.top) / rect.height;
+            const rotateX = (y - 0.5) * -8;
+            const rotateY = (x - 0.5) * 8;
+            card.style.setProperty('--rotate-x', rotateX + 'deg');
+            card.style.setProperty('--rotate-y', rotateY + 'deg');
+          });
+          card.addEventListener('mouseleave', () => {
+            card.style.setProperty('--rotate-x', '0deg');
+            card.style.setProperty('--rotate-y', '0deg');
+          });
+        });
+
+        // ── 3D Tilt on all card-premium elements ──
+        document.querySelectorAll('.card-premium:not(.card-tilt)').forEach(card => {
+          if (card.closest('[data-parallax]')) return; // skip if parallax container
+          card.addEventListener('mousemove', (e) => {
+            const rect = card.getBoundingClientRect();
+            const x = (e.clientX - rect.left) / rect.width;
+            const y = (e.clientY - rect.top) / rect.height;
+            const rotateX = (y - 0.5) * -4;
+            const rotateY = (x - 0.5) * 4;
+            card.style.setProperty('--rotate-x', rotateX + 'deg');
+            card.style.setProperty('--rotate-y', rotateY + 'deg');
+            card.style.setProperty('--tilt-scale', '1.01');
+          });
+          card.addEventListener('mouseleave', () => {
+            card.style.setProperty('--rotate-x', '0deg');
+            card.style.setProperty('--rotate-y', '0deg');
+            card.style.setProperty('--tilt-scale', '1');
+          });
+        });
+      });
+    </script>
   </body>
 </html>
 

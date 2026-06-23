@@ -7,21 +7,187 @@ export interface Props {
   description: string;
   highlight: string;
   skills: string[];
+  isCurrent?: boolean;
+  collapsible?: boolean;
   class?: string;
 }
-const { company, location, period, role, description, highlight, skills, class: className = '' } = Astro.props;
+const { company, location, period, role, description, highlight, skills, isCurrent = false, collapsible = false, class: className = '' } = Astro.props;
+const cardClass = `timeline-card${isCurrent ? ' is-current' : ' is-past'} ${className}`.trim();
 ---
 
-<article class="card glass-hover hover-lift px-[var(--card-px)] py-[var(--card-py)] {className}">
-  <span class="label-caps text-[var(--accent)] block mb-[var(--spacing-gap-sm)]">{highlight}</span>
-  <div class="flex items-center justify-between mb-[4px] gap-[var(--spacing-gap-xs)]">
-    <h3 class="font-[family-name:var(--font-mono)] text-[14px] max-md:text-[var(--text-small)] font-bold text-[var(--text-1)] m-0">{company}</h3>
-    <span class="font-[family-name:var(--font-mono)] text-[var(--text-2xs)] text-[var(--text-3)] border border-[var(--border)] px-[6px] py-[2px] whitespace-nowrap">{location}</span>
-  </div>
-  <p class="font-[family-name:var(--font-mono)] text-[var(--text-2xs)] text-[var(--text-3)] mt-[4px]">{period}</p>
-  <p class="font-[family-name:var(--font-mono)] text-[var(--text-xs)] font-bold text-[var(--text-2)]">{role}</p>
-  <p class="text-[var(--text-small)] text-[var(--text-2)] leading-relaxed mt-[var(--spacing-gap-sm)]">{description}</p>
-  <div class="flex flex-wrap gap-[var(--spacing-gap-xs)] mt-[var(--spacing-gap-sm)]">
-    {skills.map(skill => <span class="font-[family-name:var(--font-mono)] text-[var(--text-2xs)] text-[var(--text-3)] px-[6px] py-[2px] border border-[var(--border)]">{skill}</span>)}
-  </div>
-</article>
+{
+  collapsible ? (
+    <details class="collapsible-section {cardClass}">
+      <summary class="collapsible-trigger">
+        <svg class="collapsible-chevron" width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round">
+          <polyline points="6 9 12 15 18 9"></polyline>
+        </svg>
+        <div class="flex flex-col min-w-0">
+          <span class="font-[family-name:var(--font-mono)] text-[var(--text-small)] font-bold text-[var(--text-1)] truncate">{company}</span>
+          <span class="font-[family-name:var(--font-mono)] text-[var(--text-2xs)] text-[var(--text-3)] truncate">{role} · {period}</span>
+        </div>
+      </summary>
+      <div class="collapsible-reveal">
+        <div class="collapsible-reveal-inner">
+          <!-- Timeline dot -->
+          <div class="timeline-dot"></div>
+          <div class="card-body glass-hover">
+            <div class="flex items-center gap-[8px] mb-[var(--spacing-gap-xs)]">
+              <svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" class="text-[var(--accent)] shrink-0">
+                <circle cx="12" cy="12" r="10"></circle>
+                <circle cx="12" cy="12" r="6"></circle>
+                <circle cx="12" cy="12" r="2"></circle>
+              </svg>
+              <span class="font-[family-name:var(--font-mono)] text-[var(--text-2xs)] tracking-[0.1em] text-[var(--accent)]">// {highlight}</span>
+            </div>
+            <div class="flex flex-wrap items-center justify-between gap-[var(--spacing-gap-xs)] mb-[2px]">
+              <h3 class="font-[family-name:var(--font-mono)] text-[var(--text-base)] max-md:text-[var(--text-small)] font-bold text-[var(--text-1)] m-0">{company}</h3>
+              <div class="flex items-center gap-[var(--spacing-gap-xs)]">
+                <span class="font-[family-name:var(--font-mono)] text-[var(--text-2xs)] text-[var(--text-3)] whitespace-nowrap">{period}</span>
+                <span class="font-[family-name:var(--font-mono)] text-[var(--text-2xs)] text-[var(--text-3)] border border-[var(--border)] px-[6px] py-[2px] whitespace-nowrap">{location}</span>
+              </div>
+            </div>
+            <p class="font-[family-name:var(--font-mono)] text-[var(--text-small)] font-bold text-[var(--text-1)] mt-[var(--spacing-gap-xs)]">{role}</p>
+            <p class="text-[var(--text-small)] text-[var(--text-2)] leading-relaxed mt-[var(--spacing-gap-sm)]">{description}</p>
+            <div class="flex flex-wrap gap-[var(--spacing-gap-xs)] mt-[var(--spacing-gap-sm)]">
+              {skills.map(skill => (
+                <span class="font-[family-name:var(--font-mono)] text-[var(--text-2xs)] text-[var(--text-3)] px-[6px] py-[2px] border border-[var(--border)]">{skill}</span>
+              ))}
+            </div>
+          </div>
+        </div>
+      </div>
+    </details>
+  ) : (
+    <article class={cardClass}>
+      <div class="timeline-dot"></div>
+      <div class="card-body glass-hover">
+        <div class="flex items-center gap-[8px] mb-[var(--spacing-gap-xs)]">
+          <svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" class="text-[var(--accent)] shrink-0">
+            <circle cx="12" cy="12" r="10"></circle>
+            <circle cx="12" cy="12" r="6"></circle>
+            <circle cx="12" cy="12" r="2"></circle>
+          </svg>
+          <span class="font-[family-name:var(--font-mono)] text-[var(--text-2xs)] tracking-[0.1em] text-[var(--accent)]">// {highlight}</span>
+        </div>
+        <div class="flex flex-wrap items-center justify-between gap-[var(--spacing-gap-xs)] mb-[2px]">
+          <h3 class="font-[family-name:var(--font-mono)] text-[var(--text-base)] max-md:text-[var(--text-small)] font-bold text-[var(--text-1)] m-0">{company}</h3>
+          <div class="flex items-center gap-[var(--spacing-gap-xs)]">
+            <span class="font-[family-name:var(--font-mono)] text-[var(--text-2xs)] text-[var(--text-3)] whitespace-nowrap">{period}</span>
+            <span class="font-[family-name:var(--font-mono)] text-[var(--text-2xs)] text-[var(--text-3)] border border-[var(--border)] px-[6px] py-[2px] whitespace-nowrap">{location}</span>
+          </div>
+        </div>
+        <p class="font-[family-name:var(--font-mono)] text-[var(--text-small)] font-bold text-[var(--text-1)] mt-[var(--spacing-gap-xs)]">{role}</p>
+        <p class="text-[var(--text-small)] text-[var(--text-2)] leading-relaxed mt-[var(--spacing-gap-sm)]">{description}</p>
+        <div class="flex flex-wrap gap-[var(--spacing-gap-xs)] mt-[var(--spacing-gap-sm)]">
+          {skills.map(skill => (
+            <span class="font-[family-name:var(--font-mono)] text-[var(--text-2xs)] text-[var(--text-3)] px-[6px] py-[2px] border border-[var(--border)]">{skill}</span>
+          ))}
+        </div>
+      </div>
+    </article>
+  )
+}
+
+<style>
+  .timeline-card {
+    position: relative;
+    padding-left: 48px;  /* room for line + dot */
+  }
+
+  /* ── Dot — real element, no translate needed ──
+     Math: line is at left:15px, width:1px → center 15.5px
+            dot left:11px, width:9px → center 11+4.5 = 15.5px ✓
+  */
+  .timeline-dot {
+    position: absolute;
+    left: 11px;
+    top: 28px;
+    width: 9px;
+    height: 9px;
+    border-radius: 50%;
+    z-index: 2;
+    /* ring = background-colored outline creates visual gap from line */
+    box-shadow: 0 0 0 4px var(--surface);
+    transition: box-shadow 300ms ease, transform 300ms ease, background 300ms ease;
+  }
+
+  /* ── Current Experience Dot: filled accent + glow ── */
+  .timeline-card.is-current .timeline-dot {
+    background: var(--accent);
+    box-shadow: 0 0 0 4px var(--surface), 0 0 12px rgba(16, 185, 129, 0.7);
+  }
+
+  .timeline-card.is-current:hover .timeline-dot {
+    box-shadow: 0 0 0 4px var(--surface), 0 0 20px rgba(16, 185, 129, 0.9);
+    transform: scale(1.25);
+  }
+
+  /* ── Past Experience Dot: gray fill ── */
+  .timeline-card.is-past .timeline-dot {
+    background: var(--text-3);
+    border: none;
+  }
+
+  .timeline-card.is-past:hover .timeline-dot {
+    border-color: var(--accent);
+    transform: scale(1.2);
+  }
+
+  /* ── Card Body ── */
+  .card-body {
+    padding: var(--card-py) var(--card-px);
+    position: relative;
+  }
+
+  /* Hover accent line on left */
+  .card-body::before {
+    content: '';
+    position: absolute;
+    top: 0;
+    left: 0;
+    bottom: 0;
+    width: 3px;
+    background: var(--accent);
+    transform: scaleY(0);
+    transform-origin: top;
+    transition: transform 300ms cubic-bezier(0.16, 1, 0.3, 1);
+    opacity: 0.6;
+  }
+
+  .card-body:hover::before {
+    transform: scaleY(1);
+  }
+
+  /* ── Gap between cards ── */
+  .timeline-card + .timeline-card {
+    margin-top: 0;
+  }
+
+  /* ── Connect cards via border above ── */
+  .timeline-card + .timeline-card .card-body {
+    border-top: 1px solid var(--border);
+  }
+
+  @media (max-width: 640px) {
+    .timeline-card {
+      padding-left: 36px;
+    }
+
+    .timeline-dot {
+      left: 7px;   /* line at left:11px, width:1px → center 11.5px; dot 7px + 4.5 = 11.5px ✓ */
+      top: 24px;
+      width: 9px;
+      height: 9px;
+    }
+  }
+
+  @media (prefers-reduced-motion: reduce) {
+    .timeline-dot,
+    .card-body::before {
+      transition: none !important;
+      transform: none !important;
+    }
+    .card-body::before { opacity: 0; }
+  }
+</style>

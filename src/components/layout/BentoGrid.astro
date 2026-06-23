@@ -2,9 +2,10 @@
 export interface Props {
   columns?: '2' | '3' | '4' | '32' | '23';
   class?: string;
+  featured?: boolean;
 }
 
-const { columns = '2', class: className = '' } = Astro.props;
+const { columns = '2', class: className = '', featured = false } = Astro.props;
 
 const colClasses: Record<string, string> = {
   '2': 'grid-cols-2',
@@ -15,6 +16,22 @@ const colClasses: Record<string, string> = {
 };
 ---
 
-<div class="bento grid gap-[1px] bg-[var(--border)] max-md:grid-cols-1 {colClasses[columns]} {className}">
+<div class="bento grid gap-[1px] bg-[var(--border)] max-md:grid-cols-1 {colClasses[columns]} {featured ? 'featured-grid' : ''} {className}">
   <slot />
 </div>
+
+<style>
+  .featured-grid > :first-child {
+    grid-column: 1 / -1;
+  }
+  
+  @media (min-width: 768px) {
+    .featured-grid.featured-grid > :first-child {
+      grid-column: 1 / -1;
+    }
+  }
+  
+  @media (prefers-reduced-motion: reduce) {
+    .bento { gap: 1px; }
+  }
+</style>

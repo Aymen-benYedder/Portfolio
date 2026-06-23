@@ -1,0 +1,166 @@
+---
+import BaseLayout from '@layouts/BaseLayout.astro';
+import BreadcrumbSchema from '@components/seo/BreadcrumbSchema.astro';
+
+const canonical = 'https://aymen.benyedder.top/hire/';
+const pageTitle = 'Hire a Senior DevOps Engineer — Remote, Francophone, LMIA-Exempt';
+const pageDescription = 'Hire a Senior DevOps Engineer for your Canadian team. Remote, francophone, LMIA-exempt. CI/CD, Docker, GitOps, and production infrastructure automation.';
+---
+
+<BaseLayout
+  title={pageTitle}
+  description={pageDescription}
+  canonical={canonical}
+>
+  <BreadcrumbSchema items={[
+    { name: 'Home', url: 'https://aymen.benyedder.top/' },
+    { name: 'Hire', url: canonical },
+  ]} />
+
+  <!-- JobPosting Schema -->
+  <script type="application/ld+json" set:html={JSON.stringify({
+    '@context': 'https://schema.org',
+    '@type': 'JobPosting',
+    title: 'Senior DevOps Engineer',
+    description: 'Hire a Senior DevOps Engineer for remote contract work. Specializing in CI/CD pipelines, Docker infrastructure, GitOps with ArgoCD and FluxCD, Kubernetes, Prometheus/Grafana monitoring, and production-grade infrastructure automation. Francophone, remote, LMIA-exempt for Canadian companies.',
+    identifier: { '@type': 'PropertyValue', name: 'Aymen ben Yedder', value: 'aymen-ben-yedder-devops' },
+    datePosted: '2026-06-16',
+    validThrough: '2027-06-16',
+    employmentType: 'CONTRACTOR',
+    hiringOrganization: {
+      '@type': 'Organization',
+      name: 'Aymen ben Yedder',
+      sameAs: 'https://aymen.benyedder.top',
+    },
+    jobLocation: {
+      '@type': 'Place',
+      address: {
+        '@type': 'PostalAddress',
+        addressLocality: 'Medenine',
+        addressCountry: 'TN',
+      },
+    },
+    applicantLocationRequirements: {
+      '@type': 'Place',
+      address: {
+        '@type': 'PostalAddress',
+        addressCountry: 'TN',
+      },
+    },
+    employmentLocation: { '@type': 'Place', name: 'Remote' },
+    jobLocationType: 'TELECOMMUTE',
+    skills: 'CI/CD, Docker, Kubernetes, ArgoCD, FluxCD, GitOps, Prometheus, Grafana, Terraform, OpenTofu, Terragrunt, NGINX, Linux, GitHub Actions, PostgreSQL, MongoDB, DevSecOps',
+    industry: 'Information Technology',
+    occupationalCategory: '15-1252.00',
+    workHours: 'Full-time contract, flexible',
+    responsibilities: 'Design and operate production infrastructure for web applications. Build and maintain CI/CD pipelines. Automate deployments with GitOps workflows. Monitor and alert on system health. Harden servers and networks against common attack vectors. Document and train internal teams.',
+    qualifications: '8+ years in production infrastructure. Expert-level Docker and CI/CD. Production experience with Kubernetes, ArgoCD, FluxCD, Prometheus, and Grafana. Strong Linux systems administration. Fluent in English and French.',
+    experienceRequirements: '8+ years',
+    educationRequirements: "Master's in Computer Science",
+    eligibilityToWorkRequirement: 'LMIA-exempt for Canadian companies. Available for remote contract work globally.',
+    sensoryRequirement: 'Professional communication via Slack, email, and video calls during overlapping business hours with Canadian time zones.',
+  })} />
+
+  <div class="max-w-[var(--container-max)] mx-auto px-[var(--section-px)] pt-[var(--section-gap)]">
+    <div class="section-header mb-[var(--spacing-gap-lg)]">
+      <span class="font-[family-name:var(--font-mono)] text-[var(--text-2xs)] font-bold tracking-[0.10em] text-[var(--accent)]">Hire</span>
+      <h1 class="font-[family-name:var(--font-mono)] text-[var(--heading-md)] max-md:text-[var(--heading-sm)] font-bold text-[var(--text-1)] mt-[var(--spacing-gap-xs)]">Hire a Senior DevOps Engineer — Remote, Francophone, LMIA-Exempt</h1>
+      <p class="text-[var(--text-base)] text-[var(--text-2)] mt-[var(--spacing-gap-sm)]">8 years in production infrastructure. Available for Canadian teams who need infrastructure reliability without the hiring friction.</p>
+    </div>
+
+    <div class="space-y-[var(--spacing-gap-lg)]">
+
+      <!-- Who -->
+      <div class="card px-[var(--card-px)] py-[var(--card-py)]">
+        <h2 class="font-[family-name:var(--font-mono)] text-[14px] max-md:text-[var(--text-small)] font-bold text-[var(--text-1)] mb-[var(--spacing-gap-sm)]">Who I am</h2>
+        <p class="text-[var(--text-base)] text-[var(--text-2)] leading-relaxed">I am <strong class="text-[var(--text-1)]">Aymen ben Yedder</strong>, a Senior DevOps Engineer and Web Systems Architect based in Tunisia. Over the past 8 years I have designed and operated production infrastructure for food delivery platforms, safety management systems, and on-demand service applications — environments where downtime is expensive and reliability is non-negotiable.</p>
+        <p class="text-[var(--text-base)] text-[var(--text-2)] leading-relaxed mt-[var(--spacing-gap-sm)]">I currently lead infrastructure automation and delivery pipelines at <strong class="text-[var(--text-1)]">Alizeth</strong> as DevOps Engineer and Project Manager. I am fluent in English (advanced) and French (fluent), and I work remotely from Tunisia with overlap into Canadian business hours.</p>
+      </div>
+
+      <!-- Why Canadian teams hire me -->
+      <div class="card px-[var(--card-px)] py-[var(--card-py)]">
+        <h2 class="font-[family-name:var(--font-mono)] text-[14px] max-md:text-[var(--text-small)] font-bold text-[var(--text-1)] mb-[var(--spacing-gap-sm)]">Why Canadian companies hire me</h2>
+        <ul class="space-y-[var(--spacing-gap-sm)]">
+          <li class="text-[var(--text-small)] text-[var(--text-2)]"><strong class="text-[var(--text-1)]">LMIA-Exempt</strong> — I work as a remote independent contractor. No visa sponsorship, no LMIA process, no immigration paperwork. Your legal team can onboard me as a cross-border vendor in days, not months.</li>
+          <li class="text-[var(--text-small)] text-[var(--text-2)]"><strong class="text-[var(--text-1)]">Francophone</strong> — Fluent in French and English. I communicate with Quebec and bilingual Ontario teams in their working language. No translation friction, no misalignment.</li>
+          <li class="text-[var(--text-small)] text-[var(--text-2)]"><strong class="text-[var(--text-1)]">Time Zone Overlap</strong> — Tunisia is UTC+1 (4–5 hours ahead of EST/EDT). I work a schedule that overlaps with your core Canadian business hours for standups, planning, and incident response.</li>
+          <li class="text-[var(--text-small)] text-[var(--text-2)]"><strong class="text-[var(--text-1)]">Production Track Record</strong> — I have operated infrastructure that processes orders, manages safety compliance, and serves on-demand service platforms across Europe and North Africa.</li>
+        </ul>
+      </div>
+
+      <!-- What I deliver -->
+      <div class="card px-[var(--card-px)] py-[var(--card-py)]">
+        <h2 class="font-[family-name:var(--font-mono)] text-[14px] max-md:text-[var(--text-small)] font-bold text-[var(--text-1)] mb-[var(--spacing-gap-sm)]">What I deliver</h2>
+        <div class="grid grid-cols-1 md:grid-cols-2 gap-[var(--spacing-gap-md)]">
+          <div>
+            <h3 class="font-[family-name:var(--font-mono)] text-[var(--text-2xs)] font-bold tracking-[0.06em] text-[var(--accent)] uppercase mb-[var(--spacing-gap-xs)]">Infrastructure & CI/CD</h3>
+            <ul class="space-y-[6px]">
+              <li class="text-[var(--text-small)] text-[var(--text-2)]">Docker containerization & orchestration</li>
+              <li class="text-[var(--text-small)] text-[var(--text-2)]">GitHub Actions, ArgoCD, FluxCD pipelines</li>
+              <li class="text-[var(--text-small)] text-[var(--text-2)]">VPS setup, hardening, and automation</li>
+              <li class="text-[var(--text-small)] text-[var(--text-2)]">NGINX reverse proxy, SSL, and load balancing</li>
+              <li class="text-[var(--text-small)] text-[var(--text-2)]">Kubernetes cluster management</li>
+            </ul>
+          </div>
+          <div>
+            <h3 class="font-[family-name:var(--font-mono)] text-[var(--text-2xs)] font-bold tracking-[0.06em] text-[var(--accent)] uppercase mb-[var(--spacing-gap-xs)]">Observability & Security</h3>
+            <ul class="space-y-[6px]">
+              <li class="text-[var(--text-small)] text-[var(--text-2)]">Prometheus + Grafana monitoring stacks</li>
+              <li class="text-[var(--text-small)] text-[var(--text-2)]">Centralized logging with ELK</li>
+              <li class="text-[var(--text-small)] text-[var(--text-2)]">DevSecOps hardening and compliance</li>
+              <li class="text-[var(--text-small)] text-[var(--text-2)]">Backup automation and disaster recovery</li>
+              <li class="text-[var(--text-small)] text-[var(--text-2)]">Incident runbooks and post-mortems</li>
+            </ul>
+          </div>
+        </div>
+      </div>
+
+      <!-- How I work -->
+      <div class="card px-[var(--card-px)] py-[var(--card-py)]">
+        <h2 class="font-[family-name:var(--font-mono)] text-[14px] max-md:text-[var(--text-small)] font-bold text-[var(--text-1)] mb-[var(--spacing-gap-sm)]">How I work</h2>
+        <ol class="space-y-[var(--spacing-gap-sm)] list-decimal list-inside">
+          <li class="text-[var(--text-small)] text-[var(--text-2)]"><strong class="text-[var(--text-1)]">Discovery</strong> — I audit your current infrastructure, CI/CD pipelines, and deployment workflows. I identify bottlenecks, security gaps, and reliability risks within the first week.</li>
+          <li class="text-[var(--text-small)] text-[var(--text-2)]"><strong class="text-[var(--text-1)]">Proposal</strong> — I deliver a written roadmap with prioritized improvements, estimated effort, and expected outcomes. You decide what to fund and what to defer.</li>
+          <li class="text-[var(--text-small)] text-[var(--text-2)]"><strong class="text-[var(--text-1)]">Execution</strong> — I build, automate, and document. Every change is version-controlled and deployed through the pipeline I build for you. No silent fixes, no undocumented configs.</li>
+          <li class="text-[var(--text-small)] text-[var(--text-2)]"><strong class="text-[var(--text-1)]">Handoff</strong> — I train your team, write runbooks, and transfer ownership. Your infrastructure runs without me — but I stay available for ongoing support and incident response.</li>
+        </ol>
+      </div>
+
+      <!-- Tech tags -->
+      <div class="card px-[var(--card-px)] py-[var(--card-py)]">
+        <h2 class="font-[family-name:var(--font-mono)] text-[14px] max-md:text-[var(--text-small)] font-bold text-[var(--text-1)] mb-[var(--spacing-gap-sm)]">Tools I use daily</h2>
+        <div class="flex flex-wrap gap-[var(--spacing-gap-xs)]">
+          <span class="font-[family-name:var(--font-mono)] text-[var(--text-2xs)] px-[10px] py-[4px] border border-[var(--border)] text-[var(--text-2)]">Docker</span>
+          <span class="font-[family-name:var(--font-mono)] text-[var(--text-2xs)] px-[10px] py-[4px] border border-[var(--border)] text-[var(--text-2)]">Kubernetes</span>
+          <span class="font-[family-name:var(--font-mono)] text-[var(--text-2xs)] px-[10px] py-[4px] border border-[var(--border)] text-[var(--text-2)]">ArgoCD</span>
+          <span class="font-[family-name:var(--font-mono)] text-[var(--text-2xs)] px-[10px] py-[4px] border border-[var(--border)] text-[var(--text-2)]">FluxCD</span>
+          <span class="font-[family-name:var(--font-mono)] text-[var(--text-2xs)] px-[10px] py-[4px] border border-[var(--border)] text-[var(--text-2)]">GitHub Actions</span>
+          <span class="font-[family-name:var(--font-mono)] text-[var(--text-2xs)] px-[10px] py-[4px] border border-[var(--border)] text-[var(--text-2)]">Prometheus</span>
+          <span class="font-[family-name:var(--font-mono)] text-[var(--text-2xs)] px-[10px] py-[4px] border border-[var(--border)] text-[var(--text-2)]">Grafana</span>
+          <span class="font-[family-name:var(--font-mono)] text-[var(--text-2xs)] px-[10px] py-[4px] border border-[var(--border)] text-[var(--text-2)]">NGINX</span>
+          <span class="font-[family-name:var(--font-mono)] text-[var(--text-2xs)] px-[10px] py-[4px] border border-[var(--border)] text-[var(--text-2)]">Terraform</span>
+          <span class="font-[family-name:var(--font-mono)] text-[var(--text-2xs)] px-[10px] py-[4px] border border-[var(--border)] text-[var(--text-2)]">OpenTofu</span>
+          <span class="font-[family-name:var(--font-mono)] text-[var(--text-2xs)] px-[10px] py-[4px] border border-[var(--border)] text-[var(--text-2)]">Terragrunt</span>
+          <span class="font-[family-name:var(--font-mono)] text-[var(--text-2xs)] px-[10px] py-[4px] border border-[var(--border)] text-[var(--text-2)]">Linux</span>
+          <span class="font-[family-name:var(--font-mono)] text-[var(--text-2xs)] px-[10px] py-[4px] border border-[var(--border)] text-[var(--text-2)]">PostgreSQL</span>
+          <span class="font-[family-name:var(--font-mono)] text-[var(--text-2xs)] px-[10px] py-[4px] border border-[var(--border)] text-[var(--text-2)]">Git</span>
+        </div>
+      </div>
+
+      <!-- CTA -->
+      <div class="card glass-panel terminal-corner px-[var(--card-px)] py-[var(--card-py)] text-center">
+        <h2 class="font-[family-name:var(--font-mono)] text-[var(--heading-sm)] font-bold text-[var(--text-1)] mb-[var(--spacing-gap-sm)]">Ready to stabilize your infrastructure?</h2>
+        <p class="text-[var(--text-base)] text-[var(--text-2)] leading-relaxed max-w-2xl mx-auto mb-[var(--spacing-gap-md)]">Tell me about your team, your stack, and what you need. I will respond within 24 hours with a clear assessment and next steps.</p>
+        <a href="/#contact" class="font-[family-name:var(--font-mono)] text-[var(--text-2xs)] font-bold tracking-[0.1em] px-[24px] py-[12px] bg-[var(--accent)] text-[var(--void)] no-underline inline-flex items-center gap-[8px] justify-center min-h-[44px] uppercase hover:bg-transparent hover:text-[var(--accent)] hover:shadow-[0_0_15px_rgba(16,185,129,0.3)] transition-all duration-200 border border-[var(--accent)] hover-lift">[ Hire Now ]</a>
+      </div>
+
+    </div>
+  </div>
+</BaseLayout>
+
+<style>
+  .card { background: var(--card-bg); border: 1px solid var(--border); }
+  .glass-panel { background: rgba(16, 185, 129, 0.03); border: 1px solid rgba(16, 185, 129, 0.12); }
+  .terminal-corner { position: relative; }
+  ol li::marker { color: var(--accent); font-family: var(--font-mono); font-weight: bold; }
+</style>

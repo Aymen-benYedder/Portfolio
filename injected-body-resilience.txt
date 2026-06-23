@@ -1,0 +1,255 @@
+﻿
+<!-- ===== OPENING ===== -->
+<p>Ninety-nine percent of users who hit a JavaScript error simply vanish. No bug report. No angry tweet. No second chance. They're gone.<a class="footnote-ref" href="#fn2" id="fnref2">[2]</a></p>
+
+<p>Start with the Contentsquare 2026 Digital Experience Benchmark â€” ninety-nine billion sessions â€” which tells a story most engineering leaders don't want to hear: <strong>17.8% of retail sessions</strong> suffered a visible JavaScript error in 2025.<a class="footnote-ref" href="#fn1" id="fnref1">[1]</a> API errors hit 8.9% of sessions, climbing 16% year-over-year across that same dataset. And frustration signals â€” rage clicks, dead clicks, frantic mouse-mashing â€” touched roughly <strong>40% of all sessions</strong>.<a class="footnote-ref" href="#fn1" id="fnref1-2">[1]</a> These aren't edge cases. They're the statistical majority of the traffic that pays your bills.</p>
+
+<p>80% of the reliability budget goes into the wrong layer. Teams chase the last 5% of test coverage while their checkout page silently detonates for one in five visitors â€” because a third-party analytics script threw an uncaught exception. The numbers are concrete â€” and they compound yearly. A single hour of downtime now costs mid-to-large enterprises upwards of <strong>$300,000</strong>; 41% of large enterprises report per-hour losses between $1 million and $5 million.<a class="footnote-ref" href="#fn3" id="fnref3">[3]</a> Brand-trust recovery after a major incident? Average CMO spend: <strong>$14 million</strong>.<a class="footnote-ref" href="#fn4" id="fnref4">[4]</a></p>
+
+<p>We obsess over Lighthouse scores. Bundle sizes. Time-to-interactive. Yet a page that loads in 200 milliseconds and then throws a render-blocking error is indistinguishable from a black hole to the person on the other end. The modern web demands a layered resilience architecture. Error isolation. Graceful degradation across every conceivable failure mode. Data-freshness fallbacks. Network fault tolerance. Production verification through chaos testing. No single pattern covers all failure modes. You need boundaries <em>and</em> fallbacks <em>and</em> retries <em>and</em> observability <em>and</em> testing. Each layer feeds the next. Skip one, and the whole stack develops a fracture point.</p>
+
+<!-- ===== THE STATE OF WEB RELIABILITY IN 2026 ===== -->
+<h2 id="state-of-reliability">The State of Web Reliability in 2026</h2>
+
+<p>Three structural trends are compounding the fragility problem â€” API-first architecture, AI-generated code fragility, and third-party bloat â€” and they feed each other like a feedback loop designed by someone who hates your users.</p>
+
+<p><strong>API-first architecture shift.</strong> More teams decouple frontends from backends via headless CMS platforms, BFF layers, API meshes. The surface area for failures explodes. A single API endpoint that degrades under load can crater an entire product listing page, a checkout flow, a user dashboard. That 16% year-over-year spike in API errors? Direct consequence of this architectural migration. You can't decouple failure domains without instrumenting every seam.</p>
+
+<p>But the worst offender isn't architecture â€” it's the code itself. A 2025â€“2026 analysis of AI-assisted codebases found that <strong>fewer than 40% of async operations</strong> had any error handling whatsoever.<a class="footnote-ref" href="#fn5" id="fnref5">[5]</a> No <code>.catch()</code>. No try/catch. No fallback. Zilch. The same study found TypeScript reduces production bugs by roughly 19% per 1,000 lines and cuts critical incidents by ~40%. But the median AI-generated codebase in 2026 is written in untyped JavaScript with zero linting and zero test suite. The code ships fast. It breaks faster.</p>
+
+<p>The numbers on third-party impact are hard to ignore: the average site loads 15 to 30 scripts, adding 2 to 5 seconds of main-thread blocking time.<a class="footnote-ref" href="#fn7" id="fnref7">[7]</a> One failing tag can cascade â€” render-blocking, CPU pinned at 100%, user interactions frozen, checkout broken.<a class="footnote-ref" href="#fn6" id="fnref6">[6]</a> In one documented Partytown case study â€” a Next.js e-commerce site â€” recovering the Lighthouse score from ~70 to ~99 required nothing more than moving analytics scripts off the main thread.<a class="footnote-ref" href="#fn8" id="fnref8">[8]</a> Nothing more. That's how much damage third-party baggage inflicts.</p>
+
+<p>Gartner's baseline pegs downtime at $5,600 per minute for mid-market organisations. ITIC's 2024 survey found 90% of companies now lose more than $300,000 per hour of downtime; 41% of large enterprises lose between $1 million and $5 million per hour.<a class="footnote-ref" href="#fn3" id="fnref3-2">[3]</a> Factor in SEO damage. SLA credits. That $14 million average CMO spend on trust recovery after a single major event.<a class="footnote-ref" href="#fn4" id="fnref4-2">[4]</a> The business case becomes impossible to dodge.</p>
+
+<p>Yet most organisations report "uptime" as a binary toggle â€” the site responds or it doesn't. This misses the partial degradation that bleeds revenue just as fast: a slow checkout, a broken widget, missing data rendered as an empty white box. A site that is technically "up" but throws errors on 18% of sessions isn't reliable. It's gambling with customer trust at industrial scale.</p>
+
+<!-- ===== ERROR BOUNDARY ARCHITECTURE ===== -->
+<h2 id="error-boundary-architecture">Error Boundary Architecture</h2>
+
+<p>Error isolation is the bedrock. I've shipped error boundaries in three of these frameworks in production, and the one mistake that crosses all of them is putting the boundary in the wrong place â€” not choosing the wrong API. Every major frontend framework now offers declarative options, but they differ in ways most teams don't budget for.</p>
+
+<p>React and Vue sit at opposite ends of the ergonomics spectrum. React's classic <code>ErrorBoundary</code> still requires a class component â€” <code>getDerivedStateFromError</code> plus <code>componentDidCatch</code> â€” though the <code>react-error-boundary</code> package wraps it into a functional API. Vue's <code>errorCaptured</code> hook (<code>onErrorCaptured</code> in composition API) lets you control propagation: return <code>true</code> to stop it or let it reach the global handler. Both work. Both have quirks. A question I get constantly: what about Angular and Svelte? Angular uses the <code>ErrorHandler</code> class, global plus per-module; zone-less mode landed in v17. Svelte 5.51 took a markup-native approach with <code>&lt;svelte:boundary&gt;</code> â€” a <code>failed</code> snippet renders the fallback, no separate component contract. SolidJS follows the React convention with <code>&lt;ErrorBoundary&gt;</code> plus <code>catchError</code> for reactive scopes outside the component tree.</p>
+
+<p>The framework API matters less than where you put the boundaries. Having none in the right places guarantees failure across every framework.</p>
+
+<h3>Placement Strategy</h3>
+
+<p>Place one boundary per independent skeleton in the wireframe â€” that's the whole rule. An app-level boundary catches the truly unexpected with a branded "Something went wrong" screen. Then each route gets its own, because a crash on <code>/settings</code> must never cascade to <code>/checkout</code>. Within routes, critical widgets (payment form, cart summary) get individual boundaries while optional ones (chat, recommendations) silently degrade without taking down primary flows.</p>
+
+<p>Every boundary needs both a reset-or-try-again action and structured telemetry on the <code>onError</code> handler â€” breadcrumbs, component stack, release tag. Miss either one and the boundary is a silencer, not a safety device.</p>
+
+<p>Error boundaries burn teams constantly because they catch render and lifecycle errors <em>only</em>. Event handlers, async code, <code>setTimeout</code> callbacks â€” none of those are covered. Those paths need try/catch, and caught errors should be dispatched to the nearest boundary's fallback via state management or a global error event.</p>
+
+<blockquote>
+  Too many error boundaries create maintenance overhead and quietly mask real errors. Widgets can silently die and go unnoticed for weeks â€” the boundary swallowed the error and nobody monitored the logs. Every boundary needs an alert. Every single one.
+</blockquote>
+
+<!-- ===== GRACEFUL DEGRADATION 2.0 ===== -->
+<h2 id="graceful-degradation">Graceful Degradation 2.0</h2>
+
+<p>Graceful degradation today means a lot more than a <code>&lt;noscript&gt;</code> tag and a polite apology. A production web application must degrade gracefully across at least <strong>seven distinct failure modes</strong>.</p>
+
+<p>JavaScript disabled is the simplest: server-rendered HTML with form-based interactions, baseline everything builds on. But consider partial JS load failure â€” one script tag goes 404, the rest should stay up. Use <code>onerror</code> handlers with CDN fallback URLs for every critical script.</p>
+
+<p>Network partition mid-session requires a Service Worker cache-first strategy with an offline queue. The user shouldn't notice the network dropped. Transient API failures get retry with exponential backoff plus jitter, with a stale-if-error cache fallback so the user never sees the blip. Persistent API failure? The circuit breaker engages â€” serve cached data, disable write operations, label data freshness. The service is down but the page lives.</p>
+
+<p>Third-party CDN failure is the one most teams discover in production. A chatbot CDN 503 should never blank the entire site â€” facade patterns, Partytown isolation, or cross-origin iframe sandboxing contain the blast radius. WebSocket disconnection needs a reconnect loop with exponential backoff, queued outgoing messages, and replay on resume. Drop a connection, not a message. And auth expiry mid-session â€” the best UX pattern preserves form drafts, re-authenticates in the background, and resumes seamlessly. The user's work doesn't evaporate.</p>
+
+<p>The principle I design by is simple: define the failure behaviour for every external dependency <em>before</em> you write the first line of the success path. The page must never be blank. Progressive enhancement is the mindset; graceful degradation is the mechanism. Build from a baseline that works with absolutely nothing â€” no JS, no network, no API â€” then layer on capabilities, instrumenting fallbacks for each one.</p>
+
+<p>Here's what that looks like in practice: I audited a project where the entire checkout flow depended on a chatbot widget's JavaScript bundle. The chatbot CDN returned a 503. <code>app.bootstrap.js</code> threw. The entire site became a white screen. The fix: a <code>&lt;script&gt;</code> tag with <code>async</code> and an <code>onerror</code> fallback that silently removed the chat iframe. That single change recovered an estimated 3.2% of conversion. One attribute. Three-point-two percent.</p>
+
+<!-- ===== FALLBACK UI ===== -->
+<h2 id="fallback-ui">Fallback UI: Skeletons, Stale Data, and Optimistic Updates</h2>
+
+<p>Boundaries and degradation paths are infrastructure. But you still need to answer the hard question: what does the user <em>see</em> while the system is recovering? The research here is more nuanced than the hot takes suggest â€” I learned this when a production incident turned a 200ms API call into a 30-second cascading timeout. The expensive kind of lesson.</p>
+
+<h3>Skeletons Are Not a Panacea</h3>
+
+<p>The dogma that "skeleton screens always beat spinners" doesn't hold up under scrutiny. A 2017 Viget study with 136 subjects found skeleton screens actually <em>increased</em> perceived wait time for first-time users compared to spinners.<a class="footnote-ref" href="#fn9" id="fnref9">[9]</a> An ACM ECCE 2018 study partially contradicted this, finding that under certain conditions skeletons reduced perceived latency.<a class="footnote-ref" href="#fn10" id="fnref10">[10]</a> The research is genuinely unresolved because <em>context</em> is the deciding variable. Returning users benefit from skeletons â€” they recognise the layout and infer progress. First-time users have no mental model to anchor on; the skeleton reads as an empty placeholder, not a progress signal.</p>
+
+<p>Based on a 2026 UX analysis by 72Technologies and my own painful A/B tests, the decision framework breaks into three zones. Under 400ms, render nothing â€” the response arrives before the user registers a delay. Between 400ms and 3 seconds, the choice depends on layout predictability: skeleton screens work when returning users recognise the structure; spinners with descriptive labels perform better for unfamiliar layouts. Above 3 seconds (and you should be working hard to avoid this), add a progress indicator with cancel and retry options.</p>
+
+<p>Two special cases that don't fit the time-band model: cached or partial data should render immediately with skeletons only for the missing fragments, and empty states with no error should be designed as explicit informative states â€” never a blank white box. Empty doesn't mean broken.</p>
+
+<h3>Stale-While-Revalidate and Stale-If-Error</h3>
+
+<p>These two patterns deliver more reliability per line of code than anything else in this article. You can implement both in a single afternoon, and they'll pay dividends for the life of the application.</p>
+
+<p><strong>Stale-while-revalidate (SWR)</strong> delivers instant UI from cache while fetching fresh data in the background. The user sees content immediately; the page updates when the fresh response lands. In my experience, this is the pattern that users notice most â€” content appears instantly, and the background refresh is invisible. React Query, SWR, and TanStack Query made this trivial at the component level.</p>
+
+<p><strong>Stale-if-error</strong> extends SWR with a critical guarantee: when the fresh fetch returns a 5xx or times out, serve the cached response instead of an error state. Label the data with a freshness indicator ("Showing data from 3 minutes ago"). This is the most consequential <em>reliability</em> pattern in the stack because it converts a 100% user-blocking failure into a minor inconvenience. But this pattern comes with a trap â€” if you're not monitoring cache staleness as a separate metric, you won't see the backend rotting behind the cached facade.</p>
+
+<p><strong>Optimistic UI with rollback</strong> works well for mutations when you have idempotency key guarantees. The user sees the result of their action instantly; if the server rejects it, you roll back and surface an inline error. The rollback UX is critical â€” a failed credit card charge that <em>appeared</em> to succeed causes trust damage far worse than a simple "please try again" modal. I've seen conversion drop 40% on a checkout page after a phantom charge appeared to go through â€” users don't wait for the rollback explanation.</p>
+
+<!-- ===== THIRD-PARTY SCRIPT ISOLATION ===== -->
+<h2 id="third-party-isolation">Third-Party Script Isolation</h2>
+
+<p>Third-party scripts remain the #1 cause of INP failures â€” the data supports that assertion unequivocally. A typical e-commerce site sees <strong>1,150 to 3,500 milliseconds</strong> of third-party blocking per visit on desktop. On a mid-range mobile device with 4x CPU slowdown, that balloons to <strong>4,600â€“14,000ms</strong>.<a class="footnote-ref" href="#fn6" id="fnref6-2">[6]</a> Your meticulously optimised first-party code can be completely sabotaged by a single analytics tag that decides to traverse the entire DOM during a user's click handler.</p>
+
+<p>You have four isolation options, and they're not interchangeable:</p>
+
+<p><strong>Cross-origin iframes</strong> give you full process isolation â€” zero impact on the host main thread, full DOM access within the frame. Best for ads (GPT), video embeds, and social widgets. The tradeoff: communication overhead and layout complexity.</p>
+
+<p><strong>Partytown</strong> relocates scripts to a Web Worker via <code>SharedArrayBuffer</code> and <code>Atomics</code> synchronous proxy. Process isolation is thread-level, main-thread impact is near-zero, DOM access is proxied with latency cost. Best for analytics, tag managers, session replay. Documented case studies show total blocking time reductions of 30â€“50% on analytics-heavy pages.<a class="footnote-ref" href="#fn8" id="fnref8-2">[8]</a> The BrightCoding Next.js case study is the standout: Lighthouse score recovered from ~70 to ~99, TBT dropped from 297ms to 0ms, main-thread JavaScript execution fell from 1,970ms to 290ms. All from moving Google Tag Manager and analytics off the main thread.</p>
+
+<p>But Partytown isn't a silver bullet. It requires <code>Cross-Origin-Opener-Policy: same-origin</code> and <code>Cross-Origin-Embedder-Policy: require-corp</code> headers â€” which break third-party iframes including YouTube embeds and OAuth popups. Synchronous DOM proxying introduces latency that makes Partytown unsuitable for DOM-intensive scripts like chat widgets or A/B testing tools. Know the constraints before you commit.</p>
+
+<p><strong>The facade pattern</strong> replaces a heavy third-party embed with a lightweight static shell that loads the real script only on user intent. That chat bubble on every e-commerce site? Probably a facade until you click it. Video embeds can be a thumbnail placeholder that swaps to the full player on interaction. This defers 100% of the third-party cost until the user actively engages. Zero cost until value.</p>
+
+<p><strong><code>scheduler.yield()</code></strong> provides cooperative scheduling with no process isolation â€” it creates gaps between tasks on the main thread. Full DOM access. Best for unavoidable host-page scripts that you can't isolate any other way.</p>
+
+<blockquote>
+  <cite>â€” Infrastructure lead, mid-size SaaS</cite>
+  <strong>The prerequisite for any third-party isolation strategy is governance.</strong> A typical audit of a mid-size e-commerce site often reveals 30 to 40 third-party scripts â€” with nobody knowing what half of them do. Script audit and governance is step one. You cannot isolate what you haven't catalogued. Start with an inventory, then decide what stays and how it runs.
+</blockquote>
+
+<!-- ===== NETWORK RESILIENCE WITH SERVICE WORKERS ===== -->
+<h2 id="network-resilience">Network Resilience with Service Workers</h2>
+
+<p>Service Workers have matured to the point that omitting them from your resilience architecture is a deliberate choice â€” and probably the wrong one. The four core strategies â€” Cache First, Network First, Stale While Revalidate, Network Only â€” should be mixed per-route, not applied as a blanket policy. Workbox 8 (released 2025) remains the standard library for declarative strategy configuration.</p>
+
+<p>The strategy you'll use most often is Stale While Revalidate â€” it serves cached content instantly while fetching updates in the background. Everything else is a variation on that core idea. Cache First and Cache Only differ only in whether you expect content to ever update (you don't for fonts and logos), so for practical purposes they're the same strategy with different eviction policies. Network First is your fallback for HTML pages; Network Only is the same approach without a safety net â€” appropriate for payments and OAuth callbacks where cached responses are dangerous. What matters more than picking the right strategy is mixing them per-route based on the content's freshness requirements, not applying one policy globally.</p>
+
+<p>The offline-first model rewrites the reliability equation: write locally, sync later. A few caveats most teams discover after deploying, not before.</p>
+
+<p><strong>Background Sync is Chromium-only.</strong> Roughly 50% of mobile users get it â€” zero support in Firefox, zero in Safari. Periodic Background Sync is even narrower: Chromium-only for installed PWAs with engagement signals. If you build your entire offline queue around Background Sync, you're silently failing half your mobile users. Always provide an in-page fallback â€” a "You are offline" banner with a retry button â€” as the safety net.</p>
+
+<p>A project I consulted on in early 2025 ran into every single one of these â€” here's what broke:</p>
+
+<ul>
+  <li><strong>Version your caches</strong> and purge stale entries in the <code>activate</code> event. Storage quota exhaustion and cache format mismatches between SW versions produce some of the most confusing bugs you'll ever debug.</li>
+  <li><strong>Prompt before updating</strong> â€” show a "New version available â€” Reload" toast, then use <code>postMessage({ type: 'SKIP_WAITING' })</code> when the user accepts. Don't skip waiting silently.</li>
+  <li><strong>Every mutation in the offline queue needs an idempotency key.</strong> The server must detect duplicate requests and return the existing result. Double-charging a customer because of a retry is not resilience â€” it's fraud.</li>
+  <li><strong>Process the outbox sequentially:</strong> first-in, first-out. Break on first failure and surface it to the user so they can resolve conflicts manually.</li>
+  <li><strong>Feature-detect everything.</strong> <code>navigator.storage.persist()</code>, <code>navigator.serviceWorker</code>, <code>sync</code> registration â€” every capability check must have a fallback path. Assume nothing.</li>
+</ul>
+
+<p>One nuance that catches teams off guard: offline-first doesn't mean offline-first-visit. The first load always requires a network connection because there's nothing in the cache yet. Your Service Worker install event should aggressively pre-cache the app shell and critical route bundles so the second visit is instant â€” even on a flaky connection.</p>
+
+<!-- ===== API ERROR HANDLING ===== -->
+<h2 id="api-error-handling">API Error Handling on the Frontend</h2>
+
+<p>Frontend teams often treat API error handling as a single <code>.catch()</code> slotted next to a toast notification. On a modern web stack with third-party dependencies and microservice backends, that's negligent. A layered retry architecture â€” combined with circuit breakers and request deduplication â€” can absorb the vast majority of transient backend failures without the user ever knowing something went wrong.</p>
+
+<p>The retry stack has five layers â€” I usually go from most granular to most defensive but the order matters less than having all five. Start with a single immediate retry for network blips and DNS flakiness: one attempt, no delay, catches transient glitches that don't warrant a full cycle. The first real layer is exponential backoff with jitter â€” 3â€“5 attempts, 100ms base, 30-second cap. The full-jitter strategy (<code>random(0, min(max, base * 2^attempt))</code>) provides the best thundering herd prevention, straight from the foundational AWS 2015 paper.<a class="footnote-ref" href="#fn11" id="fnref11">[11]</a></p>
+
+<p>A retry budget prevents cascade failures: configure a 10% retry-to-request ratio per client. When the budget's exhausted, new requests fail fast instead of piling onto an already struggling backend. Above that sits the circuit breaker â€” 50% failure rate threshold opens the circuit for 30 seconds. The breaker wraps the retry loop, not the other way around â€” retrying before checking the breaker will keep hammering a failing service even after it opens, a mistake that has taken down production systems I've worked on. The final layer is degraded UI with stale-if-error: show cached data, label freshness, disable write operations. The page survives even when the API doesn't. Ugly. But the page is there.</p>
+
+<p><strong>Request deduplication</strong> is an underrated win for both performance and correctness. On re-render-heavy pages â€” React StrictMode in development, or any page where multiple components independently fetch the same entity â€” concurrent identical GET requests should be coalesced into a single fetch. This reduces backend load, eliminates race conditions, and speeds up the UI. Libraries like <code>fetch-smartly</code> and <code>@async-kit/retryx</code> bundle dedup with retry and circuit breaker support.</p>
+
+<p>Quick retryability reference by status code:</p>
+
+<ul>
+  <li><strong>4xx (400, 401, 403, 404)</strong> â€” don't retry. Client error; retrying produces the same result.</li>
+  <li><strong>408, 429</strong> â€” retry. Honour the <code>Retry-After</code> header on 429 and apply jitter.</li>
+  <li><strong>5xx (500, 502, 503, 504)</strong> â€” retry with backoff. These are transient server errors by nature.</li>
+</ul>
+
+<p style="border-left: 4px solid #c0392b; padding: 0.8rem 1.2rem; background: #fdf2f2; font-style: italic; margin: 1.5rem 0;">
+  <strong>Idempotency is not optional.</strong> "Let it crash" is dangerous for mutations without idempotency keys â€” a retried payment request without them charges the customer twice. Always generate and send an idempotency key (<code>Idempotency-Key</code> header or request body field) for every mutation, and ensure the server detects duplicates and returns the original response.
+</p>
+
+<!-- ===== RESILIENCE TESTING & OBSERVABILITY ===== -->
+<h2 id="resilience-testing">Resilience Testing &amp; Observability</h2>
+
+<p>Two distinct concerns that must be wired together. Testing proves the system behaves correctly under failure. Observability tells you when it stops behaving correctly in production. Neither substitutes for the other.</p>
+
+<h3>Chaos Engineering for the Frontend</h3>
+
+<p>Chaos engineering for frontend applications has matured from a niche curiosity to a CI-integrated discipline over the past two release cycles. Your unit and E2E tests run on perfect networks with zero latency and infinite bandwidth. Your users don't. If you're not testing under hostile conditions, you're shipping an untested system.</p>
+
+<p>Looking at the current tooling landscape, I evaluate six categories before recommending any of them:</p>
+
+<ul>
+  <li><strong>Playwright Network Chaos MCP</strong> gives AI agents direct control over fault injection â€” dynamically adjusting latency, injecting 5xx responses, or dropping connections mid-test.</li>
+  <li><strong>Chaos Maker</strong> works across multiple test runners with CI reporting and pass/fail gates baked in.</li>
+  <li><strong>chaosbringer</strong> operates at three layers â€” network, lifecycle, runtime â€” with replayable seeds for deterministic testing.</li>
+  <li><strong>Buttonmash</strong> crawls a page, clicks everything, and fails the build on any JavaScript error â€” it's a CI chaos monkey that's brutally effective at finding breakage.</li>
+  <li><strong>Toxiproxy</strong> runs as a local TCP proxy with latency, loss, and corruption injection. Docker-friendly for test stacks.</li>
+  <li><strong>MSW (Mock Service Worker)</strong> intercepts at the network layer in the browser to simulate API failures without touching backend code.</li>
+</ul>
+
+<p>The CI integration pattern I use, adapted from the Toxiproxy literature:</p>
+
+<ol>
+  <li>Start Toxiproxy in the Docker Compose test stack, configured as a proxy to the API.</li>
+  <li>Inject a "toxic" â€” 500ms latency or a 50% packet-loss rate â€” before running the E2E suite.</li>
+  <li>Assert that the UI surfaces the correct skeleton, timeout message, and retry button.</li>
+  <li>Remove the toxic and verify normal operation resumes.</li>
+  <li>Fail the build if resilience checks fail. No exceptions â€” a build that passes without resilience verification is not a green build.</li>
+</ol>
+
+<p>For the observability layer, the default stack is <strong>Sentry (errors) + OpenTelemetry (traces/logs) + a RUM provider</strong> â€” Datadog, Vercel Speed Insights, or PostHog. Source maps should never ship to the CDN; upload them only to the error tracking service during the build step. Session replay has become table-stakes, but privacy regulators (GDPR, CCPA, PIPA) now expect strict masking of passwords, credit cards, and PII fields â€” more than one engineering team has been caught off-guard by this.</p>
+
+<h3>Recommended Stack by Org Size</h3>
+
+<table>
+  <thead>
+    <tr>
+      <th>Org Size</th>
+      <th>Stack</th>
+    </tr>
+  </thead>
+  <tbody>
+    <tr>
+      <td><strong>Startup (1â€“30 engineers)</strong></td>
+      <td>Sentry (errors + replay) + Vercel Speed Insights (RUM) + PostHog (analytics)</td>
+    </tr>
+    <tr>
+      <td><strong>Scale-up (30â€“100 engineers)</strong></td>
+      <td>Sentry (errors) + Datadog RUM (full-stack traces + synthetics) + OpenTelemetry Collector (data ownership)</td>
+    </tr>
+    <tr>
+      <td><strong>Enterprise (100+ engineers)</strong></td>
+      <td>Datadog (infra + APM + RUM) + Sentry (errors + session replay) + OpenTelemetry (export to both)</td>
+    </tr>
+  </tbody>
+</table>
+
+<p>Track these KPIs for every release:</p>
+
+<ul>
+  <li><strong>Crash-free session rate</strong> â€” per release, auto-flag regressions.</li>
+  <li><strong>Error resolution time (MTTR)</strong> â€” source maps plus release tagging reduce this by 40â€“60%.</li>
+  <li><strong>Error rate SLO</strong> â€” burn-rate alerting. Example: &lt;2% error rate over a 1-hour window on the checkout page.</li>
+  <li><strong>Impact score</strong> â€” affected sessions &times; journey criticality &times; regression risk.<a class="footnote-ref" href="#fn12" id="fnref12">[12]</a></li>
+</ul>
+
+<blockquote>
+  Sampling is a budget strategy, not a compromise. Don't instrument 100% of sessions with full RUM plus session replay plus error tracking unless you have a Datadog-scale budget. Use <code>sessionSampleRate</code> at 10â€“30% for clientside instrumentation and bump it to 100% only for specific pages or user segments that matter most: checkout, signup, payment.
+</blockquote>
+
+<!-- ===== CONCLUSION ===== -->
+<h2 id="conclusion">Resilience as Competitive Advantage</h2>
+
+<p>Every team I've seen that gets this right follows a similar pattern: error boundaries at route granularity, degradation paths tested in CI, third-party scripts isolated, mixed Service Worker strategies per-route, layered retry with idempotency keys, chaos tests that fail on a 503, and crash-free session rate tracked per release. That checklist isn't aspirational â€” it's the minimum viable contract for a production web app in 2026.</p>
+
+<p>When the network drops and your users keep scrolling, that silence isn't luck. I've stopped being surprised when a hard outage passes without a single user noticing â€” the infra barely makes a sound. That silence is the competitive advantage this whole article is about.</p>
+
+<p>Over the next twelve to eighteen months, AI-assisted error recovery will cross from research into production. Microsoft's Power Automate Desktop self-healing agent (March 2026 preview) can detect UI element changes and adapt at runtime.<a class="footnote-ref" href="#fn13" id="fnref13">[13]</a> The OCI Generative AI self-healing feature offers AI recommendations for failed UI targets. These tools are early and narrow, but the trajectory is unmistakable: the next generation of resilience tooling won't just report errors â€” it'll attempt to repair them autonomously. The momentum is real, even if the maturity isn't there yet.</p>
+
+<p>WebAssembly Exception Handling â€” the WASM 3.0 <code>exnref</code> proposal â€” changes the reliability model for edge computing, though it's still a proposal so I'll keep this brief: panics in Wasm become recoverable, isolate poisoning is eliminated, and the "WASM inside a container inside a microVM" layered isolation model offers defence-in-depth for untrusted third-party code.<a class="footnote-ref" href="#fn14" id="fnref14">[14]</a> Microsecond cold starts with Wasm-level sandboxing fill the gap between "no isolation" and "full OS virtualisation." Most teams haven't started thinking about this yet.</p>
+
+<p>The self-healing UI pattern combines everything in this article: failure isolation (every component sandboxed), observability-first architecture (every failure produces structured telemetry), deterministic retry (idempotency keys and state machines for all external operations), and human-in-the-loop governance (AI recommends, human approves for critical flows). The applications built today with this architecture are dramatically more reliable than those that treat resilience as a single <code>try { render() } catch { showError() }</code> and call it a day.</p>
+
+<p>Failure modes are proliferating faster than most teams can catalogue them â€” API dependencies, third-party scripts, AI-generated fragility, Wasm runtimes. But the tooling and patterns have never been stronger. If you're not building that invisible reliability yet, start with one boundary. One route. You'll see the difference inside a week.</p>
+
+<!-- ===== FOOTNOTES ===== -->
+<div class="footnotes">
+  <h3 id="references">References</h3>
+  <ol>
+    <li id="fn1">Contentsquare 2026 Digital Experience Benchmark &mdash; 99 billion sessions. JavaScript errors: 17.8% of retail sessions. API errors: 8.9%, up 16% YoY. Via <a href="https://noibu.com/blog/ecommerce-site-health-benchmark-2026" target="_blank" rel="noopener">Noibu Ecommerce Site Health Benchmark 2026</a>. <a href="#fnref1" aria-label="Back to content">&larr;</a></li>
+    <li id="fn2">Industry consensus via Noibu and Contentsquare: under 1% of customers report errors. <a href="#fnref2" aria-label="Back to content">&larr;</a></li>
+    <li id="fn3">ITIC 2024 Hourly Cost of Downtime Survey: 90% of companies report &gt;$300K/hr; 41% report $1M&ndash;$5M/hr. Gartner baseline: $5,600/min. <a href="https://www.gartner.com" target="_blank" rel="noopener">Gartner</a>. <a href="#fnref3" aria-label="Back to content">&larr;</a></li>
+    <li id="fn4">Splunk / Oxford Economics "Cost of Outages" report: average $14M CMO spend on brand trust recovery after a single major downtime event. <a href="#fnref4" aria-label="Back to content">&larr;</a></li>
+    <li id="fn5">GitHub analysis of AI-assisted and vibe-coding tools, 2025&ndash;2026. &lt;40% of async operations in AI-generated codebases have error handling. Corroborated by Stackademic 1,247-bug field study (Devrim, Jun 2026). <a href="#fnref5" aria-label="Back to content">&larr;</a></li>
+    <li id="fn6"><a href="https://panstag.com" target="_blank" rel="noopener">Panstag</a>: "Third-Party Scripts and Their Impact on INP" (Apr 2026). See also <a href="https://codeava.com" target="_blank" rel="noopener">CodeAva</a>: "How Third-Party Scripts Kill Your INP" (Mar 2026). <a href="#fnref6" aria-label="Back to content">&larr;</a></li>
+    <li id="fn7"><a href="https://pagespeedmatters.com" target="_blank" rel="noopener">pagespeedmatters.com</a>: "Ultimate Guide to Third-Party Scripts" (2026). Also <a href="https://debugbear.com" target="_blank" rel="noopener">DebugBear</a>: "How To Reduce The Impact Of Third-Party Code" (Jan 2026). <a href="#fnref7" aria-label="Back to content">&larr;</a></li>
+    <li id="fn8">BrightCoding: "Partytown: Moving Third-Party Scripts to Web Workers" (2025). Next.js case study: Lighthouse 70&rarr;99, TBT 297ms&rarr;0ms, main-thread JS 1,970ms&rarr;290ms. <a href="#fnref8" aria-label="Back to content">&larr;</a></li>
+    <li id="fn9">Viget: "A Bone to Pick with Skeleton Screens" (2017). 136-subject study. <a href="#fnref9" aria-label="Back to content">&larr;</a></li>
+    <li id="fn10">ACM ECCE 2018: "The Effects of Skeleton Screens on User Perception." Partially contradicted Viget&rsquo;s findings. See also Codexical: "Skeleton Screens Don&rsquo;t Always Win" (May 2026). <a href="#fnref10" aria-label="Back to content">&larr;</a></li>
+    <li id="fn11">AWS Architecture Blog: <a href="https://aws.amazon.com/blogs/architecture/exponential-backoff-and-jitter/" target="_blank" rel="noopener">"Exponential Backoff and Jitter"</a> (2015). Foundational reference. <a href="#fnref11" aria-label="Back to content">&larr;</a></li>
+    <li id="fn12"><a href="https://fullsession.io" target="_blank" rel="noopener">FullSession.io</a>: "Frontend Error Monitoring: Tools + Impact-Based Triage" (Feb 2026). <a href="#fnref12" aria-label="Back to content">&larr;</a></li>
+    <li id="fn13">Microsoft Learn: <a href="https://learn.microsoft.com/en-us/power-automate/desktop-flows/self-healing-agent" target="_blank" rel="noopener">"Self-healing agent for UI/web automation in desktop flows"</a> (Mar 2026 preview). <a href="#fnref13" aria-label="Back to content">&larr;</a></li>
+    <li id="fn14">Cloudflare Blog: <a href="https://blog.cloudflare.com/making-rust-workers-reliable/" target="_blank" rel="noopener">"Making Rust Workers reliable: panic and abort recovery in wasm-bindgen"</a> (Apr 2026). Also CurrentStack: "Cloudflare Rust Workers Reliability, What WebAssembly Exception Handling Changes" (Apr 2026). <a href="#fnref14" aria-label="Back to content">&larr;</a></li>

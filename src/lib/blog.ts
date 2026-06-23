@@ -116,7 +116,7 @@ function normalizeStaticPost(post: StaticPost): BlogPost {
     body: post.body,
     categories: post.categories,
     tags: post.tags,
-    image: undefined,
+    image: post.image,
     author: post.author ?? { id: 'aymen-ben-yedder', name: 'Aymen ben Yedder', slug: 'aymen-ben-yedder' },
     isSanity: false,
   };

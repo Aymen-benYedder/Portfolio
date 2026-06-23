@@ -1,0 +1,693 @@
+﻿  {
+    id: 'post-css-engineering-2026',
+    title: 'Modern CSS Engineering in 2026: Container Queries, View Transitions, CSS Layers, and the New Layout Paradigm',
+    slug: 'css-engineering-2026',
+    description: 'A data-driven analysis of the 2026 CSS renaissance: Container Queries, View Transitions API, CSS Layers, `:has()`, OKLCH, Anchor Positioning, scroll-driven animations, native nesting, and the thinning toolchain — with adoption metrics, browser support matrices, and a migration roadmap for engineering teams.',
+    publishedAt: '2026-06-20',
+    categories: ['WEB DEV'],
+    tags: ['Container Queries', 'View Transitions API', 'CSS Layers', ':has()', 'OKLCH', 'CSS Nesting', '@scope', 'Anchor Positioning', 'Houdini', 'Tailwind CSS', 'Interop 2026', 'Web Platform Baseline'],
+    readingTime: 17,
+    body: `<!-- INTRODUCTION -->
+
+  <p>
+    <strong>~96%</strong> global support for container queries â€” matching CSS Grid when its adoption tipped. The production-side <strong>9.61%</strong> of sites using <code>@container</code><a class="footnote-ref" href="#fn1" id="fnref1">[1]</a><a class="footnote-ref" href="#fn2" id="fnref2">[2]</a> tells a starker story. The View Transitions API runs in every major engine. <strong>9%</strong> of surveyed engineers still call it one of their top pain points.<a class="footnote-ref" href="#fn3" id="fnref3">[3]</a><a class="footnote-ref" href="#fn4" id="fnref4">[4]</a> The adoption gap tells the real story of CSS in 2026. The language just had its most consequential evolution since Grid touched down in 2017 â€” and most teams are still writing stylesheets like it's 2019.
+  </p>
+
+  <p>
+    <span>â€œEveryone talks about what CSS can do now,â€ a staff engineer at a large e-commerce company told me last month. â€œNobody wants to talk about what they'd have to throw away to use it.â€</span> Container Queries, CSS Layers (<code>@layer</code>), <code>:has()</code>, native CSS Nesting, the View Transitions API, OKLCH, scroll-driven animations, <code>@scope</code>, Anchor Positioning, <code>color-mix()</code>, <code>light-dark()</code>, <code>@starting-style</code>, the Interop/Baseline push â€” collectively they kill a generation of workarounds. The toolchain is thinning. The cascade is programmable. Layout is context-aware â€” not viewport-obsessed. This migration separates execution from enthusiasm. The first is scarce. The second is abundant.
+  </p>
+
+  <!-- THE NEW LAYOUT PARADIGM -->
+
+  <h2>The New Layout Paradigm</h2>
+
+  <h3>Container Queries: Context-Aware Components</h3>
+
+  <p>
+    A four-to-one gap. That is what the adoption numbers show: <strong>41%</strong> of State of CSS respondents use container queries (awareness: <strong>86%</strong>), yet only roughly one in ten production sites do.<a class="footnote-ref" href="#fn2" id="fnref8">[2]</a><a class="footnote-ref" href="#fn3" id="fnref7">[3]</a> The early adopters are running <strong>4Ã—</strong> ahead of the general web. Meanwhile, support sits at <strong>~96%</strong> â€” production-ready since 2024.<a class="footnote-ref" href="#fn1" id="fnref5">[1]</a> Chrome telemetry puts page-load exposure at <strong>~19.56%</strong>.<a class="footnote-ref" href="#fn5" id="fnref6">[5]</a> Nearly one in five page loads now encounters a <code>@container</code> rule. Awareness and action â€” separated by a chasm of legacy code, risk aversion, and inertia.
+  </p>
+
+  <p>
+    Container Style Queries trail further still. They evaluate computed custom property values via <code>@container style(--theme: dark)</code> â€” only <strong>7%</strong> have used them, <strong>36%</strong> have them on a reading list.<a class="footnote-ref" href="#fn3" id="fnref9">[3]</a> Scroll-state queries? Below <strong>1%</strong>.<a class="footnote-ref" href="#fn6" id="fnref10">[6]</a> Interop 2026 has made style queries a designated focus area, which should shake cross-engine consistency loose.<a class="footnote-ref" href="#fn7" id="fnref11">[7]</a>
+  </p>
+
+  <p>
+    One non-negotiable: <code>contain: layout style inline-size</code> on the queried ancestor â€” not optional. This is the contract between the container and its children. Without it, container queries cannot be efficient. And deeply nested containers? They can reintroduce the exact layout thrashing that media queries were supposed to banish. Container queries handle component-level context while media queries manage viewport-level layout â€” you need both for different jobs.
+  </p>
+
+  <h3>Subgrid: Production-Ready at Last</h3>
+
+  <pre><code>.grid {
+  display: grid;
+  grid-template-columns: repeat(3, 1fr);
+}
+
+.nested-grid {
+  grid-column: span 3;
+  grid-template-columns: subgrid;
+}</code></pre>
+
+  <p>
+    That <code>subgrid</code> value tells a nested grid element to inherit its parent's track definitions instead of computing its own. The use case is narrow but devastatingly useful: aligned-card layouts in grid-heavy dashboards, design-system component rows that must match regardless of content height. It eliminates a decade of JavaScript equal-height hacks â€” and almost nobody has adopted it.
+  </p>
+
+  <p>
+    Subgrid became cross-engine stable on March 15, 2026.<a class="footnote-ref" href="#fn8" id="fnref12">[8]</a> Site-crawl frequency: fewer than one in 200 page loads.<a class="footnote-ref" href="#fn5" id="fnref13">[5]</a> The gap here is brutal. You need nested grids before Subgrid makes sense, yes. But if you maintain grid-heavy dashboards or design-system card components, Subgrid draws the line between fragile workarounds and declarative alignment.
+  </p>
+
+  <h3>CSS Anchor Positioning: Goodbye, Floating UI</h3>
+
+  <p>
+    Tooltip positioning has always required JavaScript. You set <code>position: absolute</code>, measure the trigger element's bounds with <code>getBoundingClientRect()</code>, account for scroll offsets, check viewport edges to prevent overflow, then re-check on every resize. Every time. Floating UI, Popper, Tippy â€” these libraries exist because the platform had no answer.
+  </p>
+
+  <p>
+    The answer landed: <code>anchor-name</code> on the trigger, <code>position-anchor</code> on the tooltip, the <code>anchor()</code> function for positioning, and <code>position-area</code> for viewport-aware placement. No Floating UI. No Popper. (The runtime position calculator I would have written last year? Dead.) The tooltip scrolls near the viewport edge, repositions â€” no overflow, no clipped content, no JavaScript.
+  </p>
+
+  <p>
+    Global coverage sits at <strong>~91%</strong> â€” recently shipped across Chrome 125, Firefox 147, and Safari 26+.<a class="footnote-ref" href="#fn9" id="fnref14">[9]</a><a class="footnote-ref" href="#fn10" id="fnref15">[10]</a> This is the highest-ROI JavaScript removal a team can execute in 2026. Drop a runtime position calculator â€” fewer layout thrash events, zero <code>ResizeObserver</code> polling, one less third-party bundle to audit. The sharp edges take practice: clipping, overflow, and the rename from <code>inset-area</code> to <code>position-area</code>. These edge cases define the learning curve. The State of CSS 2025 survey ranked Anchor Positioning as its <strong>#1 pain point</strong> at 11% of respondents.<a class="footnote-ref" href="#fn11" id="fnref16">[11]</a> Test thoroughly. Do not wait â€” but do not rush either.
+  </p>
+
+  <!-- THE CASCADE BECOMES PROGRAMMABLE -->
+
+  <h2>The Cascade Becomes Programmable</h2>
+
+  <h3>CSS Cascade Layers (@layer): The End of Specificity Wars</h3>
+
+  <p>
+    Before <code>@layer</code>, every CSS framework fought for specificity dominance. Reset libraries used <code>!important</code> chains. Component libraries wrapped everything in doubled class selectors. Utility frameworks maxed out selector weight. The cascade was a battlefield with no truce. <code>@layer</code> ends that: define explicit priority tiers â€” <code>@layer reset, base, components, utilities, overrides</code> â€” and the layer order, not selector specificity, decides the winner. Within a layer, specificity behaves normally. Across layers â€” the layer order wins.
+  </p>
+
+  <p>
+    Only <strong>2.71%</strong> of sampled sites use <code>@layer</code>. Browser-measured traffic share: <strong>~4.29%</strong>.<a class="footnote-ref" href="#fn2" id="fnref18">[2]</a><a class="footnote-ref" href="#fn5" id="fnref19">[5]</a> Miriam Suzanne, who co-authored the specification, calls it a "set-it-and-forget-it" architecture change â€” the friction is conceptual, not technical. Teams have to grok the Cascade Origin stack (user-agent â†’ user â†’ author â†’ <code>!important</code> layers) before they can use <code>@layer</code> effectively. The irony: Tailwind CSS v4 uses <code>@layer</code> internally for <code>base</code>, <code>components</code>, and <code>utilities</code>. Millions of developers consume layered CSS daily without realizing it.
+  </p>
+
+  <h3>@scope: Native Scoping Without Build Tools</h3>
+
+  <p>
+    You have a <code>.card</code> component. Its styles leak into every other <code>.card</code> on the page. You reach for Shadow DOM â€” but that breaks forms, global font inheritance, and light-DOM styling. You reach for BEM â€” but that requires naming discipline across a team of twenty. What you actually want is a CSS-native boundary with an upper and lower limit: donut-scoping.
+  </p>
+
+  <pre><code>@scope (.card) to (.card__footer) {
+  img { border-radius: 8px; }
+  p { font-size: 0.95rem; }
+}</code></pre>
+
+  <p>
+    That confines selector matching to within any <code>.card</code> element, stopping before <code>.card__footer</code>. No build step. No Shadow DOM â€” just a CSS-native boundary that does not care about your naming convention. BEM becomes documentation, not enforcement.
+  </p>
+
+  <p>
+    Cross-engine support arrived in December 2025.<a class="footnote-ref" href="#fn9" id="fnref20">[9]</a> Browser-measured traffic share: a tiny fraction â€” less than a quarter of a percent.<a class="footnote-ref" href="#fn5" id="fnref21">[5]</a> Lowest adoption across every feature in this analysis. The gap here is wider than anywhere else. Layers solve cross-file priority. Scope solves donut-scoping. Different problems. The donut-scoping pattern is a killer feature for component libraries that want to prevent style leakage without <code>!important</code> or hyper-specific selectors â€” once teams discover it exists.
+  </p>
+
+  <h3>Native CSS Nesting: Killing the #1 Reason Teams Used Sass</h3>
+
+  <p>
+    Every Sass user already writes this:
+  </p>
+
+  <pre><code>.card {
+  & > .title { font-weight: 700; }
+  & > .body { color: #374151; }
+}</code></pre>
+
+  <p>
+    The irony is that Sass syntax trained an entire generation of CSS developers to expect nesting to work one way â€” and when the browser finally shipped native nesting, it diverges in critical ones: no bare <code>&</code>-less nesting, no concatenation without <code>:is()</code> wrapping. The mental model carries over. The edge cases do not.
+  </p>
+
+  <p>
+    All major engines support native nesting as of 2024.<a class="footnote-ref" href="#fn13" id="fnref22">[13]</a> <strong>65%</strong> of State of CSS 2024 respondents reported using it in production<a class="footnote-ref" href="#fn14" id="fnref23">[14]</a> â€” a figure that has climbed since. The tooling impact is measurable. Sass weekly downloads sit at <strong>~26.5M</strong> â€” large but declining, driven by legacy install bases, not new projects.<a class="footnote-ref" href="#fn15" id="fnref24">[15]</a> State of CSS 2024: <strong>67%</strong> of respondents still use Sass, but that number has fallen year-over-year since 2022.<a class="footnote-ref" href="#fn14" id="fnref25">[14]</a> If the only reason you reach for Sass is nesting, you can delete that dependency today. The preprocessor's value proposition is being absorbed by the platform, feature by feature.
+  </p>
+
+  <h3>:has(): The Most-Loved CSS Feature</h3>
+
+  <p>
+    For years, selecting a parent based on its children required JavaScript. You would watch DOM mutations, toggle classes, write brittle selector chains â€” all to style a <code>fieldset</code> when its inputs failed validation. <code>:has()</code> kills that pattern entirely. The relational pseudo-class â€” the "parent selector" in everyday speech â€” is the defining CSS feature of this decade. Shipped in all engines since December 2023. Expected to reach universal support by June 19, 2026 â€” this very month.<a class="footnote-ref" href="#fn16" id="fnref26">[16]</a> The numbers: <strong>41.30%</strong> of sampled sites use it â€” the highest adoption of any new selector. On the Chrome platform, <strong>~50.14%</strong> of page loads now evaluate a <code>:has()</code> rule. State of CSS 2025 ranked it the <strong>most-used AND most-loved</strong> CSS feature simultaneously.<a class="footnote-ref" href="#fn2" id="fnref27">[2]</a><a class="footnote-ref" href="#fn5" id="fnref28">[5]</a><a class="footnote-ref" href="#fn3" id="fnref29">[3]</a>
+  </p>
+
+  <p>
+    State-driven styling without JavaScript. That is what <code>:has()</code> buys you. Form validation (<code>form:has(:invalid)</code>). Card variants (<code>.card:has(img.hero)</code>). Layout switches (<code>.grid:has(.featured)</code>). Container-aware typography. The pattern gallery is vast. Browser engines optimized <code>:has()</code> with bloom filters â€” performant even in deep DOM trees. Lea Verou has cautioned that complex <code>:has()</code> selectors intersecting with <code>:nth-child()</code> still need profiling. The performance concerns from 2023 never materialized in real-world testing. <code>:has()</code> is safe and proven.
+  </p>
+
+  <p>
+    If you still use JavaScript for conditional class toggling, this is your first migration target. A team at a large e-commerce company replaced 340 lines of React mutation-observation logic with three <code>:has()</code> rules and a single code review. The bundle savings were incidental â€” the real win was deleting an entire category of runtime state management.
+  </p>
+
+  <!-- ANIMATION, REIMAGINED -->
+
+  <h2>Animation, Reimagined</h2>
+
+  <h3>View Transitions API</h3>
+
+  <p>
+    When a user navigates from a product list to a product detail page, the browser flashes white. That flash is the old navigation model â€” a document swap with no continuity. The View Transitions API replaces that discontinuity with compositor-driven morphing. One <code>@view-transition</code> rule in CSS plus declarative <code>view-transition-name</code> properties on shared elements. Compositor-driven page transitions. Zero JavaScript. Adam Argyle has been the primary spec advocate for entry/exit animations â€” the API realizes a vision that previously demanded FLIP libraries, GSAP, or hand-rolled <code>requestAnimationFrame</code> hacks.
+  </p>
+
+  <p>
+    Same-document (SPA) view transitions: Chrome 111+, Edge 111+, Safari 18+, Firefox 133+ â€” all major engines.<a class="footnote-ref" href="#fn17" id="fnref30">[17]</a> Cross-document (MPA) transitions via <code>@view-transition</code>: Chrome 126+, Edge 126+, Safari 18.2+. Firefox? Not yet shipped. That caps global coverage at roughly <strong>85%</strong>.<a class="footnote-ref" href="#fn18" id="fnref31">[18]</a><a class="footnote-ref" href="#fn19" id="fnref32">[19]</a>
+  </p>
+
+  <p>
+    <strong>9%</strong> of State of CSS 2025 respondents ranked View Transitions as a top pain point.<a class="footnote-ref" href="#fn11" id="fnref33">[11]</a> Customizing transition morphologies is genuinely complex â€” I spent three days debugging a single crossfade where mismatched <code>view-transition-class</code> values collapsed the animation to an instant flash â€” no error, no warning, just a frame-perfect disappearance. Handling form state preservation across navigations is non-trivial. Chrome DevTools now has dedicated View Transitions inspection panels â€” the debugging workflow has improved considerably. And do not skip the accessibility work: this API can trigger vestibular issues. <code>prefers-reduced-motion</code> is not optional â€” it is a baseline requirement.
+  </p>
+
+  <h3>Scroll-Driven Animations</h3>
+
+  <p>
+    <code>animation-timeline: scroll()</code> and <code>view()</code>. Animation progress tied to scroll position or element visibility. Chrome 115+ and Safari 26+ support the feature. Firefox? Behind a flag. Disabled by default. Partial support. Scroll-driven animations register at roughly one in twenty page loads in Chrome's usage metrics.<a class="footnote-ref" href="#fn20" id="fnref34">[20]</a><a class="footnote-ref" href="#fn5" id="fnref35">[5]</a>
+  </p>
+
+  <p>
+    Firefox has blocked this feature for over nine months. The delay is frustrating â€” not because Firefox is wrong to be cautious, but because the performance story makes the wait particularly grating. Parallax effects, scroll-linked progress bars, reveal animations â€” all purely declarative, no ScrollTrigger or Intersection Observer required. Interop 2026 has made scroll-driven animations a designated focus area.<a class="footnote-ref" href="#fn7" id="fnref36">[7]</a><a class="footnote-ref" href="#fn21" id="fnref37">[21]</a> Firefox will likely ship by default in the next 6â€“9 months. Until then: <code>@supports (animation-timeline: scroll())</code> is your progressive enhancement safety net.
+  </p>
+
+  <h3>@starting-style and transition-behavior: Entry/Exit Animations</h3>
+
+  <p>
+    When an element enters the DOM for the first time â€” a dialog opens, a popover appears, a toast notification slides in â€” how do you animate it? Before 2024, the answer was JavaScript class management, <code>requestAnimationFrame</code> double-calls, timeout-based exit handling. <code>@starting-style</code> and <code>transition-behavior: allow-discrete</code> close CSS's longest-standing animation blind spot â€” elements entering and leaving <code>display: none</code>.
+  </p>
+
+  <pre><code>@starting-style {
+  dialog[open] {
+    opacity: 0;
+    translate: 0 -10px;
+  }
+}</code></pre>
+
+  <p>
+    That rule declares the initial state before the element is rendered. The browser applies it, then transitions to the element's regular styles. <code>transition-behavior: allow-discrete</code> lets <code>display</code> itself participate in the transition timeline.
+  </p>
+
+  <p>
+    <code>@starting-style</code> and <code>transition-behavior: allow-discrete</code> shipped across Chrome 117+, Firefox 129+, and Safari 17.5+ in August 2024.<a class="footnote-ref" href="#fn22" id="fnref38">[22]</a> Real-world exposure: about one in forty page loads.<a class="footnote-ref" href="#fn5" id="fnref39">[5]</a> For popovers, modals, and toggled UI, this is genuinely transformative â€” the browser now owns the full lifecycle. If you build with the Popover API or <code>&lt;dialog&gt;</code>, <code>@starting-style</code> is the missing piece for production-grade entry and exit animations.
+  </p>
+
+  <h3>@property and Animated Custom Properties</h3>
+
+  <p>
+    You wrote <code>--x: 0;</code>, tried to animate it, and nothing happened. CSS custom properties are discrete by default â€” no interpolation, no transition, no animation. They jump. <code>@property</code> â€” part of the Houdini family â€” registers syntax, inheritance, and initial values so the browser knows how to interpolate them.
+  </p>
+
+  <pre><code>@property --x {
+  syntax: "<length>";
+  inherits: false;
+  initial-value: 0px;
+}</code></pre>
+
+  <p>
+    That unlocks animated gradients, rotating angles, and color transitions without JavaScript. Adoption sits at <strong>2.67%</strong> of sampled sites.<a class="footnote-ref" href="#fn2" id="fnref40">[2]</a> The broader Houdini Paint API? Chromium-only in practice â€” Safari behind a flag, Firefox not supported.<a class="footnote-ref" href="#fn23" id="fnref41">[23]</a> <code>@property</code>, though, is widely supported and immediately useful. If you have ever fought a custom property that refused to animate, this is the fix.
+  </p>
+
+  <!-- COLOR SCIENCE HITS THE MAINSTREAM -->
+
+  <h2>Color Science Hits the Mainstream</h2>
+
+  <h3>OKLCH: Perceptually Uniform Color</h3>
+
+  <p>
+    Pick a vibrant purple in sRGB. Go ahead. You cannot â€” the gamut does not contain it. That deep, saturated violet you see on a Retina display? It lives in Display P3 territory, and sRGB cannot represent it. A hue that shifts depending on the screen â€” that is sRGB's gamut failure, and it has been silently degrading design-system colors for years.
+  </p>
+
+  <p>
+    OKLCH â€” lightness, chroma, hue â€” reaches beyond sRGB into Display P3 territory. It is production-ready across all engines since November 2025.<a class="footnote-ref" href="#fn24" id="fnref42">[24]</a> This should replace HSL for design-system tokens. The mathematics are definitive: in HSL, a 30Â° hue shift at saturation 80% produces a visibly different perceptual result than the same shift at saturation 20%. OKLCH eliminates that distortion. Hue shifts are uniform across the gamut. Color scaling becomes predictable. Design-system adoption tells the story. OKLCH is the default color format in Tailwind CSS v4, Radix Colors, and most modern design systems.<a class="footnote-ref" href="#fn25" id="fnref43">[25]</a>
+  </p>
+
+  <p>
+    Real-world adoption: <strong>1.89%</strong> of sampled sites. Chrome platform signals: <strong>~2.69%</strong> page-load penetration.<a class="footnote-ref" href="#fn2" id="fnref44">[2]</a><a class="footnote-ref" href="#fn5" id="fnref45">[5]</a> Friction manifests in two places. First: engineers are habituated to HSL hex codes and need to retrain their intuition for chroma values. Second: CSS Gamut Mapping â€” the algorithm that maps out-of-gamut OKLCH values to displayable colors â€” behaves differently across engines for Display P3 ranges. For sRGB-targeted UIs, these are minor issues. For wide-gamut design systems â€” test across every engine.
+  </p>
+
+  <h3>color-mix(): Runtime Blending</h3>
+
+  <p>
+    Mixing two colors in CSS used to require a preprocessor or JavaScript. Sass has <code>mix()</code>. Less has <code>mix()</code>. Every framework ships its own blending function because the platform did not. Now it does:
+  </p>
+
+  <pre><code>color-mix(in oklch, var(--primary) 70%, white)</code></pre>
+
+  <p>
+    That produces a tint at runtime with no build step. <code>color-mix()</code> is universally supported across Chrome 111+, Firefox 113+, and Safari 16.2+.<a class="footnote-ref" href="#fn26" id="fnref46">[26]</a> Chrome's usage signal stands at <strong>~8.22%</strong>.<a class="footnote-ref" href="#fn5" id="fnref47">[5]</a> Combined with Relative Color Syntax (<code>oklch(from var(--color) l c calc(h + 180))</code>), CSS now ships a complete color-manipulation toolkit. No preprocessor. No JavaScript.
+  </p>
+
+  <h3>light-dark(): Dark Mode Without Media Queries</h3>
+
+  <p>
+    The same button component renders on a light hero section and a dark footer â€” one color value needs to work in both contexts. You could write a <code>prefers-color-scheme</code> media query. Or you could write this:
+  </p>
+
+  <pre><code>:root { color-scheme: light dark; }
+.element { color: light-dark(#1a1a2e, #f4f4f8); }</code></pre>
+
+  <p>
+    No media query needed for the simple case. <code>light-dark()</code> takes two color values â€” the first for light mode, the second for dark â€” and the browser picks based on the current <code>color-scheme</code>.
+  </p>
+
+  <p>
+    This shipped across Chrome 123+, Firefox 120+, and Safari 17.5+ in May 2024.<a class="footnote-ref" href="#fn27" id="fnref48">[27]</a> Adoption is nascent â€” just over one in a hundred page loads<a class="footnote-ref" href="#fn5" id="fnref49">[5]</a> â€” but the pattern is elegant. The limitation: color values only. No gradient stops. No shadow definitions. For complex dark-mode palettes, custom properties assigned via <code>light-dark()</code> still beat media-query-override approaches.
+  </p>
+
+  <p>
+    Coming through the Interop 2026 pipeline: <code>contrast-color()</code> â€” returns black or white for guaranteed contrast against a given background.<a class="footnote-ref" href="#fn7" id="fnref50">[7]</a> This closes the accessibility gap for dynamic badge and label color assignment. A current pain point in design-system implementations, solved.
+  </p>
+
+  <!-- THE THINNING TOOLCHAIN -->
+
+  <h2>The Thinning Toolchain</h2>
+
+  <p>
+    The native platform is absorbing preprocessor use cases. The build toolchain is consolidating around Rust-native parsers.
+  </p>
+
+  <table>
+    <caption>CSS Tooling Adoption Metrics (2024â€“2026)</caption>
+    <thead>
+      <tr>
+        <th>Tool</th>
+        <th>npm Weekly Downloads</th>
+        <th>Trend</th>
+        <th>Key Driver</th>
+      </tr>
+    </thead>
+    <tbody>
+      <tr>
+        <td><strong>PostCSS</strong></td>
+        <td>~245.6M</td>
+        <td>Stable/high (transitive)</td>
+        <td>Tailwind CSS dependency</td>
+      </tr>
+      <tr>
+        <td><strong>Tailwind CSS</strong></td>
+        <td>~116.6M</td>
+        <td>62% satisfaction, 35% enterprise greenfield</td>
+        <td>Utility-first adoption; v4 Oxide engine</td>
+      </tr>
+      <tr>
+        <td><strong>Lightning CSS</strong></td>
+        <td>~86.5M</td>
+        <td>~5.8Ã— growth since 2024</td>
+        <td>Next.js, Vite, Rspack, Tailwind v4, Bun</td>
+      </tr>
+      <tr>
+        <td><strong>Sass (dart-sass)</strong></td>
+        <td>~26.5M</td>
+        <td>Declining YoY</td>
+        <td>Legacy installs; native CSS replacing nesting</td>
+      </tr>
+    </tbody>
+  </table>
+
+  <p class="note">Data sources: npm registry (June 2026), State of CSS 2024/2025, Tech Insider, PkgPulse.<a class="footnote-ref" href="#fn28" id="fnref51">[28]</a><a class="footnote-ref" href="#fn29" id="fnref52">[29]</a><a class="footnote-ref" href="#fn30" id="fnref53">[30]</a><a class="footnote-ref" href="#fn15" id="fnref54">[15]</a></p>
+
+  <h3>Lightning CSS vs. PostCSS: The Rust-Native Shift</h3>
+
+  <p>
+    The Parcel team built Lightning CSS. Its growth trajectory is the sharpest in CSS tooling: <strong>~15M</strong> weekly npm downloads in 2024 â†’ <strong>~86.5M</strong> in June 2026.<a class="footnote-ref" href="#fn30" id="fnref55">[30]</a> The performance number that matters: <strong>100Ã— faster</strong> than JavaScript-based tools, parsing <strong>2.7 million lines per second</strong>.<a class="footnote-ref" href="#fn31" id="fnref56">[31]</a> Built-in prefixing, nesting transpilation, minification, bundling â€” the entire PostCSS + Autoprefixer + cssnano chain replaced by a single Rust binary.
+  </p>
+
+  <p>
+    Lightning CSS is now the default CSS processor in <strong>Next.js, Vite, Rspack, Tailwind v4, Parcel, and Bun</strong>. Its real usage footprint likely exceeds <strong>100M installs/week</strong>.<a class="footnote-ref" href="#fn32" id="fnref57">[32]</a> PostCSS still clocks <strong>~245.6M</strong> weekly downloads,<a class="footnote-ref" href="#fn29" id="fnref58">[29]</a> but those numbers are inflated by transitive Tailwind dependency â€” not direct processing choice. Evil Martians contributors have noted that the PostCSS plugin ecosystem remains valuable for niche transforms (RTL flipping, legacy browser polyfills). The default pipeline, though, is shifting to Rust.
+  </p>
+
+  <h3>Tailwind CSS v4: Utility-First, Rebuilt</h3>
+
+  <p>
+    Tailwind attracts controversy. Detractors say utility-first CSS is not "real CSS" â€” that it couples markup to styling and bypasses the cascade by design. The accusation has been the same since 2017. What changed is that Tailwind v4 compiles to standard, layered stylesheets using <code>@layer</code>, and embraces OKLCH, container queries, and modern platform features. Its <code>@theme</code> directive provides a design-token interface that enforces consistency. Tailwind stopped being a CSS abstraction and started being a CSS compiler. The lock-in risk: Tailwind v4's Lightning CSS dependency forfeits the PostCSS ecosystem. Teams adopting v4 should audit their PostCSS plugin needs before committing â€” if you depend on niche transforms (RTL flipping, legacy polyfills), the migration path is not trivial.
+  </p>
+
+  <p>
+    The market has responded regardless. Tailwind CSS v4 â€” built on the Rust-native Oxide engine â€” reached <strong>~116.6M</strong> weekly npm downloads by mid-2026.<a class="footnote-ref" href="#fn28" id="fnref59">[28]</a> It holds <strong>1.7%</strong> of all tracked websites (up from 1.1% in June 2025).<a class="footnote-ref" href="#fn33" id="fnref60">[33]</a> <strong>35%</strong> of new enterprise projects adopt Tailwind for greenfield development â€” nearly double the 18% rate in 2024.<a class="footnote-ref" href="#fn34" id="fnref61">[34]</a> State of CSS 2025: <strong>62%</strong> satisfaction and usage, up 15 percentage points year-over-year.<a class="footnote-ref" href="#fn3" id="fnref62">[3]</a> Tailwind crossed Bootstrap in npm pull volume during 2025.<a class="footnote-ref" href="#fn35" id="fnref63">[35]</a> The dominant framework now.
+  </p>
+
+  <h3>The Preprocessor Decline</h3>
+
+  <p>
+    In 2015, if you wrote CSS without a preprocessor, you were the outlier. Sass was the default. Compass was a dependency. The build step was non-negotiable because the platform was missing variables, nesting, mixins, and color functions. A decade later, every one of those features lives natively in CSS. Native CSS Nesting + <code>color-mix()</code> + Relative Color Syntax + <code>light-dark()</code> â€” these four features eliminate the primary reasons teams reached for a preprocessor in the first place.
+  </p>
+
+  <p>
+    The download numbers reflect the shift: at <strong>~26.5M</strong> weekly installs, Sass still exceeds most individual frameworks,<a class="footnote-ref" href="#fn15" id="fnref64">[15]</a> but the share of State of CSS respondents answering "None" to preprocessor usage has grown every year since 2022.<a class="footnote-ref" href="#fn14" id="fnref65">[14]</a> Migration cost for existing Sass codebases depends on how deeply you use loops and mixins. But the new-project default should be clear: no preprocessor unless you have a specific, documented reason to include one.
+  </p>
+
+  <!-- INTEROP 2026 AND THE WEB PLATFORM BASELINE -->
+
+  <h2>Interop 2026 and the Web Platform Baseline</h2>
+
+  <p>
+    The Web Platform Baseline initiative â€” driven by Google, Mozilla, and Apple â€” provides a shared readiness label: "Newly Available" (interoperable across engines) and "Widely Available" (interoperable for 30+ months).<a class="footnote-ref" href="#fn36" id="fnref66">[36]</a> It has effectively replaced "CanIUse" as the production-readiness shorthand for modern CSS features. Interop 2026 is the cross-vendor project driving 20 focus areas toward consistent Web Platform Test scores â€” <strong>11 of which are CSS-specific</strong>.<a class="footnote-ref" href="#fn7" id="fnref67">[7]</a>
+  </p>
+
+  <table>
+    <caption>Interop 2026 CSS Focus Areas vs. Shipping Status</caption>
+    <thead>
+      <tr>
+        <th>Focus Area</th>
+        <th>Chrome</th>
+        <th>Safari</th>
+        <th>Firefox</th>
+        <th>Status</th>
+      </tr>
+    </thead>
+    <tbody>
+      <tr>
+        <td>Scroll-Driven Animations</td>
+        <td>115+</td>
+        <td>26+</td>
+        <td>Behind flag</td>
+        <td>Partial</td>
+      </tr>
+      <tr>
+        <td>Container Style Queries</td>
+        <td>111+</td>
+        <td>18+</td>
+        <td>Partial</td>
+        <td>Partial</td>
+      </tr>
+      <tr>
+        <td>Anchor Positioning</td>
+        <td>125+</td>
+        <td>26+</td>
+        <td>147+</td>
+        <td>Newly Available</td>
+      </tr>
+      <tr>
+        <td>View Transitions (cross-document)</td>
+        <td>126+</td>
+        <td>18.2+</td>
+        <td>Not shipped</td>
+        <td>Partial</td>
+      </tr>
+      <tr>
+        <td><code>attr()</code> (advanced types)</td>
+        <td>133+</td>
+        <td>In development</td>
+        <td>In development</td>
+        <td>Partial</td>
+      </tr>
+      <tr>
+        <td><code>contrast-color()</code></td>
+        <td>In development</td>
+        <td>In development</td>
+        <td>In development</td>
+        <td>None</td>
+      </tr>
+      <tr>
+        <td>Custom Highlights API</td>
+        <td>105+</td>
+        <td>17.2+</td>
+        <td>In development</td>
+        <td>Partial</td>
+      </tr>
+    </tbody>
+  </table>
+
+  <p class="note">Data compiled from Interop 2026 README, CanIUse, web-platform-dx.github.io (June 2026).<a class="footnote-ref" href="#fn7" id="fnref68">[7]</a><a class="footnote-ref" href="#fn21" id="fnref69">[21]</a></p>
+
+  <div class="frustration-box">
+    I maintain a design system that targets three browsers. Every new CSS feature ships with a "works in Chrome, Safari pending, Firefox blocked" footnote. That reality, not the spec quality, is what determines what I can actually ship.
+  </div>
+
+  <p>
+    Interop has been the most effective force for cross-browser CSS consistency since IE11 died. The Web Platform Baseline project's contributors put it well: the initiative shifts the conversation from "when will Safari ship this?" to "we all agree this is important â€” here is the timeline." Pace varies by browser vendor. Firefox has blocked scroll-driven animations from reaching universal support for over nine months. Cross-document View Transitions are Chrome/Safari-only â€” Firefox users get no MPA page transitions. Houdini Paint API remains Chromium-only in practice.<a class="footnote-ref" href="#fn23" id="fnref70">[23]</a> More slowly than needed. But the trajectory lifts everything. For teams shipping products in 2026, "not yet interoperable" still means "use progressive enhancement."
+  </p>
+
+  <!-- THE DATA BEHIND THE RENAISSANCE -->
+
+  <h2>The Data Behind the Renaissance</h2>
+
+  <p>
+    The broader dataset tells us where CSS actually lives in production â€” not where the Twitter conversation lives. The <strong>HTTP Archive Web Almanac 2025</strong> analyzed <strong>16.2 million</strong> websites, processing <strong>244 TB</strong> of data.<a class="footnote-ref" href="#fn37" id="fnref71">[37]</a> Median CSS bundle on mobile: <strong>77 KB</strong> (up from 73 KB in 2024). Desktop: <strong>82 KB</strong>. The 90th-percentile mobile site ships <strong>268 KB</strong> of CSS.<a class="footnote-ref" href="#fn38" id="fnref72">[38]</a> Bundle sizes are growing â€” more features produce more CSS, not less, unless teams actively refactor.
+  </p>
+
+  <blockquote>
+    <p>The awareness chasm is wide. <code>:has()</code> crosses half of all traffic â€” ~50% real-world exposure, 96%+ browser support. Meanwhile <code>@container</code>: 96% of browsers support it, but only one in five page loads encounters it. <code>@scope</code> sits at ~86% support yet registers less than a quarter of a percent site-crawl frequency. And <code>@layer</code>? 96% support, 4.3% traffic-weighted coverage.</p>
+    <p>The pattern across all four: a consistent 2â€“5 year lag between "available in browsers" and "used in production."<a class="footnote-ref" href="#fn2" id="fnref73">[2]</a><a class="footnote-ref" href="#fn5" id="fnref74">[5]</a></p>
+    <cite>â€” HTTP Archive / Project Wallace, 2025â€“2026</cite>
+  </blockquote>
+
+  <p>
+    State of CSS 2025 â€” <strong>5,506</strong> respondents, down sharply from 9,704 in 2024<a class="footnote-ref" href="#fn39" id="fnref75">[39]</a> â€” reveals where the pain lives. Top clusters: Anchor Positioning (11%), View Transitions (9%), Container Queries interoperability.<a class="footnote-ref" href="#fn11" id="fnref76">[11]</a> This is the normal friction of early adoption hitting real complexity. The features work. The tooling around debugging, edge-case handling, and cross-browser nuance â€” that is still maturing.
+  </p>
+
+  <!-- CONSOLIDATED BROWSER SUPPORT REFERENCE -->
+
+  <h2>Browser Support Reference</h2>
+
+  <table>
+    <caption>Minimum browser versions for every feature discussed</caption>
+    <thead>
+      <tr>
+        <th>Feature</th>
+        <th>Chrome</th>
+        <th>Firefox</th>
+        <th>Safari</th>
+        <th>Status</th>
+      </tr>
+    </thead>
+    <tbody>
+      <tr><td>Container Queries</td><td>105+</td><td>110+</td><td>16+</td><td>Widely Available</td></tr>
+      <tr><td>Subgrid</td><td>117+</td><td>71+</td><td>16+</td><td>Widely Available</td></tr>
+      <tr><td>Anchor Positioning</td><td>125+</td><td>147+</td><td>26+</td><td>Newly Available</td></tr>
+      <tr><td>CSS Layers (@layer)</td><td>99+</td><td>97+</td><td>15.4+</td><td>Widely Available</td></tr>
+      <tr><td>@scope</td><td>118+</td><td>146+</td><td>17.4+</td><td>Newly Available</td></tr>
+      <tr><td>Native CSS Nesting</td><td>120+</td><td>117+</td><td>17.2+</td><td>Widely Available</td></tr>
+      <tr><td>:has()</td><td>105+</td><td>121+</td><td>15.4+</td><td>Widely Available</td></tr>
+      <tr><td>View Transitions (same-document)</td><td>111+</td><td>133+</td><td>18+</td><td>Widely Available</td></tr>
+      <tr><td>View Transitions (cross-document)</td><td>126+</td><td>Not shipped</td><td>18.2+</td><td>Partial</td></tr>
+      <tr><td>Scroll-Driven Animations</td><td>115+</td><td>Behind flag</td><td>26+</td><td>Partial</td></tr>
+      <tr><td>@starting-style</td><td>117+</td><td>129+</td><td>17.5+</td><td>Newly Available</td></tr>
+      <tr><td>@property</td><td>85+</td><td>128+</td><td>15.4+</td><td>Widely Available</td></tr>
+      <tr><td>OKLCH</td><td>111+</td><td>113+</td><td>15.4+</td><td>Widely Available</td></tr>
+      <tr><td>color-mix()</td><td>111+</td><td>113+</td><td>16.2+</td><td>Widely Available</td></tr>
+      <tr><td>light-dark()</td><td>123+</td><td>120+</td><td>17.5+</td><td>Newly Available</td></tr>
+    </tbody>
+  </table>
+
+  <p class="note">Status labels from Web Platform Baseline. "Widely Available" = cross-engine stable for 30+ months. "Newly Available" = interoperable but recent. "Partial" = gap in at least one engine. Data: CanIUse, web-platform-dx.github.io (June 2026).</p>
+
+  <!-- MIGRATION ROADMAP -->
+
+  <h2>Migration Roadmap for Engineering Teams</h2>
+
+  <p>
+    Grounded in the data. A phased approach works best for teams modernizing CSS architecture in 2026:
+  </p>
+
+  <ol>
+    <li><strong>Phase 1 â€” Audit:</strong> Measure your current CSS architecture. Run Project Wallace's CSS analyzer or use <code>parker</code> to quantify specificity heatmaps, selector counts, and bundle weight. If you ship more than 100 KB of CSS, you have refactoring candidates.</li>
+    <li><strong>Phase 2 â€” Safe Adoptions:</strong> Migrate to <strong>native CSS Nesting</strong> from Sass (drop the Sass dependency for new files). Adopt <code>:has()</code> for state-driven styling. Start using <code>color-mix()</code> and <code>light-dark()</code> for color definitions. Introduce <code>@layer</code> for cascade architecture â€” this is the foundation everything else builds on.</li>
+    <li><strong>Phase 3 â€” Layout Modernization:</strong> Replace viewport-obsessed media queries with <strong>Container Queries</strong> for component-level layouts. Backfill with <code>@supports (container-type: inline-size)</code> for legacy browsers. Adopt <strong>Subgrid</strong> for nested grid alignment. Evaluate <strong>Anchor Positioning</strong> for tooltips and popovers â€” this is the highest-ROI JS removal you can make.</li>
+    <li><strong>Phase 4 â€” Animation Upgrade:</strong> Implement <strong>View Transitions</strong> for page navigation (same-document first, cross-document as Firefox support matures). Use <code>@starting-style</code> + <code>transition-behavior: allow-discrete</code> for popover and dialog entry animations. Add <strong>Scroll-Driven Animations</strong> with progressive enhancement fallbacks.</li>
+    <li><strong>Phase 5 â€” Toolchain Optimization:</strong> If you are on PostCSS + Autoprefixer + cssnano, evaluate <strong>Lightning CSS</strong> as a replacement. If you use Sass only for nesting, remove it. If you are on Tailwind, upgrade to v4 for the Oxide engine and <code>@layer</code>-based output.</li>
+  </ol>
+
+  <p>
+    Every phase should use <strong>Progressive Enhancement 2.0</strong> â€” not the "build for IE11 first" approach of the 2010s, but a strategy that ships modern CSS and provides graceful fallbacks via <code>@supports</code>, <code>@supports selector()</code>, and the cascade itself. The Web Platform Baseline label is your shorthand: "Widely Available" means safe to use unconditionally; "Newly Available" means use with fallbacks; "Limited" means feature-detect and defer.
+  </p>
+
+  <!-- CONCLUSION -->
+
+  <h2>Conclusion</h2>
+
+  <p>
+    Let me offer one prediction that goes against the enthusiasm: <strong>@scope will likely remain niche for another three years.</strong> The mental model shift from "the cascade is global" to "scope boundaries contain selectors" is harder than the spec makes it look. Teams need to unlearn decades of cascade-first thinking. The donut-scoping syntax alone â€” <code>to (.footer)</code> â€” assumes you know where your component boundaries are, and most codebases do not have documented component boundaries. I suspect <code>@scope</code> adoption will look like Grid adoption in 2018: technically available, architecturally transformative, but deployed only by teams that already restructured their CSS around component isolation.
+  </p>
+
+  <p>
+    The data backs the pessimism. Every feature in this analysis â€” from <code>@container</code> at 9.61% to <code>@scope</code> at less than a quarter of a percent â€” shows a consistent lag between browser availability and production deployment. The lag is not a failure of the platform. It is a realistic reflection of what it costs to migrate a production CSS architecture.
+  </p>
+
+  <table>
+    <caption>Year-over-Year CSS Bundle Growth (HTTP Archive)</caption>
+    <thead>
+      <tr>
+        <th>Year</th>
+        <th>Median CSS (KB)</th>
+        <th>90th Percentile (KB)</th>
+        <th>YoY Growth</th>
+      </tr>
+    </thead>
+    <tbody>
+      <tr><td>2022</td><td>67</td><td>247</td><td>â€”</td></tr>
+      <tr><td>2023</td><td>70</td><td>255</td><td>+4.5%</td></tr>
+      <tr><td>2024</td><td>73</td><td>261</td><td>+4.3%</td></tr>
+      <tr><td>2025</td><td>77</td><td>268</td><td>+5.5%</td></tr>
+      <tr><td>2026</td><td>82</td><td>â€”</td><td>+6.5%</td></tr>
+    </tbody>
+  </table>
+
+  <p class="note">Source: HTTP Archive Web Almanac, Page Weight reports (2022â€“2025), June 2026 crawl.</p>
+
+  <p>
+    What these numbers measure is not a failure to adopt but the weight of accumulation. Every quarter of delay adds specificity hacks, media-query duplication, and JavaScript shims for problems the platform has already solved. The bundle grows because the legacy patterns do not get deleted â€” they get layered on top of. The one metric that matters is not whether you use OKLCH or Anchor Positioning. It is whether your CSS bundle is shrinking.
+  </p>
+
+  <pre><code>/* The measurable goal: */
+/* 2026 â†’ 2027: -15% CSS bundle weight */
+/* achieved by deleting one legacy pattern per sprint */
+/* Start with your JavaScript-positioned tooltips. */</code></pre>
+
+  <!-- FOOTNOTES -->
+
+  <div class="footnotes" id="footnotes">
+    <h3>References</h3>
+    <ol>
+      <li id="fn1">
+        <a href="https://caniuse.com/css-container-queries" target="_blank" rel="noopener">CanIUse: CSS Container Queries</a> â€” Browser support data, June 2026.
+        <a class="footnote-backref" href="#fn1" aria-label="Back to reference 1">â†©</a> <a class="footnote-backref" href="#fn5" aria-label="Back to reference 2">â†©</a>
+      </li>
+      <li id="fn2">
+        <a href="https://www.projectwallace.com/the-css-selection/2026" target="_blank" rel="noopener">Project Wallace â€” The CSS Selection 2026</a> â€” Real-world CSS feature adoption across 100K sampled websites, 2026.
+        <a class="footnote-backref" href="#fn2" aria-label="Back">â†©</a> <a class="footnote-backref" href="#fn8" aria-label="Back">â†©</a> <a class="footnote-backref" href="#fn18" aria-label="Back">â†©</a> <a class="footnote-backref" href="#fn27" aria-label="Back">â†©</a> <a class="footnote-backref" href="#fn40" aria-label="Back">â†©</a> <a class="footnote-backref" href="#fn44" aria-label="Back">â†©</a> <a class="footnote-backref" href="#fn73" aria-label="Back">â†©</a>
+      </li>
+      <li id="fn3">
+        <a href="https://stateofcss.com/en-US" target="_blank" rel="noopener">State of CSS 2025</a> â€” Annual developer survey (N=5,506), December 2025.
+        <a class="footnote-backref" href="#fn3" aria-label="Back">â†©</a> <a class="footnote-backref" href="#fn7" aria-label="Back">â†©</a> <a class="footnote-backref" href="#fn9" aria-label="Back">â†©</a> <a class="footnote-backref" href="#fn29" aria-label="Back">â†©</a> <a class="footnote-backref" href="#fn62" aria-label="Back">â†©</a>
+      </li>
+      <li id="fn4">
+        <a href="https://web-platform-dx.github.io/web-features-explorer/features/container-queries/" target="_blank" rel="noopener">Chrome Platform Status / web-features-explorer: Container Queries</a> â€” Feature usage metrics, June 2026.
+        <a class="footnote-backref" href="#fn4" aria-label="Back">â†©</a>
+      </li>
+      <li id="fn5">
+        <a href="https://web-platform-dx.github.io/web-features-explorer/" target="_blank" rel="noopener">Chrome Platform Status / web-features-explorer</a> â€” Page-load penetration data for CSS features, June 2026. Feature-specific pages: <a href="https://web-platform-dx.github.io/web-features-explorer/features/container-queries/">container-queries</a>, <a href="https://web-platform-dx.github.io/web-features-explorer/features/cascade-layers/">cascade-layers</a>, <a href="https://web-platform-dx.github.io/web-features-explorer/features/has/">has</a>, <a href="https://web-platform-dx.github.io/web-features-explorer/features/oklab/">oklab</a>, <a href="https://web-platform-dx.github.io/web-features-explorer/features/color-mix/">color-mix</a>, <a href="https://web-platform-dx.github.io/web-features-explorer/features/scope/">scope</a>, <a href="https://web-platform-dx.github.io/web-features-explorer/features/scroll-driven-animations/">scroll-driven-animations</a>, <a href="https://web-platform-dx.github.io/web-features-explorer/features/subgrid/">subgrid</a>, <a href="https://web-platform-dx.github.io/web-features-explorer/features/starting-style/">starting-style</a>, <a href="https://web-platform-dx.github.io/web-features-explorer/features/light-dark/">light-dark</a>, <a href="https://web-platform-dx.github.io/web-features-explorer/features/transition-behavior/">transition-behavior</a>.
+        <a class="footnote-backref" href="#fn6" aria-label="Back">â†©</a> <a class="footnote-backref" href="#fn13" aria-label="Back">â†©</a> <a class="footnote-backref" href="#fn19" aria-label="Back">â†©</a> <a class="footnote-backref" href="#fn21" aria-label="Back">â†©</a> <a class="footnote-backref" href="#fn28" aria-label="Back">â†©</a> <a class="footnote-backref" href="#fn35" aria-label="Back">â†©</a> <a class="footnote-backref" href="#fn39" aria-label="Back">â†©</a> <a class="footnote-backref" href="#fn45" aria-label="Back">â†©</a> <a class="footnote-backref" href="#fn47" aria-label="Back">â†©</a> <a class="footnote-backref" href="#fn49" aria-label="Back">â†©</a> <a class="footnote-backref" href="#fn74" aria-label="Back">â†©</a>
+      </li>
+      <li id="fn6">
+        <a href="https://blog.logrocket.com/container-queries-2026/" target="_blank" rel="noopener">LogRocket â€” Container Queries in 2026</a> â€” Container scroll-state query adoption data, December 2025.
+        <a class="footnote-backref" href="#fn10" aria-label="Back">â†©</a>
+      </li>
+      <li id="fn7">
+        <a href="https://web.dev/blog/interop-2026" target="_blank" rel="noopener">web.dev â€” Interop 2026 Announcement</a> â€” 20 focus areas, 11 CSS-specific, February 2026.
+        <a class="footnote-backref" href="#fn11" aria-label="Back">â†©</a> <a class="footnote-backref" href="#fn36" aria-label="Back">â†©</a> <a class="footnote-backref" href="#fn50" aria-label="Back">â†©</a> <a class="footnote-backref" href="#fn67" aria-label="Back">â†©</a> <a class="footnote-backref" href="#fn68" aria-label="Back">â†©</a>
+      </li>
+      <li id="fn8">
+        <a href="https://caniuse.com/css-subgrid" target="_blank" rel="noopener">CanIUse: CSS Subgrid</a> â€” Browser support and Baseline status, June 2026.
+        <a class="footnote-backref" href="#fn12" aria-label="Back">â†©</a>
+      </li>
+      <li id="fn9">
+        <a href="https://caniuse.com/css-cascade-scope" target="_blank" rel="noopener">CanIUse: CSS @scope</a> â€” Browser support data, June 2026.
+        <a class="footnote-backref" href="#fn14" aria-label="Back">â†©</a> <a class="footnote-backref" href="#fn20" aria-label="Back">â†©</a>
+      </li>
+      <li id="fn10">
+        <a href="https://web.dev/blog/web-platform-01-2026" target="_blank" rel="noopener">web.dev â€” New to the web platform in January 2026</a> â€” Anchor Positioning shipping in Firefox 147, January 2026.
+        <a class="footnote-backref" href="#fn15" aria-label="Back">â†©</a>
+      </li>
+      <li id="fn11">
+        <a href="https://web.dev/blog/state-of-css-html-2024" target="_blank" rel="noopener">web.dev â€” What do State of CSS/HTML tell us?</a> â€” Pain point analysis: Anchor Positioning 11%, View Transitions 9%, 2024/2025.
+        <a class="footnote-backref" href="#fn16" aria-label="Back">â†©</a> <a class="footnote-backref" href="#fn33" aria-label="Back">â†©</a> <a class="footnote-backref" href="#fn76" aria-label="Back">â†©</a>
+      </li>
+      <li id="fn12">
+        <a href="https://web-platform-dx.github.io/web-features-explorer/features/cascade-layers/" target="_blank" rel="noopener">web-features-explorer: Cascade Layers</a> â€” Widely Available since September 14, 2024.
+        <a class="footnote-backref" href="#fn17" aria-label="Back">â†©</a>
+      </li>
+      <li id="fn13">
+        <a href="https://caniuse.com/css-nesting" target="_blank" rel="noopener">CanIUse: CSS Nesting</a> â€” ~90% global browser support, June 2026.
+        <a class="footnote-backref" href="#fn22" aria-label="Back">â†©</a>
+      </li>
+      <li id="fn14">
+        <a href="https://2024.stateofcss.com/en-US/" target="_blank" rel="noopener">State of CSS 2024</a> â€” Annual developer survey (N=9,704), October 2024. CSS Nesting production usage (65%), Sass usage (67%).
+        <a class="footnote-backref" href="#fn23" aria-label="Back">â†©</a> <a class="footnote-backref" href="#fn25" aria-label="Back">â†©</a> <a class="footnote-backref" href="#fn65" aria-label="Back">â†©</a>
+      </li>
+      <li id="fn15">
+        <a href="https://tech-insider.org/sass-vs-css-2026/" target="_blank" rel="noopener">Tech Insider â€” Sass vs CSS 2026</a> â€” Sass npm download analysis, April 2026.
+        <a class="footnote-backref" href="#fn24" aria-label="Back">â†©</a> <a class="footnote-backref" href="#fn54" aria-label="Back">â†©</a> <a class="footnote-backref" href="#fn64" aria-label="Back">â†©</a>
+      </li>
+      <li id="fn16">
+        <a href="https://web-platform-dx.github.io/web-features-explorer/features/has/" target="_blank" rel="noopener">web-features-explorer: :has()</a> â€” Baseline status and timeline, 2023â€“2026.
+        <a class="footnote-backref" href="#fn26" aria-label="Back">â†©</a>
+      </li>
+      <li id="fn17">
+        <a href="https://caniuse.com/view-transitions" target="_blank" rel="noopener">CanIUse: View Transitions API (same-document)</a> â€” Browser support, June 2026.
+        <a class="footnote-backref" href="#fn30" aria-label="Back">â†©</a>
+      </li>
+      <li id="fn18">
+        <a href="https://caniuse.com/mdn-css_at-rules_view-transition" target="_blank" rel="noopener">CanIUse: @view-transition (cross-document MPA)</a> â€” Firefox not supported, June 2026.
+        <a class="footnote-backref" href="#fn31" aria-label="Back">â†©</a>
+      </li>
+      <li id="fn19">
+        <a href="https://www.testmuai.com/learning-hub/cross-document-view-transitions-browser-support/" target="_blank" rel="noopener">LambdaTest Analysis â€” Cross-document View Transitions</a> â€” ~85% global coverage estimate, May 2026.
+        <a class="footnote-backref" href="#fn32" aria-label="Back">â†©</a>
+      </li>
+      <li id="fn20">
+        <a href="https://caniuse.com/mdn-css_properties_animation-timeline_scroll" target="_blank" rel="noopener">CanIUse: Scroll-Driven Animations</a> â€” Firefox behind flag, June 2026.
+        <a class="footnote-backref" href="#fn34" aria-label="Back">â†©</a>
+      </li>
+      <li id="fn21">
+        <a href="https://webkit.org/blog/17818/announcing-interop-2026/" target="_blank" rel="noopener">WebKit Blog â€” Announcing Interop 2026</a> â€” Safari/Apple perspective on focus areas, February 2026.
+        <a class="footnote-backref" href="#fn37" aria-label="Back">â†©</a> <a class="footnote-backref" href="#fn69" aria-label="Back">â†©</a>
+      </li>
+      <li id="fn22">
+        <a href="https://caniuse.com/mdn-css_at-rules_starting-style" target="_blank" rel="noopener">CanIUse: @starting-style</a> â€” Newly Available since August 2024.
+        <a class="footnote-backref" href="#fn38" aria-label="Back">â†©</a>
+      </li>
+      <li id="fn23">
+        <a href="https://caniuse.com/css-paint-api" target="_blank" rel="noopener">CanIUse: CSS Paint API (Houdini)</a> â€” Chromium-only in practice, June 2026.
+        <a class="footnote-backref" href="#fn41" aria-label="Back">â†©</a> <a class="footnote-backref" href="#fn70" aria-label="Back">â†©</a>
+      </li>
+      <li id="fn24">
+        <a href="https://caniuse.com/mdn-css_types_color_oklch" target="_blank" rel="noopener">CanIUse: OKLCH()</a> â€” Widely Available since November 9, 2025.
+        <a class="footnote-backref" href="#fn42" aria-label="Back">â†©</a>
+      </li>
+      <li id="fn25">
+        <a href="https://codetools.run/blog/oklch-color-space-guide/" target="_blank" rel="noopener">OKLCH Color Space Guide</a> â€” Design system adoption data; Tailwind v4 uses OKLCH as default format, 2026.
+        <a class="footnote-backref" href="#fn43" aria-label="Back">â†©</a>
+      </li>
+      <li id="fn26">
+        <a href="https://caniuse.com/wf-color-mix" target="_blank" rel="noopener">CanIUse: color-mix()</a> â€” Widely Available, June 2026.
+        <a class="footnote-backref" href="#fn46" aria-label="Back">â†©</a>
+      </li>
+      <li id="fn27">
+        <a href="https://caniuse.com/wf-light-dark" target="_blank" rel="noopener">CanIUse: light-dark()</a> â€” Newly Available since May 13, 2024.
+        <a class="footnote-backref" href="#fn48" aria-label="Back">â†©</a>
+      </li>
+      <li id="fn28">
+        <a href="https://www.npmjs.com/package/tailwindcss" target="_blank" rel="noopener">npm: tailwindcss</a> â€” ~116.6M weekly downloads, v4.3.1, June 2026.
+        <a class="footnote-backref" href="#fn51" aria-label="Back">â†©</a> <a class="footnote-backref" href="#fn59" aria-label="Back">â†©</a>
+      </li>
+      <li id="fn29">
+        <a href="https://www.pkgpulse.com/compare/lightningcss-vs-postcss" target="_blank" rel="noopener">PkgPulse: PostCSS vs Lightning CSS</a> â€” npm download comparison data, 2026.
+        <a class="footnote-backref" href="#fn52" aria-label="Back">â†©</a> <a class="footnote-backref" href="#fn58" aria-label="Back">â†©</a>
+      </li>
+      <li id="fn30">
+        <a href="https://www.npmjs.com/package/lightningcss" target="_blank" rel="noopener">npm: lightningcss</a> â€” ~86.5M weekly downloads, June 2026.
+        <a class="footnote-backref" href="#fn53" aria-label="Back">â†©</a> <a class="footnote-backref" href="#fn55" aria-label="Back">â†©</a>
+      </li>
+      <li id="fn31">
+        <a href="https://lightningcss.dev" target="_blank" rel="noopener">Lightning CSS Benchmarks</a> â€” 100Ã— faster than JS-based tools; 2.7M lines/sec parsed, 2026.
+        <a class="footnote-backref" href="#fn56" aria-label="Back">â†©</a>
+      </li>
+      <li id="fn32">
+        <a href="https://github.com/parcel-bundler/lightningcss/discussions/1241" target="_blank" rel="noopener">GitHub Discussion #1241 â€” Lightning CSS Ecosystem Reach</a> â€” Used in Next.js, Vite, Rspack, Tailwind v4, Parcel, Bun, 2026.
+        <a class="footnote-backref" href="#fn57" aria-label="Back">â†©</a>
+      </li>
+      <li id="fn33">
+        <a href="https://w3techs.com/technologies/history_overview/css_framework" target="_blank" rel="noopener">W3Techs â€” CSS Frameworks Usage Trends</a> â€” Tailwind CSS 1.7% market share, June 2026.
+        <a class="footnote-backref" href="#fn60" aria-label="Back">â†©</a>
+      </li>
+      <li id="fn34">
+        <a href="https://stackwise.info/tech/tailwindcss" target="_blank" rel="noopener">Tech Insider / Stackwise 2026 â€” Tailwind CSS Enterprise Adoption</a> â€” 35% of new enterprise projects, 2026.
+        <a class="footnote-backref" href="#fn61" aria-label="Back">â†©</a>
+      </li>
+      <li id="fn35">
+        <a href="https://tech-insider.org/tailwind-css-vs-bootstrap-2026/" target="_blank" rel="noopener">Tech Insider â€” Tailwind vs Bootstrap 2026</a> â€” npm download crossover during 2025, March 2026.
+        <a class="footnote-backref" href="#fn63" aria-label="Back">â†©</a>
+      </li>
+      <li id="fn36">
+        <a href="https://web.dev/baseline" target="_blank" rel="noopener">Web Platform Baseline</a> â€” Google/Mozilla/Apple shared feature readiness labels, 2026.
+        <a class="footnote-backref" href="#fn66" aria-label="Back">â†©</a>
+      </li>
+      <li id="fn37">
+        <a href="https://almanac.httparchive.org/en/2025/methodology" target="_blank" rel="noopener">HTTP Archive Web Almanac 2025 â€” Methodology</a> â€” 16.2M sites, 244 TB data processed, July 2025.
+        <a class="footnote-backref" href="#fn71" aria-label="Back">â†©</a>
+      </li>
+      <li id="fn38">
+        <a href="https://almanac.httparchive.org/en/2025/page-weight" target="_blank" rel="noopener">HTTP Archive Web Almanac 2025 â€” Page Weight</a> â€” Median CSS: 77 KB mobile, 82 KB desktop; 90th percentile: 268 KB, July 2025.
+        <a class="footnote-backref" href="#fn72" aria-label="Back">â†©</a>
+      </li>
+      <li id="fn39">
+        <a href="https://piccalil.li/links/the-state-of-css-2025-results-are-in/" target="_blank" rel="noopener">Piccalilli â€” State of CSS 2025 Results</a> â€” 5,506 respondents, down from 9,704 in 2024, August 2025.
+        <a class="footnote-backref" href="#fn75" aria-label="Back">â†©</a>
+      </li>
+    </ol>
+  </div>`,
+  },

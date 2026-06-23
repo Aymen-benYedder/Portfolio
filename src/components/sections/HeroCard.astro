@@ -1,64 +1,244 @@
 ---
-import Badge from '@components/ui/Badge.astro';
+import StatsSection from '@components/islands/StatsSection.tsx';
+import TerminalAbout from '@components/islands/TerminalAbout.tsx';
+import AsciiGlobe from '@components/AsciiGlobe.astro';
 ---
 
-<section id="hero" class="max-w-[var(--container-max)] mx-auto px-[var(--section-px)] pt-[100px] max-md:pt-[var(--section-gap)]" aria-labelledby="hero-heading">
-  <div class="hero-card glass-panel terminal-corner p-[var(--card-px)] md:p-[32px]">
-    <div class="flex items-center gap-[var(--spacing-gap-sm)] mb-[var(--spacing-gap-md)]">
-      <span class="glow-dot block"></span>
-      <span class="label-caps text-[var(--accent)] animate-flicker">System Status: Active</span>
-      <span class="ml-auto hidden md:flex items-center gap-[6px]">
-        <span class="w-[5px] h-[5px] bg-[var(--success)]" style="box-shadow: 0 0 6px var(--success);"></span>
-        <span class="font-[family-name:var(--font-mono)] text-[var(--text-2xs)] text-[var(--text-3)]">Open for remote work</span>
-      </span>
-    </div>
-    <div class="flex max-md:flex-col gap-[var(--spacing-gap-lg)]">
-      <div class="flex-1">
-        <h1 id="hero-heading" class="font-[family-name:var(--font-sans)] text-[64px] md:text-[72px] font-[800] leading-[1.0] tracking-[-0.04em] text-[var(--text-1)] m-0 uppercase">Aymen <span class="block text-[var(--text-3)] font-[family-name:var(--font-mono)] text-[var(--heading-sm)] font-normal tracking-[-0.02em] mt-[6px]">ben Yedder</span></h1>
-        <p class="font-[family-name:var(--font-mono)] text-[var(--text-base)] text-[var(--text-2)] leading-relaxed mt-[var(--spacing-gap-md)] max-w-3xl">
-          DevOps Engineer &amp; Web Systems Architect based in Tunisia. Specializing in CI/CD pipelines, Docker infrastructure, and resilient production systems where downtime is expensive.
-        </p>
-        <div class="flex flex-wrap gap-x-[var(--spacing-gap-lg)] gap-y-[var(--spacing-gap-xs)] mt-[var(--spacing-gap-md)]">
-          <div class="flex items-center gap-[6px]">
-            <span class="font-[family-name:var(--font-mono)] text-[var(--heading-md)] font-bold text-[var(--accent)]">24</span>
-            <span class="font-[family-name:var(--font-mono)] text-[var(--text-2xs)] text-[var(--text-3)]">projects deployed</span>
+<section id="hero" class="relative max-w-[var(--container-max)] mx-auto px-[var(--section-px)] pt-[clamp(80px,10vw,140px)] min-h-[90vh] flex items-center overflow-hidden" aria-labelledby="hero-heading">
+
+  <!-- Aurora Background -->
+  <div class="aurora-bg absolute inset-0 -z-10" aria-hidden="true"></div>
+
+  <!-- ── Floating Geometric Decorators ── -->
+  <div class="absolute inset-0 -z-10 overflow-hidden pointer-events-none" aria-hidden="true" data-parallax="0.15">
+    <div class="deco-shape deco-hexagon" style="top:8%;right:12%;animation-delay:0s"></div>
+    <div class="deco-shape deco-circle" style="bottom:20%;right:8%;animation-delay:-3s;width:50px;height:50px"></div>
+    <div class="deco-shape deco-diamond" style="top:35%;left:3%;animation-delay:-6s"></div>
+    <div class="deco-shape deco-ring" style="top:60%;left:5%;animation-delay:-9s;width:80px;height:80px"></div>
+  </div>
+
+  <!-- Drift Particles (dense ambient field) -->
+  <div class="absolute inset-0 -z-10 overflow-hidden pointer-events-none" aria-hidden="true" data-parallax="0.08">
+    <div class="float-particle w-[3px] h-[3px] bg-[var(--accent)] opacity-30" style="top:15%;left:10%;--drift-x:40px;--drift-y:-60px;animation-delay:0s;animation-duration:7s"></div>
+    <div class="float-particle w-[2px] h-[2px] bg-[var(--accent-glow)] opacity-20" style="top:25%;right:15%;--drift-x:-30px;--drift-y:-50px;animation-delay:-2s;animation-duration:8s"></div>
+    <div class="float-particle w-[4px] h-[4px] bg-[var(--accent)] opacity-20" style="bottom:35%;left:5%;--drift-x:50px;--drift-y:-40px;animation-delay:-4s;animation-duration:9s"></div>
+    <div class="float-particle w-[2px] h-[2px] bg-[var(--accent-glow)] opacity-25" style="top:60%;right:8%;--drift-x:-20px;--drift-y:-70px;animation-delay:-1s;animation-duration:6s"></div>
+    <div class="float-particle w-[3px] h-[3px] bg-[var(--accent)] opacity-15" style="top:10%;left:50%;--drift-x:30px;--drift-y:-80px;animation-delay:-3s;animation-duration:10s"></div>
+    <div class="float-particle w-[5px] h-[5px] bg-[var(--accent)] opacity-10" style="bottom:20%;right:25%;--drift-x:-40px;--drift-y:-50px;animation-delay:-5s;animation-duration:8s"></div>
+    <div class="float-particle w-[2px] h-[2px] bg-[var(--accent)] opacity-20" style="top:40%;left:20%;--drift-x:60px;--drift-y:-30px;animation-delay:-1.5s;animation-duration:11s"></div>
+    <div class="float-particle w-[3px] h-[3px] bg-[var(--accent-glow)] opacity-15" style="top:70%;left:75%;--drift-x:-50px;--drift-y:-60px;animation-delay:-3.5s;animation-duration:9s"></div>
+    <div class="float-particle w-[2px] h-[2px] bg-white opacity-10" style="top:5%;left:30%;--drift-x:20px;--drift-y:-40px;animation-delay:-1s;animation-duration:12s"></div>
+    <div class="float-particle w-[3px] h-[3px] bg-[var(--accent)] opacity-25" style="top:80%;left:60%;--drift-x:-30px;--drift-y:-50px;animation-delay:-2.5s;animation-duration:7.5s"></div>
+    <div class="float-particle w-[1.5px] h-[1.5px] bg-[var(--accent-glow)] opacity-20" style="top:45%;left:85%;--drift-x:-40px;--drift-y:-30px;animation-delay:-4.5s;animation-duration:13s"></div>
+    <div class="float-particle w-[4px] h-[4px] bg-white opacity-8" style="top:30%;left:40%;--drift-x:25px;--drift-y:-60px;animation-delay:-0.5s;animation-duration:14s"></div>
+    <div class="float-particle w-[2.5px] h-[2.5px] bg-[var(--accent)] opacity-18" style="bottom:45%;right:35%;--drift-x:35px;--drift-y:-45px;animation-delay:-5s;animation-duration:8s"></div>
+    <div class="float-particle w-[3px] h-[3px] bg-[var(--accent)] opacity-12" style="top:55%;left:15%;--drift-x:45px;--drift-y:-35px;animation-delay:-2s;animation-duration:10s"></div>
+    <div class="float-particle w-[2px] h-[2px] bg-[var(--accent-glow)] opacity-15" style="top:75%;left:45%;--drift-x:-25px;--drift-y:-55px;animation-delay:-3s;animation-duration:9s"></div>
+    <div class="float-particle w-[3px] h-[3px] bg-[var(--accent)] opacity-20" style="top:12%;left:70%;--drift-x:30px;--drift-y:-70px;animation-delay:-1.8s;animation-duration:11s"></div>
+  </div>
+
+  <div class="w-full">
+    <!-- ===== System Status Banner (Terminal-inspired, single row) ===== -->
+    <div class="max-w-[620px] mb-[var(--spacing-gap-xl)]" data-stagger-hero style="--stagger-delay: 0ms">
+      <div class="card-premium px-[var(--card-px)] py-[var(--spacing-gap-sm)] min-h-0">
+        <div class="flex flex-wrap items-center gap-x-[var(--spacing-gap-md)] gap-y-[6px]">
+          <!-- Badge + hostname -->
+          <div class="flex items-center gap-[var(--spacing-gap-sm)] shrink-0">
+            <span class="status-badge">System Online</span>
+            <span class="font-[family-name:var(--font-mono)] text-[var(--text-2xs)] text-[var(--text-3)]">AYMEN.SYS</span>
           </div>
-          <div class="flex items-center gap-[6px]">
-            <span class="font-[family-name:var(--font-mono)] text-[var(--heading-md)] font-bold text-[var(--text-1)]">6+</span>
-            <span class="font-[family-name:var(--font-mono)] text-[var(--text-2xs)] text-[var(--text-3)]">production years</span>
+
+          <!-- Dot divider (desktop) -->
+          <span class="hidden sm:inline w-[3px] h-[3px] rounded-full bg-[var(--text-3)] opacity-30 shrink-0" aria-hidden="true"></span>
+
+          <!-- Version -->
+          <span class="font-[family-name:var(--font-mono)] text-[var(--text-2xs)] text-[var(--text-3)] shrink-0">v2.0.4</span>
+
+          <!-- Dot divider (desktop) -->
+          <span class="hidden sm:inline w-[3px] h-[3px] rounded-full bg-[var(--text-3)] opacity-30 shrink-0" aria-hidden="true"></span>
+
+          <!-- Metrics inline -->
+          <div class="flex items-center gap-x-[var(--spacing-gap-sm)] gap-y-[4px] flex-wrap">
+            <span class="flex items-center gap-[4px] whitespace-nowrap">
+              <svg width="12" height="12" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" class="text-[var(--accent)] shrink-0"><path d="M20 21v-2a4 4 0 0 0-4-4H8a4 4 0 0 0-4 4v2"></path><circle cx="12" cy="7" r="4"></circle></svg>
+              <span class="font-[family-name:var(--font-mono)] text-[var(--text-2xs)] text-[var(--text-1)] leading-none">Available</span>
+            </span>
+            <span class="flex items-center gap-[4px] whitespace-nowrap">
+              <svg width="12" height="12" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" class="text-[var(--accent)] shrink-0"><circle cx="12" cy="12" r="10"></circle><polyline points="12 6 12 12 16 14"></polyline></svg>
+              <span class="font-[family-name:var(--font-mono)] text-[var(--text-2xs)] text-[var(--text-1)] leading-none">UTC+1</span>
+            </span>
+            <span class="flex items-center gap-[4px] whitespace-nowrap">
+              <svg width="12" height="12" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" class="text-[var(--accent)] shrink-0"><path d="M22 16.92v3a2 2 0 0 1-2.18 2 19.79 19.79 0 0 1-8.63-3.07 19.5 19.5 0 0 1-6-6 19.79 19.79 0 0 1-3.07-8.67A2 2 0 0 1 4.11 2h3a2 2 0 0 1 2 1.72 12.84 12.84 0 0 0 .7 2.81 2 2 0 0 1-.45 2.11L8.09 9.91a16 16 0 0 0 6 6l1.27-1.27a2 2 0 0 1 2.11-.45 12.84 12.84 0 0 0 2.81.7A2 2 0 0 1 22 16.92z"></path></svg>
+              <span class="font-[family-name:var(--font-mono)] text-[var(--text-2xs)] text-[var(--text-1)] leading-none">24h Resp</span>
+            </span>
+            <span class="flex items-center gap-[4px] whitespace-nowrap">
+              <svg width="12" height="12" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" class="text-[var(--accent)] shrink-0"><polygon points="12 2 2 7 12 12 22 7 12 2"></polygon><polyline points="2 17 12 22 22 17"></polyline><polyline points="2 12 12 17 22 12"></polyline></svg>
+              <span class="font-[family-name:var(--font-mono)] text-[var(--text-2xs)] text-[var(--text-1)] leading-none">Remote</span>
+            </span>
           </div>
-          <div class="flex items-center gap-[6px]">
-            <span class="font-[family-name:var(--font-mono)] text-[var(--heading-md)] font-bold text-[var(--accent)]">99.9%</span>
-            <span class="font-[family-name:var(--font-mono)] text-[var(--text-2xs)] text-[var(--text-3)]">uptime average</span>
-          </div>
-        </div>
-        <div class="flex gap-[var(--spacing-gap-sm)] mt-[var(--spacing-gap-lg)] max-md:flex-col">
-          <a href="/assets/resume.pdf" class="font-[family-name:var(--font-mono)] text-[var(--text-2xs)] font-bold tracking-[0.1em] px-[24px] py-[12px] bg-[var(--accent)] text-[var(--void)] no-underline inline-flex items-center gap-[8px] justify-center min-h-[44px] uppercase hover:bg-transparent hover:text-[var(--accent)] hover:shadow-[0_0_15px_rgba(16,185,129,0.3)] transition-all duration-200 border border-[var(--accent)] hover-lift">[ Deploy to Production ]</a>
-          <a href="/#contact" class="font-[family-name:var(--font-mono)] text-[var(--text-2xs)] font-bold tracking-[0.1em] px-[24px] py-[12px] border border-[var(--border-hi)] text-[var(--text-2)] no-underline inline-flex items-center gap-[8px] justify-center min-h-[44px] uppercase hover:border-[var(--accent)] hover:text-[var(--accent)] transition-all duration-200 hover-lift">&lt; Initiate Contact &gt;</a>
         </div>
       </div>
-      <div class="flex flex-col items-end justify-center max-md:items-start min-w-[140px]">
-        <Badge variant="green" live={true}>ACTIVE</Badge>
-        <div class="text-right max-md:text-left mt-[var(--spacing-gap-sm)]">
-          <div class="font-[family-name:var(--font-mono)] text-[var(--text-2xs)] text-[var(--text-3)]">UPTIME 99.9%</div>
-          <div class="font-[family-name:var(--font-mono)] text-[var(--text-2xs)] text-[var(--text-3)]">47MS AVG RESPONSE</div>
-        </div>
-        <div class="flex flex-wrap gap-[var(--spacing-gap-xs)] mt-[var(--spacing-gap-md)] justify-end max-md:justify-start">
-          <span class="tag-like font-[family-name:var(--font-mono)] text-[var(--text-2xs)] px-[8px] py-[3px] border border-[var(--border)] text-[var(--text-2)]">k8s</span>
-          <span class="tag-like font-[family-name:var(--font-mono)] text-[var(--text-2xs)] px-[8px] py-[3px] border border-[var(--border)] text-[var(--text-2)]">tf</span>
-          <span class="tag-like font-[family-name:var(--font-mono)] text-[var(--text-2xs)] px-[8px] py-[3px] border border-[var(--border)] text-[var(--text-2)]">argo</span>
-          <span class="tag-like font-[family-name:var(--font-mono)] text-[var(--text-2xs)] px-[8px] py-[3px] border border-[var(--border)] text-[var(--text-2)]">flux</span>
-          <span class="tag-like font-[family-name:var(--font-mono)] text-[var(--text-2xs)] px-[8px] py-[3px] border border-[var(--border)] text-[var(--text-2)]">prom</span>
-        </div>
+    </div>
+
+    <!-- ===== Main Title: Retro Pixel Name ===== -->
+    <div class="w-full max-w-[600px]" data-stagger-hero style="--stagger-delay: 100ms">
+      <h1 id="hero-heading" class="m-0 w-full min-h-[clamp(90px,22vw,140px)]">
+        <AsciiGlobe
+          width="100%"
+          height="auto"
+          accent="#34d399"
+          gray="#6b7280"
+          firstFont={30}
+          baseFont={22}
+          blockRatio={0.66}
+          rowGapRatio={0.66}
+          pixelGap={2}
+        />
+      </h1>
+    </div>
+
+    <!-- ===== Tagline with terminal scan + cursor ===== -->
+    <p class="terminal-tagline font-[family-name:var(--font-mono)] text-[clamp(0.875rem,1.5vw,1.125rem)] text-[var(--text-2)] leading-relaxed mt-[var(--spacing-gap-xl)] max-w-2xl" data-stagger-hero style="--stagger-delay: 200ms">
+      <span class="text-[var(--accent)] font-semibold">DevOps Engineer</span> &amp; Web Systems Architect. 
+      Building CI/CD pipelines, Docker infrastructure, and MERN applications for startups that can't afford downtime.
+      <span class="terminal-cursor" aria-hidden="true"></span>
+    </p>
+
+    <!-- ===== Terminal About (collapsed by default, expand on click) ===== -->
+    <div class="mt-[var(--spacing-gap-xl)]" data-stagger-hero style="--stagger-delay: 250ms">
+      <TerminalAbout client:load />
+    </div>
+
+    <!-- ===== Proof Metrics (grid with staggered cards) ===== -->
+    <div class="grid grid-cols-2 md:grid-cols-4 gap-[var(--spacing-gap-md)] mt-[var(--spacing-gap-xl)] max-w-[900px]">
+      <div class="card-premium px-[var(--spacing-gap-md)] py-[var(--spacing-gap-md)] border-t-2 border-t-[var(--accent)]" data-stagger-hero style="--stagger-delay: 300ms">
+        <svg width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" class="text-[var(--accent)] mb-[var(--spacing-gap-xs)] animate-levitate">
+          <path d="M22 11.08V12a10 10 0 1 1-5.93-9.14"></path>
+          <polyline points="22 4 12 14.01 9 11.01"></polyline>
+        </svg>
+        <span class="block font-[family-name:var(--font-mono)] text-[var(--text-2xs)] text-[var(--text-3)] uppercase tracking-[0.08em]">Projects</span>
+        <span class="block font-[family-name:var(--font-mono)] text-[26px] font-bold text-[var(--text-1)]">24+</span>
+      </div>
+      <div class="card-premium px-[var(--spacing-gap-md)] py-[var(--spacing-gap-md)] border-t-2 border-t-[var(--accent)]" data-stagger-hero style="--stagger-delay: 380ms">
+        <svg width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" class="text-[var(--accent)] mb-[var(--spacing-gap-xs)] animate-levitate" style="animation-delay:-1s">
+          <polyline points="22 12 18 12 15 21 9 3 6 12 2 12"></polyline>
+        </svg>
+        <span class="block font-[family-name:var(--font-mono)] text-[var(--text-2xs)] text-[var(--text-3)] uppercase tracking-[0.08em]">Uptime</span>
+        <span class="block font-[family-name:var(--font-mono)] text-[26px] font-bold text-[var(--text-1)]">99.9%</span>
+      </div>
+      <div class="card-premium px-[var(--spacing-gap-md)] py-[var(--spacing-gap-md)] border-t-2 border-t-[var(--accent)]" data-stagger-hero style="--stagger-delay: 460ms">
+        <svg width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" class="text-[var(--accent)] mb-[var(--spacing-gap-xs)] animate-levitate" style="animation-delay:-2s">
+          <path d="M13 2L3 14h9l-1 8 10-12h-9l1-8z"></path>
+        </svg>
+        <span class="block font-[family-name:var(--font-mono)] text-[var(--text-2xs)] text-[var(--text-3)] uppercase tracking-[0.08em]">Faster Deploy</span>
+        <span class="block font-[family-name:var(--font-mono)] text-[26px] font-bold text-[var(--text-1)]">65%</span>
+      </div>
+      <div class="card-premium px-[var(--spacing-gap-md)] py-[var(--spacing-gap-md)] border-t-2 border-t-[var(--accent)]" data-stagger-hero style="--stagger-delay: 620ms">
+        <svg width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" class="text-[var(--accent)] mb-[var(--spacing-gap-xs)] animate-levitate" style="animation-delay:-3s">
+          <circle cx="12" cy="12" r="10"></circle>
+          <polyline points="12 6 12 12 16 14"></polyline>
+        </svg>
+        <span class="block font-[family-name:var(--font-mono)] text-[var(--text-2xs)] text-[var(--text-3)] uppercase tracking-[0.08em]">Experience</span>
+        <span class="block font-[family-name:var(--font-mono)] text-[26px] font-bold text-[var(--text-1)]">8+ yrs</span>
       </div>
     </div>
+
+    <!-- ===== Stats (animated on scroll) ===== -->
+    <div class="mt-[var(--spacing-gap-xl)]" data-stagger-hero style="--stagger-delay: 700ms">
+      <StatsSection client:visible />
+    </div>
+
+    <!-- ===== CTAs with Magnetic Effect ===== -->
+    <div class="flex gap-[var(--spacing-gap-lg)] mt-[var(--spacing-gap-2xl)] max-md:flex-col" data-stagger-hero style="--stagger-delay: 800ms">
+      <a href="/#contact" class="group btn-magnetic font-[family-name:var(--font-mono)] text-[var(--text-2xs)] font-bold tracking-[0.1em] px-[28px] py-[16px] bg-[var(--accent)] text-[var(--void)] no-underline inline-flex items-center gap-[12px] justify-center min-h-[52px] uppercase border border-[var(--accent)] transition-all duration-300 hover:shadow-[0_0_40px_rgba(16,185,129,0.35)] hover:brightness-110 interactive-scale relative overflow-hidden" data-magnetic>
+        <span class="relative z-10">Request Resume</span>
+        <svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5" stroke-linecap="round" stroke-linejoin="round" class="relative z-10 group-hover:translate-x-[3px] transition-transform duration-200"><path d="M5 12h14M12 5l7 7-7 7"/></svg>
+        <span class="absolute inset-0 bg-[var(--accent-glow)] opacity-0 group-hover:opacity-20 transition-opacity duration-300"></span>
+      </a>
+      <a href="/#contact" class="group btn-magnetic font-[family-name:var(--font-mono)] text-[var(--text-2xs)] font-bold tracking-[0.1em] px-[28px] py-[16px] border border-[var(--border-hi)] text-[var(--text-2)] no-underline inline-flex items-center gap-[12px] justify-center min-h-[52px] uppercase transition-all duration-300 hover:border-[var(--accent)] hover:text-[var(--accent)] hover:shadow-[0_0_30px_rgba(16,185,129,0.12)] interactive-scale relative overflow-hidden" data-magnetic>
+        <svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" class="relative z-10 group-hover:-translate-x-[3px] transition-transform duration-200"><path d="M12 5v14M5 12l7 7 7-7"/></svg>
+        <span class="relative z-10">Initiate Contact</span>
+        <span class="absolute inset-0 bg-[var(--accent-glass)] opacity-0 group-hover:opacity-100 transition-opacity duration-300"></span>
+      </a>
+    </div>
+
+    <!-- ===== Tech Stack Tags (Capsule Pills) ===== -->
+    <div class="flex flex-wrap gap-[var(--spacing-gap-xs)] mt-[var(--spacing-gap-xl)]" data-stagger-hero style="--stagger-delay: 900ms">
+      <span class="capsule-pill">k8s</span>
+      <span class="capsule-pill">terraform</span>
+      <span class="capsule-pill">argo</span>
+      <span class="capsule-pill">flux</span>
+      <span class="capsule-pill">prometheus</span>
+      <span class="capsule-pill">docker</span>
+      <span class="capsule-pill">nginx</span>
+      <span class="capsule-pill">github actions</span>
+      <span class="capsule-pill">grafana</span>
+    </div>
+  </div>
+
+  <!-- ===== Scroll Indicator (enhanced) ===== -->
+  <div class="absolute bottom-10 left-1/2 -translate-x-1/2 scroll-indicator" data-reveal-blur style="--stagger-delay: 1200ms">
+    <span class="font-[family-name:var(--font-mono)] text-[9px] text-[var(--text-3)] tracking-[0.18em]">SCROLL</span>
+    <div class="scroll-mouse"></div>
   </div>
 </section>
 
 <style>
-.tag-like { transition: border-color 80ms, color 80ms; }
-.tag-like:hover { border-color: var(--accent); color: var(--accent); background: var(--accent-glass); }
-@media (prefers-reduced-motion: reduce) {
-  .tag-like { transition: none !important; }
-}
+  .capsule-pill { transition: all 250ms cubic-bezier(0.16, 1, 0.3, 1); }
+
+  [data-stagger-hero] {
+    opacity: 0;
+    transform: translateY(40px) scale(0.95);
+    filter: blur(4px);
+    transition: opacity 800ms cubic-bezier(0.16, 1, 0.3, 1),
+                transform 800ms cubic-bezier(0.16, 1, 0.3, 1),
+                filter 800ms cubic-bezier(0.16, 1, 0.3, 1);
+    transition-delay: var(--stagger-delay, 0ms);
+  }
+
+  [data-stagger-hero].revealed {
+    opacity: 1;
+    transform: translateY(0) scale(1);
+    filter: blur(0);
+  }
+
+  /* Hero entrance: particles fade in first */
+  .float-particle {
+    opacity: 0;
+    animation: particle-appear 1s ease forwards, var(--anim, float-delayed 6s ease-in-out infinite);
+    animation-delay: 0.3s, 1.3s;
+  }
+
+  @keyframes particle-appear {
+    to { opacity: var(--opacity, 0.3); }
+  }
+
+  /* ── AsciiGlobe Container ── */
+  .ascii-globe-wrap {
+    flex-shrink: 0;
+    align-self: center;
+    box-shadow: 0 0 20px rgba(16, 185, 129, 0.03),
+                inset 0 0 20px rgba(16, 185, 129, 0.02);
+  }
+
+  @media (max-width: 640px) {
+    .ascii-globe-wrap {
+      width: 260px !important;
+      height: 260px !important;
+    }
+  }
+
+  @media (max-width: 400px) {
+    .ascii-globe-wrap {
+      width: 200px !important;
+      height: 200px !important;
+    }
+  }
+
+  @media (prefers-reduced-motion: reduce) {
+    .capsule-pill { transition: none !important; }
+    [data-stagger-hero] { opacity: 1 !important; transform: none !important; filter: none !important; }
+    .float-particle { opacity: var(--opacity, 0.3) !important; animation: none !important; }
+    .ascii-globe-wrap { opacity: 1 !important; }
+  }
 </style>

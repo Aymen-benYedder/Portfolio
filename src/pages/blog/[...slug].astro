@@ -68,6 +68,8 @@ try {
       body: staticPost.body,
       categories: staticPost.categories,
       tags: staticPost.tags,
+      image: staticPost.image,
+      author: staticPost.author ?? { id: 'aymen-ben-yedder', name: 'Aymen ben Yedder', slug: 'aymen-ben-yedder' },
       isSanity: false,
     };
   }

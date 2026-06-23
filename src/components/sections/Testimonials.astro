@@ -1,0 +1,63 @@
+---
+export interface Props {
+  class?: string;
+}
+const { class: className = '' } = Astro.props;
+---
+
+<section id="testimonials" class="max-w-[var(--container-max)] mx-auto px-[var(--section-px)] mt-[var(--section-gap)] {className}" data-reveal-blur>
+  <div class="terminal-section-header">
+    <span class="font-[family-name:var(--font-mono)] text-[var(--text-2xs)] font-bold tracking-[0.10em] text-[var(--accent)]">Testimonials</span>
+  </div>
+  <p class="font-[family-name:var(--font-mono)] text-[var(--text-xs)] text-[var(--text-3)] mb-[var(--spacing-gap-lg)] tracking-[0.04em]">// CLIENT FEEDBACK</p>
+  <div class="grid grid-cols-1 md:grid-cols-3 gap-[var(--spacing-gap-lg)]">
+    <div class="card-premium px-[var(--card-px)] py-[var(--card-py)]" data-stagger-blur>
+      <div class="flex items-center gap-[var(--spacing-gap-xs)] mb-[var(--spacing-gap-md)]">
+        <svg width="20" height="20" viewBox="0 0 24 24" fill="currentColor" class="text-[var(--accent)] opacity-40 shrink-0">
+          <path d="M3 21c3 0 7-1 7-8V5c0-1.25-.756-2.017-2-2H4c-1.25 0-2 .75-2 1.972V11c0 1.25.75 2 2 2 1 0 1 0 1 1v1c0 1-1 2-2 2s-1 .008-1 1.03V20c0 1 0 1 1 1z"></path>
+          <path d="M15 21c3 0 7-1 7-8V5c0-1.25-.756-2.017-2-2h-4c-1.25 0-2 .75-2 1.972V11c0 1.25.75 2 2 2 1 0 1 0 1 1v1c0 1-1 2-2 2s-1 .008-1 1.03V20c0 1 0 1 1 1z"></path>
+        </svg>
+        <span class="font-[family-name:var(--font-mono)] text-[var(--text-2xs)] text-[var(--text-3)] uppercase tracking-[0.05em]">Trusted</span>
+      </div>
+      <blockquote class="m-0">
+        <p class="text-[var(--text-small)] text-[var(--text-2)] leading-relaxed">"Riskvision went from a good product to a reliably deployable one after Aymen took over infrastructure. Our compliance audits pass faster because the monitoring and deployment pipeline are fully documented and reproducible. Deployment incidents are now a thing of the past."</p>
+      </blockquote>
+      <div class="mt-[var(--spacing-gap-md)] pt-[var(--spacing-gap-sm)] border-t border-[var(--border)]">
+        <span class="font-[family-name:var(--font-mono)] text-[var(--text-2xs)] text-[var(--text-1)] font-bold">— Nour C.</span>
+        <span class="block font-[family-name:var(--font-mono)] text-[10px] text-[var(--text-3)]">Safety Compliance Lead, Riskvision</span>
+      </div>
+    </div>
+    <div class="card-premium px-[var(--card-px)] py-[var(--card-py)]" data-stagger-blur>
+      <div class="flex items-center gap-[var(--spacing-gap-xs)] mb-[var(--spacing-gap-md)]">
+        <svg width="20" height="20" viewBox="0 0 24 24" fill="currentColor" class="text-[var(--accent)] opacity-40 shrink-0">
+          <path d="M3 21c3 0 7-1 7-8V5c0-1.25-.756-2.017-2-2H4c-1.25 0-2 .75-2 1.972V11c0 1.25.75 2 2 2 1 0 1 0 1 1v1c0 1-1 2-2 2s-1 .008-1 1.03V20c0 1 0 1 1 1z"></path>
+          <path d="M15 21c3 0 7-1 7-8V5c0-1.25-.756-2.017-2-2h-4c-1.25 0-2 .75-2 1.972V11c0 1.25.75 2 2 2 1 0 1 0 1 1v1c0 1-1 2-2 2s-1 .008-1 1.03V20c0 1 0 1 1 1z"></path>
+        </svg>
+        <span class="font-[family-name:var(--font-mono)] text-[var(--text-2xs)] text-[var(--text-3)] uppercase tracking-[0.05em]">Reliable</span>
+      </div>
+      <blockquote class="m-0">
+        <p class="text-[var(--text-small)] text-[var(--text-2)] leading-relaxed">"Lavocato needed a reliable infrastructure backbone before we could scale to more cities. Aymen built our deployment pipelines and monitoring from scratch. The platform hasn't had a single outage since launch, and his documentation meant our team could manage it independently."</p>
+      </blockquote>
+      <div class="mt-[var(--spacing-gap-md)] pt-[var(--spacing-gap-sm)] border-t border-[var(--border)]">
+        <span class="font-[family-name:var(--font-mono)] text-[var(--text-2xs)] text-[var(--text-1)] font-bold">— Yasmine L.</span>
+        <span class="block font-[family-name:var(--font-mono)] text-[10px] text-[var(--text-3)]">Operations Lead, Lavocato</span>
+      </div>
+    </div>
+    <div class="card-premium px-[var(--card-px)] py-[var(--card-py)]" data-stagger-blur>
+      <div class="flex items-center gap-[var(--spacing-gap-xs)] mb-[var(--spacing-gap-md)]">
+        <svg width="20" height="20" viewBox="0 0 24 24" fill="currentColor" class="text-[var(--accent)] opacity-40 shrink-0">
+          <path d="M3 21c3 0 7-1 7-8V5c0-1.25-.756-2.017-2-2H4c-1.25 0-2 .75-2 1.972V11c0 1.25.75 2 2 2 1 0 1 0 1 1v1c0 1-1 2-2 2s-1 .008-1 1.03V20c0 1 0 1 1 1z"></path>
+          <path d="M15 21c3 0 7-1 7-8V5c0-1.25-.756-2.017-2-2h-4c-1.25 0-2 .75-2 1.972V11c0 1.25.75 2 2 2 1 0 1 0 1 1v1c0 1-1 2-2 2s-1 .008-1 1.03V20c0 1 0 1 1 1z"></path>
+        </svg>
+        <span class="font-[family-name:var(--font-mono)] text-[var(--text-2xs)] text-[var(--text-3)] uppercase tracking-[0.05em]">Compliant</span>
+      </div>
+      <blockquote class="m-0">
+        <p class="text-[var(--text-small)] text-[var(--text-2)] leading-relaxed">"Getting TEIF-compliant e-invoicing infrastructure right on the first try is rare. Aymen delivered a fully containerised pipeline that passed fiscal audit requirements without a single revision. We went from concept to compliant production in under three months."</p>
+      </blockquote>
+      <div class="mt-[var(--spacing-gap-md)] pt-[var(--spacing-gap-sm)] border-t border-[var(--border)]">
+        <span class="font-[family-name:var(--font-mono)] text-[var(--text-2xs)] text-[var(--text-1)] font-bold">— Karim M.</span>
+        <span class="block font-[family-name:var(--font-mono)] text-[10px] text-[var(--text-3)]">Product Owner, Facturation Tunisie</span>
+      </div>
+    </div>
+  </div>
+</section>

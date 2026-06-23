@@ -176,7 +176,7 @@ export function generateLocalBusiness(person: PersonData) {
   return {
     '@type': 'LocalBusiness',
     '@id': `${person.url}/#localbusiness`,
-    name: `${person.name} Freelance DevOps`,
+    name: `${person.name} — Senior DevOps Engineer`,
     description: person.description,
     url: person.url,
     sameAs: person.sameAs,
@@ -224,7 +224,7 @@ export function generateItemList(items: { position: number; url: string; name: s
     '@type': 'ItemList',
     '@id': id,
     name: 'Technical blog posts by Aymen ben Yedder',
-    description: 'Articles on DevOps, infrastructure automation, and web engineering.',
+    description: 'Articles on DevOps, infrastructure automation, and systems engineering.',
     itemListElement: items.map((item) => ({
       '@type': 'ListItem',
       position: item.position,
@@ -322,7 +322,7 @@ export function generateHeadGraph(
   });
   const lb = generateLocalBusiness(person);
   const service = generateProfessionalService({
-    name: `${person.name} — DevOps Engineering & Consulting`,
+    name: `${person.name} — Senior DevOps Engineer`,
     description: 'Professional DevOps consulting, CI/CD automation, cloud infrastructure, and web development services.',
     url: `${site.url}/services/`,
     providerId: personId,
