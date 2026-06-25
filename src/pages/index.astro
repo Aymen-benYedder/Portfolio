@@ -1,6 +1,5 @@
 ---
 import BaseLayout from '@layouts/BaseLayout.astro';
-import BentoGrid from '@components/layout/BentoGrid.astro';
 import HeroCard from '@components/sections/HeroCard.astro';
 import WorkCard from '@components/sections/WorkCard.astro';
 import ProjectCard from '@components/sections/ProjectCard.astro';
@@ -167,7 +166,7 @@ try {
   <section id="insights" class="max-w-[var(--container-max)] mx-auto px-[var(--section-px)] mt-[var(--section-gap)]">
     <div class="terminal-section-header mb-[var(--spacing-gap-xl)]">
       <span class="label-caps text-[var(--accent)]">Latest Writing</span>
-      <h2 class="font-[family-name:var(--font-mono)] text-[var(--heading-sm)] font-bold text-[var(--text-1)]">Fresh paths into your highest-priority pages</h2>
+      <h2 class="font-[family-name:var(--font-mono)] text-[var(--heading-sm)] font-bold text-[var(--text-1)]">DevOps, infrastructure, and site reliability engineering</h2>
     </div>
     <div class="grid grid-cols-1 md:grid-cols-3 gap-[var(--spacing-gap-lg)]">
       <details class="collapsible-section card glass-hover px-[var(--card-px)] py-0">
@@ -236,11 +235,11 @@ try {
     </div>
   </section>
 
-  <!-- Executive Summary -->
-  <section id="executive-summary" class="max-w-[var(--container-max)] mx-auto px-[var(--section-px)] mt-[var(--section-gap)]">
+  <!-- About -->
+  <section id="about" class="max-w-[var(--container-max)] mx-auto px-[var(--section-px)] mt-[var(--section-gap)]">
     <div class="terminal-section-header mb-[var(--spacing-gap-xl)]">
-      <span class="label-caps text-[var(--accent)]">Executive Summary</span>
-      <h2 class="font-[family-name:var(--font-mono)] text-[var(--heading-sm)] font-bold text-[var(--text-1)]">Strategic leadership &amp; stability</h2>
+      <span class="label-caps text-[var(--accent)]">About</span>
+      <h2 class="font-[family-name:var(--font-mono)] text-[var(--heading-sm)] font-bold text-[var(--text-1)]">Engineering lead who ships</h2>
     </div>
     <div class="glass-panel px-[var(--card-px)] py-[var(--card-py)] terminal-corner">
       <h3 class="font-[family-name:var(--font-mono)] text-[var(--text-base)] font-bold text-[var(--text-1)] mb-[var(--spacing-gap-md)]">I bridge complex infrastructure with a calm, reliable product experience.</h3>
@@ -297,38 +296,7 @@ try {
     <DeployMeta hash="sha: a3f7bc2" date="2025-01-15T14:32:07Z" branch="main" message="feat: add work experience section" />
   </section>
 
-  <!-- Education -->
-  <section id="education" class="max-w-[var(--container-max)] mx-auto px-[var(--section-px)] mt-[var(--section-gap)]">
-    <div class="terminal-section-header mb-[var(--spacing-gap-xl)]">
-      <span class="label-caps text-[var(--accent)]">Education</span>
-      <h2 class="font-[family-name:var(--font-mono)] text-[var(--heading-sm)] font-bold text-[var(--text-1)]">Technical depth with a media edge</h2>
-    </div>
-    <BentoGrid columns="2">
-      {education?.length > 0 ? education.map((edu: any) => (
-        <div class="card px-[var(--card-px)] py-[var(--card-py)]">
-          <h3 class="font-[family-name:var(--font-mono)] text-[14px] max-md:text-[var(--text-small)] font-bold text-[var(--text-1)]">{edu.school}</h3>
-          <p class="font-[family-name:var(--font-mono)] text-[var(--text-2xs)] text-[var(--accent)] mt-[4px]">{edu.degree}</p>
-          <p class="font-[family-name:var(--font-mono)] text-[var(--text-2xs)] text-[var(--text-3)]">{edu.period}</p>
-          <p class="text-[var(--text-small)] text-[var(--text-2)] mt-[var(--spacing-gap-sm)]">{edu.description}</p>
-        </div>
-      )) : (
-        <>
-          <div class="card px-[var(--card-px)] py-[var(--card-py)]">
-            <h3 class="font-[family-name:var(--font-mono)] text-[14px] max-md:text-[var(--text-small)] font-bold text-[var(--text-1)]">ISAMM Mannouba (Master's Program)</h3>
-            <p class="font-[family-name:var(--font-mono)] text-[var(--text-2xs)] text-[var(--accent)] mt-[4px]">Master on Media's Engineering</p>
-            <p class="font-[family-name:var(--font-mono)] text-[var(--text-2xs)] text-[var(--text-3)]">September 2013 - June 2015</p>
-            <p class="text-[var(--text-small)] text-[var(--text-2)] mt-[var(--spacing-gap-sm)]">Advanced multimedia technology training with practical media production expertise.</p>
-          </div>
-          <div class="card px-[var(--card-px)] py-[var(--card-py)]">
-            <h3 class="font-[family-name:var(--font-mono)] text-[14px] max-md:text-[var(--text-small)] font-bold text-[var(--text-1)]">ISAMM Mannouba (Bachelor's Program)</h3>
-            <p class="font-[family-name:var(--font-mono)] text-[var(--text-2xs)] text-[var(--accent)] mt-[4px]">Fundamental Bachelor's Degree in Computer Science</p>
-            <p class="font-[family-name:var(--font-mono)] text-[var(--text-2xs)] text-[var(--text-3)]">September 2008 - June 2011</p>
-            <p class="text-[var(--text-small)] text-[var(--text-2)] mt-[var(--spacing-gap-sm)]">Extensive training in programming, algorithms, data structures, and software engineering.</p>
-          </div>
-        </>
-      )}
-    </BentoGrid>
-  </section>
+
 
   <!-- Projects -->
   <section id="projects" class="max-w-[var(--container-max)] mx-auto px-[var(--section-px)] mt-[var(--section-gap)]">
@@ -371,36 +339,7 @@ try {
     </div>
   </section>
 
-  <!-- Languages -->
-  <section id="languages" class="max-w-[var(--container-max)] mx-auto px-[var(--section-px)] mt-[var(--section-gap)]">
-    <div class="terminal-section-header mb-[var(--spacing-gap-xl)]">
-      <span class="label-caps text-[var(--accent)]">Communication</span>
-      <h2 class="font-[family-name:var(--font-mono)] text-[var(--heading-sm)] font-bold text-[var(--text-1)]">Languages</h2>
-    </div>
-    <div class="grid grid-cols-3 gap-[1px] max-md:grid-cols-1">
-      <div class="card px-[var(--card-px)] py-[var(--card-py)] flex items-center justify-between max-md:flex-row">
-        <span class="flex items-center gap-[10px]">
-          <img src="/assets/flags/sa.svg" alt="Arabic language flag" width="24" height="18" class="language-flag" loading="lazy" />
-          <span class="text-[var(--text-1)] font-[family-name:var(--font-mono)] text-[14px] max-md:text-[var(--text-small)]">Arabic</span>
-        </span>
-        <span class="text-[var(--text-3)] font-[family-name:var(--font-mono)] text-[var(--text-2xs)]">Native</span>
-      </div>
-      <div class="card px-[var(--card-px)] py-[var(--card-py)] flex items-center justify-between max-md:flex-row">
-        <span class="flex items-center gap-[10px]">
-          <img src="/assets/flags/gb.svg" alt="English language flag" width="24" height="18" class="language-flag" loading="lazy" />
-          <span class="text-[var(--text-1)] font-[family-name:var(--font-mono)] text-[14px] max-md:text-[var(--text-small)]">English</span>
-        </span>
-        <span class="text-[var(--text-3)] font-[family-name:var(--font-mono)] text-[var(--text-2xs)]">Advanced</span>
-      </div>
-      <div class="card px-[var(--card-px)] py-[var(--card-py)] flex items-center justify-between max-md:flex-row">
-        <span class="flex items-center gap-[10px]">
-          <img src="/assets/flags/fr.svg" alt="French language flag" width="24" height="18" class="language-flag" loading="lazy" />
-          <span class="text-[var(--text-1)] font-[family-name:var(--font-mono)] text-[14px] max-md:text-[var(--text-small)]">French</span>
-        </span>
-        <span class="text-[var(--text-3)] font-[family-name:var(--font-mono)] text-[var(--text-2xs)]">Fluent</span>
-      </div>
-    </div>
-  </section>
+
 
   <!-- FAQ -->
   <section id="faq" aria-label="Frequently asked questions" class="max-w-[var(--container-max)] mx-auto px-[var(--section-px)] mt-[var(--section-gap)]">
@@ -432,20 +371,20 @@ try {
           <div class="form-group">
             <label for="name" class="label-caps text-[var(--text-3)] mb-[6px] block">Full Name</label>
             <input type="text" id="name" name="name" placeholder="Your Name" required
-              class="font-[family-name:var(--font-mono)] text-[var(--text-xs)] text-[var(--text-1)] bg-[var(--inset)] border border-[var(--border)] px-[14px] py-[12px] min-h-[44px] outline-none w-full transition-all duration-200 placeholder:text-[var(--text-3)] focus:border-[var(--accent)] focus:shadow-[0_0_8px_rgba(16,185,129,0.15)]" />
+              class="font-[family-name:var(--font-mono)] text-[var(--text-xs)] text-[var(--text-1)] bg-[var(--inset)] border border-[var(--border)] px-[12px] py-[12px] min-h-[44px] outline-none w-full transition-all duration-200 placeholder:text-[var(--text-3)] focus:border-[var(--accent)] focus:shadow-[0_0_8px_rgba(16,185,129,0.15)]" />
           </div>
 
           <div class="form-group">
             <label for="email" class="label-caps text-[var(--text-3)] mb-[6px] block">Email Address</label>
             <input type="email" id="email" name="email" placeholder="you@example.com" required
-              class="font-[family-name:var(--font-mono)] text-[var(--text-xs)] text-[var(--text-1)] bg-[var(--inset)] border border-[var(--border)] px-[14px] py-[12px] min-h-[44px] outline-none w-full transition-all duration-200 placeholder:text-[var(--text-3)] focus:border-[var(--accent)] focus:shadow-[0_0_8px_rgba(16,185,129,0.15)]" />
+              class="font-[family-name:var(--font-mono)] text-[var(--text-xs)] text-[var(--text-1)] bg-[var(--inset)] border border-[var(--border)] px-[12px] py-[12px] min-h-[44px] outline-none w-full transition-all duration-200 placeholder:text-[var(--text-3)] focus:border-[var(--accent)] focus:shadow-[0_0_8px_rgba(16,185,129,0.15)]" />
           </div>
 
           <div class="form-group">
             <label for="project_type" class="label-caps text-[var(--text-3)] mb-[6px] block">Project Type</label>
             <div class="relative">
               <select id="project_type" name="project_type" required
-                class="font-[family-name:var(--font-mono)] text-[var(--text-xs)] text-[var(--text-1)] bg-[var(--inset)] border border-[var(--border)] px-[14px] py-[12px] min-h-[44px] outline-none w-full transition-all duration-200 focus:border-[var(--accent)] focus:shadow-[0_0_8px_rgba(16,185,129,0.15)] appearance-none pr-[36px]">
+                class="font-[family-name:var(--font-mono)] text-[var(--text-xs)] text-[var(--text-1)] bg-[var(--inset)] border border-[var(--border)] px-[12px] py-[12px] min-h-[44px] outline-none w-full transition-all duration-200 focus:border-[var(--accent)] focus:shadow-[0_0_8px_rgba(16,185,129,0.15)] appearance-none pr-[36px]">
                 <option value="">Select Project Type</option>
                 <option value="mern">MERN Stack</option>
                 <option value="wordpress">WordPress</option>
@@ -460,7 +399,7 @@ try {
           <div class="form-group">
             <label for="message" class="label-caps text-[var(--text-3)] mb-[6px] block">Message</label>
             <textarea id="message" name="message" placeholder="Tell me about your project..." required rows="4"
-              class="font-[family-name:var(--font-mono)] text-[var(--text-xs)] text-[var(--text-1)] bg-[var(--inset)] border border-[var(--border)] px-[14px] py-[12px] min-h-[44px] outline-none w-full transition-all duration-200 placeholder:text-[var(--text-3)] focus:border-[var(--accent)] focus:shadow-[0_0_8px_rgba(16,185,129,0.15)]"></textarea>
+              class="font-[family-name:var(--font-mono)] text-[var(--text-xs)] text-[var(--text-1)] bg-[var(--inset)] border border-[var(--border)] px-[12px] py-[12px] min-h-[44px] outline-none w-full transition-all duration-200 placeholder:text-[var(--text-3)] focus:border-[var(--accent)] focus:shadow-[0_0_8px_rgba(16,185,129,0.15)]"></textarea>
           </div>
 
           <button type="submit"
@@ -480,6 +419,56 @@ try {
             <span class="text-[var(--text-base)]">Phone Call</span>
             <span class="text-[var(--text-2xs)] text-[var(--text-3)] font-[family-name:var(--font-mono)] ml-auto">+216 22 942 005</span>
           </a>
+        </div>
+      </div>
+    </div>
+  </section>
+
+  <!-- Background — Education & Languages (compact footer detail) -->
+  <section id="background" class="max-w-[var(--container-max)] mx-auto px-[var(--section-px)] mt-[var(--section-gap)]">
+    <div class="border-t border-[var(--border)] pt-[var(--spacing-gap-lg)]">
+      <div class="grid grid-cols-1 md:grid-cols-2 gap-[var(--spacing-gap-lg)]">
+        <div>
+          <span class="label-caps text-[var(--text-3)]">Education</span>
+          <ul class="list-none p-0 mt-[var(--spacing-gap-sm)] space-y-[var(--spacing-gap-sm)]">
+            {education?.length > 0 ? education.map((edu: any) => (
+              <li>
+                <span class="font-[family-name:var(--font-mono)] text-[var(--text-xs)] text-[var(--text-1)] font-bold">{edu.school}</span>
+                <span class="block font-[family-name:var(--font-mono)] text-[var(--text-2xs)] text-[var(--text-3)]">{edu.degree} · {edu.period}</span>
+              </li>
+            )) : (
+              <>
+                <li>
+                  <span class="font-[family-name:var(--font-mono)] text-[var(--text-xs)] text-[var(--text-1)] font-bold">ISAMM Mannouba</span>
+                  <span class="block font-[family-name:var(--font-mono)] text-[var(--text-2xs)] text-[var(--text-3)]">Master's in Media Engineering · 2013–2015</span>
+                </li>
+                <li>
+                  <span class="font-[family-name:var(--font-mono)] text-[var(--text-xs)] text-[var(--text-1)] font-bold">ISAMM Mannouba</span>
+                  <span class="block font-[family-name:var(--font-mono)] text-[var(--text-2xs)] text-[var(--text-3)]">Bachelor's in Computer Science · 2008–2011</span>
+                </li>
+              </>
+            )}
+          </ul>
+        </div>
+        <div>
+          <span class="label-caps text-[var(--text-3)]">Communication</span>
+          <div class="flex flex-wrap gap-[var(--spacing-gap-md)] mt-[var(--spacing-gap-sm)]">
+            <div class="flex items-center gap-[8px]">
+              <img src="/assets/flags/sa.svg" alt="" width="20" height="15" class="language-flag" loading="lazy" />
+              <span class="font-[family-name:var(--font-mono)] text-[var(--text-xs)] text-[var(--text-1)]">Arabic</span>
+              <span class="font-[family-name:var(--font-mono)] text-[var(--text-2xs)] text-[var(--text-3)]">Native</span>
+            </div>
+            <div class="flex items-center gap-[8px]">
+              <img src="/assets/flags/gb.svg" alt="" width="20" height="15" class="language-flag" loading="lazy" />
+              <span class="font-[family-name:var(--font-mono)] text-[var(--text-xs)] text-[var(--text-1)]">English</span>
+              <span class="font-[family-name:var(--font-mono)] text-[var(--text-2xs)] text-[var(--text-3)]">Advanced</span>
+            </div>
+            <div class="flex items-center gap-[8px]">
+              <img src="/assets/flags/fr.svg" alt="" width="20" height="15" class="language-flag" loading="lazy" />
+              <span class="font-[family-name:var(--font-mono)] text-[var(--text-xs)] text-[var(--text-1)]">French</span>
+              <span class="font-[family-name:var(--font-mono)] text-[var(--text-2xs)] text-[var(--text-3)]">Fluent</span>
+            </div>
+          </div>
         </div>
       </div>
     </div>
