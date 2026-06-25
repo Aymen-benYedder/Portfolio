@@ -1914,8 +1914,10 @@ button, a {
 /* Summary trigger row */
 .collapsible-trigger {
   display: flex;
+  flex-wrap: wrap;
   align-items: center;
   gap: var(--spacing-gap-sm);
+  row-gap: 4px;
   cursor: pointer;
   padding: var(--spacing-gap-sm) 0;
   user-select: none;
