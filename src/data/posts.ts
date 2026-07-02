@@ -3558,6 +3558,277 @@ sudo ufw enable</code></pre>
 </div>`,
   },
   {
+    id: 'post-vibe-coding-security-2026',
+    title: 'Vibe Coding Is a Security Disaster Waiting to Happen — And Nobody\'s Talking About the Real Numbers',
+    slug: 'vibe-coding-security-disaster-real-numbers',
+    description: '92% of US developers use AI coding tools daily. 46% of new code is AI-generated. 45% of AI code contains OWASP Top-10 vulnerabilities. A DevOps engineer connects the data everyone\'s missing on vibe coding security — and what happens when AI-generated frontends hit production infrastructure.',
+    publishedAt: '2026-07-02',
+    categories: ['SECURITY', 'DEVOPS'],
+    tags: ['Vibe Coding', 'AI Security', 'AI-Generated Code', 'Owasp', 'Infrastructure as Code', 'CI/CD', 'DevOps'],
+    readingTime: 15,
+    body: `  <p>
+    <strong>1.5 million API authentication tokens, 35,000+ email addresses, 4,060 private messages, and plaintext OpenAI API keys</strong> — exposed. The founder's admission? He <strong>hadn't written a single line of code manually</strong>. The entire app was vibe-coded. The database had <strong>Row-Level Security fully disabled</strong>. Every table. Every row. Accessible to any authenticated user. No exploit. No sophisticated attack chain. Just a misconfigured database that the AI had scaffolded with the most permissive defaults possible because that's what made it <em>work</em> in development.
+  </p>
+
+  <p>
+    That was Moltbook, January 2026. The app lasted three days. And the only thing that makes it different from thousands of other AI-generated applications hitting production right now is that someone caught it.
+  </p>
+
+  <!-- WHAT "VIBE CODING" ACTUALLY IS -->
+
+  <h2>What "Vibe Coding" Actually Is</h2>
+
+  <p>
+    Andrej Karpathy coined the term on February 2, 2025. The post generated <strong>4.5 million views</strong>. His exact framing:
+  </p>
+
+  <blockquote>
+    <p><em>"There's a new kind of coding I call 'vibe coding', where you fully give in to the vibes, embrace exponentials, and forget that the code even exists... I 'Accept All' always, I don't read the diffs anymore... The code grows beyond my usual comprehension."</em></p>
+  </blockquote>
+
+  <p>
+    He framed it as something for "throwaway weekend projects." That framing didn't survive contact with reality. By November 2025, Collins Dictionary made it <strong>Word of the Year</strong>. The New York Times profiled it. And somewhere along that timeline — quietly — the first wave of production applications built this way started hitting infrastructure.
+  </p>
+
+  <p>
+    By early 2026, Karpathy had already declared vibe coding obsolete. He told Sequoia Capital's AI Ascent:
+  </p>
+
+  <blockquote>
+    <p><em>"Sometimes I get a little bit of a heart attack because it's not like super amazing code necessarily all the time. It's very bloaty, and there's a lot of copy-paste, and there's awkward abstractions that are brittle, and it works, but it's just really gross."</em> <sup class="footnote-ref">[karpathy]</sup></p>
+  </blockquote>
+
+  <p>Read that twice. The coiner is warning us. The question is whether anyone in production engineering is acting on it.</p>
+
+  <h2>The Numbers Are Not Optional</h2>
+
+  <p>Whatever we think about vibe coding, the hard truth is: it's past the point of being stoppable.</p>
+
+  <ul>
+    <li><strong>84%</strong> of developers are using or planning to use AI coding tools (Stack Overflow 2025, n=49,000+) <sup class="footnote-ref">[stackoverflow]</sup></li>
+    <li><strong>90%</strong> use AI regularly at work (JetBrains, n=10,000+)</li>
+    <li><strong>72%</strong> of those who've tried it use AI daily (SonarSource 2026) <sup class="footnote-ref">[sonarsource]</sup></li>
+    <li>GitHub Copilot: <strong>20 million</strong> cumulative users, <strong>4.7 million</strong> paid subscribers</li>
+    <li>Cursor: <strong>$2B+ ARR</strong>. Lovable: <strong>$400M ARR</strong></li>
+  </ul>
+
+  <p>Anyone operating infrastructure should pay attention to this part:</p>
+
+  <ul>
+    <li><strong>46%</strong> of all code on GitHub is now AI-generated (GitHub State of Octoverse 2025)</li>
+    <li>Developers self-report <strong>42%</strong> of their code comes from AI (SonarSource 2026)</li>
+    <li>Gartner projects <strong>60%</strong> by end of 2026</li>
+    <li><strong>25%</strong> of Y Combinator's W25 startups have <strong>95%+ AI-generated codebases</strong> <sup class="footnote-ref">[yc]</sup></li>
+    <li><strong>256 billion</strong> lines of AI code produced in 2024 alone</li>
+  </ul>
+
+  <p>
+    Do the math that nobody in the boardroom is doing. 46% of new code is AI-generated. An independent body of research shows <strong>45-62% of AI-generated code contains security vulnerabilities</strong>. So roughly <strong>20-28% of everything being deployed right now shipped with known vulnerability classes baked in from generation</strong>. That's not a prediction. That's arithmetic.
+  </p>
+
+  <h2>The Convergence Nobody's Connecting</h2>
+
+  <p>
+    We don't have one study telling us AI code is insecure. We have <strong>eight</strong>. Different methodologies. Different toolchains. Different vulnerability taxonomies. And they all converge on the same ugly truth.
+  </p>
+
+  <p>
+    <strong>Veracode</strong> tested <strong>100+ LLMs</strong> across <strong>80 real-world coding tasks</strong> <sup class="footnote-ref">[veracode]</sup>. <strong>45%</strong> of AI-generated code introduced OWASP Top 10 vulnerabilities. Java hit <strong>>70%</strong>. Cross-Site Scripting (CWE-80) failed <strong>86%</strong> of the time. Log Injection (CWE-117) failed <strong>88%</strong>. Syntax correctness improved from ~50% to <strong>>95%</strong> between 2023 and 2025, but security pass rates stayed stuck at ~55%. Veracode's CTO: <em>"Models are getting better at coding accurately but are not improving at security."</em> The Cloud Security Alliance independently replicated this at <strong>62%</strong> <sup class="footnote-ref">[csa]</sup>.
+  </p>
+
+  <p>
+    What happens when you audit the actual PRs? <strong>CodeRabbit</strong> looked at <strong>470 open-source pull requests</strong> <sup class="footnote-ref">[coderabbit]</sup> where AI had co-authored code. The per-PR issue count came back at <strong>1.7x</strong> the human baseline. XSS at <strong>2.74x</strong>, insecure object references at <strong>1.91x</strong>, improper password handling at <strong>1.88x</strong>, business logic errors at <strong>>2x</strong>, excessive I/O at <strong>~8x</strong>. Eight times. For I/O.
+  </p>
+
+  <p>
+    The fallout on velocity is measurable. <strong>Apiiro</strong> tracked <strong>7,000+ developers</strong> across <strong>62,000 repositories</strong> inside Fortune 50 enterprises <sup class="footnote-ref">[apiiro]</sup>. AI-assisted developers churned out <strong>3-4x more commits</strong> — but bundled them into <strong>fewer, wider PRs</strong>. Security findings: <strong>10x higher</strong>. By mid-2025, organizations saw <strong>10,000+ new security findings per month</strong> from AI-originated code. Privilege escalation paths: <strong>+322%</strong>. Architectural design flaws: <strong>+153%</strong>. AI-assisted developers leaked Azure Service Principals and Storage Access Keys <strong>nearly 2x as often</strong>.
+  </p>
+
+  <p>
+    <strong>28.65 million</strong> hardcoded secrets in public GitHub commits last year alone. That's <strong>GitGuardian's</strong> tally <sup class="footnote-ref">[gitguardian]</sup> — up <strong>34%</strong> year-over-year, the largest single-year jump they've ever recorded. Claude Code-assisted commits leak secrets at ~3.2% — <strong>double the baseline rate</strong>. AI-service secrets: <strong>1,275,105 — an 81% increase</strong>. Twelve of the fifteen fastest-growing leaked secret categories were AI services. And <strong>64%</strong> of credentials confirmed valid in 2022 are still active. Unrevoked.
+  </p>
+
+  <p>
+    The growth curve is exponential. <strong>Georgia Tech's Vibe Security Radar</strong> <sup class="footnote-ref">[gatech]</sup> tracks actual CVEs traceable to AI-generated code. As of March 2026: <strong>78 confirmed AI-linked CVEs</strong> (14 critical, 25 high). 18 cases across all of H2 2025. Then <strong>56 cases in Q1 2026 alone</strong>. Then <strong>35 in March 2026 — more than the entire previous year combined</strong>. Researchers estimate the <strong>true count is 5-10x higher</strong> (~400-700) because most AI tooling doesn't leave identifiable commit metadata.
+  </p>
+
+  <p>
+    And then there's the broader landscape. <strong>Escape.tech</strong> swept <strong>5,600 publicly deployed vibe-coded applications</strong> <sup class="footnote-ref">[escape]</sup> and found <strong>2,000+ high-impact vulnerabilities</strong>, <strong>400+ exposed secrets</strong>, <strong>175 instances of exposed PII</strong> — including medical records. <strong>65%</strong> had at least one security issue; <strong>58%</strong> had a critical issue. <strong>GitClear's</strong> <sup class="footnote-ref">[gitclear]</sup> analysis of <strong>211 million lines</strong> found refactoring dropped <strong>44%</strong> while duplication increased <strong>8-fold</strong>. <strong>Kaspersky</strong> documented that after <strong>5 prompt iterations</strong>, code contained <strong>37% more critical vulnerabilities</strong>. More prompts, more danger.
+  </p>
+
+  <p>
+    <strong>The bottom line: AI-generated code is measurably less secure than human-written code, and the gap is not closing.</strong>
+  </p>
+
+  <h2>Real Breaches, Not Benchmarks</h2>
+
+  <p>
+    Moltbook is the cleanest case study because attribution is unambiguous. The pattern — <strong>Broken Object Level Authorization (BOLA)</strong> — is exactly what you expect when a model optimizes for "works" and never considers "works safely."
+  </p>
+
+  <p>
+    <strong>Lovable</strong>, valued at <strong>$400M+ ARR</strong>, suffered the same BOLA vulnerability in April 2026 <sup class="footnote-ref">[lovable]</sup>. Any free-tier account could read another user's source code. The researcher demonstrated the exploit in <strong>5 API calls</strong>. Five. The exposure window: <strong>48 days</strong> after the initial HackerOne report. Separately, <strong>CVE-2025-48757</strong> documented missing Supabase RLS in <strong>170+ Lovable-generated applications</strong>.
+  </p>
+
+  <p>
+    <strong>Base44</strong> suffered an authentication bypass. <strong>Claude Code</strong> shipped a <strong>59.8 MB source map file</strong> in its npm package, exposing ~512,000 lines of proprietary TypeScript. A Lovable-built exam app exposed <strong>18,697 users</strong> — <strong>16 vulnerabilities, 6 critical</strong>. <strong>Enrichlead</strong> followed a pattern one security researcher calls "client-side security theatre": the founder built with Cursor, security lived entirely in the browser, and any user who knew where to look had full data access.
+  </p>
+
+  <p>
+    Every breach follows the same arc. The AI generates authentication but not authorization. It ships secrets with client code. It builds infrastructure that deploys cleanly but has no security boundaries. The developer, operating in "vibe" mode, never inspects the output deeply enough. They can't. They don't know what to look for.
+  </p>
+
+  <h2>The DevOps Blind Spot</h2>
+
+  <p>
+    Now the story shifts. From "insecure app code" to something much more consequential for anyone running infrastructure. Infrastructure as Code is the weakest link in the AI security chain. And it's almost entirely undiscussed in the mainstream coverage.
+  </p>
+
+  <p>
+    The <strong>MITRE/Checkov IaC-Eval study (2026)</strong> found LLMs generate syntactically correct IaC with <strong>5-15 security policy violations per script</strong> <sup class="footnote-ref">[mitre]</sup>. <strong>Firouzi et al. (arXiv, 2026)</strong> tested ChatGPT and Gemini on IaC: <strong>75% of ChatGPT's</strong> and <strong>56% of Gemini's</strong> outputs were insecure — <strong>without any security warnings</strong> <sup class="footnote-ref">[firouzi]</sup>. When explicitly prompted for "secure" code, <strong>44% of ChatGPT's and 34% of Gemini's outputs still contained security smells</strong>. Only <strong>7% of outputs were fully secure</strong>.
+  </p>
+
+  <blockquote>
+    <p><em>"When GenAI Gets IaC Wrong, It Looks Exactly Right."</em> — Quali <sup class="footnote-ref">[quali]</sup></p>
+  </blockquote>
+
+  <p>
+    The <strong>Spacelift Infrastructure Automation Report (June 2026)</strong> should be a boardroom document at every organization shipping AI code <sup class="footnote-ref">[spacelift]</sup>:
+  </p>
+
+  <table>
+    <thead>
+      <tr><th>Metric</th><th>Figure</th></tr>
+    </thead>
+    <tbody>
+      <tr><td>AI-caused infrastructure incidents</td><td><strong>93%</strong></td></tr>
+      <tr><td>Proper AI governance foundations</td><td><strong>19%</strong></td></tr>
+      <tr><td>Ship AI infra code without review</td><td><strong>78%</strong></td></tr>
+      <tr><td>Deploy AI code directly to production</td><td><strong>33%</strong></td></tr>
+      <tr><td>Dev ahead of infra in AI adoption</td><td><strong>67%</strong></td></tr>
+      <tr><td>AI increased demands on infra teams</td><td><strong>86%</strong></td></tr>
+      <tr><td>Plan agentic AI for infrastructure</td><td><strong>89%</strong></td></tr>
+      <tr><td>Formal AI governance policy</td><td><strong>30%</strong></td></tr>
+      <tr><td>Monitor AI-generated infra code volume</td><td><strong>15%</strong></td></tr>
+    </tbody>
+  </table>
+
+  <p>
+    <strong>93%</strong> of organizations have already had an AI-caused infrastructure incident. <strong>78%</strong> ship AI-written infra code without review. <strong>33%</strong> would deploy AI-generated code directly to production. And <strong>89%</strong> plan to adopt agentic AI for infrastructure while only <strong>19%</strong> have the governance to do it safely. That is not a gap. That's a chasm.
+  </p>
+
+  <p>From a DevOps perspective, the failure chain is disturbingly tight:</p>
+
+  <ol>
+    <li>Developer prompts AI → code generated → "works on my machine"</li>
+    <li>Committed → no human review of AI-generated sections</li>
+    <li>CI/CD runs → tests pass (because AI wrote the tests too)</li>
+    <li>Deployed → misconfiguration not caught until breach</li>
+  </ol>
+
+  <p>
+    Uncle Bob identified the testing problem: when the same AI agent writes function and test in the same session, <em>"the test will almost always pass. This is not a sign of quality. It's a sign of self-consistency."</em> <sup class="footnote-ref">[unclebob]</sup>
+  </p>
+
+  <p>
+    Apiiro's finding that AI commits are <strong>fewer and wider</strong> means code review breaks down. A single PR touches a dozen services. The reviewer, faced with thousands of lines of generated Terraform and application code, trusts the authoritative-looking output. This is the "mis-reviewed > unreviewed" problem. The confident tone suppresses critical instincts. I've seen it happen. You've probably seen it happen.
+  </p>
+
+  <h2>Trust Has Already Collapsed</h2>
+
+  <p>
+    The sentiment data tells a story the industry should have heeded earlier. Developer trust in AI code accuracy fell from <strong>~40% (2024) to 29% (2025)</strong> — an 11-point drop in one year. AI tool favorability dropped from <strong>77% (2023) to 60% (2025)</strong> <sup class="footnote-ref">[stackoverflow]</sup>. SonarSource found <strong>96% of developers "do not fully trust that AI-generated code is functionally correct"</strong> <sup class="footnote-ref">[sonarsource]</sup>. Only <strong>3%</strong> report high trust.
+  </p>
+
+  <ul>
+    <li><strong>66%</strong> cite "AI solutions that are almost right, but not quite"</li>
+    <li><strong>45%</strong> say debugging AI code takes longer than writing it themselves</li>
+    <li><strong>35%</strong> of Stack Overflow visits now fix AI-related problems</li>
+    <li><strong>72%</strong> say vibe coding isn't part of their professional work</li>
+  </ul>
+
+  <p>
+    Willem Delbare, CTO of Aikido Security: <em>"Vibe coding makes software development more accessible but introduces massive security debt. Developers who don't understand the underlying code cannot possibly secure it... There is no accountability. AI coding agents are installing dependencies and making architectural decisions with no understanding of the security implications."</em> <sup class="footnote-ref">[aikido]</sup>
+  </p>
+
+  <h2>What We Do About It</h2>
+
+  <p>
+    I don't believe the answer is "stop using AI tools." The productivity gains are real. Adoption is irreversible. But the infrastructure side needs to treat AI-generated code as <strong>unverified input</strong> — the same way we treat third-party dependencies. The CSA put it directly: <em>"Organizations should treat AI-generated code as unverified input, not trusted output."</em> <sup class="footnote-ref">[csa]</sup>
+  </p>
+
+  <p>
+    <strong>Mandatory pre-commit security gates.</strong> AI-generated code should pass SAST and secret scanning before entering the repository. GitGuardian, TruffleHog — tools that catch hardcoded credentials at commit time. Non-negotiable.
+  </p>
+
+  <p>
+    <strong>IaC validation as a pipeline requirement.</strong> If you're shipping AI-generated infrastructure, every Terraform or Pulumi config from an LLM should pass through policy-as-code frameworks (Checkov, Sentinel, OPA) before any plan applies. The "it looks right" failure mode is specifically what these tools catch.
+  </p>
+
+  <p>
+    <strong>Separate function and test generation.</strong> If the same agent wrote both, neither is independently verified. Uncle Bob's advice — <em>"ban mocks at system boundaries. Real HTTP. Real databases. Mocked boundaries let the agent test its own fiction"</em> — should be organizational policy.
+  </p>
+
+  <p>
+    <strong>AI-native code review.</strong> The question shifts from "does this look correct?" to "what is the developer not aware they introduced?" Wider AI PRs mean teams need permission to split them and validate each service boundary independently.
+  </p>
+
+  <p>
+    <strong>Infrastructure governance before agentic AI.</strong> The <strong>89%</strong> that plan to adopt agentic AI for infrastructure need foundations first. AI agents should operate in sandboxed environments. Infrastructure changes should require human approval through a separate channel.
+  </p>
+
+  <p>
+    <strong>Vulnerability tracking.</strong> Tag AI-generated commits. Track security findings against them as a distinct metric. The Georgia Tech model — tracking actual CVEs — needs to become industry practice. We can't fix what we aren't measuring.
+  </p>
+
+  <h2>The Discipline Didn't Die — It Moved One Step to the Right</h2>
+
+  <p>
+    Karpathy said something at Sequoia AI Ascent 2026 that I keep coming back to:
+  </p>
+
+  <blockquote>
+    <p><em>"You can outsource thinking, but you cannot outsource understanding."</em></p>
+  </blockquote>
+
+  <p>
+    This is the line between productive use of AI tools and the disaster that's already deployed. The AI can generate Terraform that parses correctly. But it cannot understand the security context of the infrastructure it's configuring. Blast radius of the permissions it's granting? Invisible. The difference between "works in development" and "is secure in production"? It cannot tell.
+  </p>
+
+  <p>
+    The original "I Accept All" workflow — Karpathy's throwaway weekend project from February 2025 — is now someone's production pipeline. And the difference between a weekend project and production infrastructure is the difference between "works" and "works safely."
+  </p>
+
+  <p>
+    Vibe coding didn't create security problems. It just made every existing one reproducible at the speed of autocomplete. <strong>91.5%</strong> of vibe-coded applications shipped in Q1 2026 contained at least one vulnerability traceable to an AI hallucination. The disaster isn't coming. It's already deployed. Whether your organization has the infrastructure governance to survive it depends on what you do between now and your next pipeline run.
+  </p>
+
+  <hr class="footnotes-sep">
+
+  <ol class="footnotes">
+    <li id="fn-karpathy">Andrej Karpathy, Sequoia Capital AI Ascent 2026 — <a href="https://www.youtube.com/watch?v=96jN2OCOfLs" target="_blank" rel="noopener">youtube.com</a></li>
+    <li id="fn-stackoverflow">Stack Overflow Developer Survey 2025 — <a href="https://survey.stackoverflow.co/2025/ai" target="_blank" rel="noopener">survey.stackoverflow.co</a></li>
+    <li id="fn-sonarsource">SonarSource State of Code 2026 — <a href="https://www.sonarsource.com/state-of-code-developer-survey-report.pdf" target="_blank" rel="noopener">sonarsource.com</a></li>
+    <li id="fn-yc">Garry Tan, YC blog 2025</li>
+    <li id="fn-veracode">Veracode 2025 GenAI Code Security Report &amp; Spring 2026 Update — <a href="https://www.veracode.com/resources/analyst-reports/2025-genai-code-security-report/" target="_blank" rel="noopener">veracode.com</a></li>
+    <li id="fn-coderabbit">CodeRabbit, State of AI vs Human Code Generation Report, Dec 2025 — <a href="https://coderabbit.ai/blog/state-of-ai-vs-human-code-generation-report" target="_blank" rel="noopener">coderabbit.ai</a></li>
+    <li id="fn-apiiro">Apiiro, "4x Velocity, 10x Vulnerabilities," Sep 2025 — <a href="https://apiiro.com/blog/4x-velocity-10x-vulnerabilities-ai-coding-assistants-are-shipping-more-risks/" target="_blank" rel="noopener">apiiro.com</a></li>
+    <li id="fn-gitguardian">GitGuardian, State of Secrets Sprawl 2026 — <a href="https://www.gitguardian.com/state-of-secrets-sprawl-report-2026" target="_blank" rel="noopener">gitguardian.com</a></li>
+    <li id="fn-gatech">Georgia Tech Vibe Security Radar — <a href="https://vibe-radar-ten.vercel.app/" target="_blank" rel="noopener">vibe-radar-ten.vercel.app</a></li>
+    <li id="fn-escape">Escape.tech, State of Security of Vibe-Coded Apps — <a href="https://escape.tech/state-of-security-of-vibe-coded-apps" target="_blank" rel="noopener">escape.tech</a></li>
+    <li id="fn-gitclear">GitClear, AI Copilot Code Quality 2025 — <a href="https://www.gitclear.com/ai_assistant_code_quality_2025_research" target="_blank" rel="noopener">gitclear.com</a></li>
+    <li id="fn-lovable">The Register, "Lovable denies data leak," Apr 2026 — <a href="https://www.theregister.com/security/2026/04/21/lovable-denies-data-leak-cites-intentional-behavior/5226233" target="_blank" rel="noopener">theregister.com</a></li>
+    <li id="fn-mitre">MITRE/Checkov IaC-Eval 2026 — <a href="https://www.merl.com/publications/docs/TR2026-036.pdf" target="_blank" rel="noopener">merl.com</a></li>
+    <li id="fn-firouzi">Firouzi et al., arXiv 2026 — <a href="https://arxiv.org/pdf/2602.03648" target="_blank" rel="noopener">arxiv.org</a></li>
+    <li id="fn-quali">Quali, "When GenAI Gets IaC Wrong, It Looks Exactly Right," Mar 2026 — <a href="https://www.quali.com/blog/when-genai-gets-iac-wrong-it-looks-exactly-right/" target="_blank" rel="noopener">quali.com</a></li>
+    <li id="fn-spacelift">Spacelift Infrastructure Automation Survey 2026 — <a href="https://spacelift.io/infrastructure-automation-survey-2026" target="_blank" rel="noopener">spacelift.io</a></li>
+    <li id="fn-unclebob">Robert C. Martin — <a href="https://paddo.dev/blog/idiot-savant-needs-guardrails/" target="_blank" rel="noopener">paddo.dev</a></li>
+    <li id="fn-aikido">Willem Delbare, Aikido Security — <a href="https://thenewstack.io/aikido-ai-agents-security/" target="_blank" rel="noopener">thenewstack.io</a></li>
+    <li id="fn-csa">Cloud Security Alliance, "AI Vulnerability Debt," 2026 — <a href="https://labs.cloudsecurityalliance.org/research/csa-research-note-ai-codegen-vulnerability-debt-20260406-csa/" target="_blank" rel="noopener">cloudsecurityalliance.org</a></li>
+    <li id="fn-cisa">CISA KEV catalog and supply chain alerts, 2026</li>
+  </ol>`,
+  },
+  {
     id: 'post-css-engineering-2026',
     title: 'Modern CSS Engineering in 2026: Container Queries, View Transitions, CSS Layers, and the New Layout Paradigm',
     slug: 'css-engineering-2026',

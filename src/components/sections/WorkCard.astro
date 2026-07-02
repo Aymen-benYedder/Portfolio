@@ -40,11 +40,11 @@ const cardClass = `timeline-card${isCurrent ? ' is-current' : ' is-past'} ${clas
               </svg>
               <span class="font-[family-name:var(--font-mono)] text-[var(--text-2xs)] tracking-[0.1em] text-[var(--accent)]">// {highlight}</span>
             </div>
-            <div class="flex flex-wrap items-center justify-between gap-[var(--spacing-gap-xs)] mb-[2px]">
+            <div class="flex flex-wrap items-start justify-between gap-[var(--spacing-gap-xs)] mb-[2px]">
               <h3 class="font-[family-name:var(--font-mono)] text-[var(--text-base)] max-md:text-[var(--text-small)] font-bold text-[var(--text-1)] m-0">{company}</h3>
-              <div class="flex items-center gap-[var(--spacing-gap-xs)]">
-                <span class="font-[family-name:var(--font-mono)] text-[var(--text-2xs)] text-[var(--text-3)] whitespace-nowrap">{period}</span>
-                <span class="font-[family-name:var(--font-mono)] text-[var(--text-2xs)] text-[var(--text-3)] border border-[var(--border)] px-[6px] py-[2px] whitespace-nowrap">{location}</span>
+              <div class="flex items-center gap-[var(--spacing-gap-xs)] flex-wrap">
+                <span class="font-[family-name:var(--font-mono)] text-[var(--text-2xs)] text-[var(--text-3)]">{period}</span>
+                <span class="font-[family-name:var(--font-mono)] text-[var(--text-2xs)] text-[var(--text-3)] border border-[var(--border)] px-[6px] py-[2px]">{location}</span>
               </div>
             </div>
             <p class="font-[family-name:var(--font-mono)] text-[var(--text-small)] font-bold text-[var(--text-1)] mt-[var(--spacing-gap-xs)]">{role}</p>
@@ -70,11 +70,11 @@ const cardClass = `timeline-card${isCurrent ? ' is-current' : ' is-past'} ${clas
           </svg>
           <span class="font-[family-name:var(--font-mono)] text-[var(--text-2xs)] tracking-[0.1em] text-[var(--accent)]">// {highlight}</span>
         </div>
-        <div class="flex flex-wrap items-center justify-between gap-[var(--spacing-gap-xs)] mb-[2px]">
+        <div class="flex flex-wrap items-start justify-between gap-[var(--spacing-gap-xs)] mb-[2px]">
           <h3 class="font-[family-name:var(--font-mono)] text-[var(--text-base)] max-md:text-[var(--text-small)] font-bold text-[var(--text-1)] m-0">{company}</h3>
-          <div class="flex items-center gap-[var(--spacing-gap-xs)]">
-            <span class="font-[family-name:var(--font-mono)] text-[var(--text-2xs)] text-[var(--text-3)] whitespace-nowrap">{period}</span>
-            <span class="font-[family-name:var(--font-mono)] text-[var(--text-2xs)] text-[var(--text-3)] border border-[var(--border)] px-[6px] py-[2px] whitespace-nowrap">{location}</span>
+          <div class="flex items-center gap-[var(--spacing-gap-xs)] flex-wrap">
+            <span class="font-[family-name:var(--font-mono)] text-[var(--text-2xs)] text-[var(--text-3)]">{period}</span>
+            <span class="font-[family-name:var(--font-mono)] text-[var(--text-2xs)] text-[var(--text-3)] border border-[var(--border)] px-[6px] py-[2px]">{location}</span>
           </div>
         </div>
         <p class="font-[family-name:var(--font-mono)] text-[var(--text-small)] font-bold text-[var(--text-1)] mt-[var(--spacing-gap-xs)]">{role}</p>
