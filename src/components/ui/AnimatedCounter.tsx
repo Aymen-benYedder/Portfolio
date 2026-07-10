@@ -52,34 +52,4 @@ export function AnimatedCounter({
   );
 }
 
-interface StatsGridProps {
-  className?: string;
-}
 
-const stats = [
-  { end: 24, suffix: '+', label: 'Projects Delivered' },
-  { end: 8, suffix: '+ yrs', label: 'Experience' },
-  { end: 100, suffix: '%', label: 'Uptime', prefix: '99.' },
-];
-
-export function StatsGrid({ className = '' }: StatsGridProps) {
-  return (
-    <div className={`flex gap-[var(--spacing-gap-lg)] max-sm:flex-col max-sm:gap-[var(--spacing-gap-sm)] ${className}`}>
-      {stats.map((stat, i) => (
-        <div key={stat.label} className="flex flex-col" style={{ transitionDelay: `${i * 100}ms` }}>
-          <span className="font-[family-name:var(--font-mono)] text-[28px] max-md:text-[22px] font-bold text-[var(--text-1)] tracking-tight">
-            <AnimatedCounter
-              end={stat.end}
-              suffix={stat.suffix}
-              prefix={'prefix' in stat ? (stat as any).prefix : ''}
-              duration={2 + i * 0.3}
-            />
-          </span>
-          <span className="text-[var(--text-3)] text-[11px] font-[family-name:var(--font-mono)] tracking-[0.05em] uppercase">
-            {stat.label}
-          </span>
-        </div>
-      ))}
-    </div>
-  );
-}
