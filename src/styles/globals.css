@@ -1520,6 +1520,7 @@ button, a {
   [data-reveal-blur] { opacity: 1 !important; transform: none !important; filter: none !important; }
   [data-stagger-blur] { opacity: 1 !important; transform: none !important; filter: none !important; }
   [data-stagger-hero] { opacity: 1 !important; transform: none !important; filter: none !important; }
+  html.js-loaded [data-stagger-hero] { opacity: 1 !important; transform: none !important; filter: none !important; }
   .deco-shape { display: none !important; }
   .section-divider::after { animation: none !important; opacity: 0.3 !important; }
   .typewriter-text { border-right: none !important; width: auto !important; animation: none !important; }
@@ -1645,7 +1646,15 @@ button, a {
 
 /* ── Stagger Reveal Stronger (for hero entrance) ── */
 
+/* Default: visible (no JS or before JS runs) */
 [data-stagger-hero] {
+  opacity: 1;
+  transform: translateY(0) scale(1);
+  filter: blur(0);
+}
+
+/* When JS has loaded, prep for animation */
+html.js-loaded [data-stagger-hero] {
   opacity: 0;
   transform: translateY(40px) scale(0.95);
   filter: blur(4px);
@@ -1655,7 +1664,8 @@ button, a {
   transition-delay: var(--stagger-delay, 0ms);
 }
 
-[data-stagger-hero].revealed {
+/* Revealed: animate in */
+html.js-loaded [data-stagger-hero].revealed {
   opacity: 1;
   transform: translateY(0) scale(1);
   filter: blur(0);

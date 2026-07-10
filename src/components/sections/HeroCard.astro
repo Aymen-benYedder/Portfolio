@@ -82,7 +82,17 @@ import AsciiGlobe from '@components/AsciiGlobe.astro';
 
     <!-- ===== Main Title: Retro Pixel Name ===== -->
     <div class="w-full max-w-[600px]" data-stagger-hero style="--stagger-delay: 100ms">
-      <h1 id="hero-heading" aria-label="Aymen ben Yedder" class="m-0 w-full min-h-[clamp(90px,22vw,140px)]">
+      <h1 id="hero-heading" class="m-0 w-full">
+        <!-- Visible text for crawlers + screen readers -->
+        <span class="sr-only">Aymen ben Yedder — DevOps &amp; Cloud Infrastructure Engineer</span>
+        <!-- Visually present in normal flow for crawlers -->
+        <span class="h1-crawl-text font-[family-name:var(--font-mono)] text-[var(--heading-lg)] font-bold text-[var(--text-1)] leading-tight">
+          Aymen ben Yedder
+        </span>
+        <span class="block font-[family-name:var(--font-mono)] text-[clamp(0.75rem,1.2vw,0.9rem)] text-[var(--accent)] font-semibold tracking-wide mt-[var(--spacing-gap-xs)]">
+          DevOps &amp; Cloud Infrastructure Engineer
+        </span>
+        <!-- Decorative canvas — aria-hidden -->
         <AsciiGlobe
           width="100%"
           height="auto"
@@ -93,8 +103,8 @@ import AsciiGlobe from '@components/AsciiGlobe.astro';
           blockRatio={0.66}
           rowGapRatio={0.66}
           pixelGap={2}
+          aria-hidden="true"
         />
-        <span class="sr-only">Aymen ben Yedder</span>
       </h1>
     </div>
 
@@ -187,7 +197,19 @@ import AsciiGlobe from '@components/AsciiGlobe.astro';
 <style>
   .capsule-pill { transition: all 250ms cubic-bezier(0.16, 1, 0.3, 1); }
 
+  .h1-crawl-text {
+    /* Visible to crawlers and screen readers — the canvas does the visual heavy lifting */
+  }
+
+  /* Default: visible (no JS or before JS runs) */
   [data-stagger-hero] {
+    opacity: 1;
+    transform: translateY(0) scale(1);
+    filter: blur(0);
+  }
+
+  /* When JS has loaded, prep for animation */
+  html.js-loaded [data-stagger-hero] {
     opacity: 0;
     transform: translateY(40px) scale(0.95);
     filter: blur(4px);
@@ -197,7 +219,8 @@ import AsciiGlobe from '@components/AsciiGlobe.astro';
     transition-delay: var(--stagger-delay, 0ms);
   }
 
-  [data-stagger-hero].revealed {
+  /* Revealed: animate in */
+  html.js-loaded [data-stagger-hero].revealed {
     opacity: 1;
     transform: translateY(0) scale(1);
     filter: blur(0);
@@ -239,6 +262,7 @@ import AsciiGlobe from '@components/AsciiGlobe.astro';
   @media (prefers-reduced-motion: reduce) {
     .capsule-pill { transition: none !important; }
     [data-stagger-hero] { opacity: 1 !important; transform: none !important; filter: none !important; }
+    html.js-loaded [data-stagger-hero] { opacity: 1 !important; transform: none !important; filter: none !important; }
     .float-particle { opacity: var(--opacity, 0.3) !important; animation: none !important; }
     .ascii-globe-wrap { opacity: 1 !important; }
   }

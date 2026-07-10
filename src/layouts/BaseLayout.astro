@@ -46,6 +46,9 @@ const { title, description, canonical, image, ogType, noIndex } = Astro.props;
       <link rel="stylesheet" href="https://fonts.googleapis.com/css2?family=Geist:wght@400;500;600;700&family=Hanken+Grotesque:wght@400;600;700;800&family=JetBrains+Mono:wght@400;500;700&display=optional" />
     </noscript>
     <slot name="head" />
+    <script>
+      document.documentElement.classList.add('js-loaded');
+    </script>
   </head>
   <body class="bg-[var(--void)] text-[var(--text-2)]">
     <a href="#main-content" class="skip-link absolute -top-10 left-0 bg-[var(--accent)] text-[var(--void)] px-[var(--spacing-gap-sm)] py-[var(--spacing-gap-xs)] no-underline z-50 focus:top-0">Skip to main content</a>

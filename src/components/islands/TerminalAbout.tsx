@@ -135,6 +135,12 @@ export default function TerminalAbout({ typingSpeed = 8 }: TerminalAboutProps) {
                 <span className="terminal-prompt">&nbsp;</span>
                 <span className="terminal-hint">// 3 paragraphs hidden</span>
               </div>
+              {/* Crawlable full text — hidden visually but present for search engines */}
+              <div className="sr-only" aria-hidden="false">
+                {FULL_TEXT.map((line, i) => (
+                  <p key={i}>{line}</p>
+                ))}
+              </div>
             </>
           )}
 
