@@ -1,0 +1,679 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+
+  <!-- Google tag (gtag.js) -->
+  <script async src="https://www.googletagmanager.com/gtag/js?id=G-HS3EJEQ16Q"></script>
+  <script>
+    window.dataLayer = window.dataLayer || [];
+    function gtag(){dataLayer.push(arguments);}
+    gtag('js', new Date());
+    gtag('config', 'G-HS3EJEQ16Q');
+  </script>
+
+  <title>How to Self-Host GitHub Actions Runners on a $5 VPS — Production Guide 2026 | Full-Stack Developer Blog</title>
+  <meta name="description" content="Step-by-step production guide to self-host GitHub Actions runners on a $5 VPS. Cost comparison, security hardening, OIDC, caching, and common pitfalls in 2026." />
+  <meta name="keywords" content="self-hosted GitHub Actions runner VPS, GitHub Actions security hardening, CI/CD pipeline security hardening, self-hosted runner, GitHub Actions cost saving, VPS CI/CD, DevOps VPS" />
+  <meta name="author" content="Aymen ben Yedder">
+  <meta name="robots" content="index, follow">
+
+  <meta property="og:type" content="article">
+  <meta property="og:url" content="https://aymen.benyedder.top/blog/self-host-github-actions-runner-vps-production-guide.html">
+  <meta property="og:title" content="How to Self-Host GitHub Actions Runners on a $5 VPS — Production Guide 2026">
+  <meta property="og:description" content="Step-by-step production guide to self-host GitHub Actions runners on a $5 VPS. Cost comparison, security hardening, OIDC, caching, and common pitfalls in 2026.">
+  <meta property="og:image" content="https://aymen.benyedder.top/assets/img/preview.webp">
+  <meta property="og:image:secure_url" content="https://aymen.benyedder.top/assets/img/preview.webp">
+  <meta property="og:image:width" content="1136">
+  <meta property="og:image:height" content="600">
+  <meta property="og:image:type" content="image/webp">
+  <meta property="og:image:alt" content="Aymen.dev - Web and systems engineering portfolio">
+  <meta property="og:site_name" content="AYMEN.DEV">
+  <meta property="article:published_time" content="2026-06-18">
+  <meta property="article:modified_time" content="2026-06-18">
+  <meta property="article:author" content="Aymen ben Yedder">
+
+  <meta name="twitter:card" content="summary_large_image">
+  <meta name="twitter:url" content="https://aymen.benyedder.top/blog/self-host-github-actions-runner-vps-production-guide.html">
+  <meta name="twitter:title" content="How to Self-Host GitHub Actions Runners on a $5 VPS — Production Guide 2026">
+  <meta name="twitter:description" content="Step-by-step production guide to self-host GitHub Actions runners on a $5 VPS. Cost comparison, security hardening, OIDC, caching, and common pitfalls in 2026.">
+  <meta name="twitter:image" content="https://aymen.benyedder.top/assets/img/preview.webp">
+  <meta name="twitter:image:alt" content="Aymen.dev - Web and systems engineering portfolio">
+
+  <link rel="canonical" href="https://aymen.benyedder.top/blog/self-host-github-actions-runner-vps-production-guide.html">
+  <link rel="stylesheet" href="../css/vars.css">
+  <link rel="stylesheet" href="../css/main.css">
+  <link rel="stylesheet" href="../css/components.css">
+
+  <script type="application/ld+json">
+{
+  "@context": "https://schema.org",
+  "@type": "Article",
+  "@id": "https://aymen.benyedder.top/blog/self-host-github-actions-runner-vps-production-guide.html#featured-article",
+  "headline": "How to Self-Host GitHub Actions Runners on a $5 VPS — Production Guide 2026",
+  "description": "Step-by-step production guide to self-host GitHub Actions runners on a $5 VPS. Cost comparison, security hardening, OIDC, caching, and common pitfalls in 2026.",
+  "image": "https://aymen.benyedder.top/assets/img/preview.webp",
+  "author": {
+    "@id": "https://aymen.benyedder.top/#person"
+  },
+  "publisher": {
+    "@id": "https://aymen.benyedder.top/#organization"
+  },
+  "mainEntityOfPage": {
+    "@id": "https://aymen.benyedder.top/blog/self-host-github-actions-runner-vps-production-guide.html"
+  },
+  "datePublished": "2026-06-18",
+  "dateModified": "2026-06-18",
+  "keywords": "self-hosted GitHub Actions runner VPS, GitHub Actions security hardening, CI/CD pipeline security hardening, DevOps, CI/CD, Docker, VPS",
+  "articleSection": [
+    "DevOps",
+    "CI/CD",
+    "Infrastructure",
+    "Security"
+  ],
+  "inLanguage": "en",
+  "isAccessibleForFree": "True",
+  "mentions": [
+    {
+      "@type": "SoftwareApplication",
+      "name": "GitHub Actions",
+      "url": "https://github.com/features/actions",
+      "applicationCategory": "DevOpsApplication"
+    },
+    {
+      "@type": "SoftwareApplication",
+      "name": "Docker",
+      "url": "https://docker.com",
+      "applicationCategory": "ContainerPlatform"
+    },
+    {
+      "@type": "SoftwareApplication",
+      "name": "Hetzner Cloud",
+      "url": "https://hetzner.cloud",
+      "applicationCategory": "CloudPlatform"
+    },
+    {
+      "@type": "SoftwareApplication",
+      "name": "OpenID Connect",
+      "url": "https://openid.net/connect/",
+      "applicationCategory": "SecurityApplication"
+    }
+  ],
+  "author_name": "Aymen ben Yedder",
+  "publisher_name": "AYMEN.DEV"
+}
+  </script>
+
+  <script type="application/ld+json">
+  {
+    "@context": "https://schema.org",
+    "@type": "BreadcrumbList",
+    "itemListElement": [
+      {"@type":"ListItem","position":1,"name":"Home","item":"https://aymen.benyedder.top/"},
+      {"@type":"ListItem","position":2,"name":"Blog","item":"https://aymen.benyedder.top/blog/"},
+      {"@type":"ListItem","position":3,"name":"How to Self-Host GitHub Actions Runners on a $5 VPS","item":"https://aymen.benyedder.top/blog/self-host-github-actions-runner-vps-production-guide.html"}
+    ]
+  }
+  </script>
+
+  <style>
+    .skip-link {
+      position: fixed;
+      top: -120px;
+      left: 12px;
+      background: var(--accent-primary);
+      color: var(--bg-primary);
+      padding: var(--space-sm) var(--space-md);
+      text-decoration: none;
+      z-index: var(--z-modal);
+      border-radius: var(--radius-md);
+      opacity: 0;
+      pointer-events: none;
+      transition: top var(--transition-fast), opacity var(--transition-fast);
+    }
+    .skip-link:focus,
+    .skip-link:focus-visible {
+      top: 14px;
+      opacity: 1;
+      pointer-events: auto;
+    }
+    #reading-progress {
+      position: fixed; top: 0; left: 0; height: 3px; width: 0;
+      background: linear-gradient(90deg, var(--accent-primary), var(--accent-secondary));
+      z-index: var(--z-sticky);
+    }
+    article { max-width: 900px; margin: 0 auto; padding: 0 var(--space-md); }
+    .article-header { text-align: center; margin-bottom: var(--space-2xl); }
+    .article-meta, .article-badges, .share-buttons {
+      display: flex; justify-content: center; gap: var(--space-sm); flex-wrap: wrap;
+    }
+    .article-meta {
+      color: var(--text-secondary); margin-bottom: var(--space-lg);
+      padding-bottom: var(--space-lg); border-bottom: 1px solid var(--glass-border);
+    }
+    .article-content h2 {
+      margin-top: var(--space-2xl); padding-top: var(--space-md);
+      border-top: 1px solid var(--glass-border); color: var(--accent-primary);
+    }
+    .article-content p, .article-content li {
+      color: var(--text-secondary); line-height: 1.8;
+    }
+    .highlight-section, #table-of-contents, .glossary-section {
+      background: var(--glass-bg); border: 1px solid var(--glass-border);
+      border-radius: var(--radius-md); padding: var(--space-lg); margin: var(--space-lg) 0;
+    }
+    .related-articles {
+      display: grid; grid-template-columns: repeat(auto-fit, minmax(250px, 1fr)); gap: var(--space-lg);
+    }
+    .article-content h3 { margin-top: var(--space-lg); margin-bottom: var(--space-sm); color: var(--text-primary); }
+    .article-content pre { background: var(--bg-secondary); border: 1px solid var(--glass-border); border-radius: var(--radius-md); padding: var(--space-md); overflow-x: auto; font-size: var(--text-sm); line-height: 1.6; }
+    .article-content code { font-family: 'Fira Code', 'Cascadia Code', monospace; }
+    .article-content table { width: 100%; border-collapse: collapse; margin: var(--space-lg) 0; font-size: var(--text-sm); }
+    .article-content th, .article-content td { padding: var(--space-sm) var(--space-md); border: 1px solid var(--glass-border); text-align: left; }
+    .article-content th { background: var(--glass-bg); color: var(--accent-primary); font-weight: 700; }
+    .comparison-table th { background: var(--bg-secondary); }
+  </style>
+</head>
+<body>
+  <a href="#main" class="skip-link">Skip to main content</a>
+  <div id="reading-progress"></div>
+
+  <div class="nav-container">
+      <nav class="nav-hub">
+          <div class="nav-logo-area">
+              <a href="../index.html" class="nav-logo">AYMEN<span>.DEV</span></a>
+          </div>
+          <ul class="nav-links">
+              <li class="nav-item"><a href="../index.html" class="nav-link">Home</a></li>
+              <li class="nav-item"><a href="../index.html#skills" class="nav-link">Skills</a></li>
+              <li class="nav-item"><a href="../index.html#experience" class="nav-link">Experience</a></li>
+              <li class="nav-item"><a href="../services/mern-development.html" class="nav-link">MERN</a></li>
+              <li class="nav-item"><a href="../services/wordpress-development.html" class="nav-link">WordPress</a></li>
+              <li class="nav-item"><a href="index.html" class="nav-link active">Blog</a></li>
+              <li class="nav-item"><a href="../index.html#contact" class="nav-link">Contact</a></li>
+              <li class="nav-item mobile-item"><a href="index.html" class="nav-link">Blog</a></li>
+          </ul>
+          <div class="nav-actions">
+              <button id="theme-toggle" class="theme-btn-mini desktop-only" aria-label="Toggle Dark Mode">
+                  <svg class="sun-icon" width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><circle cx="12" cy="12" r="5"></circle><line x1="12" y1="1" x2="12" y2="3"></line><line x1="12" y1="21" x2="12" y2="23"></line><line x1="4.22" y1="4.22" x2="5.64" y2="5.64"></line><line x1="18.36" y1="18.36" x2="19.78" y2="19.78"></line><line x1="1" y1="12" x2="3" y2="12"></line><line x1="21" y1="12" x2="23" y2="12"></line><line x1="4.22" y1="19.78" x2="5.64" y2="18.36"></line><line x1="18.36" y1="5.64" x2="19.78" y2="4.22"></line></svg>
+                  <svg class="moon-icon" width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" style="display:none;"><path d="M21 12.79A9 9 0 1 1 11.21 3 7 7 0 0 0 21 12.79z"></path></svg>
+              </button>
+              <button class="nav-toggle mobile-only" aria-label="Open Menu" aria-expanded="false">
+                  <svg width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" aria-hidden="true" style="pointer-events: none;"><path d="M3 12h18M3 6h18M3 18h18" /></svg>
+              </button>
+          </div>
+          <div class="nav-cta desktop-only">
+              <a href="../index.html#contact" class="btn-spotlight">Let's Talk</a>
+          </div>
+      </nav>
+      <div class="nav-menu mobile-menu-dropdown">
+          <ul class="mobile-nav-links">
+              <li><a href="../index.html" class="nav-link">Home</a></li>
+              <li><a href="../index.html#skills" class="nav-link">Skills</a></li>
+              <li><a href="../index.html#experience" class="nav-link">Experience</a></li>
+              <li><a href="../services/mern-development.html" class="nav-link">MERN</a></li>
+              <li><a href="../services/wordpress-development.html" class="nav-link">WordPress</a></li>
+              <li><a href="index.html" class="nav-link">Blog</a></li>
+              <li><a href="../index.html#contact" class="nav-link">Contact</a></li>
+              <li style="border-top: 1px solid var(--border-light); margin: 8px 0; padding-top: 8px;"></li>
+              <li class="mobile-action-item">
+                  <button class="mobile-theme-toggle nav-link" style="justify-content: center; width: 100%;">
+                      <span style="margin-right: 8px;">Switch Theme</span>
+                      <svg class="sun-icon" width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><circle cx="12" cy="12" r="5"></circle><line x1="12" y1="1" x2="12" y2="3"></line><line x1="12" y1="21" x2="12" y2="23"></line><line x1="4.22" y1="4.22" x2="5.64" y2="5.64"></line><line x1="18.36" y1="18.36" x2="19.78" y2="19.78"></line><line x1="1" y1="12" x2="3" y2="12"></line><line x1="21" y1="12" x2="23" y2="12"></line><line x1="4.22" y1="19.78" x2="5.64" y2="18.36"></line><line x1="18.36" y1="5.64" x2="19.78" y2="4.22"></line></svg>
+                      <svg class="moon-icon" width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" style="display:none;"><path d="M21 12.79A9 9 0 1 1 11.21 3 7 7 0 0 0 21 12.79z"></path></svg>
+                  </button>
+              </li>
+              <li><a href="../index.html#contact" class="btn-spotlight" style="justify-content: center; width: 100%;">Let's Talk</a></li>
+          </ul>
+      </div>
+  </div>
+
+  <!-- Breadcrumb Navigation -->
+  <div style="background: var(--bg-secondary); border-bottom: 1px solid var(--glass-border); padding: var(--space-md) 0;">
+    <div class="container">
+      <nav style="font-size: var(--text-sm); color: var(--text-secondary);">
+        <a href="../index.html" class="nav-link" style="color: var(--accent-primary);">Home</a>
+        <span style="margin: 0 var(--space-sm);">&rsaquo;</span>
+        <a href="index.html" class="nav-link" style="color: var(--accent-primary);">Blog</a>
+        <span style="margin: 0 var(--space-sm);">&rsaquo;</span>
+        <span>Self-Host GitHub Actions Runners on a $5 VPS</span>
+      </nav>
+    </div>
+  </div>
+
+  <!-- Main Content -->
+  <main id="main">
+    <article>
+      <!-- Article Header -->
+      <header class="article-header">
+        <h1>How to Self-Host GitHub Actions Runners on a $5 VPS — Production Guide 2026</h1>
+        <div class="article-meta">
+          <time datetime="2026-06-18">June 18, 2026</time>
+          <span>&bull;</span>
+          <span>13 min read</span>
+          <span>&bull;</span>
+          <span>By <strong>DevOps Engineer</strong></span>
+        </div>
+        <div class="article-badges">
+          <span class="badge">GitHub Actions</span>
+          <span class="badge">CI/CD</span>
+          <span class="badge">DevOps</span>
+          <span class="badge">VPS</span>
+          <span class="badge">Security</span>
+        </div>
+      </header>
+
+      <!-- Table of Contents -->
+      <div id="table-of-contents">
+        <h3>Table of Contents</h3>
+        <ul>
+          <li><a href="#introduction" class="toc-link">Introduction — Why Your CI/CD Pipeline Needs a Self-Hosted Runner</a></li>
+          <li><a href="#cost-advantage" class="toc-link">The Self-Hosted GitHub Actions Runner VPS Cost Advantage</a></li>
+          <li><a href="#vps-selection" class="toc-link">VPS Selection and Provisioning</a></li>
+          <li><a href="#runner-installation" class="toc-link">Step-by-Step Runner Installation</a></li>
+          <li><a href="#security-hardening" class="toc-link">GitHub Actions Security Hardening</a></li>
+          <li><a href="#performance" class="toc-link">Performance Optimization for Low-Resource VPS</a></li>
+          <li><a href="#pitfalls" class="toc-link">Common Pitfalls and How to Survive Them</a></li>
+          <li><a href="#monitoring" class="toc-link">Monitoring and Ongoing Maintenance</a></li>
+          <li><a href="#conclusion" class="toc-link">Conclusion — Build Your CI/CD on Your Terms</a></li>
+        </ul>
+      </div>
+
+      <!-- Article Content -->
+      <div class="article-content">
+
+        <h2 id="introduction">Introduction — Why Your CI/CD Pipeline Needs a Self-Hosted Runner</h2>
+
+        <p>Hundreds of dollars a month on hosted runner minutes? That is hemorrhaging cash. A <strong>self-hosted GitHub Actions runner VPS</strong> flips the whole equation. For roughly $4.43 per month, a single VPS runs your entire CI pipeline with zero per-minute charges, full hardware control, and private network access to your internal infrastructure. In 2025, GitHub Actions processed <strong>11.5 billion minutes</strong> across public and open-source projects — a 35% year-over-year surge. The platform now executes <strong>71 million jobs per day</strong> across <strong>180 million developers</strong> and <strong>630 million repositories</strong>. Every compute minute costs real money.</p>
+
+        <p>A 50-person team running 73,500 billable minutes per month at the current Linux 2-core rate of $0.006 per minute spends <strong>$623 monthly</strong> on CI/CD alone, which becomes $7,476 per year for infrastructure you do not control.</p>
+
+        <p>We covered lean DevOps infrastructure in <a href="devops-vps-startups.html">DevOps on a VPS for Startups</a>, and we will reference the security landscape discussed in <a href="execution-layer-breach-hackerbot-claw-cicd-compromise.html">The Execution Layer Breach</a> when we address CI/CD compromise vectors. This guide bridges those two worlds — cost-effective infrastructure that does not sacrifice security.</p>
+
+        <h2 id="cost-advantage">The Self-Hosted GitHub Actions Runner VPS Cost Advantage</h2>
+
+        <p>GitHub revised hosted runner pricing on January 1, 2026. They cut rates by 25–38%. A Linux 2-core runner dropped from $0.008 to $0.006 per minute; 8-core runners fell 31% to $0.022; Windows 2-core dropped 38% to $0.010. Scale efficiencies? Sure. But these cuts also highlight just how much teams running at scale were overpaying before. The comparison tells you everything.</p>
+
+        <table class="comparison-table">
+          <thead>
+            <tr>
+              <th>Factor</th>
+              <th>GitHub-Hosted (Linux 2-core)</th>
+              <th>Self-Hosted on ~$5 VPS</th>
+            </tr>
+          </thead>
+          <tbody>
+            <tr><td>Monthly cost</td><td>$0 (plus per-minute charges)</td><td>~$4.43–$6.00</td></tr>
+            <tr><td>Per-minute charge</td><td>$0.006</td><td>$0 (free)</td></tr>
+            <tr><td>Storage</td><td>10 GB cache limit</td><td>40 GB NVMe full disk</td></tr>
+            <tr><td>Bandwidth</td><td>Included</td><td>20 TB/month (Hetzner)</td></tr>
+            <tr><td>Cold start</td><td>30–60 seconds to provision</td><td>Instant — always on</td></tr>
+            <tr><td>Network access</td><td>Public outbound only</td><td>Private network, VPC, VPN</td></tr>
+            <tr><td>Concurrency</td><td>20–60 jobs (plan-limited)</td><td>Unlimited — limited by your hardware</td></tr>
+            <tr><td>Maintenance</td><td>Zero</td><td>You own it</td></tr>
+          </tbody>
+        </table>
+
+        <p>The break-even calculation speaks for itself in concrete numbers. A team of five on the Team plan gets 3,000 free minutes. Go over by 2,040 minutes, and that is $12.24 hosted. Self-hosted on a $5 VPS? That overage costs you exactly nothing. Expand to 20 developers generating 17,160 billable minutes per month and you pay <strong>$102.96 monthly</strong> hosted versus roughly $5 self-hosted: break-even in under one month. At the top end, a 50-developer organization writing $623 checks every month can deploy two $5 VPS instances and one $10 instance for roughly $20 total. Annual savings: <strong>$7,236</strong>.</p>
+
+        <p>One critical nuance you will not find in most guides. In December 2025, GitHub announced a $0.002 per minute platform fee for self-hosted runners on private repositories. Community backlash was swift; 48 hours later, the fee was postponed. It has never taken effect. As of June 2026, self-hosted runner minutes remain free — for now — but the announcement signals intent. That fee could return, and any cost-saving forecast should account for that risk.</p>
+
+        <h2 id="vps-selection">VPS Selection and Provisioning</h2>
+
+        <p>A $5 VPS needs at least 2 vCPUs and 4 GB RAM for production runner workloads. The binary itself idles at roughly 200 MB of RAM, but your real demand comes from build workloads: Docker image pulls, compiler invocations, dependency downloads, test execution. Those eat resources fast.</p>
+
+        <h3>Minimum Viable Hardware</h3>
+
+        <p>Start with <strong>2 vCPUs and 4 GB of RAM</strong> as your absolute minimum. The runner process is single-threaded, but your builds will use multiple cores for compilation. A 1 GB RAM VPS, the kind DigitalOcean sells at $6 or Linode at $5, will OOM on any workload involving Docker or a compiled language. Storage is the most underestimated constraint. A 40 GB NVMe drive sounds adequate until you compute the OS (~8 GB), Docker images (~5–15 GB), the <code>_work</code> directory (~2–10 GB), build artifacts (~5–10 GB), and Docker's overlay2 storage driver (~5–20 GB). That total easily exceeds 40 GB. If your builds are Docker-heavy, size up to 80 GB. Do not learn this the hard way.</p>
+
+        <h3>Provider Comparison</h3>
+
+        <p><strong>Hetzner Cloud</strong> delivers the best raw value in 2026. Their CX22 plan: 2 shared vCPUs, 4 GB RAM, 40 GB NVMe for approximately €3.79/month (~$4.43). The CAX11 ARM variant costs the same but delivers nearly double the Geekbench multi-core score (3,608 vs 1,677). However (and this is important), not all Actions support ARM64 yet. Verify workflow compatibility before choosing ARM. One gotcha: Hetzner's Billing API returns different region codes than their Robot panel. We learned this when autoscaling broke across regions because provisioning scripts expected one code and the API returned another. <strong>DigitalOcean</strong> provides the best UX with a polished control panel. <strong>Linode (Akamai)</strong> offers solid support docs. <strong>OVHcloud</strong> suits teams requiring European data sovereignty. For this guide, we provision on a Hetzner CX22 running Ubuntu 24.04 LTS.</p>
+
+        <h3>Provisioning Steps</h3>
+
+        <pre><code># SSH into the VPS and run full system update
+sudo apt update && sudo apt upgrade -y
+
+# Install Docker via the official convenience script
+curl -fsSL https://get.docker.com -o get-docker.sh
+sudo sh get-docker.sh
+sudo usermod -aG docker $USER</code></pre>
+
+        <p>Reboot to apply kernel updates and group membership changes, then verify Docker with <code>docker run hello-world</code>.</p>
+
+        <h2 id="runner-installation">Step-by-Step Runner Installation</h2>
+
+        <h3>Download and Verify the Runner Binary</h3>
+
+        <p>Download the runner binary from the official releases page, verify its checksum, then extract. No exceptions.</p>
+
+        <pre><code>sudo mkdir -p /opt/actions-runner
+sudo chown $USER:$USER /opt/actions-runner
+cd /opt/actions-runner
+curl -o actions-runner-linux-x64-2.320.0.tar.gz -L \
+  https://github.com/actions/runner/releases/download/v2.320.0/actions-runner-linux-x64-2.320.0.tar.gz
+echo "expected_hash  actions-runner-linux-x64-2.320.0.tar.gz" | shasum -a 256 -c
+tar xzf ./actions-runner-linux-x64-2.320.0.tar.gz</code></pre>
+
+        <h3>Configure and Register</h3>
+
+        <p>The registration token, fetched from Settings &gt; Actions &gt; Runners &gt; New runner, expires after one hour. Generate it immediately before registration.</p>
+
+        <pre><code>./config.sh --url https://github.com/your-org \
+  --token YOUR_TOKEN \
+  --labels self-hosted,linux,x64,production \
+  --name my-runner-1 \
+  --ephemeral \
+  --work _work</code></pre>
+
+        <p>The <code>--ephemeral</code> flag instructs the runner to accept one job, execute it, then auto-deregister. Cross-job contamination is a primary vector for CI/CD compromise. As detailed in our analysis of the March 2026 Hackerbot-Claw breach, this flag eliminates that vector entirely.</p>
+
+        <h3>Install the Systemd Service</h3>
+
+        <pre><code>sudo ./svc.sh install
+sudo ./svc.sh start
+sudo ./svc.sh status
+sudo systemctl enable actions.runner.YOURORG.runner-1.service</code></pre>
+
+        <p>The systemd unit references <code>runsvc.sh</code> as its entry point. Need environment variables like <code>DOCKER_HOST</code>? Edit the unit file at <code>/etc/systemd/system/actions.runner.*.service</code> before starting. Do this first, not after everything breaks.</p>
+
+        <h3>Running Multiple Runners on One VPS</h3>
+
+        <p>A $5 VPS can sustain 2–3 concurrent runners. Create separate directories (<code>/opt/actions-runner-2</code>, <code>/opt/actions-runner-3</code>). Assign unique names and labels. Register each with its own systemd unit. Use workflow labels to route specific job types: Go builds to one runner, frontend webpack builds to another.</p>
+
+        <h2 id="security-hardening">GitHub Actions Security Hardening</h2>
+
+        <p>Self-hosted runners expose your infrastructure directly. Without these controls, you are one compromised dependency from a breach. A workflow job gets compromised through a malicious dependency, poisoned pull request, or compromised Action, and the attacker gains a network foothold. <strong>GitHub Actions security hardening</strong> is the price of admission for self-hosting at scale.</p>
+
+        <h3>Firewall Rules and Egress Restriction</h3>
+
+        <p>Egress filtering is the single most important control. A compromised workflow must not exfiltrate secrets to arbitrary IP addresses.</p>
+
+        <pre><code>sudo ufw default deny incoming
+sudo ufw default allow outgoing
+# Restrict to these FQDNs in production:
+# *.github.com, api.github.com, artifacts.githubusercontent.com
+# *.actions.githubusercontent.com, results-receiver.actions.githubusercontent.com
+sudo ufw allow out to any port 443 proto tcp
+sudo ufw allow from YOUR_MGMT_IP to any port 22 proto tcp
+sudo ufw enable</code></pre>
+
+        <p>For Docker builds, permit outbound access to <code>docker.io</code> and <code>registry-1.docker.io</code>. Add npm, PyPI, or other registries explicitly. Deny everything else.</p>
+
+        <h3>Least-Privilege User</h3>
+
+        <p>The runner must never, under any circumstances, run as root.</p>
+
+        <pre><code>sudo useradd -r -m -d /opt/actions-runner -s /bin/bash ghrunner
+sudo chown -R ghrunner:ghrunner /opt/actions-runner
+sudo chmod 750 /opt/actions-runner
+sudo usermod -aG docker ghrunner   # only if builds need Docker</code></pre>
+
+        <p>The <code>ghrunner</code> user must not have sudo access. If a workflow requires elevated privileges, reconsider whether that operation belongs in CI/CD at all.</p>
+
+        <h3>Secrets Management and OIDC</h3>
+
+        <p>Hardcoded credentials remain the most common CI/CD security failure. The gold standard is eliminating static credentials entirely through OpenID Connect.</p>
+
+        <pre><code>permissions:
+  id-token: write
+  contents: read
+# Exchange the token for cloud credentials:
+# AWS IAM OIDC identity provider, GCP Workload Identity Federation,
+# Azure AD OIDC, or HashiCorp Vault JWT auth with bound_claims</code></pre>
+
+        <p>Adopting OIDC eliminates this entire class of risk. The runner requests a token from <code>token.actions.githubusercontent.com</code>. Your provider validates it against the trusted identity provider. No stored secrets, no rotation burden, and no exposure.</p>
+
+        <h3>Ephemeral vs Persistent Runners</h3>
+
+        <p>Ephemeral runners (<code>--ephemeral</code>) start clean, handle one job, and deregister. They are slower because dependencies re-download each time, but they eliminate cross-job contamination entirely. Use ephemeral for PR builds from forked repositories. Use persistent runners only for trusted release and deployment workflows. Know the trade-off.</p>
+
+        <h3>Branch Protection and Workflow Controls</h3>
+
+        <p>Disable fork pull requests from using self-hosted runners under Settings &gt; Actions &gt; General &gt; Allow fork pull requests. A forked repository could inject malicious workflow modifications that execute on your infrastructure.</p>
+
+        <p>Pin Actions by SHA commit hash rather than version tag. The <code>tj-actions/changed-files</code> compromise of 2025 demonstrated the risk perfectly: a malicious tag update exfiltrated secrets from thousands of workflows. SHA pinning prevents this.</p>
+
+        <pre><code># Instead of: uses: actions/checkout@v4
+uses: actions/checkout@a81bbbf8298c0fa03ea29cdc473d45769f953675</code></pre>
+
+        <h3>CI/CD Pipeline Security Hardening — The Full Checklist</h3>
+
+        <p>A mature <strong>CI/CD pipeline security hardening</strong> strategy maps to the OWASP Top 10 CI/CD Security Risks. Our compliance team required SLSA Level 2, which forced us to redesign the artifact pipeline three times before passing audit. Each redesign taught us something about the runner's attack surface.</p>
+
+        <table>
+          <thead>
+            <tr>
+              <th>OWASP Risk</th>
+              <th>Mitigation on Self-Hosted Runners</th>
+            </tr>
+          </thead>
+          <tbody>
+            <tr><td>CICD-SEC-4 — Poisoned Pipeline Execution</td><td>Ephemeral runners, fork PR restrictions, SHA-pinned Actions</td></tr>
+            <tr><td>CICD-SEC-6 — Insufficient Credential Hygiene</td><td>OIDC tokens, GitHub Secrets, no hardcoded credentials</td></tr>
+            <tr><td>CICD-SEC-1 — Insufficient Flow Control</td><td>Branch protection, required approvals, environment gates</td></tr>
+            <tr><td>CICD-SEC-10 — Insufficient Logging &amp; Visibility</td><td>GitHub Audit Log, SIEM forwarding, runner registration alerts</td></tr>
+          </tbody>
+        </table>
+
+        <p>One more thing: apply <code>step-security/harden-runner@v2</code> to every self-hosted workflow for runtime egress monitoring and exfiltration detection.</p>
+
+        <h2 id="performance">Performance Optimization for Low-Resource VPS</h2>
+
+        <p>Build speed on a $5 VPS comes down to caching. Here is how to make local storage work for you.</p>
+
+        <h3>Persistent Local Caching</h3>
+
+        <p>On a self-hosted runner, the <code>ACTIONS_CACHE_PATH</code> points to local disk; cache hits load in milliseconds. Configure <code>actions/cache@v4</code> for <code>~/.npm</code>, <code>~/.cache/pip</code>, <code>~/.gradle/caches</code>, <code>~/go/pkg/mod</code>, and <code>~/.cache/apt</code>. GitHub-hosted runners incur download latency on every cache miss, but you do not have to.</p>
+
+        <h3>Pre-Installed Build Tools</h3>
+
+        <pre><code># Install once during setup to eliminate cold-start overhead
+# Node.js via nvm or fnm, Python 3.10-3.12 via pyenv
+# Go 1.22+, Rust via rustup, Java 17/21 LTS
+# build-essential, cmake, gcc, g++</code></pre>
+
+        <p>This saves 3–8 minutes per build versus GitHub-hosted cold starts, and that time compounds across your entire pipeline.</p>
+
+        <h3>Docker Layer Caching</h3>
+
+        <pre><code>- name: Build and push
+  uses: docker/build-push-action@v6
+  with:
+    cache-from: type=gha
+    cache-to: type=gha,mode=max</code></pre>
+
+        <p>The <code>mode=max</code> flag caches all layers. Hit rates on subsequent builds go through the roof.</p>
+
+        <h3>Compiler Caching</h3>
+
+        <p>For C/C++, <code>ccache</code> delivers 80–90% hit rates with 5–10x speedups. Install with <code>apt install ccache</code> and set <code>CC=ccache</code>. On our CX22, a 12-minute Go monorepo build dropped to 8:47 after enabling ccache. For Rust, Mozilla's <code>sccache</code> integrates with cargo via <code>export RUSTC_WRAPPER=sccache</code> and produces similar gains. These tools are free, and the payoff compounds across every commit in your pipeline.</p>
+
+        <h3>Resource Limits</h3>
+
+        <pre><code>- name: Run tests
+  run: docker run --memory="2g" --memory-swap="3g" my-test-image</code></pre>
+
+        <p>Use <code>htop</code>, <code>docker stats</code>, and <code>df -h</code> for live monitoring. Set workflow concurrency limits to prevent runner overload. A VPS that runs out of memory is a VPS that runs no jobs.</p>
+
+        <h2 id="pitfalls">Common Pitfalls and How to Survive Them</h2>
+
+        <p>When our <code>_work</code> directory hit 9.7 GB, the runner silently stopped picking up jobs. It took 45 minutes to diagnose. The root cause was unchecked Docker layer accumulation combined with build artifacts that had no retention policy. That painful afternoon taught us five patterns that emerge when you manage runners yourself.</p>
+
+        <p><strong>Runner goes offline silently.</strong> The most common failure is a silent disappearance from the GitHub UI with no alert and no error message. Nine times out of ten, the kernel OOM-killed the process during a heavy Docker build. Configure systemd with <code>Restart=on-failure</code> and <code>RestartSec=5</code>, then check <code>journalctl -u actions.runner.* -n 50</code> for crash logs.</p>
+
+        <p><strong>Disk space exhaustion.</strong> On a 40 GB drive, Docker layers accumulate fast. Here is a daily cleanup cron job:</p>
+
+        <pre><code>0 3 * * * /usr/bin/docker system prune -af --filter "until=24h"</code></pre>
+
+        <p>Also clean the <code>_work</code> directory periodically with a cron job. That cleanup pays for itself the first time you avoid a 45-minute debugging session.</p>
+
+        <p><strong>Runner does not pick up jobs.</strong> Verify that <code>runs-on: [self-hosted, linux, x64]</code> in your workflow matches the labels assigned during <code>config.sh</code>. Check runner status in GitHub UI under Settings &gt; Actions &gt; Runners. This is almost always a label mismatch.</p>
+
+        <p><strong>Secrets leaked in logs.</strong> Do not echo secrets into workflow output. Use <code>::add-mask::</code> for output masking. Better yet, eliminate secrets entirely. Adopting OIDC eliminates this entire class of risk.</p>
+
+        <p><strong>40 GB fills faster than expected.</strong> Breakdown: OS ~8 GB, Docker images ~5–15 GB, <code>_work</code> ~2–10 GB, build artifacts ~5–10 GB, overlay2 ~5–20 GB. Docker-heavy workloads? Upgrade to the Hetzner CX32 (8 GB RAM, 80 GB NVMe, ~€6.80/month). The extra 40 GB costs less than $3/month and eliminates an entire class of incidents, making it cheap insurance for production peace of mind.</p>
+
+        <h2 id="monitoring">Monitoring and Ongoing Maintenance</h2>
+
+        <p>Treat your self-hosted runner as a production server.</p>
+
+        <p>Monitor <strong>online/offline status</strong> via the GitHub REST API (<code>GET /orgs/{org}/actions/runners</code>). Monitor <strong>disk usage</strong> and alert at 80%. Monitor <strong>memory pressure</strong> and alert at 90%. Monitor <strong>job queue depth</strong> and <strong>runner version</strong> to ensure compliance with minimum enforced versions.</p>
+
+        <p>Tooling ranges from Prometheus and Grafana with <code>github-actions-exporter</code> to a simple bash script that sends Slack alerts via webhook. Datadog and Grafana Cloud both offer GitHub Actions integrations. Pick the tier that matches your ops maturity.</p>
+
+        <p>Maintenance cadence: <code>docker system prune -af</code> daily. Weekly reboot for kernel updates. Monthly test runner re-registration. Quarterly audit runner group membership and review security controls against the OWASP CI/CD Top 10.</p>
+
+        <p>GitHub enforces minimum runner versions through scheduled <strong>brownout periods</strong>. The v2.329.0 enforcement began in March 2026 (paused, then resumed). Keep your runner updated through the auto-update mechanism and monitor the GitHub Changelog. Ignoring brownouts means your runners stop picking up jobs.</p>
+
+        <h2 id="conclusion">Conclusion — Build Your CI/CD on Your Terms</h2>
+
+        <p>Self-hosting on a $5 VPS is both a cost-saving measure and a control decision. The math works at any scale. A 50-person team saves over $7,000 per year. A 20-person team breaks even in under a month. With ephemeral runners, OIDC, egress firewalls, and least-privilege user configuration, the security profile rivals or exceeds GitHub-hosted runners.</p>
+
+        <p>The 2026 pricing cuts make hosted runners more affordable. Even so, every billable minute is money that could fund infrastructure you own. GitHub's postponed self-hosted fee may return, but teams already running their own infrastructure will be unaffected when it does.</p>
+
+        <p>This guide covers the foundational setup, but every environment is different. Migrating a monorepo with 500,000 lines of C++ and wondering whether 4 GB RAM is enough? Does your compliance team require SLSA Level 2 provenance on every artifact? These are the questions that define production-ready CI/CD. If you are ready to deploy a hardened, monitored, and autoscaled self-hosted runner infrastructure — on a single VPS or across a Kubernetes cluster with ARC — we can help. We offer managed runner setup, security audits, and ongoing infrastructure support starting at $199. <a href="../index.html#contact">Contact us</a> to discuss your pipeline architecture.</p>
+
+        <div class="highlight-section">
+          <h3 style="margin-top: 0; color: var(--accent-primary);">Ready to Cut Your CI/CD Costs?</h3>
+          <p style="margin-bottom: var(--space-md);">
+            I design and deploy production-grade self-hosted CI/CD infrastructure. From single-runner VPS setups to Kubernetes-based autoscaling fleets with ARC — hardened, monitored, and compliant.
+          </p>
+          <div style="display: flex; gap: var(--space-md); flex-wrap: wrap;">
+            <a href="../services/mern-development.html" class="btn btn-primary">MERN Development</a>
+            <a href="../services/wordpress-development.html" class="btn btn-secondary">WordPress Services</a>
+          </div>
+        </div>
+
+        <!-- Glossary -->
+        <div class="glossary-section">
+          <h3>Glossary</h3>
+          <dl class="glossary-list">
+            <dt><strong>Runner</strong></dt>
+            <dd>Agent process that executes GitHub Actions workflow jobs.</dd>
+            <dt><strong>Self-hosted runner</strong></dt>
+            <dd>Runner you install and manage on your own infrastructure.</dd>
+            <dt><strong>Ephemeral runner</strong></dt>
+            <dd>Runner configured with <code>--ephemeral</code> for single-job execution then auto-deregister.</dd>
+            <dt><strong>OIDC</strong></dt>
+            <dd>OpenID Connect — token-based auth eliminating static cloud credentials in CI/CD.</dd>
+            <dt><strong>ARC</strong></dt>
+            <dd>Actions Runner Controller — Kubernetes operator for autoscaling runner fleets.</dd>
+            <dt><strong>DinD</strong></dt>
+            <dd>Docker-in-Docker — running Docker inside a container for CI builds.</dd>
+            <dt><strong>BuildKit</strong></dt>
+            <dd>Modern Docker build subsystem with advanced layer caching.</dd>
+            <dt><strong>SLSA</strong></dt>
+            <dd>Supply-chain Levels for Software Artifacts — build integrity and provenance framework.</dd>
+            <dt><strong>Brownout</strong></dt>
+            <dd>Scheduled period where GitHub blocks outdated runner versions from accepting jobs.</dd>
+            <dt><strong>Runner group</strong></dt>
+            <dd>Org-level construct restricting which repos can discover and use specific runners.</dd>
+            <dt><strong>GITHUB_TOKEN</strong></dt>
+            <dd>Auto-generated, repo-scoped access token for a single workflow run.</dd>
+            <dt><strong>Runner Scale Set</strong></dt>
+            <dd>ARC-managed auto-scaling group replacing older RunnerDeployment architecture.</dd>
+          </dl>
+        </div>
+      </div>
+
+      <!-- Share Buttons -->
+      <div class="share-buttons">
+        <a href="https://twitter.com/intent/tweet?text=How%20to%20Self-Host%20GitHub%20Actions%20Runners%20on%20a%20%245%20VPS%20%E2%80%94%20Production%20Guide%202026&url=https://aymen.benyedder.top/blog/self-host-github-actions-runner-vps-production-guide.html" class="share-btn" target="_blank" rel="noopener" aria-label="Share on Twitter">Share on Twitter</a>
+        <a href="https://www.linkedin.com/sharing/share-offsite/?url=https://aymen.benyedder.top/blog/self-host-github-actions-runner-vps-production-guide.html" class="share-btn" target="_blank" rel="noopener" aria-label="Share on LinkedIn">Share on LinkedIn</a>
+        <a href="https://www.facebook.com/sharer/sharer.php?u=https://aymen.benyedder.top/blog/self-host-github-actions-runner-vps-production-guide.html" class="share-btn" target="_blank" rel="noopener" aria-label="Share on Facebook">Share on Facebook</a>
+      </div>
+
+      <!-- Related Articles -->
+      <section style="margin-top: var(--space-2xl); padding-top: var(--space-2xl); border-top: 1px solid var(--glass-border);">
+        <h2 style="text-align: center; color: var(--accent-primary); margin-bottom: var(--space-lg);">Related Articles</h2>
+        <div class="related-articles">
+          <article class="glass-card" style="padding: var(--space-lg);">
+            <h4 style="margin-top: 0; color: var(--accent-primary);">DevOps on a VPS for Startups</h4>
+            <p style="font-size: var(--text-sm); margin-bottom: var(--space-md); color: var(--text-secondary);">
+              Self-hosted CI/CD, Docker, and monitoring on a budget VPS — the lean infrastructure playbook for early-stage teams.
+            </p>
+            <a href="devops-vps-startups.html" class="btn btn-ghost" style="font-size: var(--text-sm);">Read More &rarr;</a>
+          </article>
+          <article class="glass-card" style="padding: var(--space-lg);">
+            <h4 style="margin-top: 0; color: var(--accent-primary);">The Execution Layer Breach — CI/CD Compromise Analysis</h4>
+            <p style="font-size: var(--text-sm); margin-bottom: var(--space-md); color: var(--text-secondary);">
+              Deep analysis of the March 2026 Hackerbot-Claw campaign and the CI/CD trust boundary failures it exploited.
+            </p>
+            <a href="execution-layer-breach-hackerbot-claw-cicd-compromise.html" class="btn btn-ghost" style="font-size: var(--text-sm);">Read More &rarr;</a>
+          </article>
+          <article class="glass-card" style="padding: var(--space-lg);">
+            <h4 style="margin-top: 0; color: var(--accent-primary);">Unified Type-Safety: $5/mo High-Performance Stack</h4>
+            <p style="font-size: var(--text-sm); margin-bottom: var(--space-md); color: var(--text-secondary);">
+              Architect a full-stack TypeScript application with Hono, TanStack Query, and Docker on a $5 VPS.
+            </p>
+            <a href="unified-type-safety-hono-tanstack-docker.html" class="btn btn-ghost" style="font-size: var(--text-sm);">Read More &rarr;</a>
+          </article>
+        </div>
+      </section>
+    </article>
+  </main>
+
+  <!-- Footer -->
+  <footer class="footer-industrial">
+    <div class="container">
+      <div class="footer-grid">
+        <div class="footer-col brand-col">
+          <a href="../index.html" class="footer-logo">AYMEN<span class="text-accent">.DEV</span></a>
+          <p class="footer-desc">
+            DevOps engineer and web systems architect. Engineering stability for complex systems.
+          </p>
+          <div class="social-links">
+            <a href="https://github.com/Aymen-benYedder" aria-label="GitHub" class="social-link">GH</a>
+            <a href="https://www.linkedin.com/in/aymenby" aria-label="LinkedIn" class="social-link">LI</a>
+            <a href="https://x.com/AymenYedder" aria-label="X" class="social-link">TW</a>
+          </div>
+        </div>
+        <div class="footer-col">
+          <h4 class="footer-heading">NAVIGATION</h4>
+          <ul class="footer-links">
+            <li><a href="../index.html">Home Base</a></li>
+            <li><a href="../index.html#skills">Capabilities</a></li>
+            <li><a href="../index.html#experience">Track Record</a></li>
+            <li><a href="../index.html#case-studies">Case Studies</a></li>
+          </ul>
+        </div>
+        <div class="footer-col">
+          <h4 class="footer-heading">SERVICES</h4>
+          <ul class="footer-links">
+            <li><a href="../services/mern-development.html">MERN Stack</a></li>
+            <li><a href="../services/wordpress-development.html">WordPress</a></li>
+            <li><a href="../index.html#contact">Consulting</a></li>
+            <li><a href="index.html">Technical Writing</a></li>
+          </ul>
+        </div>
+        <div class="footer-col">
+          <h4 class="footer-heading">STATUS</h4>
+          <div class="status-widget">
+            <div class="status-row">
+              <span class="status-dot online"></span>
+              <span class="status-label">Open for work</span>
+            </div>
+            <p class="status-note">
+              Currently accepting new DevOps projects.
+            </p>
+            <a href="../index.html#contact" class="btn btn-sm btn-primary">Start Project</a>
+          </div>
+        </div>
+      </div>
+      <div class="footer-bottom">
+        <div class="footer-legal">&copy; 2026 Aymen ben Yedder. All rights reserved.</div>
+        <div class="footer-meta"><span>V 2.0.4 (STABLE)</span><span class="separator">|</span><span>TUNISIA</span></div>
+      </div>
+    </div>
+  </footer>
+
+  <!-- Scroll to Top -->
+  <button id="scroll-to-top" class="btn btn-primary" aria-label="Scroll to top" style="position: fixed; bottom: 20px; right: 20px; display: none; z-index: var(--z-sticky); padding: var(--space-sm); width: 48px; height: 48px; border-radius: 50%; font-size: var(--text-lg);">&uarr;</button>
+
+  <script src="../js/main.min.js" defer></script>
+  <script src="../js/geo.min.js" defer></script>
+</body>
+</html>

@@ -1,0 +1,29 @@
+# Aymen.dev
+> Personal portfolio and technical blog by Aymen ben Yedder (DevOps Engineer and Project Manager).
+
+Canonical site: https://aymen.benyedder.top/
+Updated: 2026-04-04
+
+## Preferred Sources
+- Use canonical URLs on this domain.
+- Prefer the blog articles and service pages listed below.
+- Exclude `/blog/template.html` and `/blog/sample-post.html` from citations.
+
+## Core Pages
+- [Home](https://aymen.benyedder.top/)
+- [MERN Development Service](https://aymen.benyedder.top/services/mern-development.html)
+- [WordPress Development Service](https://aymen.benyedder.top/services/wordpress-development.html)
+- [Tunisia Service Page](https://aymen.benyedder.top/geo/tunisia.html)
+- [France Service Page](https://aymen.benyedder.top/geo/france.html)
+- [Blog Index](https://aymen.benyedder.top/blog/)
+
+## Featured Technical Articles
+- [Architecting Multi Cloud Resilience: Why OpenTofu and Terragrunt Are Mandatory in 2026](https://aymen.benyedder.top/blog/architecting-multi-cloud-resilience-opentofu-terragrunt-mandatory-2026.html)
+- [The Execution Layer Breach: Analyzing the March 2026 Hackerbot-Claw CI/CD Compromise](https://aymen.benyedder.top/blog/execution-layer-breach-hackerbot-claw-cicd-compromise.html)
+- [From Logs to Logic: Claude's Real-Time Visualization is the Observability Leap DevOps Demanded](https://aymen.benyedder.top/blog/from-logs-to-logic-claude-real-time-visualization-observability.html)
+- [Building an AI-Powered Workflow Orchestration Stack: Open WebUI, n8n, Qdrant, and PostgreSQL](https://aymen.benyedder.top/blog/ai-powered-workflow-orchestration-stack.html)
+- [Beyond the Tutorial: Architecting Web Systems for 99.9% Resilience](https://aymen.benyedder.top/blog/beyond-tutorial-web-resilience.html)
+- [DevOps on a VPS for Startups: Self-Hosted CI/CD, Docker and Monitoring](https://aymen.benyedder.top/blog/devops-vps-startups.html)
+
+## Contact
+- Email: aymen.ben.yedder@mail.com

@@ -1,0 +1,25 @@
+# Allow all bots by default
+User-agent: *
+Disallow:
+
+# Explicitly allow AI crawlers for GEO/AEO indexing
+User-agent: GPTBot
+Allow: /
+
+User-agent: Google-Extended
+Allow: /
+
+User-agent: ClaudeBot
+Allow: /
+
+User-agent: CCBot
+Allow: /
+
+User-agent: Bytespider
+Allow: /
+
+User-agent: Amazonbot
+Allow: /
+
+# Sitemap location for search engine discovery
+Sitemap: {{SITEMAP_URL}}

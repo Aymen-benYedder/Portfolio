@@ -1,0 +1,987 @@
+﻿<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+
+  <!-- Google tag (gtag.js) -->
+  <script async src="https://www.googletagmanager.com/gtag/js?id=G-HS3EJEQ16Q"></script>
+  <script>
+    window.dataLayer = window.dataLayer || [];
+    function gtag(){dataLayer.push(arguments);}
+    gtag('js', new Date());
+    gtag('config', 'G-HS3EJEQ16Q');
+  </script>
+  
+  <!-- SEO & Primary Meta Tags -->
+  <title>Building a MERN Stack Application: A Complete Guide | Full-Stack Developer Blog</title>
+  <meta name="description" content="Learn how to build a complete MERN Stack application from scratch. This comprehensive guide covers React, Node.js, Express, MongoDB, authentication, and deployment best practices.">
+  <meta name="keywords" content="MERN Stack, React, Node.js, Express, MongoDB, Full-Stack Development, JavaScript, Tutorial, Web Development">
+  <meta name="author" content="Aymen ben Yedder">
+  <meta name="robots" content="index, follow, max-snippet:-1, max-image-preview:large, max-video-preview:-1">
+  
+  <!-- Open Graph / Social Media -->
+  <meta property="og:type" content="article">
+  <meta property="og:url" content="https://aymen.benyedder.top/blog/sample-post.html">
+  <meta property="og:title" content="Building a MERN Stack Application: A Complete Guide">
+  <meta property="og:description" content="Comprehensive guide to building production-ready MERN Stack applications with best practices.">
+  <meta property="og:image" content="https://aymen.benyedder.top/assets/img/preview.webp">
+  <meta property="og:image:secure_url" content="https://aymen.benyedder.top/assets/img/preview.webp">
+  <meta property="og:image:width" content="1136">
+  <meta property="og:image:height" content="600">
+  <meta property="og:image:type" content="image/webp">
+  <meta property="og:image:alt" content="Aymen.dev - Web and systems engineering portfolio">
+  <meta property="og:site_name" content="AYMEN.DEV">
+  <meta property="article:published_time" content="2026-06-07">
+  <meta property="article:author" content="Aymen ben Yedder">
+  
+  <!-- Twitter Card -->
+  <meta name="twitter:card" content="summary_large_image">
+  <meta name="twitter:url" content="https://aymen.benyedder.top/blog/sample-post.html">
+  <meta name="twitter:title" content="Building a MERN Stack Application: A Complete Guide">
+  <meta name="twitter:description" content="Learn MERN Stack development from scratch with this comprehensive tutorial.">
+  <meta name="twitter:image" content="https://aymen.benyedder.top/assets/img/preview.webp">
+  <meta name="twitter:image:alt" content="Aymen.dev - Web and systems engineering portfolio">
+  
+  <!-- Canonical URL -->
+  <link rel="canonical" href="https://aymen.benyedder.top/blog/sample-post.html">
+  
+  <!-- Favicon -->
+  <link rel="icon" type="image/png" sizes="32x32" href="data:image/svg+xml,<svg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 100 100'><rect fill='%2300d4ff' width='100' height='100'/><text x='50' y='65' font-size='70' font-weight='bold' text-anchor='middle' fill='%230a0a0f' font-family='system-ui'>D</text></svg>">
+  
+  <!-- Structured Data: Article Schema -->
+    <script type="application/ld+json">
+{
+  "@context": "https://schema.org",
+  "@type": "Article",
+  "@id": "https://aymen.benyedder.top/blog/#featured-article",
+  "headline": "Building a MERN Stack Application: A Complete Guide",
+  "description": "Comprehensive guide to building production-ready MERN Stack applications with best practices and code examples.",
+  "image": "https://aymen.benyedder.top/assets/img/preview.webp",
+  "author": {
+    "@id": "https://aymen.benyedder.top/#person"
+  },
+  "publisher": {
+    "@id": "https://aymen.benyedder.top/#organization"
+  },
+  "mainEntityOfPage": {
+    "@id": "https://aymen.benyedder.top/blog/"
+  },
+  "datePublished": "2026-06-07",
+  "dateModified": "2026-06-07",
+  "keywords": "DevOps, CI/CD, Docker, MERN stack, infrastructure automation",
+  "articleSection": [
+    "DevOps",
+    "Infrastructure",
+    "CI/CD",
+    "Cloud Architecture"
+  ],
+  "inLanguage": "en",
+  "isAccessibleForFree": "True",
+  "author_name": "Aymen ben Yedder",
+  "publisher_name": "AYMEN.DEV"
+}
+  </script>
+
+  
+    <script type="application/ld+json">
+    {
+      "@context": "https://schema.org",
+      "@type": "BreadcrumbList",
+      "itemListElement": [
+        {"@type":"ListItem","position":1,"name":"Home","item":"https://aymen.benyedder.top/"},
+        {"@type":"ListItem","position":2,"name":"Blog","item":"https://aymen.benyedder.top/blog/"},
+        {"@type":"ListItem","position":3,"name":"Building a MERN Stack Application: A Complete Guide","item":"https://aymen.benyedder.top/blog/sample-post.html"}
+      ]
+    }
+    </script>
+  
+  <!-- CSS Files -->
+  <link rel="stylesheet" href="../css/styles.min.css">
+  
+  <!-- Blog Post Styles -->
+  <style>
+    /* Reading progress bar */
+    #reading-progress {
+      position: fixed;
+      top: 0;
+      left: 0;
+      height: 3px;
+      background: linear-gradient(90deg, var(--accent-primary), var(--accent-secondary));
+      width: 0;
+      z-index: var(--z-sticky);
+    }
+
+    /* Article layout */
+    article {
+      max-width: 900px;
+      margin: 0 auto;
+      padding: 0 var(--space-md);
+    }
+
+    /* Article header */
+    .article-header {
+      margin-bottom: var(--space-2xl);
+      text-align: center;
+    }
+
+    .article-header h1 {
+      font-size: var(--text-3xl);
+      margin-bottom: var(--space-md);
+      color: var(--text-primary);
+    }
+
+    .article-meta {
+      display: flex;
+      justify-content: center;
+      align-items: center;
+      gap: var(--space-md);
+      flex-wrap: wrap;
+      color: var(--text-secondary);
+      margin-bottom: var(--space-lg);
+      font-size: var(--text-sm);
+      padding-bottom: var(--space-lg);
+      border-bottom: 1px solid var(--glass-border);
+    }
+
+    .article-meta time {
+      font-weight: 600;
+    }
+
+    .article-badges {
+      display: flex;
+      flex-wrap: wrap;
+      gap: var(--space-sm);
+      justify-content: center;
+      margin-bottom: var(--space-lg);
+    }
+
+    /* Article content */
+    .article-content {
+      line-height: 1.8;
+      color: var(--text-primary);
+    }
+
+    .article-content h2 {
+      font-size: var(--text-2xl);
+      margin-top: var(--space-2xl);
+      margin-bottom: var(--space-md);
+      color: var(--accent-primary);
+      padding-top: var(--space-md);
+      border-top: 1px solid var(--glass-border);
+    }
+
+    .article-content h3 {
+      font-size: var(--text-lg);
+      margin-top: var(--space-lg);
+      margin-bottom: var(--space-sm);
+      color: var(--text-primary);
+    }
+
+    .article-content p {
+      margin-bottom: var(--space-md);
+      color: var(--text-secondary);
+    }
+
+    .article-content ul,
+    .article-content ol {
+      margin-left: var(--space-lg);
+      margin-bottom: var(--space-md);
+    }
+
+    .article-content li {
+      margin-bottom: var(--space-sm);
+      color: var(--text-secondary);
+    }
+
+    .article-content strong {
+      color: var(--accent-primary);
+      font-weight: 700;
+    }
+
+    /* Highlighted sections */
+    .highlight-section {
+      background: rgba(0, 212, 255, 0.05);
+      border-left: 4px solid var(--accent-primary);
+      padding: var(--space-lg);
+      border-radius: var(--radius-md);
+      margin: var(--space-lg) 0;
+    }
+
+    /* Table of Contents */
+    #table-of-contents {
+      background: var(--glass-bg);
+      border: 1px solid var(--glass-border);
+      border-radius: var(--radius-md);
+      padding: var(--space-lg);
+      margin-bottom: var(--space-2xl);
+    }
+
+    #table-of-contents h3 {
+      margin-top: 0;
+      margin-bottom: var(--space-md);
+      color: var(--accent-primary);
+    }
+
+    #table-of-contents ul {
+      list-style: none;
+      padding: 0;
+      margin: 0;
+    }
+
+    #table-of-contents li {
+      margin-bottom: var(--space-sm);
+    }
+
+    .toc-link {
+      color: var(--accent-primary);
+      text-decoration: none;
+      transition: color var(--transition-base);
+      display: block;
+      padding: var(--space-xs) 0;
+    }
+
+    .toc-link:hover,
+    .toc-link.active {
+      color: var(--accent-secondary);
+      font-weight: 600;
+    }
+
+    /* Glossary section */
+    .glossary-section {
+      background: var(--glass-bg);
+      border: 1px solid var(--glass-border);
+      border-radius: var(--radius-md);
+      padding: var(--space-lg);
+      margin: var(--space-2xl) 0;
+    }
+
+    .glossary-section h3 {
+      color: var(--accent-primary);
+      margin-top: 0;
+    }
+
+    .glossary-list {
+      display: grid;
+      gap: var(--space-lg);
+    }
+
+    .glossary-list dt {
+      font-weight: 700;
+      color: var(--accent-primary);
+      margin-top: var(--space-md);
+    }
+
+    .glossary-list dd {
+      margin-left: var(--space-md);
+      margin-bottom: 0;
+      color: var(--text-secondary);
+    }
+
+    /* Animated scroll element */
+    .animate-on-scroll {
+      opacity: 0;
+      transform: translateY(20px);
+      transition: all var(--transition-base);
+    }
+
+    .animate-on-scroll.animated {
+      opacity: 1;
+      transform: translateY(0);
+    }
+
+    /* Related articles */
+    .related-articles {
+      display: grid;
+      grid-template-columns: repeat(auto-fit, minmax(250px, 1fr));
+      gap: var(--space-lg);
+      margin-top: var(--space-2xl);
+    }
+
+    .related-article-card {
+      padding: var(--space-lg);
+    }
+
+    .related-article-card h4 {
+      margin-top: 0;
+      color: var(--accent-primary);
+    }
+
+    /* Share buttons */
+    .share-buttons {
+      display: flex;
+      gap: var(--space-md);
+      justify-content: center;
+      margin: var(--space-2xl) 0;
+      flex-wrap: wrap;
+    }
+
+    .share-btn {
+      padding: var(--space-sm) var(--space-md);
+      background: var(--glass-bg);
+      border: 1px solid var(--glass-border);
+      color: var(--accent-primary);
+      border-radius: var(--radius-md);
+      cursor: pointer;
+      transition: all var(--transition-base);
+      text-decoration: none;
+      display: inline-flex;
+      align-items: center;
+      gap: var(--space-xs);
+    }
+
+    .share-btn:hover {
+      background: rgba(0, 212, 255, 0.1);
+      border-color: var(--accent-primary);
+    }
+  </style>
+  
+  <!-- Skip to Main Content Link -->
+  <style>
+    .skip-link {
+      position: absolute;
+      top: -40px;
+      left: 0;
+      background: var(--accent-primary);
+      color: var(--bg-primary);
+      padding: var(--space-sm) var(--space-md);
+      text-decoration: none;
+      z-index: var(--z-modal);
+      border-radius: var(--radius-md);
+    }
+    
+    .skip-link:focus {
+      top: 0;
+    }
+  </style>
+</head>
+<body>
+  <!-- Reading Progress Bar -->
+  <div id="reading-progress"></div>
+  
+  <!-- Skip to Main Content -->
+  <a href="#main" class="skip-link">Skip to main content</a>
+
+  <!-- Navigation -->
+  <div class="nav-container">
+      <nav class="nav-hub">
+          <!-- Brand -->
+          <div class="nav-logo-area">
+              <a href="../index.html" class="nav-logo">AYMEN<span>.DEV</span></a>
+          </div>
+
+          <!-- Links -->
+          <ul class="nav-links">
+              <li class="nav-item"><a href="../index.html" class="nav-link">Home</a></li>
+              <li class="nav-item"><a href="../index.html#skills" class="nav-link">Skills</a></li>
+              <li class="nav-item"><a href="../index.html#experience" class="nav-link">Experience</a></li>
+              <li class="nav-item"><a href="../services/mern-development.html" class="nav-link">MERN</a></li>
+              <li class="nav-item"><a href="../services/wordpress-development.html" class="nav-link">WordPress</a></li>
+              <li class="nav-item"><a href="index.html" class="nav-link active">Blog</a></li>
+              <li class="nav-item"><a href="../index.html#contact" class="nav-link">Contact</a></li>
+              <!-- Mobile Only (Hidden on Desktop) -->
+              <li class="nav-item mobile-item"><a href="index.html" class="nav-link">Blog</a></li>
+          </ul>
+
+          <!-- Actions -->
+          <div class="nav-actions">
+              <button id="theme-toggle" class="theme-btn-mini desktop-only" aria-label="Toggle Dark Mode">
+                  <svg class="sun-icon" width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor"
+                      stroke-width="2" stroke-linecap="round" stroke-linejoin="round">
+                      <circle cx="12" cy="12" r="5"></circle>
+                      <line x1="12" y1="1" x2="12" y2="3"></line>
+                      <line x1="12" y1="21" x2="12" y2="23"></line>
+                      <line x1="4.22" y1="4.22" x2="5.64" y2="5.64"></line>
+                      <line x1="18.36" y1="18.36" x2="19.78" y2="19.78"></line>
+                      <line x1="1" y1="12" x2="3" y2="12"></line>
+                      <line x1="21" y1="12" x2="23" y2="12"></line>
+                      <line x1="4.22" y1="19.78" x2="5.64" y2="18.36"></line>
+                      <line x1="18.36" y1="5.64" x2="19.78" y2="4.22"></line>
+                  </svg>
+                  <svg class="moon-icon" width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor"
+                      stroke-width="2" stroke-linecap="round" stroke-linejoin="round" style="display:none;">
+                      <path d="M21 12.79A9 9 0 1 1 11.21 3 7 7 0 0 0 21 12.79z"></path>
+                  </svg>
+              </button>
+
+              <!-- Mobile Toggle -->
+              <button class="nav-toggle mobile-only" aria-label="Open Menu" aria-expanded="false">
+                  <svg width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
+                      <path d="M3 12h18M3 6h18M3 18h18" />
+                  </svg>
+              </button>
+          </div>
+
+          <!-- CTA -->
+          <div class="nav-cta desktop-only">
+              <a href="../index.html#contact" class="btn-spotlight">Let's Talk</a>
+          </div>
+      </nav>
+
+      <!-- Mobile Dropdown Menu -->
+      <div class="nav-menu mobile-menu-dropdown">
+          <ul class="mobile-nav-links">
+              <li><a href="../index.html" class="nav-link">Home</a></li>
+              <li><a href="../index.html#skills" class="nav-link">Skills</a></li>
+              <li><a href="../index.html#experience" class="nav-link">Experience</a></li>
+              <li><a href="../services/mern-development.html" class="nav-link">MERN</a></li>
+              <li><a href="../services/wordpress-development.html" class="nav-link">WordPress</a></li>
+              <li><a href="index.html" class="nav-link">Blog</a></li>
+              <li><a href="../index.html#contact" class="nav-link">Contact</a></li>
+
+              <!-- Divider -->
+              <li style="border-top: 1px solid var(--border-light); margin: 8px 0; padding-top: 8px;"></li>
+
+              <!-- Mobile Actions (Regrouped) -->
+              <li class="mobile-action-item">
+                  <button class="mobile-theme-toggle nav-link" style="justify-content: center; width: 100%;">
+                      <span style="margin-right: 8px;">Switch Theme</span>
+                      <svg class="sun-icon" width="18" height="18" viewBox="0 0 24 24" fill="none"
+                          stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round">
+                          <circle cx="12" cy="12" r="5"></circle>
+                          <line x1="12" y1="1" x2="12" y2="3"></line>
+                          <line x1="12" y1="21" x2="12" y2="23"></line>
+                          <line x1="4.22" y1="4.22" x2="5.64" y2="5.64"></line>
+                          <line x1="18.36" y1="18.36" x2="19.78" y2="19.78"></line>
+                          <line x1="1" y1="12" x2="3" y2="12"></line>
+                          <line x1="21" y1="12" x2="23" y2="12"></line>
+                          <line x1="4.22" y1="19.78" x2="5.64" y2="18.36"></line>
+                          <line x1="18.36" y1="5.64" x2="19.78" y2="4.22"></line>
+                      </svg>
+                      <svg class="moon-icon" width="18" height="18" viewBox="0 0 24 24" fill="none"
+                          stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"
+                          style="display:none;">
+                          <path d="M21 12.79A9 9 0 1 1 11.21 3 7 7 0 0 0 21 12.79z"></path>
+                      </svg>
+                  </button>
+              </li>
+              <li>
+                  <a href="../index.html#contact" class="btn-spotlight" style="justify-content: center; width: 100%;">Let's Talk</a>
+              </li>
+          </ul>
+      </div>
+  </div>
+  
+  <!-- Breadcrumb Navigation -->
+  <div style="background: var(--bg-secondary); border-bottom: 1px solid var(--glass-border); padding: var(--space-md) 0;">
+    <div class="container">
+      <nav style="font-size: var(--text-sm); color: var(--text-secondary);">
+        <a href="../index.html" class="nav-link" style="color: var(--accent-primary);">Home</a>
+        <span style="margin: 0 var(--space-sm);">â€º</span>
+        <a href="index.html" class="nav-link" style="color: var(--accent-primary);">Blog</a>
+        <span style="margin: 0 var(--space-sm);">â€º</span>
+        <span>Building a MERN Stack Application</span>
+      </nav>
+    </div>
+  </div>
+  
+  <!-- Main Content -->
+  <main id="main">
+    <article>
+      <!-- Article Header -->
+      <header class="article-header">
+        <h1>Building a MERN Stack Application: A Complete Guide</h1>
+        
+        <div class="article-meta">
+          <time datetime="2026-06-07">June 7, 2026</time>
+          <span>â€¢</span>
+          <span>8 min read</span>
+          <span>â€¢</span>
+          <span>By <strong>Full-Stack Developer</strong></span>
+        </div>
+        
+        <div class="article-badges">
+          <span class="badge">React</span>
+          <span class="badge">Node.js</span>
+          <span class="badge">MongoDB</span>
+          <span class="badge">Express</span>
+        </div>
+      </header>
+      
+      <!-- Table of Contents -->
+      <div id="table-of-contents">
+        <h3>Table of Contents</h3>
+        <!-- Auto-generated by main.js -->
+      </div>
+      
+      <!-- Article Content -->
+      <div class="article-content animate-on-scroll">
+        <h2>Introduction</h2>
+        <p>
+          The MERN Stack has become one of the most popular technology stacks for building modern web applications.
+          It provides a complete ecosystem for developing full-stack JavaScript applications with a powerful frontend,
+          scalable backend, and flexible database.
+        </p>
+        <p>
+          In this comprehensive guide, we'll walk through building a complete MERN Stack application from initial setup
+          through deployment. You'll learn how each component works together and best practices for production-ready code.
+        </p>
+        
+        <h2>Prerequisites</h2>
+        <p>Before starting, you should have:</p>
+        <ul>
+          <li>Solid understanding of JavaScript (ES6+)</li>
+          <li>Basic familiarity with React fundamentals</li>
+          <li>Understanding of Node.js and npm</li>
+          <li>Comfortable with command line/terminal</li>
+          <li>Basic knowledge of REST APIs</li>
+          <li>Node.js and npm installed on your system</li>
+        </ul>
+        
+        <h2>Project Architecture Overview</h2>
+        <p>
+          The MERN Stack is organized into distinct layers, each responsible for specific functionality:
+        </p>
+        <ul>
+          <li><strong>Frontend (React):</strong> User interface and client-side logic</li>
+          <li><strong>Backend (Node.js/Express):</strong> Server logic and API endpoints</li>
+          <li><strong>Database (MongoDB):</strong> Data persistence and retrieval</li>
+        </ul>
+        
+        <div class="highlight-section">
+          <strong>Architecture Pattern:</strong> The MERN Stack follows the MVC (Model-View-Controller) pattern,
+          where MongoDB models data, React provides the view, and Express controllers handle business logic.
+        </div>
+        
+        <h2>Setting Up Your Development Environment</h2>
+        <p>Start by creating a new MERN project:</p>
+        
+        <div class="code-block">
+          <div class="code-block-header">
+            <span class="code-language">Shell</span>
+          </div>
+          <pre><code>// Initialize npm project
+npm init -y
+
+// Install core dependencies
+npm install express mongoose cors dotenv
+npm install -D nodemon
+
+// Install frontend dependencies
+npx create-react-app client
+cd client
+npm install axios react-router-dom</code></pre>
+        </div>
+        
+        <h3>Server Structure</h3>
+        <p>Create a modular server structure for scalability:</p>
+        
+        <div class="code-block">
+          <div class="code-block-header">
+            <span class="code-language">JavaScript</span>
+          </div>
+          <pre><code>// server.js - Main entry point
+const express = require('express');
+const mongoose = require('mongoose');
+const cors = require('cors');
+require('dotenv').config();
+
+const app = express();
+
+// Middleware
+app.use(cors());
+app.use(express.json());
+
+// MongoDB Connection
+mongoose.connect(process.env.MONGODB_URI)
+  .then(() => console.log('MongoDB connected'))
+  .catch(err => console.log('MongoDB connection error:', err));
+
+// Start server
+const PORT = process.env.PORT || 5000;
+app.listen(PORT, () => {
+  console.log(`Server running on port ${PORT}`);
+});</code></pre>
+        </div>
+        
+        <h2>Database Design with MongoDB</h2>
+        <p>Design your MongoDB schemas carefully for optimal performance:</p>
+        
+        <div class="code-block">
+          <div class="code-block-header">
+            <span class="code-language">JavaScript</span>
+          </div>
+          <pre><code>// models/User.js
+const mongoose = require('mongoose');
+
+const userSchema = new mongoose.Schema({
+  name: { type: String, required: true },
+  email: { type: String, required: true, unique: true },
+  password: { type: String, required: true },
+  createdAt: { type: Date, default: Date.now },
+  updatedAt: { type: Date, default: Date.now }
+});
+
+module.exports = mongoose.model('User', userSchema);</code></pre>
+        </div>
+        
+        <h2>Building REST API Endpoints</h2>
+        <p>Create organized routes for your API endpoints:</p>
+        
+        <div class="code-block">
+          <div class="code-block-header">
+            <span class="code-language">JavaScript</span>
+          </div>
+          <pre><code>// routes/users.js
+const express = require('express');
+const router = express.Router();
+const User = require('../models/User');
+
+// GET all users
+router.get('/', async (req, res) => {
+  try {
+    const users = await User.find();
+    res.json(users);
+  } catch (error) {
+    res.status(500).json({ message: error.message });
+  }
+});
+
+// POST new user
+router.post('/', async (req, res) => {
+  const user = new User({
+    name: req.body.name,
+    email: req.body.email,
+    password: req.body.password
+  });
+
+  try {
+    const newUser = await user.save();
+    res.status(201).json(newUser);
+  } catch (error) {
+    res.status(400).json({ message: error.message });
+  }
+});
+
+module.exports = router;</code></pre>
+        </div>
+        
+        <h2>Building React Components</h2>
+        <p>Create reusable React components with proper state management:</p>
+        
+        <div class="code-block">
+          <div class="code-block-header">
+            <span class="code-language">JavaScript (JSX)</span>
+          </div>
+          <pre><code>// components/UserList.jsx
+import { useState, useEffect } from 'react';
+import axios from 'axios';
+
+function UserList() {
+  const [users, setUsers] = useState([]);
+  const [loading, setLoading] = useState(true);
+
+  useEffect(() => {
+    fetchUsers();
+  }, []);
+
+  const fetchUsers = async () => {
+    try {
+      const response = await axios.get('/api/users');
+      setUsers(response.data);
+      setLoading(false);
+    } catch (error) {
+      console.error('Error fetching users:', error);
+      setLoading(false);
+    }
+  };
+
+  if (loading) return <div>Loading...</div>;
+
+  return (
+    <div>
+      <h2>Users</h2>
+      <ul>
+        {users.map(user => (
+          <li key={user._id}>{user.name}</li>
+        ))}
+      </ul>
+    </div>
+  );
+}
+
+export default UserList;</code></pre>
+        </div>
+        
+        <h2>Technical Glossary</h2>
+        <p>Key concepts and terms used in MERN Stack development:</p>
+        
+        <div class="glossary-section">
+          <h3>MERN Stack Terminology</h3>
+          <dl class="glossary-list">
+            <dt>Middleware</dt>
+            <dd>Functions in Express that process requests before they reach route handlers. Examples include CORS validation and JSON parsing.</dd>
+            
+            <dt>Schema</dt>
+            <dd>A MongoDB schema defines the structure of documents in a collection, specifying fields, types, and validation rules.</dd>
+            
+            <dt>RESTful API</dt>
+            <dd>An API architecture using HTTP methods (GET, POST, PUT, DELETE) to perform operations on resources identified by URLs.</dd>
+            
+            <dt>Component Lifecycle</dt>
+            <dd>In React, the series of methods called in a predictable order during component creation, updating, and destruction.</dd>
+            
+            <dt>Hooks</dt>
+            <dd>React Hooks like useState and useEffect allow functional components to have state and side effects without using class components.</dd>
+            
+            <dt>Async/Await</dt>
+            <dd>JavaScript syntax for handling asynchronous operations that makes code more readable than traditional promise chains.</dd>
+          </dl>
+        </div>
+        
+        <h2>Best Practices</h2>
+        <ul>
+          <li>
+            <strong>Error Handling:</strong> Always wrap database operations in try-catch blocks to handle errors gracefully
+          </li>
+          <li>
+            <strong>Environment Variables:</strong> Store sensitive data like API keys and database URLs in .env files
+          </li>
+          <li>
+            <strong>Code Organization:</strong> Separate concerns into models, routes, controllers, and middleware directories
+          </li>
+          <li>
+            <strong>Input Validation:</strong> Validate all user input both on the client and server side
+          </li>
+          <li>
+            <strong>Authentication:</strong> Use JWT tokens for secure API authentication and authorization
+          </li>
+          <li>
+            <strong>Performance:</strong> Use pagination for large datasets and implement caching where appropriate
+          </li>
+        </ul>
+        
+        <h2>Deployment</h2>
+        <p>
+          Once your application is ready, deploy it to production using platforms like:
+        </p>
+        <ul>
+          <li>Heroku for simple full-stack deployments</li>
+          <li>Vercel for React frontend with serverless backend</li>
+          <li>AWS EC2 for more control and scalability</li>
+          <li>DigitalOcean for affordable VPS hosting</li>
+        </ul>
+        
+        <div class="code-block">
+          <div class="code-block-header">
+            <span class="code-language">Shell</span>
+          </div>
+          <pre><code>// Prepare for production
+// 1. Build React app
+cd client
+npm run build
+
+// 2. Serve static files from Express
+app.use(express.static('client/build'));
+
+// 3. Set NODE_ENV=production
+export NODE_ENV=production
+
+// 4. Deploy to your hosting platform</code></pre>
+        </div>
+
+        <!-- CSS Example Code Block -->
+        <div class="code-block">
+          <div class="code-block-header">
+            <span class="code-language">CSS</span>
+          </div>
+          <pre><code>/* Responsive container */
+.container {
+  max-width: 1200px;
+  margin: 0 auto;
+  padding: 0 1rem;
+}
+
+@media (max-width: 600px) {
+  .container {
+    padding: 0 0.5rem;
+  }
+}</code></pre>
+        </div>
+
+        <!-- JSON Example: package.json snippet -->
+        <div class="code-block">
+          <div class="code-block-header">
+            <span class="code-language">JSON</span>
+          </div>
+          <pre><code>{
+  "name": "my-mern-app",
+  "version": "1.0.0",
+  "scripts": {
+    "start": "node server.js",
+    "dev": "nodemon server.js"
+  },
+  "dependencies": {
+    "express": "^4.18.2",
+    "mongoose": "^6.0.0"
+  }
+}</code></pre>
+        </div>
+
+        <h2>Conclusion</h2>
+
+        <!-- Glossary additions: Virtual DOM, ORM, JWT -->
+        <div class="glossary-section">
+          <h3>MERN Stack Terminology</h3>
+          <dl class="glossary-list">
+            <dt>Virtual DOM</dt>
+            <dd>An in-memory tree representation of the UI used by libraries like React for efficient DOM updates by diffing and reconciling changes.</dd>
+
+            <dt>ORM</dt>
+            <dd>Object-Relational Mapping (ORM) is a technique for mapping database tables to programming language objects. For MongoDB, projects often use an ODM (Object Document Mapper) such as Mongoose to enforce schema and validation.</dd>
+
+            <dt>JWT</dt>
+            <dd>JSON Web Tokens (JWT) are compact tokens used for stateless authentication, containing claims that can be validated and signed to secure API access.</dd>
+          </dl>
+        </div>
+
+        
+        <p>
+          The MERN Stack provides a complete, modern solution for building web applications with JavaScript across
+          all layers. By following these practices and patterns, you can build scalable, maintainable applications
+          that deliver excellent user experiences.
+        </p>
+        <p>
+          The key to success is understanding how each component works together and building with scalability in mind
+          from the start. Start small, test thoroughly, and gradually add more complex features as your application grows.
+        </p>
+        
+        <div class="highlight-section" style="background: linear-gradient(135deg, rgba(0, 212, 255, 0.1), rgba(0, 153, 204, 0.1));">
+          <h3 style="margin-top: 0; color: var(--accent-primary);">Need Professional MERN Development?</h3>
+          <p style="margin-bottom: var(--space-md);">
+            If you'd like help building your next MERN Stack application or need to scale an existing project,
+            let's work together to create something amazing.
+          </p>
+          <div style="display: flex; gap: var(--space-md); flex-wrap: wrap;">
+            <a href="../services/mern-development.html" class="btn btn-primary">MERN Development Services</a>
+            <a href="../index.html#contact" class="btn btn-secondary">Get in Touch</a>
+          </div>
+        </div>
+      </div>
+      
+      <!-- Share Buttons -->
+      <div class="share-buttons">
+        <a href="https://twitter.com/intent/tweet?url=https://aymen.benyedder.top/blog/sample-post.html&text=Building%20a%20MERN%20Stack%20Application" class="share-btn" aria-label="Share on Twitter" target="_blank" rel="noopener">
+          <span>Share on Twitter</span>
+        </a>
+        <a href="https://www.linkedin.com/sharing/share-offsite/?url=https://aymen.benyedder.top/blog/sample-post.html" class="share-btn" aria-label="Share on LinkedIn" target="_blank" rel="noopener">
+          <span>Share on LinkedIn</span>
+        </a>
+        <a href="https://www.facebook.com/sharer/sharer.php?u=https://aymen.benyedder.top/blog/sample-post.html" class="share-btn" aria-label="Share on Facebook" target="_blank" rel="noopener">
+          <span>Share on Facebook</span>
+        </a>
+      </div>
+      
+      <!-- Related Articles -->
+      <section style="margin-top: var(--space-2xl); padding-top: var(--space-2xl); border-top: 1px solid var(--glass-border);">
+        <h2 style="text-align: center; color: var(--accent-primary); margin-bottom: var(--space-lg);">Related Articles</h2>
+        <div class="related-articles">
+          <article class="glass-card related-article-card animate-on-scroll">
+            <h4>React Hooks Deep Dive</h4>
+            <p class="text-secondary" style="font-size: var(--text-sm); margin-bottom: var(--space-md);">
+              Master React Hooks including useState, useEffect, and custom hooks for powerful state management.
+            </p>
+            <a href="sample-post.html" class="btn btn-ghost" style="font-size: var(--text-sm);">Read More â†’</a>
+          </article>
+          
+          <article class="glass-card related-article-card animate-on-scroll">
+            <h4>MongoDB Schema Design</h4>
+            <p class="text-secondary" style="font-size: var(--text-sm); margin-bottom: var(--space-md);">
+              Learn database design best practices and schema optimization for MongoDB applications.
+            </p>
+            <a href="index.html" class="btn btn-ghost" style="font-size: var(--text-sm);">Read More â†’</a>
+          </article>
+          
+          <article class="glass-card related-article-card animate-on-scroll">
+            <h4>Web Performance Optimization</h4>
+            <p class="text-secondary" style="font-size: var(--text-sm); margin-bottom: var(--space-md);">
+              Achieve 100/100 Lighthouse scores with optimization techniques for React applications.
+            </p>
+            <a href="index.html" class="btn btn-ghost" style="font-size: var(--text-sm);">Read More â†’</a>
+          </article>
+        </div>
+      </section>
+    </article>
+  </main>
+  
+  <!-- Footer: Industrial Premium Design -->
+  <footer class="footer-industrial">
+    <div class="container">
+      <div class="footer-grid">
+        <!-- Column 1: Brand & Philosophy -->
+        <div class="footer-col brand-col">
+          <a href="../index.html" class="footer-logo">
+            AYMEN<span class="text-accent">.DEV</span>
+          </a>
+          <p class="footer-desc">
+            Full-stack developer sharing knowledge on MERN Stack, WordPress, and web development best practices.
+          </p>
+          <div class="social-links">
+            <a href="https://github.com/Aymen-benYedder" aria-label="GitHub" class="social-link">GH</a>
+            <a href="https://www.linkedin.com/in/aymenby" aria-label="LinkedIn" class="social-link">LI</a>
+            <a href="https://x.com/AymenYedder" aria-label="X" class="social-link">TW</a>
+          </div>
+        </div>
+
+        <!-- Column 2: Navigation -->
+        <div class="footer-col">
+          <h4 class="footer-heading">NAVIGATION</h4>
+          <ul class="footer-links">
+            <li><a href="../index.html">Home Base</a></li>
+            <li><a href="../index.html#skills">Capabilities</a></li>
+            <li><a href="../index.html#experience">Track Record</a></li>
+            <li><a href="../index.html#case-studies">Case Studies</a></li>
+          </ul>
+        </div>
+
+        <!-- Column 3: Services -->
+        <div class="footer-col">
+          <h4 class="footer-heading">SERVICES</h4>
+          <ul class="footer-links">
+            <li><a href="../services/mern-development.html">MERN Stack</a></li>
+            <li><a href="../services/wordpress-development.html">WordPress</a></li>
+            <li><a href="../index.html#contact">Consulting</a></li>
+            <li><a href="index.html">Technical Writing</a></li>
+          </ul>
+        </div>
+
+        <!-- Column 4: Status -->
+        <div class="footer-col">
+          <h4 class="footer-heading">STATUS</h4>
+          <div class="status-widget">
+            <div class="status-row">
+              <span class="status-dot online"></span>
+              <span class="status-label">Open for work</span>
+            </div>
+            <p class="status-note">
+              Currently accepting new projects for Q1 2025.
+            </p>
+            <a href="../index.html#contact" class="btn btn-sm btn-primary">Start Project</a>
+          </div>
+        </div>
+      </div>
+
+      <div class="footer-bottom">
+        <div class="footer-legal">
+          &copy; 2026 Aymen ben Yedder. All rights reserved.
+        </div>
+        <div class="footer-meta">
+          <span>V 2.0.4 (STABLE)</span>
+          <span class="separator">|</span>
+          <span>TUNISIA</span>
+        </div>
+      </div>
+    </div>
+  </footer>
+  
+  <!-- Scroll to Top Button -->
+  <button id="scroll-to-top" class="btn btn-primary" aria-label="Scroll to top" style="position: fixed; bottom: 20px; right: 20px; display: none; z-index: var(--z-sticky); padding: var(--space-sm); width: 48px; height: 48px; border-radius: 50%; font-size: var(--text-lg);">â†‘</button>
+  
+  <!-- Script: Main Interactivity (minified) -->
+  <script src="../js/main.min.js" defer></script>
+  
+  <!-- Script: GEO Personalization (minified) -->
+  <script src="../js/geo.min.js" defer></script>
+</body>
+</html>
+

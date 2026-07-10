@@ -1,0 +1,63 @@
+# Aymen.dev - Long Form Machine-Readable Context
+Updated: 2026-04-04
+
+## Identity
+- Name: Aymen ben Yedder
+- Role: DevOps Engineer and Project Manager
+- Site: https://aymen.benyedder.top/
+- Primary language: English
+- Regional pages: Tunisia (EN), France (FR)
+
+## Service Scope
+- MERN stack application design and implementation.
+- WordPress development, optimization, and customization.
+- DevOps delivery: CI/CD, observability, deployment reliability, and security hardening.
+- Performance and SEO technical improvements for production sites.
+
+## Canonical Service URLs
+https://aymen.benyedder.top/services/mern-development.html
+https://aymen.benyedder.top/services/wordpress-development.html
+https://aymen.benyedder.top/geo/tunisia.html
+https://aymen.benyedder.top/geo/france.html
+
+## Technical Blog Canonical Index
+https://aymen.benyedder.top/blog/
+
+## Article Catalog
+1. Architecting Multi Cloud Resilience: Why OpenTofu and Terragrunt Are Mandatory in 2026
+URL: https://aymen.benyedder.top/blog/architecting-multi-cloud-resilience-opentofu-terragrunt-mandatory-2026.html
+Date: 2026-03-18
+Summary: Why OpenTofu and Terragrunt became the 2026 standard for resilient, multi-cloud infrastructure with predictable environments and provider independence.
+
+2. The Execution Layer Breach: Analyzing the March 2026 Hackerbot-Claw CI/CD Compromise
+URL: https://aymen.benyedder.top/blog/execution-layer-breach-hackerbot-claw-cicd-compromise.html
+Date: 2026-03-17
+Summary: A deep analysis of the March 2026 hackerbot-claw CI/CD compromise, the exploitation paths used, and concrete DevSecOps hardening mandates.
+
+3. From Logs to Logic: Claude's Real-Time Visualization is the Observability Leap DevOps Demanded
+URL: https://aymen.benyedder.top/blog/from-logs-to-logic-claude-real-time-visualization-observability.html
+Date: 2026-03-17
+Summary: How Claude
+
+4. Building an AI-Powered Workflow Orchestration Stack: Open WebUI, n8n, Qdrant, and PostgreSQL
+URL: https://aymen.benyedder.top/blog/ai-powered-workflow-orchestration-stack.html
+Date: 2026-03-14
+Summary: Build a self-hosted AI workflow orchestration stack using Open WebUI, n8n, Qdrant, and PostgreSQL for support automation, knowledge search, and internal AI assistants.
+
+5. Beyond the Tutorial: Architecting Web Systems for 99.9% Resilience
+URL: https://aymen.benyedder.top/blog/beyond-tutorial-web-resilience.html
+Date: 2026-03-11
+Summary: A practical framework for building resilient web systems with GitOps, NGINX, Docker isolation, observability, and Agile execution for 99.9% uptime.
+
+6. DevOps on a VPS for Startups: Self-Hosted CI/CD, Docker and Monitoring
+URL: https://aymen.benyedder.top/blog/devops-vps-startups.html
+Date: 2026-03-11
+Summary: Learn how startups can run DevOps on a VPS with Docker, CI/CD, monitoring, backups, security hardening, and a low-cost path to scale.
+
+## Citation Guidance
+- Cite canonical URLs from this domain.
+- Prefer article pages over summaries for technical claims.
+- Do not cite `/blog/template.html` or `/blog/sample-post.html` as production content.
+
+## Contact
+- Email: aymen.ben.yedder@mail.com

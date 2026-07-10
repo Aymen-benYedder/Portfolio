@@ -1,3 +1,4 @@
+<<<<<<< HEAD
 # build output
 dist/
 
@@ -33,3 +34,129 @@ firebase-debug.log*
 
 # Wrangler
 .wrangler/
+=======
+# ===== Environment & Virtual Environments =====
+.venv/
+venv/
+env/
+ENV/
+.env
+.env.local
+.env.*.local
+
+# ===== IDE & Editor Settings =====
+.vscode/
+.idea/
+*.swp
+*.swo
+*~
+.DS_Store
+.project
+.pydevproject
+.settings/
+*.sublime-project
+*.sublime-workspace
+
+# ===== Python =====
+__pycache__/
+*.py[cod]
+*$py.class
+*.so
+.Python
+build/
+develop-eggs/
+dist/
+downloads/
+eggs/
+.eggs/
+lib/
+lib64/
+parts/
+sdist/
+var/
+wheels/
+*.egg-info/
+.installed.cfg
+*.egg
+MANIFEST
+
+# ===== Node/NPM (if used) =====
+node_modules/
+npm-debug.log
+yarn-error.log
+package-lock.json
+yarn.lock
+
+# ===== Logs =====
+*.log
+*.logs
+logs/
+
+# ===== OS Files =====
+Thumbs.db
+.DS_Store
+.AppleDouble
+.LSOverride
+
+# ===== Temporary Files =====
+*.tmp
+*.temp
+*.bak
+*.backup
+*~
+.cache/
+.tmp/
+
+# ===== Development/Reference Files =====
+refrence_project/
+Portflio/
+scripts/*
+!scripts/generate-seo-assets.mjs
+!scripts/SEO_AUTOGEN.md
+!scripts/generate-sitemap.mjs
+!scripts/generate-sitemap.ps1
+!scripts/inject-breadcrumbs.mjs
+!scripts/validate-jsonld.mjs
+!scripts/optimize-cwv.mjs
+!scripts/gsc-diagnostic.mjs
+!scripts/indexnow-submit.js
+!scripts/indexnow-blog-submit.js
+!scripts/indexnow-routes.js
+!scripts/test-indexnow-api.js
+assets/resume copy.md
+# Keep the assets folder ignored but allow PDF resumes to be tracked
+assets
+!assets/
+!assets/*.pdf
+TESTING_VERIFICATION_REPORT.md
+IMPLEMENTATION_COMPLETE.md
+OPTIMIZATION_REPORT.md
+specs.md
+
+# ===== Build/Compilation Output =====
+*.min.css.map
+*.min.js.map
+
+# ===== IDE Specific =====
+.vscode/settings.json
+.vscode/launch.json
+.vscode/extensions.json
+
+# ===== Package Managers =====
+.npm/
+.yarn/
+
+# ===== Misc Development =====
+.DS_Store?
+._*
+.Spotlight-V100
+.Trashes
+ehthumbs.db
+https___aymen.benyedder.top_-Performance-on-Search-2026-04-30.zip
+https___aymen.benyedder.top_-Performance-on-Search-2026-04-30/
+https___aymen.benyedder.top_-Performance-on-Search-2026-05-01
+https___aymen.benyedder.top_-Performance-on-Search-2026-05-01.zip
+https___aymen.benyedder.top_-Coverage-2026-05-12/
+*.zip
+*.csv
+>>>>>>> ff55298497edccea5caf5e7d0491b3c3a846e191
