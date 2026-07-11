@@ -120,40 +120,6 @@ import AsciiGlobe from '@components/AsciiGlobe.astro';
       <TerminalAbout client:load />
     </div>
 
-    <!-- ===== Proof Metrics (grid with staggered cards) ===== -->
-    <div class="grid grid-cols-2 md:grid-cols-4 gap-[var(--spacing-gap-md)] mt-[var(--spacing-gap-xl)] max-w-[900px]">
-      <div class="card-premium px-[var(--spacing-gap-md)] py-[var(--spacing-gap-md)] border-t-2 border-t-[var(--accent)]" data-stagger-hero style="--stagger-delay: 300ms">
-        <svg width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" class="text-[var(--accent)] mb-[var(--spacing-gap-xs)] animate-levitate">
-          <path d="M22 11.08V12a10 10 0 1 1-5.93-9.14"></path>
-          <polyline points="22 4 12 14.01 9 11.01"></polyline>
-        </svg>
-        <span class="block font-[family-name:var(--font-mono)] text-[var(--text-2xs)] text-[var(--text-3)] uppercase tracking-[0.08em]">Projects</span>
-        <span class="block font-[family-name:var(--font-mono)] text-[26px] font-bold text-[var(--text-1)]">24+</span>
-      </div>
-      <div class="card-premium px-[var(--spacing-gap-md)] py-[var(--spacing-gap-md)] border-t-2 border-t-[var(--accent)]" data-stagger-hero style="--stagger-delay: 380ms">
-        <svg width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" class="text-[var(--accent)] mb-[var(--spacing-gap-xs)] animate-levitate" style="animation-delay:-1s">
-          <polyline points="22 12 18 12 15 21 9 3 6 12 2 12"></polyline>
-        </svg>
-        <span class="block font-[family-name:var(--font-mono)] text-[var(--text-2xs)] text-[var(--text-3)] uppercase tracking-[0.08em]">Uptime</span>
-        <span class="block font-[family-name:var(--font-mono)] text-[26px] font-bold text-[var(--text-1)]">99.9%</span>
-      </div>
-      <div class="card-premium px-[var(--spacing-gap-md)] py-[var(--spacing-gap-md)] border-t-2 border-t-[var(--accent)]" data-stagger-hero style="--stagger-delay: 460ms">
-        <svg width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" class="text-[var(--accent)] mb-[var(--spacing-gap-xs)] animate-levitate" style="animation-delay:-2s">
-          <path d="M13 2L3 14h9l-1 8 10-12h-9l1-8z"></path>
-        </svg>
-        <span class="block font-[family-name:var(--font-mono)] text-[var(--text-2xs)] text-[var(--text-3)] uppercase tracking-[0.08em]">Faster Deploy</span>
-        <span class="block font-[family-name:var(--font-mono)] text-[26px] font-bold text-[var(--text-1)]">65%</span>
-      </div>
-      <div class="card-premium px-[var(--spacing-gap-md)] py-[var(--spacing-gap-md)] border-t-2 border-t-[var(--accent)]" data-stagger-hero style="--stagger-delay: 620ms">
-        <svg width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" class="text-[var(--accent)] mb-[var(--spacing-gap-xs)] animate-levitate" style="animation-delay:-3s">
-          <circle cx="12" cy="12" r="10"></circle>
-          <polyline points="12 6 12 12 16 14"></polyline>
-        </svg>
-        <span class="block font-[family-name:var(--font-mono)] text-[var(--text-2xs)] text-[var(--text-3)] uppercase tracking-[0.08em]">Experience</span>
-        <span class="block font-[family-name:var(--font-mono)] text-[26px] font-bold text-[var(--text-1)]">8+ yrs</span>
-      </div>
-    </div>
-
     <!-- ===== Stats (animated on scroll) ===== -->
     <div class="mt-[var(--spacing-gap-xl)]" data-stagger-hero style="--stagger-delay: 700ms">
       <StatsSection client:visible />

@@ -3,6 +3,7 @@ import { AnimatedCounter } from '@components/ui/AnimatedCounter';
 const stats = [
   { end: 24, suffix: '+', label: 'Projects', sublabel: 'shipped to production' },
   { end: 8, suffix: '+ yrs', label: 'Experience', sublabel: 'production experience', accent: false },
+  { end: 65, suffix: '%', label: 'Faster Deploy', sublabel: 'average improvement across clients' },
   { end: 99.9, suffix: '%', label: 'Uptime', sublabel: '· last 12 months across managed infra', decimals: 1 },
 ];
 

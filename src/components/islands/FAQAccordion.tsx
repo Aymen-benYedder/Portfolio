@@ -25,10 +25,9 @@ export default function FAQAccordion({ items }: { items: FAQItem[] }) {
           </button>
           <div
             id={`faq-answer-${i}`}
-            hidden={openIndex !== i}
-            className="px-[var(--card-px)] pb-[16px] text-[var(--text-small)] text-[var(--text-2)] leading-relaxed"
+            className={`grid px-[var(--card-px)] text-[var(--text-small)] text-[var(--text-2)] leading-relaxed transition-all duration-300 ease-[cubic-bezier(0.16,1,0.3,1)] ${openIndex === i ? 'grid-rows-[1fr] pb-[16px]' : 'grid-rows-[0fr]'}`}
           >
-            {item.answer}
+            <div className="overflow-hidden">{item.answer}</div>
           </div>
         </div>
       ))}
