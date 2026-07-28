@@ -18,6 +18,460 @@
 
 export const staticPosts: StaticPost[] = [
   {
+    id: 'post-docker-security-2026',
+    title: 'Docker Security Hardening in 2026: From Dev Defaults to Production Fortress',
+    slug: 'docker-security-hardening-2026',
+    description: 'Container escapes, supply chain attacks, and misconfigured defaults are rampant. Here is a layered security hardening guide for Docker in 2026 — with practical configs, real CVEs, and production-grade tooling.',
+    publishedAt: '2026-07-28',
+    categories: ['DevOps', 'Security'],
+    tags: ['Docker', 'Container Security', 'DevSecOps', 'Supply Chain', 'Runtime Security', 'CIS Benchmark'],
+    readingTime: 15,
+    body: `<p>Seventy-six percent of containers run as root. Forty-one supply chain attacks happen every month. In 2025 alone, over 450,000 new malicious packages were discovered across npm, PyPI, Maven, and NuGet — a 75% year-over-year increase.<sup><a href="#fn1" id="fnref1">1</a></sup><sup><a href="#fn2" id="fnref2">2</a></sup></p>
+
+<p>Docker is the standard for packaging and shipping software. It is also, by default, insecure. The gap between "it works on my machine" and "it survives a motivated attacker" is not a feature toggle — it is a discipline. This article walks through seven hardening layers that transform a development-default container into something that can hold up in production, against real threats, in 2026.</p>
+
+<h2>The Threat Landscape Is Not Hypothetical</h2>
+
+<p>Before diving into mitigations, it is worth understanding what you are defending against. The container escape CVEs of the last two years are not theoretical — they are actively exploited.</p>
+
+<h3>2024: Leaky Vessels</h3>
+
+<p>A coordinated disclosure in January 2024 revealed five critical vulnerabilities across runc, BuildKit, and Docker Engine. CVE-2024-21626 in runc allowed container escape via a leaked file descriptor (<code>/proc/self/fd/7</code>), affecting virtually every container runtime built on runc. CVE-2024-41110 in Docker Engine bypassed AuthZ plugins entirely — meaning any plugin-based access control could be circumvented with a crafted API request.<sup><a href="#fn3" id="fnref3">3</a></sup></p>
+
+<h3>2025: runc Triple Threat</h3>
+
+<p>Three runc vulnerabilities disclosed in November 2025 — CVE-2025-31133 (CVSS 7.3), CVE-2025-52565, and CVE-2025-52881 — affected every runc version back to 1.0.0-rc3. CVE-2025-52881 enabled LSM bypass and arbitrary writes via procfs redirects. These were being actively exploited as of June 2026.<sup><a href="#fn4" id="fnref4">4</a></sup></p>
+
+<h3>2026: The Pattern Continues</h3>
+
+<p>CVE-2026-34040 (CVSS 8.8) in Docker Engine bypassed AuthZ enforcement using oversized requests. CVE-2026-41567 exploited decompression binary path hijacking to achieve host root access. CVE-2026-1483 enabled Kubernetes pod privilege escalation leading to cluster takeover. These are not edge cases — they are the norm.<sup><a href="#fn5" id="fnref5">5</a></sup><sup><a href="#fn6" id="fnref6">6</a></sup></p>
+
+<p>The attack surface is expanding. The cost is real: $80.6 billion annually from supply chain attacks alone, with 30% of all breaches involving third-party compromise.<sup><a href="#fn7" id="fnref7">7</a></sup></p>
+
+<h2>Layer 1: Image Hardening</h2>
+
+<p>The image is the unit of deployment. Every decision you make in the Dockerfile cascades into the running container's security posture.</p>
+
+<h3>Run as Non-Root</h3>
+
+<p>This is the single highest-impact change you can make. A container running as root that escapes to the host lands as root on the host. A container running as UID 1000 that escapes lands as an unprivileged user.</p>
+
+<pre><code class="language-dockerfile"># Create a non-root user
+RUN addgroup -g 1001 appgroup && \\
+    adduser -u 1001 -G appgroup -s /bin/sh -D appuser
+
+# Switch before CMD
+USER appuser
+
+CMD ["./app"]</code></pre>
+
+<p>In Kubernetes, enforce this at the pod level:</p>
+
+<pre><code class="language-yaml">securityContext:
+  runAsNonRoot: true
+  runAsUser: 1001
+  runAsGroup: 1001
+  fsGroup: 1001</code></pre>
+
+<h3>Read-Only Root Filesystem</h3>
+
+<p>A writable filesystem gives an attacker a place to write exploits, modify binaries, or store exfiltrated data. Make it read-only and mount explicit writable paths where needed.</p>
+
+<pre><code class="language-dockerfile">RUN chmod -R 555 /app
+
+# Writable directories for runtime data
+VOLUME /tmp /app/data</code></pre>
+
+<p>In Kubernetes:</p>
+
+<pre><code class="language-yaml">securityContext:
+  readOnlyRootFilesystem: true
+  allowPrivilegeEscalation: false
+  capabilities:
+    drop: ["ALL"]</code></pre>
+
+<h3>Drop All Capabilities</h3>
+
+<p>Linux capabilities give containers fine-grained root privileges. The default set includes capabilities that most applications never need — <code>CAP_NET_RAW</code> enables ICMP-based attacks, <code>CAP_SYS_ADMIN</code> enables mount operations, <code>CAP_SETUID</code> enables privilege escalation.</p>
+
+<p>Drop everything, then add back only what is required:</p>
+
+<pre><code class="language-dockerfile">RUN setcap -r /usr/bin/* 2>/dev/null || true
+
+# In Kubernetes
+securityContext:
+  capabilities:
+    drop: ["ALL"]
+    add: ["NET_BIND_SERVICE"]  # Only if binding port &lt; 1024</code></pre>
+
+<h3>Use Minimal Base Images</h3>
+
+<p>Every package in your base image is a potential vulnerability. Distroless images from Google contain only the application and its runtime dependencies — no shell, no package manager, no attack surface you do not need.</p>
+
+<pre><code class="language-dockerfile"># Instead of:
+FROM ubuntu:24.04  # ~78MB, 60+ packages
+
+# Use:
+FROM gcr.io/distroless/static-debian12  # ~2MB, zero packages
+FROM gcr.io/distroless/java21-debian12  # ~250MB, JRE only</code></pre>
+
+<h3>Multi-Stage Builds</h3>
+
+<p>Build tools, compilers, and test frameworks have no place in a production image. Multi-stage builds keep build dependencies out of the final image entirely.</p>
+
+<pre><code class="language-dockerfile">FROM golang:1.22 AS builder
+WORKDIR /src
+COPY . .
+RUN CGO_ENABLED=0 go build -o /app .
+
+FROM gcr.io/distroless/static-debian12
+COPY --from=builder /app /app
+CMD ["/app"]</code></pre>
+
+<h2>Layer 2: Supply Chain Security</h2>
+
+<p>41 supply chain attacks per month in late 2025. 86% of codebases contain open source vulnerabilities. 1.2 million cumulative malicious packages discovered across registries.<sup><a href="#fn2" id="fnref2">2</a></sup><sup><a href="#fn8" id="fnref8">8</a></sup> Supply chain security is not optional.</p>
+
+<h3>Generate SBOMs</h3>
+
+<p>A Software Bill of Materials is a machine-readable inventory of every component in your image. It is required by US Executive Order 14028 for federal software and will be mandatory under the EU Cyber Resilience Act by December 2027 — with vulnerability reporting obligations starting September 2026.<sup><a href="#fn9" id="fnref9">9</a></sup></p>
+
+<p><strong>Syft</strong> generates SBOMs in both CycloneDX and SPDX formats:</p>
+
+<pre><code class="language-bash"># Install
+curl -sSfL https://raw.githubusercontent.com/anchore/syft/main/install.sh | sh -s
+
+# Generate SBOM
+syft myapp:latest -o cyclonedx-json > sbom.json
+
+# Scan with Grype
+grype sbom:sbom.json --fail-on high</code></pre>
+
+<p><strong>Trivy</strong> does it all in one command:</p>
+
+<pre><code class="language-bash"># SBOM + vulnerability scan
+trivy image --format cyclonedx --output sbom.json myapp:latest
+trivy image --severity HIGH,CRITICAL --exit-code 1 myapp:latest</code></pre>
+
+<h3>Sign Your Images</h3>
+
+<p>Docker Content Trust is shutting down December 8, 2026. Brownouts started July 14, 2026. If you are still using DCT, migrate now.<sup><a href="#fn10" id="fnref10">10</a></sup></p>
+
+<p><strong>Cosign</strong> (part of Sigstore, a graduated OpenSSF project) is the replacement. It supports keyless signing via OIDC — no long-lived keys to rotate or leak.</p>
+
+<pre><code class="language-bash"># Keyless signing (uses OIDC identity)
+cosign sign --yes myregistry.io/myapp:v1.2.3
+
+# Verify before deploying
+cosign verify myregistry.io/myapp:v1.2.3
+
+# Sign an SBOM
+cosign attest --predicate sbom.json --type cyclonedx myregistry.io/myapp:v1.2.3</code></pre>
+
+<h3>Continuous Scanning with Docker Scout</h3>
+
+<p>Docker Scout monitors your images continuously — not just at build time. When a new CVE is published, Scout re-evaluates your existing images against 23 advisory databases and flags newly affected artifacts.<sup><a href="#fn11" id="fnref11">11</a></sup></p>
+
+<pre><code class="language-bash"># Scan for CVEs
+docker scout cves myapp:latest
+
+# Get fix recommendations
+docker scout recommendations myapp:latest
+
+# Compare two versions
+docker scout compare myapp:latest --to myapp:v1.1.0</code></pre>
+
+<h2>Layer 3: Runtime Security</h2>
+
+<p>Prevention is ideal. Detection is essential. Runtime security tools monitor container behavior in real-time and alert on anomalies — or in some cases, block them before damage occurs.</p>
+
+<h3>Falco: Detection at Scale</h3>
+
+<p>Falco is a CNCF graduated project that uses eBPF to monitor syscalls and detect suspicious behavior. It ships with 40+ rules mapped to MITRE ATT&CK for Containers techniques and routes alerts through Falcosidekick to 70+ destinations — Slack, PagerDuty, SIEM, or custom webhooks.<sup><a href="#fn12" id="fnref12">12</a></sup></p>
+
+<p>With the modern eBPF driver, CPU overhead is 1–5%. Falco does not block by default — it detects and alerts. Pair it with enforcement mechanisms for full protection.</p>
+
+<h3>Tetragon: Prevention in the Kernel</h3>
+
+<p>Tetragon, developed by Isovalent (now Cisco), takes a different approach. It uses eBPF not just for observation but for in-kernel enforcement via LSM hooks. It can kill processes, block syscalls, and drop packets before the action completes — with sub-1% CPU overhead.<sup><a href="#fn13" id="fnref13">13</a></sup></p>
+
+<p>For teams already running Cilium, Tetragon integrates natively. Its TracingPolicy CRDs define what to observe and what to enforce:</p>
+
+<pre><code class="language-yaml">apiVersion: cilium.io/v1alpha1
+kind: TracingPolicy
+metadata:
+  name: block-write-etc
+spec:
+  kprobes:
+  - call: fd_install
+    syscall: false
+    args:
+    - index: 1
+      type: file
+    selectors:
+    - matchArgs:
+      - index: 1
+        operator: Prefix
+        values:
+        - /etc/</code></pre>
+
+<h3>Use Seccomp Profiles</h3>
+
+<p>Seccomp restricts the syscalls a container can make. Docker ships a default profile that blocks ~44 of ~300 syscalls. For stricter control, use a custom profile or the <code>RuntimeDefault</code> profile in Kubernetes:</p>
+
+<pre><code class="language-yaml">securityContext:
+  seccompProfile:
+    type: RuntimeDefault</code></pre>
+
+<h2>Layer 4: Network Segmentation</h2>
+
+<p>By default, every container on the same Docker bridge network can communicate with every other container. This is the opposite of zero trust.</p>
+
+<h3>Default Deny-All</h3>
+
+<p>In Kubernetes, start with a default deny-all NetworkPolicy and add explicit allow rules:</p>
+
+<pre><code class="language-yaml">apiVersion: networking.k8s.io/v1
+kind: NetworkPolicy
+metadata:
+  name: default-deny-all
+  namespace: production
+spec:
+  podSelector: {}
+  policyTypes:
+  - Ingress
+  - Egress</code></pre>
+
+<p>Then whitelist only the traffic your application needs:</p>
+
+<pre><code class="language-yaml">apiVersion: networking.k8s.io/v1
+kind: NetworkPolicy
+metadata:
+  name: allow-api-to-db
+  namespace: production
+spec:
+  podSelector:
+    matchLabels:
+      app: api
+  policyTypes:
+  - Egress
+  egress:
+  - to:
+    - podSelector:
+        matchLabels:
+          app: postgres
+    ports:
+    - protocol: TCP
+      port: 5432</code></pre>
+
+<h3>Choose Your CNI Wisely</h3>
+
+<p>Not all CNIs enforce NetworkPolicy. The default Docker bridge does not. For production Kubernetes:</p>
+
+<ul>
+<li><strong>Cilium</strong> — eBPF-based, supports L7 policies, deep traffic visibility via Hubble, integrates with Tetragon for runtime enforcement</li>
+<li><strong>Calico</strong> — high-performance, supports both NetworkPolicy and extended policy types</li>
+<li><strong>Weave Net</strong> — simpler setup, built-in encryption</li>
+</ul>
+
+<h2>Layer 5: Automated Auditing</h2>
+
+<p>Manual security reviews do not scale. Automate baseline checks with Docker Bench Security, which implements the CIS Docker Benchmark v1.6.0.<sup><a href="#fn14" id="fnref14">14</a></sup></p>
+
+<pre><code class="language-bash"># Run from source (Hub image is deprecated)
+git clone https://github.com/docker/docker-bench-security.git
+cd docker-bench-security
+sudo sh docker-bench-security.sh</code></pre>
+
+<p>Docker Bench checks five categories: host configuration, daemon configuration, container runtime, image/build, and Docker Security Operations. It produces a pass/warn/info report against CIS sections 1.x through 5.x.</p>
+
+<p>Integrate it into CI/CD to catch regressions before they reach production:</p>
+
+<pre><code class="language-yaml"># GitHub Actions example
+- name: Run Docker Bench
+  run: |
+    docker run --net host --pid host --userns host --cap-add audit_control \\
+      -e DOCKER_CONTENT_TRUST=$DOCKER_CONTENT_TRUST \\
+      -v /var/lib:/var/lib:ro -v /var/run/docker.sock:/var/run/docker.sock \\
+      -v /usr/lib/systemd:/usr/lib/systemd:ro \\
+      docker/docker-bench-security</code></pre>
+
+<h2>Layer 6: Rootless Docker</h2>
+
+<p>Rootless Docker runs the daemon and all containers as an unprivileged user. If a container escapes, it lands as a mapped non-root user on the host — not as root.<sup><a href="#fn15" id="fnref15">15</a></sup></p>
+
+<p>It is production-ready in 2026 for most workloads, with Docker Engine v29 fully supporting rootless with containerd. The trade-offs: you cannot bind privileged ports below 1024 without additional configuration, and networking via <code>slirp4netns</code> has slight overhead compared to the standard bridge.</p>
+
+<pre><code class="language-bash"># Check if rootless is installed
+docker info | grep -i rootless
+
+# Install rootless (if not present)
+dockerd-rootless-setuptool.sh install
+
+# Verify
+docker context use rootless
+docker run --rm hello-world</code></pre>
+
+<p>Performance benchmarks show rootless Docker uses ~85MB memory versus ~100MB for traditional Docker, with slightly faster startup times (~0.8s vs ~1.2s). The security benefit — eliminating host-root from the container escape path — far outweighs the minor performance cost.</p>
+
+<h2>Layer 7: Kubernetes Pod Security Standards</h2>
+
+<p>Kubernetes 1.25 removed PodSecurityPolicy and replaced it with Pod Security Admission (PSA) and three Pod Security Standards profiles: Privileged, Baseline, and Restricted.<sup><a href="#fn16" id="fnref16">16</a></sup></p>
+
+<p>For production workloads, target the <strong>Restricted</strong> profile. It enforces every hardening practice covered in this article:</p>
+
+<pre><code class="language-yaml">apiVersion: v1
+kind: Namespace
+metadata:
+  name: production
+  labels:
+    pod-security.kubernetes.io/enforce: restricted
+    pod-security.kubernetes.io/enforce-version: latest
+    pod-security.kubernetes.io/audit: restricted
+    pod-security.kubernetes.io/warn: restricted</code></pre>
+
+<p>The graduation path: apply as <code>warn</code> first (logs violations without blocking), move to <code>audit</code> (logs for review), then enforce. Do this per-namespace to avoid breaking existing workloads.</p>
+
+<p>For policies beyond PSS — like requiring specific registries, blocking <code>latest</code> tags, or enforcing resource limits — use OPA Gatekeeper or Kyverno.</p>
+
+<h2>The Checklist</h2>
+
+<p>Here is the complete hardening checklist, organized by deployment phase:</p>
+
+<table>
+<thead>
+<tr><th>Phase</th><th>Action</th><th>Tool</th></tr>
+</thead>
+<tbody>
+<tr><td>Build</td><td>Non-root USER in Dockerfile</td><td>Dockerfile</td></tr>
+<tr><td>Build</td><td>Read-only filesystem</td><td>Dockerfile / K8s securityContext</td></tr>
+<tr><td>Build</td><td>Drop all capabilities</td><td>Dockerfile / K8s securityContext</td></tr>
+<tr><td>Build</td><td>Minimal base image (distroless)</td><td>Dockerfile</td></tr>
+<tr><td>Build</td><td>Multi-stage build</td><td>Dockerfile</td></tr>
+<tr><td>Build</td><td>Seccomp RuntimeDefault profile</td><td>K8s securityContext</td></tr>
+<tr><td>Pipeline</td><td>Generate SBOM</td><td>Syft, Trivy</td></tr>
+<tr><td>Pipeline</td><td>Vulnerability scan (fail on HIGH+)</td><td>Grype, Trivy, Docker Scout</td></tr>
+<tr><td>Pipeline</td><td>Image signing (Cosign keyless)</td><td>Sigstore/Cosign</td></tr>
+<tr><td>Pipeline</td><td>Docker Bench in CI</td><td>docker-bench-security</td></tr>
+<tr><td>Deploy</td><td>Default deny-all NetworkPolicy</td><td>K8s NetworkPolicy</td></tr>
+<tr><td>Deploy</td><td>Pod Security Standards (Restricted)</td><td>K8s PSA</td></tr>
+<tr><td>Deploy</td><td>Rootless runtime</td><td>Docker Engine v29+</td></tr>
+<tr><td>Runtime</td><td>Behavioral monitoring</td><td>Falco, Tetragon</td></tr>
+<tr><td>Runtime</td><td>Continuous image scanning</td><td>Docker Scout, Trivy</td></tr>
+</tbody>
+</table>
+
+<h2>Conclusion</h2>
+
+<p>Docker security is not a single configuration change. It is a layered defense strategy where each layer compensates for the others. A non-root container that escapes to the host still lands as an unprivileged user. An image with a known CVE is caught by runtime monitoring before exploitation. A compromised build pipeline produces a signed artifact that fails verification at deploy time.</p>
+
+<p>The threat landscape in 2026 is not slowing down. runc CVEs affect every version back to 2015. Supply chain attacks cost $80 billion annually. 76% of containers still run as root. The tools exist — Falco, Tetragon, Cosign, Docker Scout, Docker Bench, Sigstore — to close these gaps. The question is whether you will close them before an attacker finds them.</p>
+
+<p>Start with Layer 1. Run as non-root. It takes five minutes and eliminates the most common escalation path. Then work through the checklist. Each layer is an investment that compounds.</p>
+
+<hr />
+
+<h2>Frequently Asked Questions</h2>
+
+<div class="faq-item">
+<h3>What is the most important Docker security setting?</h3>
+<p>Running containers as a non-root user. It eliminates the most common privilege escalation path if a container escape occurs. A container running as UID 1000 that escapes to the host lands as an unprivileged user, not root. Add the <code>USER</code> directive in your Dockerfile and <code>runAsNonRoot: true</code> in your Kubernetes security context.</p>
+</div>
+
+<div class="faq-item">
+<h3>Is Docker Content Trust still secure?</h3>
+<p>Docker Content Trust is shutting down December 8, 2026. Brownouts for writes started July 14, 2026. DCT relied on Notary v1, which is no longer maintained. Migrate to Sigstore/Cosign for keyless signing or Notation for Azure-native workflows. Both are endorsed by Docker as official replacements.</p>
+</div>
+
+<div class="faq-item">
+<h3>Should I use Falco or Tetragon for runtime security?</h3>
+<p>Falco excels at detection and alerting with the largest community rule set and 70+ alert destinations. Tetragon adds in-kernel enforcement — it can block syscalls and kill processes before actions complete. If you need prevention, not just detection, Tetragon is the choice. If you need broad detection coverage and SIEM integration, Falco is stronger. Many production deployments use both.</p>
+</div>
+
+<div class="faq-item">
+<h3>What is the EU Cyber Resilience Act timeline for containers?</h3>
+<p>Conformity assessment requirements began June 11, 2026. Vulnerability reporting obligations — including 24-hour notification for exploited vulnerabilities — apply from September 11, 2026. Full CRA applicability with SBOM delivery requirements is December 11, 2027. Non-compliance fines reach €15 million or 2.5% of global turnover.</p>
+</div>
+
+<div class="faq-item">
+<h3>Is rootless Docker production-ready?</h3>
+<p>Yes, for most workloads. Docker Engine v29 fully supports rootless with containerd. Performance overhead is minimal — slightly faster startup (~0.8s vs ~1.2s), slightly lower memory usage (~85MB vs ~100MB). Limitations: cannot bind privileged ports below 1024 without configuration, and <code>slirp4netns</code> networking has minor overhead. Not suitable for workloads requiring <code>--privileged</code> mode.</p>
+</div>
+
+<hr />
+
+<h2>Footnotes</h2>
+
+<div class="footnotes">
+<ol>
+<li id="fn1">
+<a href="https://www.cyera.com/research/one-megabyte-to-root-how-a-size-check-broke-dockers-last-line-of-defense" target="_blank" rel="noopener">Cyera Research</a> — 76% of containers run as root, up 31% year-over-year, 2024–2026.
+<a class="footnote-backref" href="#fnref1" aria-label="Back">↩</a>
+</li>
+<li id="fn2">
+<a href="https://devops.gheware.com/blog/posts/container-supply-chain-security-2026.html" target="_blank" rel="noopener">Gheware DevOps — Container Supply Chain Security 2026</a> — 41 supply chain attacks per month in late 2025, 76% increase since 2023.
+<a class="footnote-backref" href="#fnref2" aria-label="Back">↩</a>
+</li>
+<li id="fn3">
+<a href="https://www.docker.com/blog/leaky-vessels-vulnerability-discovered-in-runc/" target="_blank" rel="noopener">Docker Blog — Leaky Vessels</a> — CVE-2024-21626 runc escape via fd leak, CVE-2024-41110 AuthZ bypass, January 2024.
+<a class="footnote-backref" href="#fnref3" aria-label="Back">↩</a>
+</li>
+<li id="fn4">
+<a href="https://www.sysdig.com/blog/runc-container-escape-vulnerabilities" target="_blank" rel="noopener">Sysdig — runc Container Escape Vulnerabilities</a> — CVE-2025-31133, CVE-2025-52565, CVE-2025-52881, disclosed November 2025, actively exploited June 2026.
+<a class="footnote-backref" href="#fnref4" aria-label="Back">↩</a>
+</li>
+<li id="fn5">
+<a href="https://zeropath.com/blog/cve-2026-41567-docker-moby-container-escape-path-hijacking" target="_blank" rel="noopener">ZeroPath — CVE-2026-41567</a> — Decompression binary path hijacking, host root access, CVSS 7.2.
+<a class="footnote-backref" href="#fnref5" aria-label="Back">↩</a>
+</li>
+<li id="fn6">
+<a href="https://sesamedisk.com/container-escape-vulnerabilities-2026/" target="_blank" rel="noopener">SesameDisk — Container Escape Vulnerabilities 2026</a> — CVE-2026-34040 AuthZ bypass CVSS 8.8, CVE-2026-1483 K8s privilege escalation.
+<a class="footnote-backref" href="#fnref6" aria-label="Back">↩</a>
+</li>
+<li id="fn7">
+<a href="https://appsecsanta.com/research/supply-chain-attack-statistics" target="_blank" rel="noopener">AppSecSanta — Supply Chain Attack Statistics</a> — $80.6B annual cost, 30% of breaches involve third-party compromise.
+<a class="footnote-backref" href="#fnref7" aria-label="Back">↩</a>
+</li>
+<li id="fn8">
+<a href="https://www.sonatype.com/resources/state-of-the-software-supply-chain-2026" target="_blank" rel="noopener">Sonatype 2026 — State of the Software Supply Chain</a> — 1.2M cumulative malicious packages, 454,600+ new in 2025 (75% YoY increase).
+<a class="footnote-backref" href="#fnref8" aria-label="Back">↩</a>
+</li>
+<li id="fn9">
+<a href="https://digital-strategy.ec.europa.eu/en/factpages/cyber-resilience-act-implementation" target="_blank" rel="noopener">EU Digital Strategy — Cyber Resilience Act</a> — CRA entered into force December 10, 2024; SBOM delivery required by December 11, 2027; fines up to €15M or 2.5% global turnover.
+<a class="footnote-backref" href="#fnref9" aria-label="Back">↩</a>
+</li>
+<li id="fn10">
+<a href="https://www.docker.com/blog/retiring-docker-content-trust/" target="_blank" rel="noopener">Docker Blog — Retiring Docker Content Trust</a> — Full shutdown December 8, 2026; brownouts began July 14, 2026.
+<a class="footnote-backref" href="#fnref10" aria-label="Back">↩</a>
+</li>
+<li id="fn11">
+<a href="https://docs.docker.com/scout/" target="_blank" rel="noopener">Docker Docs — Docker Scout</a> — Continuous vulnerability management, 23 advisory databases, SBOM generation, policy-based enforcement.
+<a class="footnote-backref" href="#fnref11" aria-label="Back">↩</a>
+</li>
+<li id="fn12">
+<a href="https://falco.org/docs/" target="_blank" rel="noopener">Falco Documentation</a> — CNCF graduated, 40+ MITRE ATT&CK rules, 1–5% CPU overhead with modern eBPF driver.
+<a class="footnote-backref" href="#fnref12" aria-label="Back">↩</a>
+</li>
+<li id="fn13">
+<a href="https://github.com/cilium/tetragon" target="_blank" rel="noopener">Tetragon GitHub</a> — eBPF-native in-kernel enforcement via LSM hooks, sub-1% CPU overhead, Cilium integration.
+<a class="footnote-backref" href="#fnref13" aria-label="Back">↩</a>
+</li>
+<li id="fn14">
+<a href="https://github.com/docker/docker-bench-security" target="_blank" rel="noopener">Docker Bench Security GitHub</a> — CIS Docker Benchmark v1.6.0, 9.6K stars, checks host/daemon/container/build/operations.
+<a class="footnote-backref" href="#fnref14" aria-label="Back">↩</a>
+</li>
+<li id="fn15">
+<a href="https://docs.docker.com/engine/security/rootless/" target="_blank" rel="noopener">Docker Docs — Rootless Docker</a> — Production-ready in v29+, ~85MB memory, ~0.8s startup, container escape → unprivileged user.
+<a class="footnote-backref" href="#fnref15" aria-label="Back">↩</a>
+</li>
+<li id="fn16">
+<a href="https://kubernetes.io/docs/concepts/security/pod-security-standards/" target="_blank" rel="noopener">Kubernetes Docs — Pod Security Standards</a> — Three profiles: Privileged, Baseline, Restricted; PSA replaces PSP since K8s 1.25.
+<a class="footnote-backref" href="#fnref16" aria-label="Back">↩</a>
+</li>
+</ol>
+</div>`,
+  },
+  {
     id: 'post-gitops-2026',
     title: 'GitOps in 2026: Why ArgoCD and FluxCD Are No Longer Just "Deployment Tools"',
     slug: 'gitops-2026-argocd-fluxcd',
