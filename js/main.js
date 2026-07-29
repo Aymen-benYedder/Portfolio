@@ -589,31 +589,10 @@
   }
 
   /**
-  /* Theme Toggle (Light/Dark) - Desktop & Mobile Synchronized */
+  /* Force Dark Mode — light mode permanently disabled */
   function initThemeToggle() {
-    const toggleBtns = document.querySelectorAll('#theme-toggle, .mobile-theme-toggle');
-    const html = document.documentElement;
-
-    if (toggleBtns.length === 0) return;
-
-    // 1. Initialize State (apply once)
-    const savedTheme = localStorage.getItem('theme');
-    const defaultTheme = savedTheme || 'dark';
-
-    html.setAttribute('data-theme', defaultTheme);
-
-    // 2. Toggle Handler - attach to all buttons
-    const toggleHandler = () => {
-      const currentTheme = html.getAttribute('data-theme');
-      const newTheme = currentTheme === 'dark' ? 'light' : 'dark';
-
-      html.setAttribute('data-theme', newTheme);
-      localStorage.setItem('theme', newTheme);
-    };
-
-    toggleBtns.forEach(btn => {
-      btn.addEventListener('click', toggleHandler);
-    });
+    document.documentElement.setAttribute('data-theme', 'dark');
+    localStorage.setItem('theme', 'dark');
   }
 
   /**

@@ -35,24 +35,22 @@
    ============================================ */
 
 :root {
-  /* Color Palette: Blue-600 & Slate */
-  --bg-primary: #ffffff;
-  --bg-secondary: #f8f9fa;
-  --accent-primary: #2563eb;
-  --accent-secondary: #1d4ed8;
-  --text-primary: #0f172a;
-  --text-secondary: #64748b;
-  --text-muted: #94a3b8;
-  --text-light: #cbd5e1;
+  /* Color Palette: Dark Navy/Black + Cyan Accents (Dark Mode Only — Light Mode Disabled) */
+  --bg-primary: #050508;
+  --bg-secondary: #0f0f1e;
+  --accent-primary: #00e5ff;
+  --accent-secondary: #0099cc;
+  --text-primary: #ffffff;
+  --text-secondary: #a8a8c0;
+  --text-muted: #707088;
+  --text-light: #505570;
 
-  /* Light Card Effects */
-  --glass-bg: #ffffff;
-  --glass-border: #f1f5f9;
-  --border-light: #e2e8f0;
-  --glass-shadow: 0 4px 12px rgba(0, 0, 0, 0.1);
-  --backdrop-blur: blur(12px);
-  --glass-blur: none;
-  --glass-blur-heavy: none;
+  /* Dark Card Effects */
+  --glass-bg: rgba(255, 255, 255, 0.03);
+  --glass-border: rgba(255, 255, 255, 0.15);
+  --border-light: rgba(255, 255, 255, 0.08);
+  --glass-shadow: 0 12px 40px rgba(0, 0, 0, 0.4);
+  --backdrop-blur: blur(16px);
 
   /* Spacing Scale (Mobile-First) */
   --space-xs: 0.25rem;
@@ -103,12 +101,12 @@
   --transition-colors: color 0.3s ease, background-color 0.3s ease, border-color 0.3s ease;
   --transition-transform: transform 0.3s ease;
 
-  /* Shadow Scale (Light Theme) */
-  --shadow-sm: 0 1px 2px rgba(0, 0, 0, 0.05);
-  --shadow-md: 0 4px 6px rgba(0, 0, 0, 0.07);
-  --shadow-lg: 0 10px 15px rgba(0, 0, 0, 0.1);
-  --shadow-xl: 0 20px 25px rgba(0, 0, 0, 0.1);
-  --shadow-blue: 0 10px 25px rgba(37, 99, 235, 0.15);
+  /* Shadow Scale (Dark Theme) */
+  --shadow-sm: 0 2px 8px rgba(0, 0, 0, 0.4);
+  --shadow-md: 0 4px 16px rgba(0, 0, 0, 0.5);
+  --shadow-lg: 0 8px 32px rgba(0, 0, 0, 0.6);
+  --shadow-xl: 0 12px 48px rgba(0, 0, 0, 0.7);
+  --shadow-blue: 0 10px 25px rgba(0, 229, 255, 0.2);
 
   /* Z-Index Scale */
   --z-base: 1;
@@ -118,38 +116,6 @@
   --z-tooltip: 1100;
 
   /* Component Specific */
-  --nav-bg: rgba(255, 255, 255, 0.8);
-  --input-bg: #ffffff;
-}
-
-/* Dark Theme Fallback */
-:root[data-theme="dark"],
-.dark {
-  /* Color Palette: Dark Navy/Black + Cyan Accents */
-  --bg-primary: #050508;
-  --bg-secondary: #0f0f1e;
-  --accent-primary: #00e5ff;
-  --accent-secondary: #0099cc;
-  --text-primary: #ffffff;
-  --text-secondary: #a8a8c0;
-  --text-muted: #707088;
-  --text-light: #505570;
-
-  /* Dark Card Effects */
-  --glass-bg: rgba(255, 255, 255, 0.03);
-  --glass-border: rgba(255, 255, 255, 0.15);
-  --border-light: rgba(255, 255, 255, 0.08);
-  --glass-shadow: 0 12px 40px rgba(0, 0, 0, 0.4);
-  --backdrop-blur: blur(16px);
-
-  /* Shadow Scale (Dark Theme) */
-  --shadow-sm: 0 2px 8px rgba(0, 0, 0, 0.4);
-  --shadow-md: 0 4px 16px rgba(0, 0, 0, 0.5);
-  --shadow-lg: 0 8px 32px rgba(0, 0, 0, 0.6);
-  --shadow-xl: 0 12px 48px rgba(0, 0, 0, 0.7);
-  --shadow-blue: 0 10px 25px rgba(0, 229, 255, 0.2);
-
-  /* Component Specific Overrides */
   --nav-bg: rgba(5, 5, 8, 0.8);
   --input-bg: rgba(255, 255, 255, 0.05);
 
