@@ -1,4 +1,4 @@
-﻿export interface StaticPost {
+export interface StaticPost {
   id: string;
   title: string;
   slug: string;
@@ -1572,7 +1572,7 @@ sudo ufw enable</code></pre>
     tags: ['npm', 'pnpm', 'Yarn', 'Bun', 'Package Manager', 'Benchmarks', 'JavaScript', 'TypeScript'],
     readingTime: 16,
     image: {
-      url: '/assets/npm-vs-pnpm-vs-yarn-vs-bun-2026.webp',
+      url: 'https://aymen.benyedder.top/assets/npm-vs-pnpm-vs-yarn-vs-bun-2026.webp',
       alt: 'Benchmark comparison chart showing npm, pnpm, Yarn, and Bun package managers with install speed, disk usage, and adoption metrics',
       caption: 'Package manager comparison: install speed, disk usage, and market adoption trends (2026)'
     },
@@ -4974,5 +4974,1906 @@ sudo ufw enable</code></pre>
       </li>
     </ol>
   </div>`,
+  },
+
+  {
+    id: 'post-terraform-production',
+    title: 'Terraform in Production: State Management, Modules, and Multi-Environment IaC',
+    slug: 'terraform-production-state-management-modules-multi-environment-iac',
+    description: 'Production-grade Terraform: remote state with locking, composable module design, multi-environment directory patterns, CI/CD with OIDC, policy as code with OPA, cost estimation with Infracost, and migration to OpenTofu.',
+    publishedAt: '2026-07-28',
+    categories: ['DevOps'],
+    tags: ['Terraform', 'OpenTofu', 'IaC', 'State Management', 'DevOps', 'Infrastructure as Code'],
+    readingTime: 16,
+    body: `<h2>Executive Summary</h2>
+
+<p>Infrastructure as Code promised us a world where cloud environments are reproducible, auditable, and safe to change. And for the most part, Terraform delivered on that promise. But there's a gap between "I can spin up a VPC with a main.tf" and "my team manages 200 resources across three cloud providers in production without fear." That gap is where state management discipline, module design patterns, and multi-environment strategies separate IaC teams that sleep well from those that don't.</p>
+
+<p>I've spent the better part of the last eight years building, breaking, and rebuilding infrastructure pipelines across AWS, GCP, and Azure. This article is the guide I wish I'd had when I first started running Terraform in production environments with actual humans pushing changes simultaneously.</p>
+
+<h2>Why Terraform State Management Matters in Production</h2>
+
+<p>Let's start with the thing that keeps platform engineers up at night: state. Terraform's state file is a mapping between the resources defined in your configuration and the real-world infrastructure they represent. Every time you run <code>terraform apply</code>, Terraform consults the state file to determine what exists, what needs to be created, and what should be destroyed.</p>
+
+<p>Here's the problem: by default, Terraform writes this state file to a local <code>terraform.tfstate</code>. In production, that's catastrophically dangerous. A local state file means:</p>
+<ul>
+<li>Only one person can run Terraform at a time from a single machine</li>
+<li>If that machine dies, your state file dies with it</li>
+<li>No audit trail of who changed what and when</li>
+<li>Secrets stored in state (database passwords, API keys) sit unencrypted on disk</li>
+</ul>
+
+<p>The moment you have a second engineer, or a CI/CD pipeline, local state becomes a single point of catastrophic failure. Remote state isn't optional in production. It's the first thing you configure.</p>
+
+<h2>Remote State Backends: S3, GCS, and Azure Storage</h2>
+
+<h3>AWS S3 Backend with DynamoDB Locking</h3>
+
+<p>The S3 backend is the most widely deployed Terraform remote state configuration, and for good reason. S3 offers 99.999999999% durability across multiple Availability Zones, versioning for state file history, server-side encryption with KMS, and lifecycle policies to manage state file retention.</p>
+
+<p>But S3 alone doesn't solve the concurrent access problem. Without state locking, two engineers running <code>terraform apply</code> simultaneously will corrupt the state file. DynamoDB provides the distributed lock mechanism:</p>
+
+<pre><code>terraform {
+  backend "s3" {
+    bucket         = "myorg-terraform-state"
+    key            = "prod/network/terraform.tfstate"
+    region         = "eu-west-3"
+    encrypt        = true
+    dynamodb_table = "terraform-state-locks"
+    kms_key_id     = "alias/terraform-state-key"
+  }
+}</code></pre>
+
+<p>The DynamoDB table uses a primary key called <code>LockID</code> (string). Terraform creates an entry when it acquires the lock and removes it on unlock. If a second process tries to acquire the lock while it's held, it receives an error rather than corrupting state. This pattern is battle-tested at massive scale <a class="footnote-ref" href="#fn1">[1]</a>.</p>
+
+<h3>Google Cloud Storage Backend</h3>
+
+<p>The GCS backend works similarly but leverages Google Cloud Storage's built-in object versioning and bucket-level locking. Configuration is straightforward:</p>
+
+<pre><code>terraform {
+  backend "gcs" {
+    bucket = "myorg-terraform-state"
+    prefix = "prod/network"
+    encryption_key = "base64-encoded-aes-256-key"
+  }
+}</code></pre>
+
+<p>GCS generates a <code>default.tflock</code> file when a state operation is in progress, backed by the bucket's consistency guarantees. Notably, GCS does not require a separate DynamoDB-like table for locking — the lock is native to the bucket's object consistency model <a class="footnote-ref" href="#fn2">[2]</a>.</p>
+
+<h3>Azure Storage Backend</h3>
+
+<p>For teams on Azure, the <code>azurerm</code> backend stores state in Azure Blob Storage with native leasing for locking:</p>
+
+<pre><code>terraform {
+  backend "azurerm" {
+    resource_group_name  = "terraform-state-rg"
+    storage_account_name = "myorgterraformstate"
+    container_name       = "tfstate"
+    key                  = "prod.network.tfstate"
+    use_azuread_auth     = true
+  }
+}</code></pre>
+
+<p>Azure's blob lease mechanism provides the lock: when Terraform needs to modify state, it acquires an infinite lease on the blob. The lease is released after the operation completes. If Terraform crashes mid-operation, the lease automatically breaks after 60 seconds (the lease period), preventing deadlocks <a class="footnote-ref" href="#fn3">[3]</a>.</p>
+
+<h3>State Encryption and Secret Management</h3>
+
+<p>One of the most underappreciated risks of Terraform in production is that state files contain plaintext values of outputs and resource attributes. If you're provisioning an RDS instance, the master password — or a hash of it — can end up in state. Encrypting state at rest is non-negotiable:</p>
+
+<ul>
+<li><strong>S3:</strong> Enable SSE-S3, SSE-KMS, or SSE-C. Prefer KMS for audit trail integration.</li>
+<li><strong>GCS:</strong> Enable bucket-level default encryption with Cloud KMS or CMEK.</li>
+<li><strong>Azure:</strong> Enable infrastructure encryption with double encryption for blob storage.</li>
+</ul>
+
+<p>Beyond encryption-at-rest, consider using <code>sensitive = true</code> on output values to prevent Terraform from displaying them in CLI output, and integrate with Vault or AWS Secrets Manager for runtime secret resolution <a class="footnote-ref" href="#fn4">[4]</a>.</p>
+
+<h2>Terraform Module Design Patterns</h2>
+
+<h3>Composable, Not Monolithic</h3>
+
+<p>The single most common anti-pattern I see in production Terraform codebases is the monolithic module. Teams write one massive module that provisions a VPC, subnets, security groups, EC2 instances, load balancers, databases, and IAM roles — all at once. This works until it doesn't. A typo in a security group rule triggers a full re-evaluation of every resource, and a <code>terraform plan</code> that should take 30 seconds takes five minutes.</p>
+
+<p>The composable module pattern flips this. Each module does one thing well:</p>
+
+<ul>
+<li><code>modules/vpc/</code> — VPC, subnets, route tables, Internet Gateway, NAT Gateway</li>
+<li><code>modules/ecs/</code> — ECS cluster, task definitions, service definitions</li>
+<li><code>modules/rds/</code> — RDS instance, parameter group, subnet group, security group</li>
+<li><code>modules/iam/</code> — IAM roles, policies, instance profiles</li>
+</ul>
+
+<p>Each module exposes <code>outputs</code> that other modules consume via <code>data.terraform_remote_state</code> or direct module references:</p>
+
+<pre><code>module "vpc" {
+  source   = "./modules/vpc"
+  name     = local.naming_prefix
+  vpc_cidr = "10.0.0.0/16"
+}
+
+module "rds" {
+  source       = "./modules/rds"
+  vpc_id       = module.vpc.vpc_id
+  subnet_ids   = module.vpc.private_subnet_ids
+  db_name      = "app_production"
+  engine_version = "16.3"
+
+  providers = {
+    aws = aws.primary
+  }
+}</code></pre>
+
+<h3>The Terraform Registry and Published Modules</h3>
+
+<p>HashiCorp's Terraform Registry hosts thousands of verified modules from cloud providers and the community. Using a published module from the Registry is often a better starting point than writing one from scratch <a class="footnote-ref" href="#fn5">[5]</a>.</p>
+
+<p>The critical rule: <strong>pin module versions.</strong> A <code>source = "hashicorp/subnets/cidr"</code> without a version constraint means your infrastructure changes when the module publisher cuts a new release — potentially breaking your configuration without warning.</p>
+
+<pre><code>module "vpc" {
+  source  = "terraform-aws-modules/vpc/aws"
+  version = "5.0.0"
+
+  name = "production"
+  cidr = "10.0.0.0/16"
+
+  azs             = ["eu-west-3a", "eu-west-3b", "eu-west-3c"]
+  private_subnets = ["10.0.1.0/24", "10.0.2.0/24", "10.0.3.0/24"]
+  public_subnets  = ["10.0.101.0/24", "10.0.102.0/24", "10.0.103.0/24"]
+}</code></pre>
+
+<p>When you use modules from the Registry, you inherit community battle-testing. The <code>terraform-aws-modules/vpc/aws</code> module, for instance, is downloaded millions of times — edge cases around NAT Gateway provisioning, flow log setup, and IPv6 support have been handled by dozens of contributors. The tradeoff is that you depend on external maintainers. For critical production infrastructure, I recommend forking the module into your private repository and pinning to a specific commit. You lose automatic upstream fixes but gain complete control.</p>
+
+<h3>Module Versioning and Release Strategy</h3>
+
+<p>Treat your modules like software libraries. Each module should have its own Git repository, semantic versioning tags, and CI/CD pipeline that runs <code>terraform validate</code> and <code>terraform plan</code> on every PR. A typical internal module release workflow looks like:</p>
+
+<ol>
+<li>Developer creates a PR against <code>terraform-modules/vpc</code> on a feature branch</li>
+<li>CI runs <code>terraform fmt -check</code>, <code>tflint</code>, <code>checkov</code>, and <code>terraform validate</code></li>
+<li>On merge to <code>main</code>, CI tags the commit with the next semver version (<code>v1.2.0</code>)</li>
+<li>The module is published to an internal Terraform Registry (like Terraform Enterprise or a private S3 bucket)</li>
+<li>Downstream infrastructure repos update their <code>version</code> constraint</li>
+</ol>
+
+<p>This discipline prevents the "works on my machine" problem from cascading into production. If a module change breaks staging, the fix goes through the same review pipeline as application code <a class="footnote-ref" href="#fn6">[6]</a>.</p>
+
+<h2>Multi-Environment Strategies: Workspaces vs Directories</h2>
+
+<p>Every production IaC setup needs at least three environments: development, staging, and production. How you model those environments in Terraform is a foundational architectural decision with lasting consequences.</p>
+
+<h3>Terraform Workspaces</h3>
+
+<p>Workspaces allow a single configuration directory to manage multiple state files under the same backend prefix. The syntax is simple:</p>
+
+<pre><code>terraform workspace new staging
+terraform workspace select staging
+terraform apply -var-file="staging.tfvars"</code></pre>
+
+<p>Terraform appends the workspace name to the state key automatically. The same configuration provisions the same resources — just with a different state file per workspace.</p>
+
+<p><strong>When workspaces work:</strong> They're acceptable for simple, homogeneous environments where every workspace provisions the exact same resources — think ephemeral preview environments for pull requests, or per-developer sandbox accounts.</p>
+
+<p><strong>When workspaces fail:</strong> Production environments are never identical. Production might use a multi-AZ RDS cluster while dev uses a single-AZ <code>db.t3.micro</code>. Production might have a WAF and CloudFront; dev doesn't. Workspaces force you to encode these differences with conditional logic:</p>
+
+<pre><code>resource "aws_rds_cluster" "main" {
+  multi_az = terraform.workspace == "prod" ? true : false
+  instance_class = terraform.workspace == "prod" ? "db.r6g.large" : "db.t3.medium"
+}</code></pre>
+
+<p>This pattern scales poorly. After about three or four <code>terraform.workspace</code> conditionals, your code becomes an unreadable, untestable mess. Workspaces also make it impossible to have different providers or provider configurations per environment — a critical limitation when using multiple AWS accounts.</p>
+
+<h3>The Directory Structure Pattern</h3>
+
+<p>The alternative — and the approach I use in every production deployment — is the directory-based multi-environment layout:</p>
+
+<pre><code>terraform/
+  env/
+    dev/
+      main.tf
+      vars.tf
+      dev.tfvars
+      backend.tf
+    staging/
+      main.tf
+      vars.tf
+      staging.tfvars
+      backend.tf
+    prod/
+      main.tf
+      vars.tf
+      prod.tfvars
+      backend.tf
+  modules/
+    vpc/
+    ecs/
+    rds/
+    iam/
+  global/
+    iam-base/
+    billing/</code></pre>
+
+<p>Each environment directory is a completely independent Terraform root module with its own backend configuration, variable definitions, and state file. The environments share modules from the <code>modules/</code> directory but pass in different variable values.</p>
+
+<p><strong>This pattern gives you:</strong></p>
+<ul>
+<li>Explicit, auditable differences between environments (no hidden <code>terraform.workspace</code> conditionals)</li>
+<li>Independent provider configurations per environment (important for multi-account AWS setups)</li>
+<li>The ability to run <code>terraform plan</code> on all environments in parallel in CI</li>
+<li>Clear separation of state — a production apply can't accidentally affect dev</li>
+<li>Per-environment CI/CD approvals and gating</li>
+</ul>
+
+<p>The tradeoff is duplication. Each environment directory has some copy-pasted configuration. Mitigate this with Terragrunt <a class="footnote-ref" href="#fn7">[7]</a>, which abstracts the boilerplate into a <code>terragrunt.hcl</code> that generates reusable backend configurations and module sources for each environment.</p>
+
+<p>I've explored this pattern extensively in my article on <a href="https://aymen.benyedder.top/blog/architecting-multi-cloud-resilience-opentofu-terragrunt-mandatory-2026/" target="_blank" rel="noopener">multi-cloud resilience with OpenTofu and Terragrunt</a>, where I discuss how Terragrunt enforces environment parity and eliminates duplication at scale.</p>
+
+<h2>Terraform Cloud vs Open-Source</h2>
+
+<p>In 2026, HCP Terraform (formerly Terraform Cloud) is a mature SaaS platform, but the open-source ecosystem around Terraform — and its fork OpenTofu — has grown considerably. The decision isn't binary; it depends on team size, compliance requirements, and whether you already have the operational capacity to manage your own backend.</p>
+
+<table>
+<thead>
+<tr>
+<th>Capability</th>
+<th>HCP Terraform</th>
+<th>Open-Source + CI</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td>Remote state storage</td>
+<td>Managed (built-in)</td>
+<td>Self-managed (S3, GCS, Azurerm)</td>
+</tr>
+<tr>
+<td>State locking</td>
+<td>Managed (built-in)</td>
+<td>DynamoDB / GCS lease / Blob lease</td>
+</tr>
+<tr>
+<td>Run history / audit trail</td>
+<td>Built-in, searchable</td>
+<td>Custom (store plan JSON in S3)</td>
+</tr>
+<tr>
+<td>Collaboration / approvals</td>
+<td>Built-in run queues</td>
+<td>CI pipeline approvals (GitHub required status checks)</td>
+</tr>
+<tr>
+<td>Policy as Code</td>
+<td>Sentinel (proprietary)</td>
+<td>OPA / Conftest (open-source)</td>
+</tr>
+<tr>
+<td>Cost estimation</td>
+<td>Built-in via Infracost integration</td>
+<td>Infracost CLI in CI</td>
+</tr>
+<tr>
+<td>Private Registry</td>
+<td>Built-in</td>
+<td>Terraform Registry, S3-compatible, Git-based</td>
+</tr>
+<tr>
+<td>Scaling</td>
+<td>Managed (autoscaling)</td>
+<td>Depends on CI runner capacity</td>
+</tr>
+<tr>
+<td>Compliance certifications</td>
+<td>SOC 2, ISO 27001, FedRAMP</td>
+<td>Your responsibility</td>
+</tr>
+<tr>
+<td>Licensing cost</td>
+<td>Per-resource or per-runner</td>
+<td>Free (Terraform under BSL, OpenTofu fully open-source)</td>
+</tr>
+</tbody>
+</table>
+
+<p>The open-source approach gives you full control and zero per-resource cost, but you own the operational burden. For a startup running 500 resources across three environments, the open-source route is almost always correct. For a regulated enterprise running 10,000 resources with 50 Terraform engineers, HCP Terraform's governance features — run queues, audit trails, Sentinel policies — can justify the cost <a class="footnote-ref" href="#fn8">[8]</a>.</p>
+
+<h2>CI/CD Integration for Terraform</h2>
+
+<h3>GitHub Actions</h3>
+
+<p>A production-grade Terraform CI/CD pipeline has three clear stages: validate, plan, apply. These should run in order, with the plan stage producing output that is both human-readable and machine-parsable.</p>
+
+<pre><code>name: 'Terraform'
+
+on:
+  push:
+    branches: [main]
+  pull_request:
+    branches: [main]
+
+permissions:
+  contents: read
+  id-token: write  # For OIDC auth to AWS
+
+jobs:
+  terraform:
+    name: 'Terraform Validate and Plan'
+    runs-on: ubuntu-latest
+    
+    steps:
+    - uses: actions/checkout@v4
+
+    - uses: hashicorp/setup-terraform@v3
+      with:
+        terraform_version: 1.9.0
+
+    - name: Terraform Init
+      run: terraform init
+      working-directory: env/\${{ matrix.environment }}
+
+    - name: Terraform Validate
+      run: terraform validate -no-color
+      working-directory: env/\${{ matrix.environment }}
+
+    - name: Terraform Plan
+      run: terraform plan -no-color -out=tfplan
+      working-directory: env/\${{ matrix.environment }}
+
+    - name: Upload Plan
+      uses: actions/upload-artifact@v4
+      with:
+        name: tfplan-\${{ matrix.environment }}
+        path: env/\${{ matrix.environment }}/tfplan</code></pre>
+
+<p>On PRs, only <code>validate</code> and <code>plan</code> run. On merge to <code>main</code>, an apply workflow picks up the plan artifact and executes it. This two-phase approach — plan on PR, apply on merge — gives you the safety of reviewing what will change without exposing write credentials to PRs from forks <a class="footnote-ref" href="#fn9">[9]</a>.</p>
+
+<h3>OIDC Authentication</h3>
+
+<p>Stop using long-lived AWS access keys in GitHub Secrets. OIDC authentication lets GitHub Actions assume an IAM role directly via token exchange:</p>
+
+<pre><code>provider "aws" {
+  region = var.aws_region
+  assume_role_with_web_identity {
+    role_arn           = "arn:aws:iam::123456789012:role/TerraformCIRole"
+    web_identity_token = file(var.oidc_token_file)
+  }
+}</code></pre>
+
+<p>GitHub configures the OIDC issuer URL (<code>https://token.actions.githubusercontent.com</code>) in AWS as an identity provider. The role has a trust policy that restricts which repos, environments, and branches can assume it:</p>
+
+<pre><code>{
+  "Version": "2012-10-17",
+  "Statement": [
+    {
+      "Effect": "Allow",
+      "Principal": { "Federated": "arn:aws:iam::123456789012:oidc-provider/token.actions.githubusercontent.com" },
+      "Action": "sts:AssumeRoleWithWebIdentity",
+      "Condition": {
+        "StringEquals": {
+          "token.actions.githubusercontent.com:aud": "sts.amazonaws.com",
+          "token.actions.githubusercontent.com:sub": "repo:myorg/infrastructure:environment:prod"
+        }
+      }
+    }
+  ]
+}</code></pre>
+
+<p>This is the security standard in 2026. No static keys, no secret rotation, and full audit trail through CloudTrail. The same pattern applies to GitLab CI with OIDC for <code>id_tokens</code> in <code>ci_job_jwt</code> <a class="footnote-ref" href="#fn10">[10]</a>.</p>
+
+<h3>GitLab CI</h3>
+
+<p>GitLab CI's native Terraform integration provides a pre-built template. A production pipeline looks similar to GitHub Actions but uses GitLab's native environment protection rules:</p>
+
+<pre><code>include:
+  - template: Terraform/Base.gitlab-ci.yml
+
+variables:
+  TF_STATE_NAME: default
+  TF_CACHE_KEY: default
+
+stages:
+  - validate
+  - plan
+  - apply
+
+terraform:validate:
+  stage: validate
+  script:
+    - terraform init
+    - terraform validate
+
+terraform:plan:
+  stage: plan
+  environment:
+    name: $CI_ENVIRONMENT_NAME
+  script:
+    - terraform init
+    - terraform plan -out=plan.cache
+
+terraform:apply:
+  stage: apply
+  environment:
+    name: $CI_ENVIRONMENT_NAME
+  rules:
+    - if: $CI_MERGE_REQUEST_APPROVED
+  script:
+    - terraform init
+    - terraform apply plan.cache</code></pre>
+
+<p>The key detail: the apply stage requires a merge request approval before running. This stop gives a human one last chance to examine the plan before infrastructure changes take effect.</p>
+
+<h2>Policy as Code: Sentinel and OPA</h2>
+
+<p>Giving every engineer the ability to provision cloud resources is powerful — and dangerous. Without guardrails, a misconfigured security group can expose a database to the public internet, or an oversized instance type can blow through your monthly cloud budget in a weekend.</p>
+
+<p>Policy as Code enforces rules at plan time, before resources are created. Two dominant tools exist in the Terraform ecosystem: HashiCorp's Sentinel (proprietary, tied to HCP Terraform) and the Open Policy Agent (open-source, provider-agnostic).</p>
+
+<h3>Sentinel (HCP Terraform)</h3>
+
+<p>Sentinel policies are written in a purpose-built language and evaluated against the <code>tfplan</code> before an apply is allowed:</p>
+
+<pre><code>import "tfplan/v2"
+
+main = rule {
+  all tfplan.resource_changes as _, rc {
+    rc.change.after.tags contains "CostCenter"
+  }
+}</code></pre>
+
+<p>This policy mandates that every resource change includes a <code>CostCenter</code> tag. If any resource is missing it, the policy fails and the run is blocked <a class="footnote-ref" href="#fn11">[11]</a>.</p>
+
+<h3>OPA / Conftest (Open-Source)</h3>
+
+<p>OPA decouples policy from the Terraform backend entirely. Conftest runs OPA rules against your Terraform plan output:</p>
+
+<pre><code>package main
+
+deny[msg] {
+  resource := input.resource_changes[_]
+  resource.change.after.instance_type == "m5.24xlarge"
+  msg := sprintf("Instance %v is using an oversized instance type", [resource.address])
+}
+
+deny[msg] {
+  resource := input.resource_changes[_]
+  resource.type == "aws_security_group_rule"
+  resource.change.after.cidr_blocks[_] == "0.0.0.0/0"
+  resource.change.after.from_port == 22
+  msg := sprintf("SSH open to world in %v", [resource.address])
+}</code></pre>
+
+<p>Run it in CI after <code>terraform plan</code>:</p>
+
+<pre><code>terraform plan -out=tfplan
+terraform show -json tfplan > plan.json
+conftest test plan.json --policy policy/</code></pre>
+
+<p>If Conftest returns any <code>deny</code> rules, the pipeline fails before any resources are created. This pattern is open-source, free, and works identically with OpenTofu <a class="footnote-ref" href="#fn12">[12]</a>.</p>
+
+<p>For teams looking to integrate policy as code into a broader platform engineering strategy, my article on <a href="https://aymen.benyedder.top/blog/platform-engineering-2026-building-idp-backstage-kubernetes-gitops/" target="_blank" rel="noopener">building Internal Developer Platforms with Backstage</a> discusses how OPA integrates with the IDP layer to enforce compliance across both infrastructure and application deployments.</p>
+
+<h2>Migration to OpenTofu</h2>
+
+<p>HashiCorp's switch from the Mozilla Public License to the Business Source License (BSL) in 2023 sent shockwaves through the IaC community. The OpenTofu fork — now a Linux Foundation project — emerged as the community-led response, and by 2026 has become the preferred choice for organizations that cannot accept BSL's restrictions on commercial use <a class="footnote-ref" href="#fn13">[13]</a>.</p>
+
+<p>Migration from Terraform to OpenTofu is surprisingly straightforward:</p>
+
+<pre><code># 1. Replace the binary
+#   - Install OpenTofu from https://opentofu.org/docs/cli/install/
+#   - Or use the OpenTofu GitHub Actions in CI
+
+# 2. Run OpenTofu commands (they mirror Terraform exactly)
+tofu init
+tofu plan
+tofu apply
+
+# 3. State files are fully compatible — no migration needed
+# 4. Aliases exist for scripting compatibility:
+alias terraform=tofu</code></pre>
+
+<p>OpenTofu supports all major Terraform providers, the entire HCL syntax, and remote state backends exactly as Terraform does. The only areas where you may encounter gaps are:</p>
+<ul>
+<li><strong>Sentinel policies</strong> — replace with OPA/Conftest</li>
+<li><strong>HCP Terraform features</strong> — run queues, cost estimation, private registry (use Infracost + Git-based module sources)</li>
+<li><strong>Provider protocol versions</strong> — most major providers (AWS, Azure, GCP) now publish provider versions compatible with OpenTofu's <code>tfprotov5</code> and <code>tfprotov6</code></li>
+</ul>
+
+<p>I've documented the full migration strategy in <a href="https://aymen.benyedder.top/blog/architecting-multi-cloud-resilience-opentofu-terragrunt-mandatory-2026/" target="_blank" rel="noopener">my OpenTofu and Terragrunt article</a>, which covers the nitty-gritty of registry migration, state compatibility testing, and CI pipeline conversion.</p>
+
+<h2>Cost Estimation and Planning</h2>
+
+<p>Infrastructure cost surprises are one of the leading causes of friction between DevOps teams and finance departments. Terraform's <code>plan</code> tells you what will change but not what it will cost you. Fortunately, the IaC ecosystem has matured around cost estimation.</p>
+
+<h3>Infracost</h3>
+
+<p><a href="https://www.infracost.io/" target="_blank" rel="noopener">Infracost</a> is the de facto standard for Terraform cost estimation. It parses the <code>terraform plan</code> JSON and estimates monthly costs based on current cloud provider pricing:</p>
+
+<pre><code>infracost breakdown --path . --show-skipped
+
+# Output:
+# NAME                                        MONTHLY QTY  UNIT                PRICE   MONTHLY COST
+# aws_instance.web_server                     1            hours               $0.069  $50.23
+# aws_db_instance.main                        1            hours               $0.379  $272.88
+# aws_s3_bucket.logs                          1            months              $0.00   $1.50
+#                                                                        TOTAL:  $324.61</code></pre>
+
+<p>Infracost integrates seamlessly into both GitHub Actions and GitLab CI. A PR comment showing cost impact has a remarkable effect on developer decisions. I've seen engineers voluntarily downgrade instance types from <code>m5.xlarge</code> to <code>m5.large</code> after seeing the $100/month difference rendered inline in a PR <a class="footnote-ref" href="#fn14">[14]</a>.</p>
+
+<h3>Budget Boundaries and Policy Enforcement</h3>
+
+<p>Combine cost estimation with policy as code to enforce budget boundaries at plan time:</p>
+
+<pre><code># OPA policy: fail if estimated monthly cost exceeds $5,000
+deny[msg] {
+  cost := data.infracost.breakdown.total_monthly_cost
+  cost > 5000
+  msg := sprintf("Estimated monthly cost $%.0f exceeds budget of $5,000", [cost])
+}</code></pre>
+
+<p>This pattern — parse the plan, estimate the cost, enforce the budget — means your cloud bill becomes a hard constraint in the deployment pipeline, not a surprise at the end of the month.</p>
+
+<h2>Drift Detection and Reconciliation</h2>
+
+<p>Infrastructure drift is the silent killer of IaC reliability. Someone modifies a resource through the cloud console, applies a hotfix during an incident, or a cloud provider's API changes how it serializes a resource. Suddenly, <code>terraform plan</code> shows changes for resources nobody touched in Git.</p>
+
+<p>A robust drift detection strategy has three components:</p>
+
+<ol>
+<li><strong>Scheduled drift scans:</strong> A cron job (or scheduled GitHub Action) runs <code>terraform plan</code> daily against production and archives the output. If unexpected changes appear, the platform team investigates before they accumulate.</li>
+<li><strong>State refresh in pipelines:</strong> Before any critical apply, run <code>terraform refresh</code> to sync state with reality. Combined with the plan output, this gives a complete picture of drift.</li>
+<li><strong>Reconciliation automation:</strong> For known-safe drift (e.g., auto-scaling groups changing desired count), periodic <code>terraform apply</code> can re-converge. For unauthorized drift, alert and block.</li>
+</ol>
+
+<p>GitOps-compatible tools like ArgoCD and FluxCD handle drift reconciliation at the Kubernetes level. My article on <a href="https://aymen.benyedder.top/blog/gitops-2026-argocd-fluxcd/" target="_blank" rel="noopener">GitOps in 2026: ArgoCD and FluxCD</a> discusses the reconciliation patterns that apply equally to infrastructure managed through Terraform and applications managed through Kubernetes.</p>
+
+<h2>The Production Terraform Stack: A Reference Architecture</h2>
+
+<p>After eight years of building and rebuilding Terraform pipelines, here's what I converge to for a standard production setup:</p>
+
+<table>
+<thead>
+<tr>
+<th>Layer</th>
+<th>Tool</th>
+<th>Purpose</th>
+</tr>
+</thead>
+<tbody>
+<tr><td>IaC Engine</td><td>OpenTofu 1.8+ / Terraform 1.9+</td><td>Configuration evaluation and resource provisioning</td></tr>
+<tr><td>State Backend</td><td>S3 + DynamoDB</td><td>Remote state with locking and encryption</td></tr>
+<tr><td>Module Registry</td><td>Git-based (private repos) + Terraform Registry</td><td>Versioned, reusable module distribution</td></tr>
+<tr><td>Orchestration</td><td>Terragrunt</td><td>DRY environment configuration and module source management</td></tr>
+<tr><td>CI/CD</td><td>GitHub Actions / GitLab CI</td><td>Plan-on-PR, apply-on-merge with OIDC</td></tr>
+<tr><td>Policy Engine</td><td>OPA / Conftest</td><td>Plan-time compliance enforcement</td></tr>
+<tr><td>Cost Estimation</td><td>Infracost</td><td>PR-level cost impact visibility</td></tr>
+<tr><td>Linting / Security</td><td>tflint + checkov + tfsec</td><td>Code quality, security scanning, compliance checks</td></tr>
+<tr><td>Secret Management</td><td>Vault / AWS Secrets Manager</td><td>Runtime secret resolution for Terraform</td></tr>
+</tbody>
+</table>
+
+<p>Each of these tools addresses a specific failure mode. Skip any one, and you accept the risk. In a startup context, you might skip cost estimation or policy enforcement early on. In a regulated enterprise, you skip none of them.</p>
+
+<h2>Lessons from Production Incidents</h2>
+
+<div class="highlight-section">
+<strong>Lesson 1: State locking is not optional.</strong> I've seen a team lose six hours of work because two engineers ran <code>terraform apply</code> simultaneously on the same S3-backed state. DynamoDB locking would have prevented it entirely. Cost: <code>$0.00</code> for the DynamoDB table. Lesson learned: expensive.
+</div>
+
+<div class="highlight-section">
+<strong>Lesson 2: Test module changes in isolation.</strong> A seemingly minor change to a shared module — adding a default tag — changed the <code>user_data</code> field on 15 EC2 instances in production, forcing a rolling replacement. The fix: test module changes in a dedicated "module sandbox" environment before promoting to the shared module registry.
+</div>
+
+<div class="highlight-section">
+<strong>Lesson 3: Plan artifacts are audit evidence.</strong> When an auditor asks "what changed in production last Tuesday at 14:00 UTC," the answer shouldn't be "I think someone ran terraform apply." Archive every plan JSON to S3, tagged with a timestamp, commit SHA, and the engineer who triggered it. When the auditor asks, you have a searchable record.
+</div>
+
+<div class="highlight-section">
+<strong>Lesson 4: OIDC eliminates static credentials as an attack surface.</strong> Before OIDC, a leaked AWS access key in a CI log could compromise your entire infrastructure. After OIDC, the only way to assume the Terraform role is through a GitHub Actions workflow in an approved repository. The attack surface drops from "anyone who can read a CI log" to "anyone who can push code to a protected branch."
+</div>
+
+<h2>Conclusion</h2>
+
+<p>Running Terraform in production is not about the apply command. It's about the discipline you build around it. Remote state with locking eliminates data loss. Composable modules with semantic versioning eliminate configuration explosion. Directory-based environments eliminate workspace confusion. CI/CD pipelines with OIDC and policy as code eliminate manual risk.</p>
+
+<p>The patterns in this article represent the accumulated knowledge of a community that's been running Terraform in production for the better part of a decade. They're not theoretical. They're the difference between a platform team that sleeps through pager alerts and one that dreads them.</p>
+
+<p>The infrastructure landscape is shifting. OpenTofu is now a legitimate mainstream alternative. HCP Terraform continues to add governance features. Policy as Code is becoming table stakes rather than an advanced pattern. But the fundamentals — state discipline, module hygiene, environment design — remain constant. Master those, and you can adapt to whichever tooling evolution the industry brings next.</p>
+
+<p>Start with the remote state backend. Then modularize. Then automate the pipeline. The rest is iteration.</p>
+
+<hr>
+
+<h2>References</h2>
+
+<ol>
+<li id="fn1">HashiCorp. "Remote State — Terraform Backends." <em>HashiCorp Developer</em>. <a href="https://developer.hashicorp.com/terraform/language/backend" target="_blank" rel="noopener">https://developer.hashicorp.com/terraform/language/backend</a></li>
+<li id="fn2">Google Cloud. "Using Terraform with Cloud Storage." <em>Google Cloud Docs</em>. <a href="https://cloud.google.com/docs/terraform/resource-management/store-state" target="_blank" rel="noopener">https://cloud.google.com/docs/terraform/resource-management/store-state</a></li>
+<li id="fn3">Microsoft Azure. "Store Terraform state in Azure Storage." <em>Microsoft Learn</em>. <a href="https://learn.microsoft.com/en-us/azure/developer/terraform/store-state-in-azure-storage" target="_blank" rel="noopener">https://learn.microsoft.com/en-us/azure/developer/terraform/store-state-in-azure-storage</a></li>
+<li id="fn4">HashiCorp. "Sensitive Data in State." <em>HashiCorp Developer</em>. <a href="https://developer.hashicorp.com/terraform/language/state/sensitive-data" target="_blank" rel="noopener">https://developer.hashicorp.com/terraform/language/state/sensitive-data</a></li>
+<li id="fn5">HashiCorp. "Terraform Registry — Find and Use Modules." <em>HashiCorp Developer</em>. <a href="https://registry.terraform.io/" target="_blank" rel="noopener">https://registry.terraform.io/</a></li>
+<li id="fn6">HashiCorp. "Module Composition and Publishing Best Practices." <em>HashiCorp Developer</em>. <a href="https://developer.hashicorp.com/terraform/language/modules/develop/composition" target="_blank" rel="noopener">https://developer.hashicorp.com/terraform/language/modules/develop/composition</a></li>
+<li id="fn7">Gruntwork. "Terragrunt — Keep Your Terraform Code DRY." <em>Gruntwork Docs</em>. <a href="https://terragrunt.gruntwork.io/docs/" target="_blank" rel="noopener">https://terragrunt.gruntwork.io/docs/</a></li>
+<li id="fn8">HashiCorp. "HCP Terraform Overview." <em>HashiCorp Cloud Platform</em>. <a href="https://developer.hashicorp.com/terraform/cloud-docs" target="_blank" rel="noopener">https://developer.hashicorp.com/terraform/cloud-docs</a></li>
+<li id="fn9">HashiCorp. "Terraform GitHub Actions." <em>HashiCorp Developer</em>. <a href="https://developer.hashicorp.com/terraform/tutorials/automation/github-actions" target="_blank" rel="noopener">https://developer.hashicorp.com/terraform/tutorials/automation/github-actions</a></li>
+<li id="fn10">Amazon Web Services. "Configuring OIDC between GitHub Actions and AWS." <em>AWS Docs</em>. <a href="https://docs.aws.amazon.com/IAM/latest/UserGuide/id_roles_providers_create_oidc.html" target="_blank" rel="noopener">https://docs.aws.amazon.com/IAM/latest/UserGuide/id_roles_providers_create_oidc.html</a></li>
+<li id="fn11">HashiCorp. "Sentinel — Policy as Code Framework." <em>HashiCorp Developer</em>. <a href="https://developer.hashicorp.com/sentinel/docs/terraform" target="_blank" rel="noopener">https://developer.hashicorp.com/sentinel/docs/terraform</a></li>
+<li id="fn12">Open Policy Agent. "OPA — Terraform Integration." <em>OPA Documentation</em>. <a href="https://www.openpolicyagent.org/docs/latest/terraform/" target="_blank" rel="noopener">https://www.openpolicyagent.org/docs/latest/terraform/</a></li>
+<li id="fn13">OpenTofu. "OpenTofu — The Open Source Alternative to Terraform." <em>OpenTofu Docs</em>. <a href="https://opentofu.org/docs/" target="_blank" rel="noopener">https://opentofu.org/docs/</a></li>
+<li id="fn14">Infracost. "Cloud Cost Estimation for Terraform." <em>Infracost Docs</em>. <a href="https://www.infracost.io/docs/" target="_blank" rel="noopener">https://www.infracost.io/docs/</a></li>
+</ol>
+
+<p><em>Aymen Ben Yedder — DevOps &amp; Infrastructure Engineer. 8 years in production IaC, cloud architecture, and platform engineering. More at <a href="https://aymen.benyedder.top">aymen.benyedder.top</a>.</em></p>
+`,
+  },
+  {
+    id: 'post-docker-production',
+    title: 'Production Docker: Multi-Stage Builds, Security Scanning, and Image Optimization',
+    slug: 'production-docker-multi-stage-builds-security-scanning-optimization',
+    description: 'Production-grade Docker: multi-stage builds for 80% smaller images, Trivy security scanning in CI, distroless base images, layer caching strategies, health checks, and container hardening patterns from 8 years of production experience.',
+    publishedAt: '2026-07-28',
+    categories: ['DevOps'],
+    tags: ['Docker', 'Container Security', 'DevOps', 'CI/CD', 'Image Optimization', 'Trivy'],
+    readingTime: 12,
+    body: `<h2>The Problem with Docker in Production</h2>
+
+<p>Docker changed how we ship software. The promise of "it works everywhere" was real enough to transform the industry. But somewhere between the tutorial and the production deployment, things got complicated.</p>
+
+<p>I've been running Docker in production for over eight years — across startup VPS setups, multi-node Swarm clusters, and Kubernetes deployments. The problems I see repeat themselves: images that are 1.5 GB because nobody thought to clean up build dependencies, containers running as root with access to the host's Docker socket, and vulnerabilities sitting in base images that haven't been updated since the project started.</p>
+
+<p>This article covers three areas where I've seen the biggest impact on production Docker quality: <strong>multi-stage builds</strong> for small, secure images, <strong>security scanning</strong> integrated into your CI pipeline, and <strong>image optimization</strong> patterns that reduce attack surface and deployment time.</p>
+
+<h2>Why Image Size Matters More Than You Think</h2>
+
+<p>A 1.2 GB Node.js image is not a badge of honour. It's a tax on every part of your deployment pipeline: slower uploads to the registry, slower pulls on your servers, and a dramatically larger surface area for vulnerabilities. Every layer in a Docker image is a potential attack vector — the more you include, the more you expose.</p>
+
+<p>Consider what happens when you push a 1.5 GB image vs. a 150 MB one:<a class="footnote-ref" href="#fn1">[1]</a></p>
+
+<table>
+  <thead>
+    <tr>
+      <th>Metric</th>
+      <th>Large Image (1.5 GB)</th>
+      <th>Optimized Image (150 MB)</th>
+      <th>Improvement</th>
+    </tr>
+  </thead>
+  <tbody>
+    <tr>
+      <td>Upload to registry (100 Mbps)</td>
+      <td>~2 minutes</td>
+      <td>~12 seconds</td>
+      <td>10x faster</td>
+    </tr>
+    <tr>
+      <td>Pull on deploy (1 Gbps)</td>
+      <td>~12 seconds</td>
+      <td>~1.2 seconds</td>
+      <td>10x faster</td>
+    </tr>
+    <tr>
+      <td>Disk usage (30 deploys retained)</td>
+      <td>~45 GB</td>
+      <td>~4.5 GB</td>
+      <td>90% less</td>
+    </tr>
+    <tr>
+      <td>Known CVEs (typical)</td>
+      <td>150–400+</td>
+      <td>5–20</td>
+      <td>95% fewer</td>
+    </tr>
+  </tbody>
+</table>
+
+<p>Every second your deploy takes is time your application is in a partially updated state. Every CVE in your image is a potential incident. Optimizing image size directly improves both security and operational reliability.</p>
+
+<h2>Multi-Stage Builds: The Single Most Impactful Docker Pattern</h2>
+
+<p>Multi-stage builds let you use one Dockerfile with multiple <code>FROM</code> statements. Early stages contain the full build toolchain (compilers, npm, dev dependencies). Later stages copy only the runtime artifacts into a minimal base image. The build tools never reach production.</p>
+
+<h3>Node.js Example</h3>
+
+<pre><code># Stage 1: Build
+FROM node:22-alpine AS builder
+WORKDIR /app
+COPY package*.json ./
+RUN npm ci --only=production
+COPY . .
+RUN npm run build
+
+# Stage 2: Production runtime
+FROM node:22-alpine AS runner
+WORKDIR /app
+RUN addgroup --system --gid 1001 nodejs && \
+    adduser --system --uid 1001 nodeuser
+
+COPY --from=builder --chown=nodeuser:nodejs /app/dist ./dist
+COPY --from=builder --chown=nodeuser:nodejs /app/node_modules ./node_modules
+COPY --from=builder --chown=nodeuser:nodejs /app/package.json ./
+
+USER nodeuser
+EXPOSE 3000
+ENV NODE_ENV=production
+CMD ["node", "dist/index.js"]</code></pre>
+
+<p>Key decisions in this Dockerfile:</p>
+<ul>
+  <li><strong>Alpine base</strong> — keeps the image around 120 MB vs. 350 MB for full Debian-based Node images. Alpine uses musl libc instead of glibc, which means a smaller footprint but you need to verify compatibility with native modules<a class="footnote-ref" href="#fn2">[2]</a>.</li>
+  <li><strong>Non-root user</strong> — the <code>USER nodeuser</code> directive means the container runs without root privileges. If an attacker exploits your application, they don't automatically get root access to the container. This is one of the Docker security fundamentals that gets ignored more often than you'd think.</li>
+  <li><strong><code>npm ci</code></strong> — uses <code>package-lock.json</code> for deterministic installs. Unlike <code>npm install</code>, <code>npm ci</code> fails if the lockfile is out of sync with <code>package.json</code>, preventing "works on my machine" deployment failures.</li>
+</ul>
+
+<h3>Python Example</h3>
+
+<pre><code># Stage 1: Build
+FROM python:3.12-slim AS builder
+WORKDIR /app
+COPY requirements.txt .
+RUN pip install --user --no-cache-dir -r requirements.txt
+
+COPY . .
+RUN python -m compileall .
+
+# Stage 2: Production runtime
+FROM python:3.12-slim AS runner
+WORKDIR /app
+
+RUN addgroup --system --gid 1001 pyuser && \
+    adduser --system --uid 1001 pyuser
+
+COPY --from=builder /root/.local /root/.local
+COPY --from=builder /app /app
+
+ENV PYTHONDONTWRITEBYTECODE=1 \
+    PYTHONUNBUFFERED=1
+
+USER pyuser
+CMD ["python", "-m", "app"]</code></pre>
+
+<p>The pattern is identical: build in one stage, produce artifacts, copy only what's needed into a clean runtime stage. The result is typically a 70–80% reduction in final image size compared to a single-stage build<a class="footnote-ref" href="#fn3">[3]</a>.</p>
+
+<h3>Go Example (Compiled Languages)</h3>
+
+<p>For compiled languages like Go, Rust, or C++, multi-stage builds are even more dramatic because the build stage contains the entire compiler toolchain:</p>
+
+<pre><code># Stage 1: Build
+FROM golang:1.22 AS builder
+WORKDIR /app
+COPY go.mod go.sum ./
+RUN go mod download
+COPY . .
+RUN CGO_ENABLED=0 GOOS=linux go build -o /app/server .
+
+# Stage 2: Distroless runtime
+FROM gcr.io/distroless/static-debian12:nonroot AS runner
+COPY --from=builder /app/server /server
+EXPOSE 8080
+ENTRYPOINT ["/server"]</code></pre>
+
+<p>Using <code>distroless</code> as the runtime base — Google's minimal images that contain only your application and its runtime dependencies — produces a final image in the 10–20 MB range. No shell, no package manager, no utilities. Just your binary and the Linux kernel syscalls it needs<a class="footnote-ref" href="#fn4">[4]</a>.</p>
+
+<h2>Base Image Selection Strategy</h2>
+
+<p>Your choice of base image is the single biggest factor determining your final image size and vulnerability count. Here's how the options compare for a typical Node.js application:</p>
+
+<table>
+  <thead>
+    <tr>
+      <th>Base Image</th>
+      <th>Size</th>
+      <th>Typical CVEs</th>
+      <th>Use Case</th>
+    </tr>
+  </thead>
+  <tbody>
+    <tr>
+      <td><code>node:22</code> (Debian full)</td>
+      <td>~350 MB</td>
+      <td>100–200</td>
+      <td>Local development, compatibility testing</td>
+    </tr>
+    <tr>
+      <td><code>node:22-slim</code></td>
+      <td>~180 MB</td>
+      <td>30–60</td>
+      <td>Production with common native deps</td>
+    </tr>
+    <tr>
+      <td><code>node:22-alpine</code></td>
+      <td>~120 MB</td>
+      <td>0–10</td>
+      <td>Production, minimal footprint</td>
+    </tr>
+    <tr>
+      <td><code>gcr.io/distroless/nodejs22-debian12</code></td>
+      <td>~100 MB</td>
+      <td>0–5</td>
+      <td>Security-critical production</td>
+    </tr>
+  </tbody>
+</table>
+
+<p>Distroless images are the gold standard for security-conscious teams. They contain only your application and its runtime dependencies — no shell, no package manager, no utilities. This dramatically reduces the attack surface<a class="footnote-ref" href="#fn5">[5]</a>. The tradeoff is debuggability: you can't <code>docker exec</code> into a distroless container to run diagnostics. In practice, you compensate with better observability (structured logging, metrics, tracing) rather than runtime debugging.</p>
+
+<h2>Security Scanning: Integrate, Don't Bolt On</h2>
+
+<p>Scanning your images once before pushing to production is not enough. Images should be scanned at every stage: in CI before registry push, in the registry, and periodically in production. The tools have matured significantly in the last few years.</p>
+
+<h3>CI Pipeline Integration</h3>
+
+<p>Here's the scanning workflow I use in every project. It runs in CI, after the image is built but before it's pushed to the registry:</p>
+
+<pre><code># .github/workflows/docker-security.yml
+name: Docker Security Scan
+
+on:
+  pull_request:
+    paths:
+      - 'Dockerfile'
+      - '**/Dockerfile'
+
+jobs:
+  scan:
+    runs-on: ubuntu-latest
+    steps:
+      - uses: actions/checkout@v4
+
+      - name: Build image
+        run: docker build -t app:\${{ github.sha }} .
+
+      - name: Scan with Trivy
+        uses: aquasecurity/trivy-action@master
+        with:
+          image-ref: 'app:\${{ github.sha }}'
+          format: 'sarif'
+          output: 'trivy-results.sarif'
+          severity: 'CRITICAL,HIGH'
+          exit-code: '1'
+
+      - name: Upload scan results
+        uses: github/codeql-action/upload-sarif@v3
+        with:
+          sarif_file: 'trivy-results.sarif'
+
+      - name: Check for secrets
+        uses: aquasecurity/trivy-action@master
+        with:
+          scan-type: 'fs'
+          scan-ref: '.'
+          scanners: 'secret'</code></pre>
+
+<p>The <code>exit-code: '1'</code> parameter is the crucial piece — it causes the pipeline to fail if any CRITICAL or HIGH vulnerabilities are found. This means a PR with a vulnerable image literally cannot merge. No manual gates, no Slack ping to "please fix this." The CI blocks it<a class="footnote-ref" href="#fn6">[6]</a>.</p>
+
+<h3>Vulnerability Scanning Tools Compared</h3>
+
+<p>I've used all four major open-source container scanners in production. Here's how they compare:</p>
+
+<table>
+  <thead>
+    <tr>
+      <th>Tool</th>
+      <th>Speed</th>
+      <th>Database Currency</th>
+      <th>SARIF Output</th>
+      <th>License Scanning</th>
+      <th>CI Integration</th>
+    </tr>
+  </thead>
+  <tbody>
+    <tr>
+      <td><strong>Trivy</strong></td>
+      <td>Fastest</td>
+      <td>Excellent (updated daily)</td>
+      <td>Yes</td>
+      <td>Yes</td>
+      <td>Native GitHub Action</td>
+    </tr>
+    <tr>
+      <td><strong>Grype</strong></td>
+      <td>Fast</td>
+      <td>Excellent (anchore feed)</td>
+      <td>Yes</td>
+      <td>Yes</td>
+      <td>GitHub Action available</td>
+    </tr>
+    <tr>
+      <td><strong>Clair</strong></td>
+      <td>Moderate</td>
+      <td>Good (Red Hat + OSV feeds)</td>
+      <td>No</td>
+      <td>No</td>
+      <td>Requires Clair server</td>
+    </tr>
+    <tr>
+      <td><strong>Docker Scout</strong></td>
+      <td>Moderate</td>
+      <td>Good (Docker Hub feed)</td>
+      <td>Limited</td>
+      <td>No</td>
+      <td>Docker Desktop + CLI</td>
+    </tr>
+  </tbody>
+</table>
+
+<p><strong>Trivy</strong> is the tool I default to in every project. It's fast (typically scans an image in 5–30 seconds), covers multiple vulnerability databases (NVD, Red Hat, Debian, Alpine, GitHub Advisory), supports multiple output formats including SARIF which integrates directly into GitHub Code Scanning, and has a mature GitHub Action maintained by Aqua Security<a class="footnote-ref" href="#fn7">[7]</a>.</p>
+
+<h2>Image Optimization Beyond Multi-Stage</h2>
+
+<h3>Layer Caching Strategy</h3>
+
+<p>Docker builds each layer independently and caches them. Layers that haven't changed are reused from cache. The order of instructions in your Dockerfile directly determines how effective caching is:</p>
+
+<pre><code># Bad: invalidates cache on every code change
+COPY . .
+RUN npm ci
+RUN npm run build
+
+# Good: leverages Docker layer caching
+COPY package*.json ./
+RUN npm ci
+COPY . .
+RUN npm run build</code></pre>
+
+<p>By copying <code>package.json</code> and running <code>npm ci</code> <em>before</em> copying the rest of the source code, Docker caches the dependency installation layer. On subsequent builds, as long as <code>package.json</code> hasn't changed, that layer is reused — saving 30–60 seconds per CI build. For a team running 50 CI builds a day, that's 25–50 minutes of cumulative build time saved<a class="footnote-ref" href="#fn8">[8]</a>.</p>
+
+<h3><code>.dockerignore</code> Is Not Optional</h3>
+
+<p>Without a <code>.dockerignore</code> file, every <code>COPY . .</code> sends your entire project directory — including <code>node_modules</code>, <code>.git</code>, <code>.env</code>, and build artifacts — to the Docker daemon as build context. This slows builds, invalidates cache for irrelevant files, and can accidentally include secrets in your image:</p>
+
+<pre><code># .dockerignore
+node_modules
+.git
+.env
+*.md
+dist
+.cache
+.vscode
+.idea
+coverage
+tests
+docker-compose*.yml</code></pre>
+
+<h3>Health Checks and Resource Constraints</h3>
+
+<p>These are not optimization patterns in the traditional sense, but they directly impact production reliability:</p>
+
+<pre><code>HEALTHCHECK --interval=30s --timeout=3s --start-period=5s --retries=3 \
+  CMD wget --no-verbose --tries=1 --spider http://localhost:3000/health || exit 1</code></pre>
+
+<p>The <code>HEALTHCHECK</code> instruction tells Docker how to test if the container is actually working. Without it, a container stuck in a deadlock or serving 500s is considered "healthy" because the process is still running. With it, Docker automatically restarts unhealthy containers<a class="footnote-ref" href="#fn9">[9]</a>.</p>
+
+<p>Combined with resource constraints:</p>
+
+<pre><code>docker run -d --name app \
+  --memory="512m" \
+  --cpus="0.5" \
+  --restart=unless-stopped \
+  --read-only \
+  --tmpfs /tmp:rw,noexec,nosuid \
+  app:latest</code></pre>
+
+<p>This prevents any single container from consuming all host memory, limits CPU contention, and makes the container filesystem read-only (except <code>/tmp</code>) — blocking a whole class of container breakout attacks.</p>
+
+<h2>The Production Dockerfile: A Reference</h2>
+
+<p>Here's the Dockerfile I start from for Node.js services. It incorporates every pattern discussed above:</p>
+
+<pre><code># Stage 1: Build
+FROM node:22-alpine AS builder
+WORKDIR /app
+
+# Dependency installation (only invalidates on package changes)
+COPY package*.json ./
+RUN npm ci --only=production --ignore-scripts && \
+    npm cache clean --force
+
+# Build stage
+COPY tsconfig.json ./
+COPY src ./src
+RUN npm run build
+
+# Stage 2: Production runtime with distroless
+FROM gcr.io/distroless/nodejs22-debian12:nonroot AS runner
+WORKDIR /app
+
+COPY --from=builder /app/dist ./dist
+COPY --from=builder /app/node_modules ./node_modules
+COPY package.json ./
+
+EXPOSE 3000
+ENV NODE_ENV=production
+
+HEALTHCHECK --interval=30s --timeout=3s --start-period=10s --retries=3 \
+  CMD ["node", "-e", "require('http').get('http://localhost:3000/health', r => process.exit(r.statusCode === 200 ? 0 : 1))"]
+
+USER nonroot:nonroot
+CMD ["dist/index.js"]</code></pre>
+
+<p>Final image size: approximately 150 MB. Vulnerabilities (Trivy scan): typically 0 critical, 0–5 high. Base image: distroless with no shell, no package manager. User: non-root, unprivileged. Ready for production.</p>
+
+<h2>Security Hardening Checklist</h2>
+
+<p>Beyond what we've covered, here are the additional practices I apply to every production Docker deployment:</p>
+
+<ul>
+  <li><strong>Never run containers as root.</strong> Create a dedicated user in the Dockerfile and use <code>USER</code> to switch. Drop Linux capabilities with <code>--cap-drop=ALL</code> and add back only what's needed.</li>
+  <li><strong>Use read-only root filesystems.</strong> Pass <code>--read-only</code> to <code>docker run</code>. Mount <code>--tmpfs</code> for directories that need write access (<code>/tmp</code>, <code>/var/run</code>).</li>
+  <li><strong>Pin base image digests, not tags.</strong> <code>FROM node:22-alpine@sha256:abc123...</code> instead of <code>FROM node:22-alpine</code>. This prevents a base image update from changing your image without your explicit action.</li>
+  <li><strong>Scan images in CI, and fail on CRITICAL/HIGH.</strong> Use Trivy or Grype with <code>exit-code: 1</code> for severity thresholds that match your risk tolerance.</li>
+  <li><strong>Sign your images.</strong> Use Docker Content Trust or <code>cosign</code> to sign images. Verify signatures before deployment. This prevents tampered images from reaching production.</li>
+  <li><strong>Enable Docker BuildKit.</strong> Set <code>DOCKER_BUILDKIT=1</code> for faster builds, better cache invalidation, and SSH mount support for private repository access during builds.</li>
+  <li><strong>Clean up unused images and volumes.</strong> Run <code>docker system prune -f</code> regularly in CI and on production hosts to prevent disk exhaustion.</li>
+  <li><strong>Use a minimal base image.</strong> Prefer Alpine or Distroless over full Debian images. Every package in your image is a potential vulnerability.</li>
+</ul>
+
+<p>If you're building out a broader container strategy, my article on <a href="https://aymen.benyedder.top/blog/devops-vps-startups/">DevOps on a VPS: Production-Ready Setup for Startups</a> covers the full deployment pipeline from Docker Compose to CI/CD, and <a href="https://aymen.benyedder.top/blog/beyond-tutorial-web-resilience/">Architecting Web Systems for 99.9% Resilience</a> discusses how these container patterns fit into a larger reliability framework.</p>
+
+<h2>Image Tagging and Registry Strategy</h2>
+
+<p>Tag your images with <strong>commit SHA + environment</strong>, not <code>latest</code>. The <code>latest</code> tag is ambiguous and makes rollbacks impossible because you can't tell which version you were running before. Instead:</p>
+
+<ul>
+  <li><code>sha-a1b2c3d4</code> — immutable, traceable to a specific commit</li>
+  <li><code>sha-a1b2c3d4-production</code> — tagged after successful production deploy</li>
+  <li><code>v1.2.3</code> — for release versions</li>
+</ul>
+
+<p>Use a private registry (Docker Hub private repos, GitHub Container Registry (GHCR), AWS ECR, or a self-hosted Harbor registry). Public registries are fine for base images; your application images should never be public by default. Configure retention policies in your registry to automatically delete images older than 90 days — this keeps storage costs predictable and prevents image sprawl<a class="footnote-ref" href="#fn10">[10]</a>.</p>
+
+<h2>Docker in Production: Beyond the Container</h2>
+
+<p>A well-optimized Docker image is necessary but not sufficient for production reliability. The container itself sits inside a larger system — the host OS, the orchestration layer, the network, the storage, and the monitoring stack all matter just as much.</p>
+
+<p>Key operational practices I follow:</p>
+<ul>
+  <li><strong>Log everything to stdout/stderr.</strong> Docker captures these streams. Use a log shipper (Promtail, Filebeat, Fluentd) to forward them to a centralized platform like Loki or Elasticsearch. Never log to files inside the container — they're lost when the container restarts.</li>
+  <li><strong>Set resource limits.</strong> Always specify <code>--memory</code> and <code>--cpus</code> in production. Without limits, a memory leak in one container can bring down the entire host.</li>
+  <li><strong>Use orchestration.</strong> Docker Compose is fine for single-host setups. For multi-host, use Docker Swarm (easier) or Kubernetes (more powerful). Both provide declarative deployment, health-check-based recovery, and rolling updates out of the box.</li>
+  <li><strong>Monitor container metrics.</strong> Track container CPU, memory, disk I/O, and restart count. cAdvisor plus Prometheus covers this natively. Set up alerts for container OOM kills and unexpected restarts.</li>
+</ul>
+
+<p>For a complete monitoring setup around your Docker infrastructure, I've covered the full stack — Prometheus, Grafana, Loki, Alertmanager, and cAdvisor — in detail in my guide on <a href="https://aymen.benyedder.top/blog/devops-vps-startups/">DevOps on a VPS for Startups: Self-Hosted CI/CD, Docker and Monitoring</a>.</p>
+
+<h2>Conclusion</h2>
+
+<p>Running Docker in production is not about the <code>docker run</code> command. It's about the discipline you build around image construction, security scanning, and operational monitoring. Multi-stage builds cut your image size by 70–80% and eliminate the build toolchain from production. Trivy or Grype scanning in CI prevents vulnerable images from reaching your registry. Health checks, read-only filesystems, and non-root users harden the container against runtime attacks.</p>
+
+<p>The patterns in this article represent lessons learned across years of production incidents — not theoretical best practices. Every one of them has saved me from a specific failure mode, and every one of them is within reach of any team, regardless of scale.</p>
+
+<p>Start with the multi-stage build. Then add the security scan. Then harden the runtime. The rest is iteration.</p>
+
+<hr>
+
+<h2>References</h2>
+
+<ol class="footnotes-list">
+  <li id="fn1" class="footnote-item">Docker Inc. "Best practices for writing Dockerfiles." <em>Docker Docs</em>. <a href="https://docs.docker.com/develop/develop-images/dockerfile_best-practices/" target="_blank" rel="noopener">https://docs.docker.com/develop/develop-images/dockerfile_best-practices/</a></li>
+  <li id="fn2" class="footnote-item">Alpine Linux. "Alpine Docker Image." <em>Docker Hub</em>. <a href="https://hub.docker.com/_/alpine" target="_blank" rel="noopener">https://hub.docker.com/_/alpine</a></li>
+  <li id="fn3" class="footnote-item">Docker Inc. "Multi-stage builds." <em>Docker Docs</em>. <a href="https://docs.docker.com/build/building/multi-stage/" target="_blank" rel="noopener">https://docs.docker.com/build/building/multi-stage/</a></li>
+  <li id="fn4" class="footnote-item">Google. "Distroless Container Images." <em>GitHub</em>. <a href="https://github.com/GoogleContainerTools/distroless" target="_blank" rel="noopener">https://github.com/GoogleContainerTools/distroless</a></li>
+  <li id="fn5" class="footnote-item">Google. "Why Distroless Containers?" <em>GitHub</em>. <a href="https://github.com/GoogleContainerTools/distroless#why-should-i-use-distroless-images" target="_blank" rel="noopener">https://github.com/GoogleContainerTools/distroless#why-should-i-use-distroless-images</a></li>
+  <li id="fn6" class="footnote-item">Aqua Security. "Trivy GitHub Action." <em>GitHub Marketplace</em>. <a href="https://github.com/aquasecurity/trivy-action" target="_blank" rel="noopener">https://github.com/aquasecurity/trivy-action</a></li>
+  <li id="fn7" class="footnote-item">Aqua Security. "Trivy — Comprehensive Vulnerability Scanner." <em>GitHub</em>. <a href="https://github.com/aquasecurity/trivy" target="_blank" rel="noopener">https://github.com/aquasecurity/trivy</a></li>
+  <li id="fn8" class="footnote-item">Docker Inc. "Leverage layer caching." <em>Docker Docs</em>. <a href="https://docs.docker.com/build/cache/" target="_blank" rel="noopener">https://docs.docker.com/build/cache/</a></li>
+  <li id="fn9" class="footnote-item">Docker Inc. "Dockerfile reference — HEALTHCHECK." <em>Docker Docs</em>. <a href="https://docs.docker.com/engine/reference/builder/#healthcheck" target="_blank" rel="noopener">https://docs.docker.com/engine/reference/builder/#healthcheck</a></li>
+  <li id="fn10" class="footnote-item">Docker Inc. "Docker image tags best practices." <em>Docker Blog</em>. <a href="https://www.docker.com/blog/tagging-best-practices/" target="_blank" rel="noopener">https://www.docker.com/blog/tagging-best-practices/</a></li>
+</ol>
+
+<p><em>Aymen Ben Yedder — DevOps & Systems Engineer. 8 years in production infrastructure. Writing about Docker, CI/CD, and infrastructure automation for engineering teams. More at <a href="https://aymen.benyedder.top">aymen.benyedder.top</a>.</em></p>
+`,
+  },
+  {
+    id: 'post-prometheus-grafana-monitoring',
+    title: 'Prometheus + Grafana on a VPS: Complete Self-Hosted Monitoring Stack',
+    slug: 'prometheus-grafana-self-hosted-monitoring-stack-vps',
+    description: 'Complete self-hosted monitoring stack on a single VPS: Prometheus, Grafana, Loki, Alertmanager, Node Exporter, and cAdvisor with Docker Compose. Includes alert rules, dashboard provisioning, Nginx reverse proxy, and cost comparison vs Datadog.',
+    publishedAt: '2026-07-28',
+    categories: ['DevOps'],
+    tags: ['Prometheus', 'Grafana', 'Monitoring', 'Observability', 'DevOps', 'Loki', 'Alertmanager'],
+    readingTime: 14,
+    body: `<p>If you're running production services on a VPS — whether it's a SaaS backend, a side project, or a client's staging environment — you've probably asked yourself: <em>What happens when the server goes down at 3 AM?</em></p>
+
+<p>The short answer is: without monitoring, you find out when a user emails you. The better answer is Prometheus + Grafana, the open-source stack that powers observability at everything from five-person startups to billion-user enterprises at Spotify, SoundCloud, and DigitalOcean<a class="footnote-ref" href="#fn1">[1]</a>.</p>
+
+<p>In this guide, I'll walk you through deploying a complete self-hosted monitoring stack on a single VPS: Prometheus for metrics collection, Grafana for dashboards, Loki for logs, Alertmanager for notifications, Node Exporter for system metrics, and cAdvisor for Docker container monitoring. I run this exact stack on my own infrastructure, and I've used variations of it across production environments over the last eight years.</p>
+
+<h2>Why Self-Hosted Monitoring?</h2>
+
+<p>Before we dive into the tech, let's address the elephant in the room: managed observability vendors like Datadog, New Relic, and Grafana Cloud are excellent products. They're also expensive — shockingly so at scale. Datadog's Infrastructure Monitoring starts at $15 per host per month, and that's before APM, logs, and custom metrics. A three-node cluster with moderate logging can easily run $500–$2,000/month.</p>
+
+<p>Self-hosting Prometheus and Grafana on a $10–$20/month VPS gives you:</p>
+
+<ul>
+  <li><strong>Unlimited metrics volume</strong> — your only limit is disk space</li>
+  <li><strong>Complete data control</strong> — no metrics leave your network</li>
+  <li><strong>No per-host licensing</strong> — scale to dozens of nodes at no additional software cost</li>
+  <li><strong>Full customisation</strong> — every alert, every dashboard, every retention policy is yours to tune</li>
+  <li><strong>Learning value</strong> — understanding PromQL, TSDB internals, and alerting semantics is a genuine SRE skill</li>
+</ul>
+
+<p>Of course, self-hosting means you're on the hook for maintenance, backups, and upgrades. But for a small-to-medium infrastructure, that's a trade-off worth making — especially when your monitoring stack costs less than a coffee subscription.</p>
+
+<h2>Prometheus Architecture: Pull, Store, Alert</h2>
+
+<p>Prometheus is a <strong>pull-based</strong> monitoring system. Unlike push-based agents (Telegraf, Datadog Agent) that fire metrics at a central server, Prometheus scrapes HTTP endpoints at regular intervals. This has several important implications:</p>
+
+<ul>
+  <li><strong>You can tell if a target is down</strong> — a missing scrape is itself an alert condition</li>
+  <li><strong>No authentication headache at the agent level</strong> — the Prometheus server is the only thing that needs access to your metrics endpoints</li>
+  <li><strong>Service discovery</strong> — Prometheus integrates with Kubernetes, Consul, DNS, and file-based discovery to find targets dynamically<a class="footnote-ref" href="#fn2">[2]</a></li>
+</ul>
+
+<p>The architecture breaks down into four components that we'll deploy together:</p>
+
+<table>
+  <thead>
+    <tr>
+      <th>Component</th>
+      <th>Role</th>
+      <th>Port</th>
+    </tr>
+  </thead>
+  <tbody>
+    <tr>
+      <td>Prometheus Server</td>
+      <td>Scrapes, stores, evaluates alert rules</td>
+      <td>9090</td>
+    </tr>
+    <tr>
+      <td>Node Exporter</td>
+      <td>Exposes Linux kernel metrics (CPU, memory, disk, network)</td>
+      <td>9100</td>
+    </tr>
+    <tr>
+      <td>cAdvisor</td>
+      <td>Exposes Docker container metrics</td>
+      <td>8080</td>
+    </tr>
+    <tr>
+      <td>Alertmanager</td>
+      <td>Deduplicates, groups, and routes alerts</td>
+      <td>9093</td>
+    </tr>
+    <tr>
+      <td>Grafana</td>
+      <td>Visualisation and dashboarding</td>
+      <td>3000</td>
+    </tr>
+    <tr>
+      <td>Loki</td>
+      <td>Log aggregation (with Promtail)</td>
+      <td>3100</td>
+    </tr>
+  </tbody>
+</table>
+
+<p>All of this runs in Docker Compose on a single VPS. In production, you'd separate these across nodes or use Thanos for long-term storage, but for the scale we're targeting, a single box is perfectly adequate — and remarkably performant.</p>
+
+<h2>Prerequisites</h2>
+
+<p>Before we start, you'll need:</p>
+
+<ul>
+  <li>A VPS running Ubuntu 22.04 or Debian 12 (2 GB RAM, 2 vCPUs, 40 GB disk minimum)</li>
+  <li>Docker and Docker Compose v2 installed</li>
+  <li>A domain pointing to your VPS for Grafana access</li>
+  <li>Basic familiarity with YAML and Linux administration</li>
+</ul>
+
+<p>If you haven't set up your VPS yet, check out my previous article on <a href="https://aymen.benyedder.top/blog/devops-vps-startups/">DevOps on a VPS: Production-Ready Setup for Startups</a> — it covers everything from initial hardening to Docker installation.</p>
+
+<h2>Deploying the Stack with Docker Compose</h2>
+
+<p>Let's create the project structure. Every component gets its own configuration directory, making upgrades and debugging straightforward:</p>
+
+<pre><code>mkdir -p monitoring/{prometheus,grafana,alertmanager,loki,promtail}
+cd monitoring</code></pre>
+
+<p>Here's the full <code>docker-compose.yml</code>. I'll break down each section afterward:</p>
+
+<pre><code>version: '3.8'
+
+networks:
+  monitoring:
+    driver: bridge
+
+volumes:
+  prometheus-data:
+  grafana-data:
+  alertmanager-data:
+  loki-data:
+
+services:
+  prometheus:
+    image: prom/prometheus:v2.53.0
+    container_name: prometheus
+    volumes:
+      - ./prometheus/prometheus.yml:/etc/prometheus/prometheus.yml
+      - ./prometheus/alert-rules.yml:/etc/prometheus/alert-rules.yml
+      - prometheus-data:/prometheus
+    command:
+      - '--config.file=/etc/prometheus/prometheus.yml'
+      - '--storage.tsdb.path=/prometheus'
+      - '--storage.tsdb.retention.time=30d'
+      - '--web.console.libraries=/usr/share/prometheus/console_libraries'
+      - '--web.console.templates=/usr/share/prometheus/consoles'
+    ports:
+      - "127.0.0.1:9090:9090"
+    networks:
+      - monitoring
+    restart: unless-stopped
+
+  node-exporter:
+    image: prom/node-exporter:v1.8.0
+    container_name: node-exporter
+    volumes:
+      - /proc:/host/proc:ro
+      - /sys:/host/sys:ro
+      - /:/rootfs:ro
+    command:
+      - '--path.procfs=/host/proc'
+      - '--path.sysfs=/host/sys'
+      - '--path.rootfs=/rootfs'
+      - '--collector.filesystem.mount-points-exclude=^/(sys|proc|dev|host|etc)($$|/)'
+    ports:
+      - "127.0.0.1:9100:9100"
+    networks:
+      - monitoring
+    restart: unless-stopped
+
+  cadvisor:
+    image: gcr.io/cadvisor/cadvisor:v0.49.1
+    container_name: cadvisor
+    volumes:
+      - /:/rootfs:ro
+      - /var/run:/var/run:ro
+      - /sys:/sys:ro
+      - /var/lib/docker/:/var/lib/docker:ro
+      - /dev/disk/:/dev/disk:ro
+    devices:
+      - /dev/kmsg
+    privileged: true
+    ports:
+      - "127.0.0.1:8080:8080"
+    networks:
+      - monitoring
+    restart: unless-stopped
+
+  alertmanager:
+    image: prom/alertmanager:v0.27.0
+    container_name: alertmanager
+    volumes:
+      - ./alertmanager/alertmanager.yml:/etc/alertmanager/alertmanager.yml
+      - alertmanager-data:/alertmanager
+    command:
+      - '--config.file=/etc/alertmanager/alertmanager.yml'
+      - '--storage.path=/alertmanager'
+    ports:
+      - "127.0.0.1:9093:9093"
+    networks:
+      - monitoring
+    restart: unless-stopped
+
+  grafana:
+    image: grafana/grafana:11.0.0
+    container_name: grafana
+    volumes:
+      - ./grafana/datasources:/etc/grafana/provisioning/datasources
+      - ./grafana/dashboards:/etc/grafana/provisioning/dashboards
+      - grafana-data:/var/lib/grafana
+    environment:
+      - GF_SECURITY_ADMIN_USER=admin
+      - GF_SECURITY_ADMIN_PASSWORD=\${GRAFANA_ADMIN_PASSWORD}
+      - GF_INSTALL_PLUGINS=grafana-piechart-panel
+      - GF_SERVER_DOMAIN=monitoring.yourdomain.com
+      - GF_SERVER_ROOT_URL=https://monitoring.yourdomain.com
+    ports:
+      - "127.0.0.1:3000:3000"
+    networks:
+      - monitoring
+    restart: unless-stopped
+
+  loki:
+    image: grafana/loki:3.0.0
+    container_name: loki
+    volumes:
+      - ./loki/loki.yml:/etc/loki/loki.yml
+      - loki-data:/loki
+    command:
+      - '-config.file=/etc/loki/loki.yml'
+    ports:
+      - "127.0.0.1:3100:3100"
+    networks:
+      - monitoring
+    restart: unless-stopped
+
+  promtail:
+    image: grafana/promtail:3.0.0
+    container_name: promtail
+    volumes:
+      - ./promtail/promtail.yml:/etc/promtail/promtail.yml
+      - /var/log:/var/log:ro
+      - /var/lib/docker/containers:/var/lib/docker/containers:ro
+    command:
+      - '-config.file=/etc/promtail/promtail.yml'
+    networks:
+      - monitoring
+    restart: unless-stopped</code></pre>
+
+<p>A few design decisions worth calling out:</p>
+
+<ul>
+  <li><strong>All ports bind to 127.0.0.1</strong> — the stack is never exposed directly. Nginx reverse proxy handles external access with TLS.</li>
+  <li><strong>Retention is set to 30 days</strong> via <code>--storage.tsdb.retention.time=30d</code>. This keeps about 10–15 GB of data on a typical 3-node setup.</li>
+  <li><strong>Grafana admin password comes from an environment variable</strong> — create a <code>.env</code> file in the project root with <code>GRAFANA_ADMIN_PASSWORD=your-secure-password</code>. Never hardcode secrets in Compose files.</li>
+  <li><strong>cAdvisor runs privileged</strong> — unfortunately, this is required for container resource metrics. Limit its attack surface by binding only to localhost.</li>
+</ul>
+
+<h2>Configuring Prometheus: Targets and Service Discovery</h2>
+
+<p>Prometheus needs to know what to scrape and how often. The main configuration file, <code>prometheus/prometheus.yml</code>, defines scrape targets, global settings, and alert rule files:</p>
+
+<pre><code>global:
+  scrape_interval: 15s
+  evaluation_interval: 15s
+  scrape_timeout: 10s
+
+alerting:
+  alertmanagers:
+    - static_configs:
+        - targets:
+          - alertmanager:9093
+
+rule_files:
+  - "alert-rules.yml"
+
+scrape_configs:
+  - job_name: 'prometheus'
+    static_configs:
+      - targets: ['localhost:9090']
+
+  - job_name: 'node'
+    static_configs:
+      - targets:
+        - node-exporter:9100
+
+  - job_name: 'cadvisor'
+    static_configs:
+      - targets:
+        - cadvisor:8080
+
+  - job_name: 'loki'
+    static_configs:
+      - targets:
+        - loki:3100</code></pre>
+
+<p>Each <code>job_name</code> represents a logical group of targets. Prometheus resolves Docker service names via the embedded DNS — <code>node-exporter:9100</code> resolves to the container IP on the <code>monitoring</code> network. This is one of those small conveniences that makes Docker Compose so pleasant for homelab and VPS setups.</p>
+
+<p>The <code>scrape_interval: 15s</code> is a sane default. For most system metrics (CPU, memory, disk), 15-second resolution captures anomalies without generating excessive storage volume. If you're monitoring request latency or throughput, you might tighten this to 5–10 seconds.</p>
+
+<h3>Alerting Rules: What to Watch For</h3>
+
+<p>Alerting rules are evaluated by Prometheus and fired to Alertmanager. Create <code>prometheus/alert-rules.yml</code>:</p>
+
+<pre><code>groups:
+  - name: node_alerts
+    interval: 30s
+    rules:
+      - alert: HighCPUUsage
+        expr: 100 - (avg by(instance) (rate(node_cpu_seconds_total{mode="idle"}[5m])) * 100) > 80
+        for: 10m
+        labels:
+          severity: warning
+        annotations:
+          summary: "CPU usage above 80% on {{ $labels.instance }}"
+          description: "CPU usage is {{ $value | humanizePercentage }} on {{ $labels.instance }} for over 10 minutes."
+
+      - alert: CriticalCPUUsage
+        expr: 100 - (avg by(instance) (rate(node_cpu_seconds_total{mode="idle"}[5m])) * 100) > 95
+        for: 5m
+        labels:
+          severity: critical
+        annotations:
+          summary: "Critical CPU usage above 95% on {{ $labels.instance }}"
+          description: "CPU usage is {{ $value | humanizePercentage }} on {{ $labels.instance }}."
+
+      - alert: HighMemoryUsage
+        expr: (1 - (node_memory_MemAvailable_bytes / node_memory_MemTotal_bytes)) * 100 > 85
+        for: 5m
+        labels:
+          severity: warning
+        annotations:
+          summary: "Memory usage above 85% on {{ $labels.instance }}"
+          description: "Memory usage is {{ $value | humanizePercentage }} on {{ $labels.instance }}."
+
+      - alert: DiskSpaceLow
+        expr: (node_filesystem_avail_bytes{mountpoint="/",fstype!~"tmpfs|overlay"} / node_filesystem_size_bytes{mountpoint="/",fstype!~"tmpfs|overlay"}) * 100 < 15
+        for: 5m
+        labels:
+          severity: warning
+        annotations:
+          summary: "Disk space below 15% on {{ $labels.instance }}"
+          description: "Disk available is {{ $value | humanizePercentage }} on {{ $labels.instance }} (mount: {{ $labels.mountpoint }})."
+
+      - alert: DiskSpaceCritical
+        expr: (node_filesystem_avail_bytes{mountpoint="/",fstype!~"tmpfs|overlay"} / node_filesystem_size_bytes{mountpoint="/",fstype!~"tmpfs|overlay"}) * 100 < 5
+        for: 2m
+        labels:
+          severity: critical
+        annotations:
+          summary: "Disk space below 5% on {{ $labels.instance }}"
+          description: "Disk available is {{ $value | humanizePercentage }} on {{ $labels.instance }}."
+
+      - alert: InstanceDown
+        expr: up == 0
+        for: 1m
+        labels:
+          severity: critical
+        annotations:
+          summary: "Instance {{ $labels.instance }} is down"
+          description: "Instance {{ $labels.instance }} (job: {{ $labels.job }}) has been unreachable for over 1 minute."
+
+      - alert: HighLoadAverage
+        expr: node_load15 > (count without(cpu, mode) (node_cpu_seconds_total{mode="idle"}) * 0.8)
+        for: 15m
+        labels:
+          severity: warning
+        annotations:
+          summary: "Load average high on {{ $labels.instance }}"
+          description: "15-minute load average is {{ $value }} on {{ $labels.instance }}."
+
+      - alert: RootFilesystemFullPredict
+        expr: predict_linear(node_filesystem_avail_bytes{mountpoint="/",fstype!~"tmpfs|overlay"}[6h], 24*3600) < 0
+        for: 1h
+        labels:
+          severity: warning
+        annotations:
+          summary: "Root filesystem on {{ $labels.instance }} predicted to fill within 24 hours"
+          description: "Based on the last 6 hours of data, {{ $labels.instance }} will run out of disk space within 24 hours."</code></pre>
+
+<p>A few rules deserve special mention:</p>
+
+<ul>
+  <li><strong><code>predict_linear</code></strong> — Prometheus's built-in forecasting function. The "RootFilesystemFullPredict" rule uses linear regression on the last 6 hours of disk usage to predict whether you'll run out in the next 24 hours. This has saved me more than once when a misconfigured logger started filling up <code>/var/log</code>.</li>
+  <li><strong><code>up == 0</code></strong> — the most fundamental alert. Since Prometheus uses pull-based scraping, a missing scrape is itself a signal. If Node Exporter, cAdvisor, or any target stops responding, this rule fires.</li>
+  <li><strong><code>for: 10m</code> / <code>for: 5m</code></strong> — the <code>for</code> duration prevents flapping alerts. CPU spikes during a deployment or cron job won't trigger notifications unless the condition persists.</li>
+</ul>
+
+<h2>Grafana: Dashboard Design and Provisioning</h2>
+
+<p>Grafana supports <strong>provisioning</strong> — declaring datasources and dashboards as code. This is non-negotiable for any reproducible setup. Create <code>grafana/datasources/datasources.yml</code>:</p>
+
+<pre><code>apiVersion: 1
+
+datasources:
+  - name: Prometheus
+    type: prometheus
+    access: proxy
+    url: http://prometheus:9090
+    isDefault: true
+
+  - name: Loki
+    type: loki
+    access: proxy
+    url: http://loki:3100</code></pre>
+
+<p>For dashboards, Grafana can import dashboards from JSON files on startup. The community Node Exporter Full dashboard (ID 1860) is the de-facto standard for system monitoring<a class="footnote-ref" href="#fn3">[3]</a>. Download it programmatically in a setup script:</p>
+
+<pre><code>mkdir -p grafana/dashboards
+curl -o grafana/dashboards/node-exporter-full.json \
+  https://grafana.com/api/dashboards/1860/revisions/latest/download</code></pre>
+
+<p>Then create the dashboard provider: <code>grafana/dashboards/dashboards.yml</code>:</p>
+
+<pre><code>apiVersion: 1
+
+providers:
+  - name: 'default'
+    orgId: 1
+    folder: ''
+    type: file
+    disableDeletion: false
+    editable: true
+    options:
+      path: /etc/grafana/provisioning/dashboards</code></pre>
+
+<p>This gives you a fully functioning Grafana instance with Prometheus and Loki datasources, plus the Node Exporter dashboard, on first boot. No clicking around in the UI.</p>
+
+<h3>Custom Dashboard Design Principles</h3>
+
+<p>Over the years, I've developed a few heuristics for dashboard design that I apply consistently:</p>
+
+<ul>
+  <li><strong>One screen, one question</strong> — each row or section should answer a single operational question: "Is CPU saturated?", "Are containers restarting?", "Is disk filling up?"</li>
+  <li><strong>Left to right, top to bottom</strong> — overview panels go at the top (Uptime, CPU, Memory), drilling down into detail below (per-process, per-container)</li>
+  <li><strong>Red/yellow/green thresholds</strong> — every gauge and stat panel should have visible threshold lines. If a panel doesn't have a threshold, ask whether it needs one.</li>
+  <li><strong>Logs context</strong> — use Loki as a panel datasource alongside Prometheus. A CPU spike panel with a "Show related logs" link is infinitely more useful than either in isolation.</li>
+  <li><strong>Minimal cardinality</strong> — avoid <code>label_join</code> and high-cardinality labels (user IDs, email addresses, request paths with params). Each unique label combination creates a new time series, and Prometheus's strength degrades beyond a few million series<a class="footnote-ref" href="#fn4">[4]</a>.</li>
+</ul>
+
+<h2>Loki: Log Aggregation Without the Complexity</h2>
+
+<p>Loki is Grafana's log aggregation system, designed to be economical by not indexing the content of log lines — only their labels (host, job, container name, etc.)<a class="footnote-ref" href="#fn5">[5]</a>. This makes it dramatically cheaper than Elasticsearch for log storage, both in RAM and disk.</p>
+
+<p>Create <code>loki/loki.yml</code>:</p>
+
+<pre><code>auth_enabled: false
+
+server:
+  http_listen_port: 3100
+
+ingester:
+  lifecycler:
+    address: 127.0.0.1
+    ring:
+      kvstore:
+        store: inmemory
+      replication_factor: 1
+    final_sleep: 0s
+  chunk_idle_period: 5m
+  chunk_retain_period: 30s
+  max_transfer_retries: 0
+
+schema_config:
+  configs:
+    - from: 2024-01-01
+      store: boltdb-shipper
+      object_store: filesystem
+      schema: v11
+      index:
+        prefix: index_
+        period: 24h
+
+storage_config:
+  boltdb_shipper:
+    active_index_directory: /loki/index
+    cache_location: /loki/cache
+    cache_ttl: 168h
+    shared_store: filesystem
+  filesystem:
+    directory: /loki/chunks
+
+compactor:
+  working_directory: /loki/compactor
+  shared_store: filesystem
+
+limits_config:
+  reject_old_samples: true
+  reject_old_samples_max_age: 168h
+
+chunk_store_config:
+  max_look_back_period: 0s
+
+table_manager:
+  retention_deletes_enabled: true
+  retention_period: 672h</code></pre>
+
+<p>And <code>promtail/promtail.yml</code> to ship logs:</p>
+
+<pre><code>server:
+  http_listen_port: 9080
+  grpc_listen_port: 0
+
+positions:
+  filename: /tmp/positions.yaml
+
+clients:
+  - url: http://loki:3100/loki/api/v1/push
+
+scrape_configs:
+  - job_name: system
+    static_configs:
+      - targets:
+          - localhost
+        labels:
+          job: varlogs
+          __path__: /var/log/*log
+
+  - job_name: containers
+    pipeline_stages:
+      - docker: {}
+    static_configs:
+      - targets:
+          - localhost
+        labels:
+          job: dockerlogs
+          __path__: /var/lib/docker/containers/*/*-json.log</code></pre>
+
+<p>Within minutes of starting the stack, you'll have logs from all running Docker containers and system logs flowing into Loki, queryable directly from Grafana's Explore tab.</p>
+
+<h2>Alertmanager: Routing and Notification</h2>
+
+<p>Alertmanager receives alerts from Prometheus, deduplicates them, groups them intelligently, and routes them to the right notification channel. Create <code>alertmanager/alertmanager.yml</code>:</p>
+
+<pre><code>route:
+  receiver: 'default'
+  group_wait: 30s
+  group_interval: 5m
+  repeat_interval: 4h
+  routes:
+    - match:
+        severity: critical
+      receiver: 'pagerduty'
+      repeat_interval: 1h
+    - match:
+        severity: warning
+      receiver: 'slack'
+
+receivers:
+  - name: 'default'
+    slack_configs:
+      - api_url: 'https://hooks.slack.com/services/xxx/yyy/zzz'
+        channel: '#alerts'
+        title: '{{ template "custom.title" . }}'
+        text: '{{ template "custom.slack" . }}'
+
+  - name: 'slack'
+    slack_configs:
+      - api_url: 'https://hooks.slack.com/services/xxx/yyy/zzz'
+        channel: '#alerts-warning'
+        send_resolved: true
+        title: '{{ template "custom.title" . }}'
+        text: '{{ template "custom.slack" . }}'
+
+  - name: 'pagerduty'
+    pagerduty_configs:
+      - routing_key: 'your_pagerduty_key'
+        severity: 'critical'
+
+templates:
+  - '/etc/alertmanager/*.tmpl'</code></pre>
+
+<p>Key configuration decisions:</p>
+
+<ul>
+  <li><strong><code>group_wait: 30s</code></strong> — buffers alerts for 30 seconds before sending, allowing Alertmanager to group related alerts into a single notification</li>
+  <li><strong><code>repeat_interval: 4h</code></strong> — prevents alert fatigue. You don't need a notification every 5 minutes that CPU is at 90%. Once every 4 hours is sufficient unless the severity escalates</li>
+  <li><strong>Critical alerts go to PagerDuty</strong> — warning-level alerts are fine for Slack, but a critical alert should page someone</li>
+  <li><strong><code>send_resolved: true</code></strong> — crucial for reducing noise. Knowing when an alert resolves is as important as knowing when it fires</li>
+</ul>
+
+<p>Alertmanager supports email, Slack, PagerDuty, OpsGenie, webhook, and more<a class="footnote-ref" href="#fn6">[6]</a>. For a small team, Slack or Discord with a webhook is perfectly adequate. Alertmanager templates let you customise the notification format — I use a template that includes the Grafana dashboard link directly in the alert:</p>
+
+<pre><code>{{ define "custom.title" }}
+  [{{ .Status | toUpper }}] {{ .GroupLabels.alertname }}
+{{ end }}
+
+{{ define "custom.slack" }}
+  {{ range .Alerts }}
+    *Alert:* {{ .Annotations.summary }}
+    *Description:* {{ .Annotations.description }}
+    *Graph:* <{{ .GeneratorURL }}|View in Grafana>
+    *Severity:* {{ .Labels.severity }}
+    *Instance:* {{ .Labels.instance }}
+  {{ end }}
+{{ end }}</code></pre>
+
+<h2>Securing the Stack with Nginx Reverse Proxy</h2>
+
+<p>You should never expose Prometheus, Alertmanager, or Grafana directly to the internet. The compose file above binds all ports to <code>127.0.0.1</code>, meaning only localhost can reach them. Your Nginx reverse proxy sits in front, handling TLS termination and basic authentication.</p>
+
+<p>On the host (not in a container), configure a site in <code>/etc/nginx/sites-available/monitoring.yourdomain.com</code>:</p>
+
+<pre><code>server {
+    listen 443 ssl http2;
+    server_name monitoring.yourdomain.com;
+
+    ssl_certificate /etc/letsencrypt/live/monitoring.yourdomain.com/fullchain.pem;
+    ssl_certificate_key /etc/letsencrypt/live/monitoring.yourdomain.com/privkey.pem;
+
+    location / {
+        proxy_pass http://127.0.0.1:3000;
+        proxy_set_header Host $host;
+        proxy_set_header X-Real-IP $remote_addr;
+        proxy_set_header X-Forwarded-Proto $scheme;
+
+        # Grafana requires WebSocket proxying for live updates
+        proxy_http_version 1.1;
+        proxy_set_header Upgrade $http_upgrade;
+        proxy_set_header Connection "upgrade";
+    }
+
+    # Optional: basic auth for Prometheus API
+    location /prometheus/ {
+        proxy_pass http://127.0.0.1:9090/;
+        auth_basic "Prometheus";
+        auth_basic_user_file /etc/nginx/.htpasswd;
+    }
+}
+
+server {
+    listen 80;
+    server_name monitoring.yourdomain.com;
+    return 301 https://$server_name$request_uri;
+}</code></pre>
+
+<p>Add Grafana's <code>GF_SERVER_ROOT_URL</code> environment variable matching the domain, and you have a TLS-secured monitoring portal accessible from anywhere. Use Let's Encrypt with Certbot for free SSL certificates.</p>
+
+<p>If you're rolling out a full production stack across multiple services, check out my article on <a href="https://aymen.benyedder.top/blog/unified-type-safety-hono-tanstack-docker/">Unified Type Safety with Hono, TanStack, and Docker</a> for patterns on structuring compose-based deployments.</p>
+
+<h2>Metric Retention and Storage Strategy</h2>
+
+<p>Prometheus's local TSDB is performant but not infinitely scalable. For a single VPS running a handful of nodes, here's what you can expect:</p>
+
+<table>
+  <thead>
+    <tr>
+      <th>Configuration</th>
+      <th>Daily Storage</th>
+      <th>30-Day Storage</th>
+      <th>Scrape Interval</th>
+    </tr>
+  </thead>
+  <tbody>
+    <tr>
+      <td>1 server (Node Exporter + cAdvisor + 5 containers)</td>
+      <td>~200–400 MB</td>
+      <td>~6–12 GB</td>
+      <td>15s</td>
+    </tr>
+    <tr>
+      <td>3 servers (Node Exporter + cAdvisor + ~15 containers)</td>
+      <td>~600 MB – 1.2 GB</td>
+      <td>~18–36 GB</td>
+      <td>15s</td>
+    </tr>
+    <tr>
+      <td>5 servers + custom application metrics</td>
+      <td>~1–3 GB</td>
+      <td>~30–90 GB</td>
+      <td>15s</td>
+    </tr>
+  </tbody>
+</table>
+
+<p>A few retention strategies worth considering:</p>
+
+<ul>
+  <li><strong>Downsampling with recording rules</strong> — create aggregated metrics (e.g., <code>avg by(instance) (rate(...)[5m])</code>) at longer intervals and retain those longer than raw data</li>
+  <li><strong>Thanos or Cortex</strong> — for multi-server setups, Thanos provides global querying across Prometheus instances with unlimited object store retention (S3, GCS, MinIO)<a class="footnote-ref" href="#fn7">[7]</a></li>
+  <li><strong>Alertmanager silencing</strong> — during maintenance windows, silence alerts rather than stopping Prometheus, preserving your metric continuity</li>
+  <li><strong>Compaction</strong> — Prometheus automatically compacts older blocks. Monitor <code>prometheus_tsdb_blocks_loaded</code> to verify compaction is keeping pace with ingestion</li>
+</ul>
+
+<h2>Cost Comparison: Self-Hosted vs Managed</h2>
+
+<p>Let's talk numbers. Here's a realistic monthly cost comparison for monitoring 5 hosts with moderate logging (10 GB/day):</p>
+
+<table>
+  <thead>
+    <tr>
+      <th>Category</th>
+      <th>Self-Hosted</th>
+      <th>Datadog</th>
+      <th>Grafana Cloud</th>
+      <th>New Relic</th>
+    </tr>
+  </thead>
+  <tbody>
+    <tr>
+      <td>Infrastructure</td>
+      <td>$15 (VPS)</td>
+      <td>$75 (5 hosts × $15)</td>
+      <td>$0–$79 (free tier + overage)</td>
+      <td>$0–$100 (free tier + overage)</td>
+    </tr>
+    <tr>
+      <td>Logs (10 GB/day)</td>
+      <td>$0</td>
+      <td>$160 (1.59/GB indexed)</td>
+      <td>$99 (50 GB retention)</td>
+      <td>$75 (0.25/GB ingested)</td>
+    </tr>
+    <tr>
+      <td>Custom Metrics</td>
+      <td>$0</td>
+      <td>$5 per 100 custom metrics</td>
+      <td>$8 per 1,000 series</td>
+      <td>$5 per 100 custom metrics</td>
+    </tr>
+    <tr>
+      <td>APM (optional)</td>
+      <td>$0 (OpenTelemetry)</td>
+      <td>$31 per host</td>
+      <td>$36 per host</td>
+      <td>$0.25/GB ingested</td>
+    </tr>
+    <tr>
+      <td><strong>Total (estimated)</strong></td>
+      <td><strong>~$15–30/month</strong></td>
+      <td><strong>~$350–500/month</strong></td>
+      <td><strong>~$150–250/month</strong></td>
+      <td><strong>~$100–200/month</strong></td>
+    </tr>
+  </tbody>
+</table>
+
+<p>The self-hosted stack saves roughly <strong>90%</strong> compared to Datadog at this scale. However, that saving comes with operational cost: you're responsible for upgrades, security patches, backup restoration, and capacity planning. Measure the TCO holistically. For a startup with less than 10 servers and someone comfortable SSH-ing into a box, self-hosting is a no-brainer. At 50+ servers, the managed premium starts earning its keep through reduced cognitive load.</p>
+
+<p>As I discussed in <a href="https://aymen.benyedder.top/blog/from-logs-to-logic-claude-real-time-visualization-observability/">From Logs to Logic: Real-Time Observability with Claude</a>, the pipeline from raw metrics to actionable insight matters more than the tooling itself. Whether you self-host or buy managed, the principles of good observability remain the same: meaningful alerts, well-designed dashboards, and a culture of incident response.</p>
+
+<h2>Testing the Stack</h2>
+
+<p>Once everything is running, verify each component:</p>
+
+<pre><code># Check Prometheus targets
+curl http://127.0.0.1:9090/api/v1/targets | jq .data.activeTargets
+
+# Check Node Exporter metrics
+curl http://127.0.0.1:9100/metrics | head -20
+
+# Verify Alertmanager is receiving alerts
+curl http://127.0.0.1:9093/api/v2/alerts | jq
+
+# Query Loki for logs
+curl -s "http://127.0.0.1:3100/loki/api/v1/query_range" \
+  --data-urlencode 'query={job="varlogs"}' | jq .data.result
+
+# Access Grafana
+curl -I https://monitoring.yourdomain.com</code></pre>
+
+<p>You can also trigger a test alert to verify your notification pipeline. Create a test rule that fires immediately:</p>
+
+<pre><code># prometheus/test-alert.yml
+groups:
+  - name: test
+    rules:
+      - alert: TestAlert
+        expr: vector(1)
+        annotations:
+          summary: "This is a test alert — your notification pipeline is working"</code></pre>
+
+<p>Apply it temporarily, verify the alert reaches your Slack/PagerDuty channel, then remove it.</p>
+
+<h2>Operational Considerations and Gotchas</h2>
+
+<p>After running this stack for years across multiple environments, here are the sharp edges I've collected:</p>
+
+<ul>
+  <li><strong>Time-series cardinality explosion</strong> — if you expose metrics with unique labels per request (e.g., <code>user_id</code> or <code>email</code> as a label), you can saturate Prometheus's memory in minutes. Monitor <code>prometheus_tsdb_head_series</code> and set a <code>--storage.tsdb.max-block-duration</code> cap. Use <code>metrics_relabel_configs</code> to drop high-cardinality labels at scrape time.</li>
+  <li><strong>Loki out of memory</strong> — Loki's ingester caches chunks in memory before flushing. If you're shipping high-volume logs (50+ MB/s), tune <code>chunk_idle_period</code> and <code>max_chunk_size</code>. I've had Loki OOM on a 2 GB box with aggressive logging; bumping to 4 GB resolved it.</li>
+  <li><strong>Disk filling up faster than expected</strong> — Prometheus TSDB blocks are immutable and cannot be partially deleted. If you misconfigure retention or suddenly double your scrape targets, you might run out of disk before old blocks are cleaned. Set up a disk usage alert (we did!) and consider a separate volume for Prometheus data.</li>
+  <li><strong>Time zone drift</strong> — Prometheus alerting rules evaluate in UTC. If your on-call team is in a different time zone, remember that "between 2 AM and 5 AM" in your rules means UTC unless you adjust. This matters for maintenance window silencing.</li>
+  <li><strong>Backups</strong> — back up <code>prometheus-data</code> and <code>grafana-data</code> volumes. Prometheus's TSDB can be snapshotted live via the <code>/api/v1/admin/tsdb/snapshot</code> API<a class="footnote-ref" href="#fn8">[8]</a>. For Grafana, exporting dashboards as JSON (which you're already provisioning!) is more practical than restoring the full database.</li>
+  <li><strong>Resource allocation</strong> — on a 2 GB VPS, Prometheus + Loki + Grafana + Alertmanager + cAdvisor + Node Exporter + Nginx uses roughly 1–1.5 GB of RAM. That leaves 0.5–1 GB for your actual workloads. If your application containers are memory-sensitive, either upgrade to a 4 GB VPS or use the <code>mem_limit</code> directive in your compose file to cap each service.</li>
+</ul>
+
+<h2>Beyond the Basics: What's Next?</h2>
+
+<p>Once you have the core stack running, here are natural extensions to explore:</p>
+
+<ul>
+  <li><strong>Blackbox Exporter</strong> — external endpoint monitoring. Probe your domain, check SSL certificate expiry, measure HTTP response times from outside your network. This is how you detect outages that affect your users, not just your server.</li>
+  <li><strong>PostgreSQL Exporter / MySQL Exporter</strong> — database-specific metrics: connection count, query throughput, replication lag, long-running transactions.</li>
+  <li><strong>Custom application metrics</strong> — instrument your own code with Prometheus client libraries. Go, Python, Java, Node.js, and Rust all have first-party or recommended clients<a class="footnote-ref" href="#fn9">[9]</a>.</li>
+  <li><strong>OpenTelemetry Collector</strong> — as a unified agent for metrics, traces, and logs. The OpenTelemetry project has become the industry standard for telemetry collection, and Prometheus can scrape OTel metrics natively<a class="footnote-ref" href="#fn10">[10]</a>.</li>
+  <li><strong>Grafana OnCall</strong> — open-source incident management with schedules, escalations, and on-call rotations, integrated directly with Alertmanager.</li>
+</ul>
+
+<h2>Conclusion</h2>
+
+<p>Self-hosting Prometheus and Grafana on a VPS is one of the highest-ROI infrastructure decisions you can make as a small team or solo operator. It costs ~$15/month in compute, gives you enterprise-grade observability, and teaches you the fundamentals of the monitoring stack used at the largest tech companies in the world.</p>
+
+<p>The stack I've laid out here — Prometheus, Node Exporter, cAdvisor, Alertmanager, Loki, Promtail, and Grafana, all behind an Nginx reverse proxy with TLS — has run production workloads for years across multiple environments. It's battle-tested, it's cheap, and it's entirely under your control.</p>
+
+<p>Start with the basics: scrape system metrics, ship container logs, set up a few critical alerts, and build a dashboard that answers the questions you actually ask at 3 AM. You can always layer on complexity later.</p>
+
+<p>If you're building out your monitoring stack alongside a broader DevOps setup, check out <a href="https://aymen.benyedder.top/blog/devops-vps-startups/">DevOps on a VPS: Production-Ready Setup for Startups</a> for foundational infrastructure patterns, and <a href="https://aymen.benyedder.top/blog/from-logs-to-logic-claude-real-time-visualization-observability/">From Logs to Logic: Real-Time Observability with Claude</a> for how AI-assisted analysis fits into the observability pipeline.</p>
+
+<hr class="footnotes-sep">
+
+<h2>References</h2>
+
+<ol class="footnotes-list">
+  <li id="fn1" class="footnote-item">Prometheus Authors. "Overview — Prometheus Monitoring." <em>prometheus.io</em>. <a href="https://prometheus.io/docs/introduction/overview/">https://prometheus.io/docs/introduction/overview/</a></li>
+  <li id="fn2" class="footnote-item">Prometheus Authors. "Configuration — scrape_config." <em>prometheus.io</em>. <a href="https://prometheus.io/docs/prometheus/latest/configuration/configuration/#scrape_config">https://prometheus.io/docs/prometheus/latest/configuration/configuration/#scrape_config</a></li>
+  <li id="fn3" class="footnote-item">Grafana Labs. "Node Exporter Full — Dashboard ID 1860." <em>grafana.com/grafana/dashboards</em>. <a href="https://grafana.com/grafana/dashboards/1860">https://grafana.com/grafana/dashboards/1860</a></li>
+  <li id="fn4" class="footnote-item">Prometheus Authors. "Best Practices — Naming and Labels." <em>prometheus.io</em>. <a href="https://prometheus.io/docs/practices/naming/">https://prometheus.io/docs/practices/naming/</a></li>
+  <li id="fn5" class="footnote-item">Grafana Labs. "Loki Overview." <em>grafana.com/docs/loki</em>. <a href="https://grafana.com/docs/loki/latest/get-started/overview/">https://grafana.com/docs/loki/latest/get-started/overview/</a></li>
+  <li id="fn6" class="footnote-item">Prometheus Authors. "Alertmanager Configuration." <em>prometheus.io</em>. <a href="https://prometheus.io/docs/alerting/latest/configuration/">https://prometheus.io/docs/alerting/latest/configuration/</a></li>
+  <li id="fn7" class="footnote-item">Thanos Authors. "Thanos — Overview." <em>thanos.io</em>. <a href="https://thanos.io/tip/thanos/quick-tutorial.md/">https://thanos.io/tip/thanos/quick-tutorial.md/</a></li>
+  <li id="fn8" class="footnote-item">Prometheus Authors. "Prometheus HTTP API — TSDB Admin." <em>prometheus.io</em>. <a href="https://prometheus.io/docs/prometheus/latest/querying/api/#tsdb-admin-apis">https://prometheus.io/docs/prometheus/latest/querying/api/#tsdb-admin-apis</a></li>
+  <li id="fn9" class="footnote-item">Prometheus Authors. "Client Libraries — Prometheus." <em>prometheus.io</em>. <a href="https://prometheus.io/docs/instrumenting/clientlibs/">https://prometheus.io/docs/instrumenting/clientlibs/</a></li>
+  <li id="fn10" class="footnote-item">CNCF. "OpenTelemetry — An observability framework for cloud-native software." <em>opentelemetry.io</em>. <a href="https://opentelemetry.io/docs/concepts/what-is-opentelemetry/">https://opentelemetry.io/docs/concepts/what-is-opentelemetry/</a></li>
+</ol>
+`,
   },
 ];

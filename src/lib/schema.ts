@@ -59,9 +59,10 @@ export function generateWebSite(data: SiteData, personId: string) {
 }
 
 export function generateWebPage(data: { url: string; name: string; description: string; dateModified: string }, siteId: string, aboutId: string) {
+  const url = data.url.replace(/\/$/, '');
   return {
     '@type': 'WebPage',
-    '@id': `${data.url}/#webpage`,
+    '@id': `${url}/#webpage`,
     url: data.url,
     name: data.name,
     description: data.description,
@@ -86,9 +87,10 @@ export function generateOrganization(data: { name: string; url: string; logo: st
 }
 
 export function generateBreadcrumbList(items: { name: string; url: string }[]) {
+  const lastUrl = items[items.length - 1].url.replace(/\/$/, '');
   return {
     '@type': 'BreadcrumbList',
-    '@id': `${items[items.length - 1].url}/#breadcrumb`,
+    '@id': `${lastUrl}/#breadcrumb`,
     itemListElement: items.map((item, i) => ({
       '@type': 'ListItem',
       position: i + 1,
@@ -127,7 +129,7 @@ export function generateBlogPosting(data: {
 }) {
   return {
     '@type': 'BlogPosting',
-    '@id': `${data.url}/#article`,
+    '@id': `${data.url.replace(/\/$/, '')}/#article`,
     headline: data.headline,
     description: data.description,
     ...(data.image && { image: data.image }),
@@ -159,7 +161,7 @@ export function generateArticle(data: {
 }) {
   return {
     '@type': 'Article',
-    '@id': `${data.url}/#article`,
+    '@id': `${data.url.replace(/\/$/, '')}/#article`,
     headline: data.headline,
     description: data.description,
     ...(data.image && { image: data.image }),
@@ -209,7 +211,7 @@ export function generateProfessionalService(data: {
 }) {
   return {
     '@type': 'ProfessionalService',
-    '@id': `${data.url}/#service`,
+    '@id': `${data.url.replace(/\/$/, '')}/#service`,
     name: data.name,
     description: data.description,
     provider: { '@id': data.providerId },
@@ -279,7 +281,7 @@ export function generateTechArticle(data: {
 }) {
   return {
     '@type': 'TechArticle',
-    '@id': `${data.url}/#techarticle`,
+    '@id': `${data.url.replace(/\/$/, '')}/#techarticle`,
     headline: data.headline,
     description: data.description,
     ...(data.image && { image: data.image }),
@@ -329,15 +331,9 @@ export function generateHeadGraph(
     areaServed: ['Tunisia', 'France', 'Europe', 'Middle East', 'North Africa'],
     serviceTypes: ['DevOps Consulting', 'CI/CD Pipeline Automation', 'Cloud Infrastructure', 'Web Development', 'Server Setup & Hardening'],
   });
-  const app = generateSoftwareApplication({
-    name: site.name,
-    url: site.url,
-    description: site.description,
-    creatorId: personId,
-  });
 
   return {
     '@context': 'https://schema.org',
-    '@graph': [personObj, siteObj, pageObj, org, lb, service, app],
+    '@graph': [personObj, siteObj, pageObj, org, lb, service],
   };
 }
