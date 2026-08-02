@@ -20,7 +20,16 @@ const postCards = posts.map(p => ({
   readingTime: p.readingTime,
 }));
 
-const categories = ['all', ...new Set(posts.flatMap(p => p.categories).filter(Boolean))];
+const categoryKeys = new Set<string>();
+const categories = ['all', ...posts
+  .flatMap(p => p.categories)
+  .filter(Boolean)
+  .filter(c => {
+    const key = c.toLowerCase();
+    if (categoryKeys.has(key)) return false;
+    categoryKeys.add(key);
+    return true;
+  })];
 ---
 
 <BaseLayout
@@ -48,7 +57,8 @@ const categories = ['all', ...new Set(posts.flatMap(p => p.categories).filter(Bo
           {categories.map(cat => (
             <button
               data-category={cat === 'all' ? '' : cat}
-              class="filter-btn label-caps px-[12px] py-[8px] min-h-[36px] border cursor-pointer transition-all duration-200 border-[var(--border)] text-[var(--text-2)] hover:border-[var(--accent)] hover:text-[var(--accent)]"
+              aria-pressed={cat === 'all'}
+              class="filter-btn label-caps px-[12px] py-[8px] min-h-[44px] border cursor-pointer transition-all duration-200 border-[var(--border)] text-[var(--text-2)] hover:border-[var(--accent)] hover:text-[var(--accent)]"
             >
               {cat === 'all' ? 'ALL' : cat.toUpperCase()}
             </button>
@@ -92,16 +102,19 @@ const categories = ['all', ...new Set(posts.flatMap(p => p.categories).filter(Bo
         document.querySelectorAll('.filter-btn').forEach(b => {
           b.classList.remove('border-[var(--accent)]', 'text-[var(--accent)]', 'bg-[rgba(16,185,129,0.08)]', 'shadow-[0_0_8px_rgba(16,185,129,0.1)]');
           b.classList.add('border-[var(--border)]', 'text-[var(--text-2)]');
+          b.setAttribute('aria-pressed', 'false');
         });
         btn.classList.remove('border-[var(--border)]', 'text-[var(--text-2)]');
         btn.classList.add('border-[var(--accent)]', 'text-[var(--accent)]', 'bg-[rgba(16,185,129,0.08)]', 'shadow-[0_0_8px_rgba(16,185,129,0.1)]');
+        btn.setAttribute('aria-pressed', 'true');
 
         document.querySelectorAll('.post-card').forEach(card => {
           if (!category) {
             (card as HTMLElement).style.display = 'block';
           } else {
             const categories = JSON.parse(card.getAttribute('data-categories') || '[]');
-            (card as HTMLElement).style.display = categories.includes(category) ? 'block' : 'none';
+            const key = category.toLowerCase();
+            (card as HTMLElement).style.display = categories.some((c: string) => c.toLowerCase() === key) ? 'block' : 'none';
           }
         });
       });

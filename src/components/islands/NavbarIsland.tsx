@@ -23,11 +23,18 @@ export default function NavbarIsland() {
   const [shrunk, setShrunk] = useState(false);
   const [activeSection, setActiveSection] = useState('');
   const [scrollProgress, setScrollProgress] = useState(0);
+  // Tracks whether hydration has completed. Guards any render-time read of
+  // browser-only APIs (window.location) that would diverge from the SSR HTML
+  // and trigger React hydration mismatch (#418).
+  const [hydrated, setHydrated] = useState(false);
   const menuRef = useRef<HTMLUListElement>(null);
   const headerRef = useRef<HTMLElement>(null);
 
   // Force dark mode on mount (client-side only)
   useEffect(() => { forceDarkMode(); }, []);
+
+  // Flip after first client commit so pathname-based active states can kick in
+  useEffect(() => { setHydrated(true); }, []);
 
   // Scroll listener: track scroll position, shrink state, progress
   useEffect(() => {
@@ -112,11 +119,11 @@ export default function NavbarIsland() {
       const sectionId = item.href.replace('/#', '');
       return activeSection === sectionId;
     }
-    // Blog link active when on /blog/ page
-    if (typeof document !== 'undefined') {
-      return item.href !== '/' && window.location.pathname.startsWith(item.href.replace(/\/$/, ''));
-    }
-    return false;
+    // Blog link active when on /blog/ page.
+    // Guarded by `hydrated` so the server render and the first client render
+    // produce identical markup (pathname is only read after hydration).
+    if (!hydrated) return false;
+    return item.href !== '/' && window.location.pathname.startsWith(item.href.replace(/\/$/, ''));
   };
 
   const headerHeight = shrunk ? 'h-[44px]' : 'h-[52px]';

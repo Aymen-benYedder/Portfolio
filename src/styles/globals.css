@@ -113,6 +113,8 @@
 
 html {
   scroll-behavior: smooth;
+  /* Fixed navbar is 52px tall (44px shrunk) — keep anchored sections clear of it */
+  scroll-padding-top: 84px;
   max-width: var(--container-max);
   margin: 0 auto;
 }

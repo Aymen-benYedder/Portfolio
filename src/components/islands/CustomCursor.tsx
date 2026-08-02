@@ -40,10 +40,10 @@ export default function CustomCursor() {
     ringPos.current.y += (mouseRef.current.y - ringPos.current.y) * 0.08;
 
     if (cursorRef.current) {
-      cursorRef.current.style.transform = `translate(${mouseRef.current.x}px, ${mouseRef.current.y}px)`;
+      cursorRef.current.style.transform = `translate(${mouseRef.current.x}px, ${mouseRef.current.y}px) translate(-50%, -50%)`;
     }
     if (ringRef.current) {
-      ringRef.current.style.transform = `translate(${ringPos.current.x}px, ${ringPos.current.y}px)`;
+      ringRef.current.style.transform = `translate(${ringPos.current.x}px, ${ringPos.current.y}px) translate(-50%, -50%)`;
     }
 
     rafRef.current = requestAnimationFrame(animateRing);
