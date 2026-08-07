@@ -3,6 +3,7 @@ import BlogLayout from '@layouts/BlogLayout.astro';
 import ArticleSchema from '@components/seo/ArticleSchema.astro';
 import BreadcrumbSchema from '@components/seo/BreadcrumbSchema.astro';
 import FAQPageSchema from '@components/seo/FAQPageSchema.astro';
+import TechArticleSchema from '@components/seo/TechArticleSchema.astro';
 import DeployMeta from '@components/ui/DeployMeta.astro';
 import Badge from '@components/ui/Badge.astro';
 import CodeBlockInjector from '@components/islands/CodeBlockInjector.tsx';
@@ -84,13 +85,15 @@ if (!post) {
 const allPosts = await getNormalizedPosts();
 const relatedPosts = getRelatedPosts(allPosts, slug as string, 3);
 const canonicalUrl = getCanonicalUrl(slug as string, post.canonicalUrl);
+// OG/JSON-LD need absolute URLs; the <img> keeps the relative path so it renders in local preview too.
+const postImage = post.image?.url ? (post.image.url.startsWith('http') ? post.image.url : `https://aymen.benyedder.top${post.image.url}`) : undefined;
 ---
 
 <BlogLayout
   title={post.seoTitle || post.title}
   description={post.seoDescription || post.description || `Read about ${post.title}`}
   canonical={canonicalUrl}
-  image={post.image?.url}
+  image={postImage}
   noIndex={post.noIndex}
   breadcrumbItems={[
     { name: 'Home', url: 'https://aymen.benyedder.top/' },
@@ -106,7 +109,7 @@ const canonicalUrl = getCanonicalUrl(slug as string, post.canonicalUrl);
     headline={post.title}
     description={post.seoDescription || post.description || ''}
     url={canonicalUrl}
-    image={post.image?.url}
+    image={postImage}
     datePublished={post.publishedAt}
     dateModified={post.updatedAt || post.publishedAt}
     keywords={post.tags}
@@ -116,18 +119,30 @@ const canonicalUrl = getCanonicalUrl(slug as string, post.canonicalUrl);
     wordCount={post.body ? (typeof post.body === 'string' ? post.body.replace(/<[^>]*>/g, '').split(/\s+/).length : 0) : 0}
   />
   {post.faq && post.faq.length > 0 && <FAQPageSchema items={post.faq} url={canonicalUrl} />}
+  <TechArticleSchema
+    headline={post.title}
+    description={post.seoDescription || post.description || ''}
+    url={canonicalUrl}
+    image={postImage}
+    datePublished={post.publishedAt}
+    dateModified={post.updatedAt || post.publishedAt}
+    keywords={post.tags}
+    authorName={post.author?.name}
+    authorUrl={post.author?.slug ? `https://aymen.benyedder.top/author/${post.author.slug}/` : undefined}
+    proficiencyLevel="Intermediate"
+  />
 
   <article class="max-w-[var(--container-max)] mx-auto px-[var(--section-px)] pt-[var(--section-gap)]">
     <header class="mb-[var(--spacing-gap-lg)]">
       <div class="flex items-center gap-[var(--spacing-gap-sm)] mb-[var(--spacing-gap-sm)] flex-wrap">
         {post.categories.map((cat: string) => <Badge variant="ghost">{cat}</Badge>)}
       </div>
-      <h1 class="font-[family-name:var(--font-mono)] text-[var(--heading-md)] max-md:text-[22px] font-bold leading-[1.2] text-[var(--text-1)] m-0">{post.title}</h1>
+      <h1 class="font-[family-name:var(--font-mono)] text-[length:var(--heading-md)] max-md:text-[22px] font-bold leading-[1.2] text-[var(--text-1)] m-0">{post.title}</h1>
       <div class="flex items-center gap-[var(--spacing-gap-md)] mt-[var(--spacing-gap-sm)] flex-wrap">
-        {post.publishedAt && <time datetime={post.publishedAt} class="font-[family-name:var(--font-mono)] text-[var(--text-2xs)] text-[var(--text-3)]">{new Date(post.publishedAt).toLocaleDateString('en-US', { year: 'numeric', month: 'long', day: 'numeric' })}</time>}
-        {post.readingTime && <span class="font-[family-name:var(--font-mono)] text-[var(--text-2xs)] text-[var(--text-3)]">{post.readingTime} min read</span>}
+        {post.publishedAt && <time datetime={post.publishedAt} class="font-[family-name:var(--font-mono)] text-[length:var(--text-2xs)] text-[var(--text-3)]">{new Date(post.publishedAt).toLocaleDateString('en-US', { year: 'numeric', month: 'long', day: 'numeric' })}</time>}
+        {post.readingTime && <span class="font-[family-name:var(--font-mono)] text-[length:var(--text-2xs)] text-[var(--text-3)]">{post.readingTime} min read</span>}
         {post.author && (
-          <span class="font-[family-name:var(--font-mono)] text-[var(--text-2xs)] text-[var(--accent)]">
+          <span class="font-[family-name:var(--font-mono)] text-[length:var(--text-2xs)] text-[var(--accent)]">
             By <a href={`/author/${post.author.slug}/`} class="text-[var(--accent)] hover:underline">{post.author.name}</a>
           </span>
         )}
@@ -137,23 +152,23 @@ const canonicalUrl = getCanonicalUrl(slug as string, post.canonicalUrl);
     {post.image && (
       <figure class="mb-[var(--spacing-gap-lg)] border border-[var(--border)]">
         <img src={post.image.url} alt={post.image.alt} class="w-full h-auto" loading="lazy" decoding="async" />
-        {post.image.caption && <figcaption class="text-[var(--text-2)] text-[var(--text-small)] mt-[var(--spacing-gap-xs)] text-center">{post.image.caption}</figcaption>}
+        {post.image.caption && <figcaption class="text-[var(--text-2)] text-[length:var(--text-small)] mt-[var(--spacing-gap-xs)] text-center">{post.image.caption}</figcaption>}
       </figure>
     )}
 
     {post.directAnswer && (
       <div class="mb-[var(--spacing-gap-lg)] p-[var(--card-px)] bg-[rgba(16,185,129,0.05)] border-l-2 border-[var(--accent)]">
-        <h2 class="font-[family-name:var(--font-mono)] text-[var(--text-small)] font-bold text-[var(--accent)] mb-[var(--spacing-gap-xs)]">Direct Answer</h2>
-        <p class="text-[var(--text-base)] text-[var(--text-2)] leading-relaxed">{post.directAnswer}</p>
+        <h2 class="font-[family-name:var(--font-mono)] text-[length:var(--text-small)] font-bold text-[var(--accent)] mb-[var(--spacing-gap-xs)]">Direct Answer</h2>
+        <p class="text-[length:var(--text-base)] text-[var(--text-2)] leading-relaxed">{post.directAnswer}</p>
       </div>
     )}
 
     {post.keyTakeaways && post.keyTakeaways.length > 0 && (
       <div class="mb-[var(--spacing-gap-lg)] p-[var(--card-px)] border border-[var(--border)]">
-        <h2 class="font-[family-name:var(--font-mono)] text-[var(--text-small)] font-bold text-[var(--text-1)] mb-[var(--spacing-gap-sm)]">Key Takeaways</h2>
+        <h2 class="font-[family-name:var(--font-mono)] text-[length:var(--text-small)] font-bold text-[var(--text-1)] mb-[var(--spacing-gap-sm)]">Key Takeaways</h2>
         <ul class="space-y-[var(--spacing-gap-xs)]">
           {post.keyTakeaways.map((takeaway: string) => (
-            <li class="text-[var(--text-small)] text-[var(--text-2)] flex items-start gap-[8px]">
+            <li class="text-[length:var(--text-small)] text-[var(--text-2)] flex items-start gap-[8px]">
               <span class="text-[var(--accent)] mt-[3px]">→</span>
               <span>{takeaway}</span>
             </li>
@@ -162,7 +177,7 @@ const canonicalUrl = getCanonicalUrl(slug as string, post.canonicalUrl);
       </div>
     )}
 
-    <div class="prose prose-invert max-w-none text-[var(--text-base)] leading-relaxed text-[var(--text-2)]"
+    <div class="prose prose-invert max-w-none text-[length:var(--text-base)] leading-relaxed text-[var(--text-2)]"
       style="--tw-prose-body: var(--text-2); --tw-prose-headings: var(--text-1); --tw-prose-links: var(--accent); --tw-prose-bold: var(--text-1); --tw-prose-code: var(--accent-glow); --tw-prose-pre-bg: var(--inset); --tw-prose-quotes: var(--text-2);">
       {post.body ? (
         post.isSanity ? (
@@ -182,12 +197,12 @@ const canonicalUrl = getCanonicalUrl(slug as string, post.canonicalUrl);
 
     {post.faq && post.faq.length > 0 && (
       <section class="mt-[var(--spacing-gap-lg)]">
-        <h2 class="font-[family-name:var(--font-mono)] text-[var(--heading-sm)] font-bold text-[var(--text-1)] mb-[var(--spacing-gap-md)]">Frequently Asked Questions</h2>
+        <h2 class="font-[family-name:var(--font-mono)] text-[length:var(--heading-sm)] font-bold text-[var(--text-1)] mb-[var(--spacing-gap-md)]">Frequently Asked Questions</h2>
         <div class="space-y-[var(--spacing-gap-md)]">
           {post.faq.map((faqItem: { question: string; answer: string }) => (
             <div class="p-[var(--card-px)] border border-[var(--border)]">
-              <h3 class="font-[family-name:var(--font-mono)] text-[var(--text-small)] font-bold text-[var(--text-1)] mb-[var(--spacing-gap-xs)]">{faqItem.question}</h3>
-              <p class="text-[var(--text-small)] text-[var(--text-2)] leading-relaxed">{faqItem.answer}</p>
+              <h3 class="font-[family-name:var(--font-mono)] text-[length:var(--text-small)] font-bold text-[var(--text-1)] mb-[var(--spacing-gap-xs)]">{faqItem.question}</h3>
+              <p class="text-[length:var(--text-small)] text-[var(--text-2)] leading-relaxed">{faqItem.answer}</p>
             </div>
           ))}
         </div>
@@ -204,12 +219,12 @@ const canonicalUrl = getCanonicalUrl(slug as string, post.canonicalUrl);
 
     {relatedPosts.length > 0 && (
       <section class="mt-[var(--spacing-gap-lg)] pt-[var(--spacing-gap-md)] border-t border-[var(--border)]">
-        <h2 class="font-[family-name:var(--font-mono)] text-[var(--text-small)] font-bold text-[var(--text-1)] mb-[var(--spacing-gap-md)]">Related Articles</h2>
+        <h2 class="font-[family-name:var(--font-mono)] text-[length:var(--text-small)] font-bold text-[var(--text-1)] mb-[var(--spacing-gap-md)]">Related Articles</h2>
         <div class="grid gap-[var(--spacing-gap-sm)]">
           {relatedPosts.map(related => (
             <a href={`/blog/${related.slug}/`} class="block p-[var(--card-px)] border border-[var(--border)] hover:border-[var(--accent)] transition-colors no-underline">
-              <h3 class="font-[family-name:var(--font-mono)] text-[var(--text-small)] font-bold text-[var(--text-1)] hover:text-[var(--accent)]">{related.title}</h3>
-              <p class="text-[var(--text-xs)] text-[var(--text-2)] mt-[4px]">{related.description}</p>
+              <h3 class="font-[family-name:var(--font-mono)] text-[length:var(--text-small)] font-bold text-[var(--text-1)] hover:text-[var(--accent)]">{related.title}</h3>
+              <p class="text-[length:var(--text-xs)] text-[var(--text-2)] mt-[4px]">{related.description}</p>
             </a>
           ))}
         </div>

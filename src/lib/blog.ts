@@ -118,6 +118,13 @@ function normalizeStaticPost(post: StaticPost): BlogPost {
     tags: post.tags,
     image: post.image,
     author: post.author ?? { id: 'aymen-ben-yedder', name: 'Aymen ben Yedder', slug: 'aymen-ben-yedder' },
+    seoTitle: post.seoTitle,
+    seoDescription: post.seoDescription,
+    canonicalUrl: post.canonicalUrl,
+    noIndex: post.noIndex,
+    directAnswer: post.directAnswer,
+    keyTakeaways: post.keyTakeaways,
+    faq: post.faq,
     isSanity: false,
   };
 }

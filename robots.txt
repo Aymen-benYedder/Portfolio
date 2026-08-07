@@ -1,25 +1,49 @@
-# Allow all bots by default
-User-agent: *
-Disallow:
+# ─── SEO / GEO / AEO robots.txt — Tiered AI Crawler Architecture ───
+# Cloudflare managed robots.txt MUST be disabled in the dashboard for this file to take effect.
+# Dashboard → Security → Bots → AI Crawlers → Toggle off "Cloudflare managed"
 
-# Explicitly allow AI crawlers for GEO/AEO indexing
-User-agent: GPTBot
+# ── Default: allow everything ──
+User-agent: *
+Allow: /
+Disallow: /admin/
+Disallow: /sample-post/
+Disallow: /template/
+
+# ── Allow search/AI-answer crawlers ──
+User-agent: OAI-SearchBot
 Allow: /
 
 User-agent: Google-Extended
 Allow: /
 
-User-agent: ClaudeBot
+User-agent: Applebot-Extended
 Allow: /
+
+User-agent: PerplexityBot
+Allow: /
+
+# ── Block training crawlers ──
+User-agent: GPTBot
+Disallow: /
+
+User-agent: ClaudeBot
+Disallow: /
+
+User-agent: meta-externalagent
+Disallow: /
+
+User-agent: anthropic-ai
+Disallow: /
+
+# ── Block aggressive data scrapers ──
+User-agent: Bytespider
+Disallow: /
 
 User-agent: CCBot
-Allow: /
-
-User-agent: Bytespider
-Allow: /
+Disallow: /
 
 User-agent: Amazonbot
-Allow: /
+Disallow: /
 
-# Sitemap location for search engine discovery
-Sitemap: https://aymen.benyedder.top/sitemap.xml
+# ── Sitemap ──
+Sitemap: https://aymen.benyedder.top/sitemap-index.xml

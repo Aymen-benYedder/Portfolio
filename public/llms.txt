@@ -1,29 +1,46 @@
 # AYMEN.DEV — DevOps & Cloud Infrastructure Engineer
 
 ## About
-I am Aymen ben Yedder, a DevOps Engineer and Web Systems Architect based in Medenine, Tunisia. Over the past 8 years I have designed and operated production infrastructure for food delivery platforms, safety management systems, and on-demand service applications.
+I am Aymen ben Yedder, a DevOps Engineer and Web Systems Architect based in Medenine, Tunisia. Over the past 8 years I have designed and operated production infrastructure for food delivery platforms, safety management systems, and on-demand service applications. I specialize in CI/CD pipelines, Docker containerization, Kubernetes, GitOps (ArgoCD/FluxCD), observability (Prometheus/Grafana), and self-hosted infrastructure on VPS.
 
 ## Core Stack
-- Infrastructure: Docker, NGINX, Apache, GitHub Actions, ArgoCD, FluxCD, Prometheus, Grafana, ELK
-- Development: React, Node.js, JavaScript/TypeScript, HTML5, CSS3
-- Databases: MongoDB, PostgreSQL, MySQL
-- Automation: Bash, PowerShell
+- Infrastructure: Docker, Docker Compose, Kubernetes, NGINX, Apache, GitHub Actions, ArgoCD, FluxCD, OpenTofu, Terragrunt, Terraform, Prometheus, Grafana, ELK, Ansible
+- Development: React, Node.js, JavaScript/TypeScript, Hono, TanStack, HTML5, CSS3, WordPress
+- Databases: MongoDB, PostgreSQL, MySQL, Qdrant
+- Automation: Bash, PowerShell, GitHub Actions, CI/CD
 - Project Management: Agile, Scrum, Kanban, ClickUp
 
 ## Services
+- **DevOps & CI/CD Infrastructure**: https://aymen.benyedder.top/services/ci-cd-infrastructure/
 - **WordPress Development**: https://aymen.benyedder.top/services/wordpress-development/
 - **MERN Stack Development**: https://aymen.benyedder.top/services/mern-development/
-- **Server Setup & CI/CD**: https://aymen.benyedder.top/services/
 
 ## Latest Articles
-- **GitOps in 2026: Why ArgoCD and FluxCD Are No Longer Just "Deployment Tools"**: https://aymen.benyedder.top/blog/gitops-2026-argocd-fluxcd/
-- **Unified Type-Safety: Architecting a $5/mo High-Performance Stack**: https://aymen.benyedder.top/blog/unified-type-safety-hono-tanstack-docker/
-- **Architecting Multi-Cloud Resilience: Why OpenTofu and Terragrunt Are Mandatory in 2026**: https://aymen.benyedder.top/blog/architecting-multi-cloud-resilience-opentofu-terragrunt-mandatory-2026/
-- **From Logs to Logic: Claude's Real-Time Visualization for Observability**: https://aymen.benyedder.top/blog/from-logs-to-logic-claude-real-time-visualization-observability/
+- **AI Coding Agents in CI/CD: Turning Review Gates Into Your First Line of Defense**: https://aymen.benyedder.top/blog/agentic-ai-cicd-review-gates-2026/
 - **The Execution Layer Breach: Analyzing the March 2026 Hackerbot-Claw CI/CD Compromise**: https://aymen.benyedder.top/blog/execution-layer-breach-hackerbot-claw-cicd-compromise/
-- **Building an AI-Powered Workflow Orchestration Stack**: https://aymen.benyedder.top/blog/ai-powered-workflow-orchestration-stack/
+- **Vibe Coding Is a Security Disaster Waiting to Happen — And Nobody's Talking About the Real Numbers**: https://aymen.benyedder.top/blog/vibe-coding-security-disaster-real-numbers/
+- **GitOps in 2026: Why ArgoCD and FluxCD Are No Longer Just "Deployment Tools"**: https://aymen.benyedder.top/blog/gitops-2026-argocd-fluxcd/
+- **Platform Engineering in 2026: Building Internal Developer Platforms with Backstage, Kubernetes, and GitOps**: https://aymen.benyedder.top/blog/platform-engineering-2026-building-idp-backstage-kubernetes-gitops/
+- **Deploying and Scaling LLMs in Production: A DevOps Guide to Self-Hosted AI Inference**: https://aymen.benyedder.top/blog/deploying-scaling-llms-production-devops-self-hosted-ai-inference/
+- **Building an AI-Powered Workflow Orchestration Stack: Open WebUI, n8n, Qdrant, and PostgreSQL**: https://aymen.benyedder.top/blog/ai-powered-workflow-orchestration-stack/
+- **Docker Security Hardening in 2026: From Dev Defaults to Production Fortress**: https://aymen.benyedder.top/blog/docker-security-hardening-2026/
+- **Production Docker: Multi-Stage Builds, Security Scanning, and Image Optimization**: https://aymen.benyedder.top/blog/production-docker-multi-stage-builds-security-scanning-optimization/
+- **DevOps on a VPS for Startups: Self-Hosted CI/CD, Docker and Monitoring**: https://aymen.benyedder.top/blog/devops-vps-startups/
+- **Prometheus + Grafana on a VPS: Complete Self-Hosted Monitoring Stack**: https://aymen.benyedder.top/blog/prometheus-grafana-self-hosted-monitoring-stack-vps/
+- **Terraform in Production: State Management, Modules, and Multi-Environment IaC**: https://aymen.benyedder.top/blog/terraform-production-state-management-modules-multi-environment-iac/
+- **Architecting Multi Cloud Resilience: Why OpenTofu and Terragrunt Are Mandatory in 2026**: https://aymen.benyedder.top/blog/architecting-multi-cloud-resilience-opentofu-terragrunt-mandatory-2026/
+- **From Logs to Logic: Claude's Real-Time Visualization is the Observability Leap DevOps Demanded**: https://aymen.benyedder.top/blog/from-logs-to-logic-claude-real-time-visualization-observability/
+- **Unified Type-Safety: Architecting a $5/mo High-Performance Stack with Hono, TanStack, and Docker**: https://aymen.benyedder.top/blog/unified-type-safety-hono-tanstack-docker/
 - **Beyond the Tutorial: Architecting Web Systems for 99.9% Resilience**: https://aymen.benyedder.top/blog/beyond-tutorial-web-resilience/
-- **DevOps on a VPS for Startups**: https://aymen.benyedder.top/blog/devops-vps-startups/
+- **Building Resilient Web Applications in 2026: Error Boundaries, Graceful Degradation, and the Layered Reliability Architecture**: https://aymen.benyedder.top/blog/web-resilience-2026/
+- **The State of Web Performance in 2026: Core Web Vitals, HTTP/3, Edge Rendering, and Modern Optimization Strategies**: https://aymen.benyedder.top/blog/state-of-web-performance-2026/
+- **Frontend Performance in 2026: Myths, Metrics, and New Realities**: https://aymen.benyedder.top/blog/web-dev-beliefs-that-are-quietly-costing-you-debunked/
+- **Modern CSS Engineering in 2026: Container Queries, View Transitions, CSS Layers, and the New Layout Paradigm**: https://aymen.benyedder.top/blog/css-engineering-2026/
+- **npm vs pnpm vs Yarn vs Bun: The 2026 Package Manager Guide**: https://aymen.benyedder.top/blog/npm-vs-pnpm-vs-yarn-vs-bun-2026-package-manager-guide/
+- **C16 Francophone Mobility: How Canadian Employers Hire Foreign Workers Without an LMIA**: https://aymen.benyedder.top/blog/c16-francophone-mobility-lmia-exemption-canada/
+- **Canada's Global Talent Stream in 2026 — The Two-Week Work Permit Still Delivers**: https://aymen.benyedder.top/blog/canada-global-talent-stream-2026-two-week-work-permit/
+- **LMIA Exemption Codes for Canadian Work Permits in 2026: C61, C62, C63, C10, C11, C16, and the PR Pathways**: https://aymen.benyedder.top/blog/lmia-exemption-codes-canada-work-permits-2026-c61-c62-c63-c10/
+- **DevOps Engineer's Guide to the Best Digital Nomad Visas in 2026**: https://aymen.benyedder.top/blog/devops-digital-nomad-visas-2026-comparison/
 
 ## Blog Archive
 All articles: https://aymen.benyedder.top/blog/
