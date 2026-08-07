@@ -14,7 +14,7 @@ export default function FAQAccordion({ items }: { items: FAQItem[] }) {
         <div key={i} className="border-b border-[rgba(16,185,129,0.06)] last:border-b-0">
           <button
             onClick={() => setOpenIndex(openIndex === i ? null : i)}
-            className="w-full flex items-center justify-between px-[var(--card-px)] py-[14px] min-h-[52px] font-[family-name:var(--font-mono)] text-[var(--text-small)] max-md:text-[var(--text-xs)] font-bold text-[var(--text-1)] bg-transparent border-none cursor-pointer text-left hover:bg-[rgba(255,255,255,0.02)] transition-[background_80ms]"
+            className="w-full flex items-center justify-between px-[var(--card-px)] py-[14px] min-h-[52px] font-[family-name:var(--font-mono)] text-[length:var(--text-small)] max-md:text-[length:var(--text-xs)] font-bold text-[var(--text-1)] bg-transparent border-none cursor-pointer text-left hover:bg-[rgba(255,255,255,0.02)] transition-[background_80ms]"
             aria-expanded={openIndex === i}
             aria-controls={`faq-answer-${i}`}
           >
@@ -25,7 +25,7 @@ export default function FAQAccordion({ items }: { items: FAQItem[] }) {
           </button>
           <div
             id={`faq-answer-${i}`}
-            className={`grid px-[var(--card-px)] text-[var(--text-small)] text-[var(--text-2)] leading-relaxed transition-all duration-300 ease-[cubic-bezier(0.16,1,0.3,1)] ${openIndex === i ? 'grid-rows-[1fr] pb-[16px]' : 'grid-rows-[0fr]'}`}
+            className={`grid px-[var(--card-px)] text-[length:var(--text-small)] text-[var(--text-2)] leading-relaxed transition-all duration-300 ease-[cubic-bezier(0.16,1,0.3,1)] ${openIndex === i ? 'grid-rows-[1fr] pb-[16px]' : 'grid-rows-[0fr]'}`}
           >
             <div className="overflow-hidden">{item.answer}</div>
           </div>

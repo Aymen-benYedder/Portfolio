@@ -45,14 +45,14 @@ import AsciiGlobe from '@components/AsciiGlobe.astro';
           <!-- Badge + hostname -->
           <div class="flex items-center gap-[var(--spacing-gap-sm)] shrink-0">
             <span class="status-badge">System Online</span>
-            <span class="font-[family-name:var(--font-mono)] text-[var(--text-2xs)] text-[var(--text-3)]">AYMEN.SYS</span>
+            <span class="font-[family-name:var(--font-mono)] text-[length:var(--text-2xs)] text-[var(--text-3)]">AYMEN.SYS</span>
           </div>
 
           <!-- Dot divider (desktop) -->
           <span class="hidden sm:inline w-[3px] h-[3px] rounded-full bg-[var(--text-3)] opacity-30 shrink-0" aria-hidden="true"></span>
 
           <!-- Version -->
-          <span class="font-[family-name:var(--font-mono)] text-[var(--text-2xs)] text-[var(--text-3)] shrink-0">v2.0.4</span>
+          <span class="font-[family-name:var(--font-mono)] text-[length:var(--text-2xs)] text-[var(--text-3)] shrink-0">v2.0.4</span>
 
           <!-- Dot divider (desktop) -->
           <span class="hidden sm:inline w-[3px] h-[3px] rounded-full bg-[var(--text-3)] opacity-30 shrink-0" aria-hidden="true"></span>
@@ -61,19 +61,19 @@ import AsciiGlobe from '@components/AsciiGlobe.astro';
           <div class="flex items-center gap-x-[var(--spacing-gap-sm)] gap-y-[4px] flex-wrap">
             <span class="flex items-center gap-[4px] whitespace-nowrap">
               <svg width="12" height="12" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" class="text-[var(--accent)] shrink-0"><path d="M20 21v-2a4 4 0 0 0-4-4H8a4 4 0 0 0-4 4v2"></path><circle cx="12" cy="7" r="4"></circle></svg>
-              <span class="font-[family-name:var(--font-mono)] text-[var(--text-2xs)] text-[var(--text-1)] leading-none">Available</span>
+              <span class="font-[family-name:var(--font-mono)] text-[length:var(--text-2xs)] text-[var(--text-1)] leading-none">Available</span>
             </span>
             <span class="flex items-center gap-[4px] whitespace-nowrap">
               <svg width="12" height="12" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" class="text-[var(--accent)] shrink-0"><circle cx="12" cy="12" r="10"></circle><polyline points="12 6 12 12 16 14"></polyline></svg>
-              <span class="font-[family-name:var(--font-mono)] text-[var(--text-2xs)] text-[var(--text-1)] leading-none">UTC+1</span>
+              <span class="font-[family-name:var(--font-mono)] text-[length:var(--text-2xs)] text-[var(--text-1)] leading-none">UTC+1</span>
             </span>
             <span class="flex items-center gap-[4px] whitespace-nowrap">
               <svg width="12" height="12" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" class="text-[var(--accent)] shrink-0"><path d="M22 16.92v3a2 2 0 0 1-2.18 2 19.79 19.79 0 0 1-8.63-3.07 19.5 19.5 0 0 1-6-6 19.79 19.79 0 0 1-3.07-8.67A2 2 0 0 1 4.11 2h3a2 2 0 0 1 2 1.72 12.84 12.84 0 0 0 .7 2.81 2 2 0 0 1-.45 2.11L8.09 9.91a16 16 0 0 0 6 6l1.27-1.27a2 2 0 0 1 2.11-.45 12.84 12.84 0 0 0 2.81.7A2 2 0 0 1 22 16.92z"></path></svg>
-              <span class="font-[family-name:var(--font-mono)] text-[var(--text-2xs)] text-[var(--text-1)] leading-none">24h Response</span>
+              <span class="font-[family-name:var(--font-mono)] text-[length:var(--text-2xs)] text-[var(--text-1)] leading-none">24h Response</span>
             </span>
             <span class="flex items-center gap-[4px] whitespace-nowrap">
               <svg width="12" height="12" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" class="text-[var(--accent)] shrink-0"><polygon points="12 2 2 7 12 12 22 7 12 2"></polygon><polyline points="2 17 12 22 22 17"></polyline><polyline points="2 12 12 17 22 12"></polyline></svg>
-              <span class="font-[family-name:var(--font-mono)] text-[var(--text-2xs)] text-[var(--text-1)] leading-none">Remote</span>
+              <span class="font-[family-name:var(--font-mono)] text-[length:var(--text-2xs)] text-[var(--text-1)] leading-none">Remote</span>
             </span>
           </div>
         </div>
@@ -86,7 +86,7 @@ import AsciiGlobe from '@components/AsciiGlobe.astro';
         <!-- Visible text for crawlers + screen readers -->
         <span class="sr-only">Aymen ben Yedder — DevOps &amp; Cloud Infrastructure Engineer</span>
         <!-- Visually present in normal flow for crawlers -->
-        <span class="h1-crawl-text font-[family-name:var(--font-mono)] text-[var(--heading-lg)] font-bold text-[var(--text-1)] leading-tight">
+        <span class="h1-crawl-text font-[family-name:var(--font-mono)] text-[length:var(--heading-lg)] font-bold text-[var(--text-1)] leading-tight">
           Aymen ben Yedder
         </span>
         <span class="block font-[family-name:var(--font-mono)] text-[clamp(0.75rem,1.2vw,0.9rem)] text-[var(--accent)] font-semibold tracking-wide mt-[var(--spacing-gap-xs)]">
@@ -127,12 +127,12 @@ import AsciiGlobe from '@components/AsciiGlobe.astro';
 
     <!-- ===== CTAs with Magnetic Effect ===== -->
     <div class="flex gap-[var(--spacing-gap-lg)] mt-[var(--spacing-gap-2xl)] max-md:flex-col" data-stagger-hero style="--stagger-delay: 800ms">
-      <a href="/#contact" class="group btn-magnetic font-[family-name:var(--font-mono)] text-[var(--text-2xs)] font-bold tracking-[0.1em] px-[28px] py-[16px] bg-[var(--accent)] text-[var(--void)] no-underline inline-flex items-center gap-[12px] justify-center min-h-[52px] uppercase border border-[var(--accent)] transition-all duration-300 hover:shadow-[0_0_40px_rgba(16,185,129,0.35)] hover:brightness-110 interactive-scale relative overflow-hidden" data-magnetic>
+      <a href="/#contact" class="group btn-magnetic font-[family-name:var(--font-mono)] text-[length:var(--text-2xs)] font-bold tracking-[0.1em] px-[28px] py-[16px] bg-[var(--accent)] text-[var(--void)] no-underline inline-flex items-center gap-[12px] justify-center min-h-[52px] uppercase border border-[var(--accent)] transition-all duration-300 hover:shadow-[0_0_40px_rgba(16,185,129,0.35)] hover:brightness-110 interactive-scale relative overflow-hidden" data-magnetic>
         <span class="relative z-10">View My Work</span>
         <svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5" stroke-linecap="round" stroke-linejoin="round" class="relative z-10 group-hover:translate-x-[3px] transition-transform duration-200"><path d="M5 12h14M12 5l7 7-7 7"/></svg>
         <span class="absolute inset-0 bg-[var(--accent-glow)] opacity-0 group-hover:opacity-20 transition-opacity duration-300"></span>
       </a>
-      <a href="/#contact" class="group btn-magnetic font-[family-name:var(--font-mono)] text-[var(--text-2xs)] font-bold tracking-[0.1em] px-[28px] py-[16px] border border-[var(--border-hi)] text-[var(--text-2)] no-underline inline-flex items-center gap-[12px] justify-center min-h-[52px] uppercase transition-all duration-300 hover:border-[var(--accent)] hover:text-[var(--accent)] hover:shadow-[0_0_30px_rgba(16,185,129,0.12)] interactive-scale relative overflow-hidden" data-magnetic>
+      <a href="/#contact" class="group btn-magnetic font-[family-name:var(--font-mono)] text-[length:var(--text-2xs)] font-bold tracking-[0.1em] px-[28px] py-[16px] border border-[var(--border-hi)] text-[var(--text-2)] no-underline inline-flex items-center gap-[12px] justify-center min-h-[52px] uppercase transition-all duration-300 hover:border-[var(--accent)] hover:text-[var(--accent)] hover:shadow-[0_0_30px_rgba(16,185,129,0.12)] interactive-scale relative overflow-hidden" data-magnetic>
         <svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" class="relative z-10 group-hover:-translate-x-[3px] transition-transform duration-200"><path d="M12 5v14M5 12l7 7 7-7"/></svg>
         <span class="relative z-10">Get in Touch</span>
         <span class="absolute inset-0 bg-[var(--accent-glass)] opacity-0 group-hover:opacity-100 transition-opacity duration-300"></span>
@@ -203,33 +203,15 @@ import AsciiGlobe from '@components/AsciiGlobe.astro';
     to { opacity: var(--opacity, 0.3); }
   }
 
-  /* ── AsciiGlobe Container ── */
-  .ascii-globe-wrap {
-    flex-shrink: 0;
-    align-self: center;
-    box-shadow: 0 0 20px rgba(16, 185, 129, 0.03),
-                inset 0 0 20px rgba(16, 185, 129, 0.02);
-  }
-
-  @media (max-width: 640px) {
-    .ascii-globe-wrap {
-      width: 260px !important;
-      height: 260px !important;
-    }
-  }
-
-  @media (max-width: 400px) {
-    .ascii-globe-wrap {
-      width: 200px !important;
-      height: 200px !important;
-    }
-  }
+  /* ── AsciiGlobe Container ──
+     Note: sizing of .ascii-globe-wrap is owned by AsciiGlobe.astro.
+     Scoped rules here can never match the globe (different Astro component
+     scope), so keep any globe styling inside AsciiGlobe.astro instead. */
 
   @media (prefers-reduced-motion: reduce) {
     .capsule-pill { transition: none !important; }
     [data-stagger-hero] { opacity: 1 !important; transform: none !important; filter: none !important; }
     html.js-loaded [data-stagger-hero] { opacity: 1 !important; transform: none !important; filter: none !important; }
     .float-particle { opacity: var(--opacity, 0.3) !important; animation: none !important; }
-    .ascii-globe-wrap { opacity: 1 !important; }
   }
 </style>

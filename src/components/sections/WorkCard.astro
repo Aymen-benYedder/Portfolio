@@ -23,8 +23,8 @@ const cardClass = `timeline-card${isCurrent ? ' is-current' : ' is-past'} ${clas
           <polyline points="6 9 12 15 18 9"></polyline>
         </svg>
         <div class="flex flex-col min-w-0">
-          <span class="font-[family-name:var(--font-mono)] text-[var(--text-small)] font-bold text-[var(--text-1)] truncate">{company}</span>
-          <span class="font-[family-name:var(--font-mono)] text-[var(--text-2xs)] text-[var(--text-3)] truncate">{role} · {period}</span>
+          <span class="font-[family-name:var(--font-mono)] text-[length:var(--text-small)] font-bold text-[var(--text-1)] truncate">{company}</span>
+          <span class="font-[family-name:var(--font-mono)] text-[length:var(--text-2xs)] text-[var(--text-3)] truncate">{role} · {period}</span>
         </div>
       </summary>
       <div class="collapsible-reveal">
@@ -38,20 +38,20 @@ const cardClass = `timeline-card${isCurrent ? ' is-current' : ' is-past'} ${clas
                 <circle cx="12" cy="12" r="6"></circle>
                 <circle cx="12" cy="12" r="2"></circle>
               </svg>
-              <span class="font-[family-name:var(--font-mono)] text-[var(--text-2xs)] tracking-[0.1em] text-[var(--accent)]">// {highlight}</span>
+              <span class="font-[family-name:var(--font-mono)] text-[length:var(--text-2xs)] tracking-[0.1em] text-[var(--accent)]">// {highlight}</span>
             </div>
             <div class="flex flex-wrap items-start justify-between gap-[var(--spacing-gap-xs)] mb-[2px]">
-              <h3 class="font-[family-name:var(--font-mono)] text-[var(--text-base)] max-md:text-[var(--text-small)] font-bold text-[var(--text-1)] m-0">{company}</h3>
+              <h3 class="font-[family-name:var(--font-mono)] text-[length:var(--text-base)] max-md:text-[length:var(--text-small)] font-bold text-[var(--text-1)] m-0">{company}</h3>
               <div class="flex items-center gap-[var(--spacing-gap-xs)] flex-wrap">
-                <span class="font-[family-name:var(--font-mono)] text-[var(--text-2xs)] text-[var(--text-3)]">{period}</span>
-                <span class="font-[family-name:var(--font-mono)] text-[var(--text-2xs)] text-[var(--text-3)] border border-[var(--border)] px-[6px] py-[2px]">{location}</span>
+                <span class="font-[family-name:var(--font-mono)] text-[length:var(--text-2xs)] text-[var(--text-3)]">{period}</span>
+                <span class="font-[family-name:var(--font-mono)] text-[length:var(--text-2xs)] text-[var(--text-3)] border border-[var(--border)] px-[6px] py-[2px]">{location}</span>
               </div>
             </div>
-            <p class="font-[family-name:var(--font-mono)] text-[var(--text-small)] font-bold text-[var(--text-1)] mt-[var(--spacing-gap-xs)]">{role}</p>
-            <p class="text-[var(--text-small)] text-[var(--text-2)] leading-relaxed mt-[var(--spacing-gap-sm)]">{description}</p>
+            <p class="font-[family-name:var(--font-mono)] text-[length:var(--text-small)] font-bold text-[var(--text-1)] mt-[var(--spacing-gap-xs)]">{role}</p>
+            <p class="text-[length:var(--text-small)] text-[var(--text-2)] leading-relaxed mt-[var(--spacing-gap-sm)]">{description}</p>
             <div class="flex flex-wrap gap-[var(--spacing-gap-xs)] mt-[var(--spacing-gap-sm)]">
               {skills.map(skill => (
-                <span class="font-[family-name:var(--font-mono)] text-[var(--text-2xs)] text-[var(--text-3)] px-[6px] py-[2px] border border-[var(--border)]">{skill}</span>
+                <span class="font-[family-name:var(--font-mono)] text-[length:var(--text-2xs)] text-[var(--text-3)] px-[6px] py-[2px] border border-[var(--border)]">{skill}</span>
               ))}
             </div>
           </div>
@@ -68,20 +68,20 @@ const cardClass = `timeline-card${isCurrent ? ' is-current' : ' is-past'} ${clas
             <circle cx="12" cy="12" r="6"></circle>
             <circle cx="12" cy="12" r="2"></circle>
           </svg>
-          <span class="font-[family-name:var(--font-mono)] text-[var(--text-2xs)] tracking-[0.1em] text-[var(--accent)]">// {highlight}</span>
+          <span class="font-[family-name:var(--font-mono)] text-[length:var(--text-2xs)] tracking-[0.1em] text-[var(--accent)]">// {highlight}</span>
         </div>
         <div class="flex flex-wrap items-start justify-between gap-[var(--spacing-gap-xs)] mb-[2px]">
-          <h3 class="font-[family-name:var(--font-mono)] text-[var(--text-base)] max-md:text-[var(--text-small)] font-bold text-[var(--text-1)] m-0">{company}</h3>
+          <h3 class="font-[family-name:var(--font-mono)] text-[length:var(--text-base)] max-md:text-[length:var(--text-small)] font-bold text-[var(--text-1)] m-0">{company}</h3>
           <div class="flex items-center gap-[var(--spacing-gap-xs)] flex-wrap">
-            <span class="font-[family-name:var(--font-mono)] text-[var(--text-2xs)] text-[var(--text-3)]">{period}</span>
-            <span class="font-[family-name:var(--font-mono)] text-[var(--text-2xs)] text-[var(--text-3)] border border-[var(--border)] px-[6px] py-[2px]">{location}</span>
+            <span class="font-[family-name:var(--font-mono)] text-[length:var(--text-2xs)] text-[var(--text-3)]">{period}</span>
+            <span class="font-[family-name:var(--font-mono)] text-[length:var(--text-2xs)] text-[var(--text-3)] border border-[var(--border)] px-[6px] py-[2px]">{location}</span>
           </div>
         </div>
-        <p class="font-[family-name:var(--font-mono)] text-[var(--text-small)] font-bold text-[var(--text-1)] mt-[var(--spacing-gap-xs)]">{role}</p>
-        <p class="text-[var(--text-small)] text-[var(--text-2)] leading-relaxed mt-[var(--spacing-gap-sm)]">{description}</p>
+        <p class="font-[family-name:var(--font-mono)] text-[length:var(--text-small)] font-bold text-[var(--text-1)] mt-[var(--spacing-gap-xs)]">{role}</p>
+        <p class="text-[length:var(--text-small)] text-[var(--text-2)] leading-relaxed mt-[var(--spacing-gap-sm)]">{description}</p>
         <div class="flex flex-wrap gap-[var(--spacing-gap-xs)] mt-[var(--spacing-gap-sm)]">
           {skills.map(skill => (
-            <span class="font-[family-name:var(--font-mono)] text-[var(--text-2xs)] text-[var(--text-3)] px-[6px] py-[2px] border border-[var(--border)]">{skill}</span>
+            <span class="font-[family-name:var(--font-mono)] text-[length:var(--text-2xs)] text-[var(--text-3)] px-[6px] py-[2px] border border-[var(--border)]">{skill}</span>
           ))}
         </div>
       </div>

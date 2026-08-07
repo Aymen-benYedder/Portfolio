@@ -29,7 +29,7 @@ const { title, badge: badgeText, description, tags, link, linkText = 'View proje
               <polyline points="15 3 21 3 21 9"></polyline>
               <line x1="10" y1="14" x2="21" y2="3"></line>
             </svg>
-            <span class="font-[family-name:var(--font-mono)] text-[var(--text-small)] font-bold text-[var(--text-1)] truncate">{title}</span>
+            <span class="font-[family-name:var(--font-mono)] text-[length:var(--text-small)] font-bold text-[var(--text-1)] truncate">{title}</span>
           </div>
           <Badge variant="blue">{badgeText}</Badge>
         </div>
@@ -37,12 +37,12 @@ const { title, badge: badgeText, description, tags, link, linkText = 'View proje
       <div class="collapsible-reveal">
         <div class="collapsible-reveal-inner">
           <div class="pb-[var(--card-py)]">
-            <p class="text-[var(--text-small)] text-[var(--text-2)] leading-relaxed">{description}</p>
-            {meta && <p class="font-[family-name:var(--font-mono)] text-[var(--text-2xs)] text-[var(--text-3)] mt-[var(--spacing-gap-xs)]">{meta}</p>}
+            <p class="text-[length:var(--text-small)] text-[var(--text-2)] leading-relaxed">{description}</p>
+            {meta && <p class="font-[family-name:var(--font-mono)] text-[length:var(--text-2xs)] text-[var(--text-3)] mt-[var(--spacing-gap-xs)]">{meta}</p>}
             <div class="flex flex-wrap gap-[var(--spacing-gap-xs)] mt-[var(--spacing-gap-sm)]">
-              {tags.map(tag => <span class="font-[family-name:var(--font-mono)] text-[var(--text-2xs)] text-[var(--text-3)] px-[6px] py-[2px] border border-[var(--border)]">{tag}</span>)}
+              {tags.map(tag => <span class="font-[family-name:var(--font-mono)] text-[length:var(--text-2xs)] text-[var(--text-3)] px-[6px] py-[2px] border border-[var(--border)]">{tag}</span>)}
             </div>
-            <a href={link} class="font-[family-name:var(--font-mono)] text-[var(--text-2xs)] text-[var(--text-3)] mt-[var(--spacing-gap-sm)] inline-block no-underline uppercase tracking-[0.1em] transition-all duration-200 hover:text-[var(--accent)] hover:translate-x-[4px]">{linkText}</a>
+            <a href={link} class="font-[family-name:var(--font-mono)] text-[length:var(--text-2xs)] text-[var(--text-3)] mt-[var(--spacing-gap-sm)] inline-block no-underline uppercase tracking-[0.1em] transition-all duration-200 hover:text-[var(--accent)] hover:translate-x-[4px]">{linkText}</a>
           </div>
         </div>
       </div>
@@ -57,16 +57,16 @@ const { title, badge: badgeText, description, tags, link, linkText = 'View proje
               <polyline points="15 3 21 3 21 9"></polyline>
               <line x1="10" y1="14" x2="21" y2="3"></line>
             </svg>
-            <h3 class="font-[family-name:var(--font-mono)] text-[var(--text-base)] font-bold text-[var(--text-1)] m-0">{title}</h3>
+            <h3 class="font-[family-name:var(--font-mono)] text-[length:var(--text-base)] font-bold text-[var(--text-1)] m-0">{title}</h3>
           </div>
           <Badge variant="blue">{badgeText}</Badge>
         </div>
-        <p class="text-[var(--text-small)] text-[var(--text-2)] leading-relaxed">{description}</p>
-        {meta && <p class="font-[family-name:var(--font-mono)] text-[var(--text-2xs)] text-[var(--text-3)] mt-[var(--spacing-gap-xs)]">{meta}</p>}
+        <p class="text-[length:var(--text-small)] text-[var(--text-2)] leading-relaxed">{description}</p>
+        {meta && <p class="font-[family-name:var(--font-mono)] text-[length:var(--text-2xs)] text-[var(--text-3)] mt-[var(--spacing-gap-xs)]">{meta}</p>}
         <div class="flex flex-wrap gap-[var(--spacing-gap-xs)] mt-[var(--spacing-gap-sm)]">
-          {tags.map(tag => <span class="font-[family-name:var(--font-mono)] text-[var(--text-2xs)] text-[var(--text-3)] px-[6px] py-[2px] border border-[var(--border)]">{tag}</span>)}
+          {tags.map(tag => <span class="font-[family-name:var(--font-mono)] text-[length:var(--text-2xs)] text-[var(--text-3)] px-[6px] py-[2px] border border-[var(--border)]">{tag}</span>)}
         </div>
-        <a href={link} class="font-[family-name:var(--font-mono)] text-[var(--text-2xs)] text-[var(--text-3)] mt-[var(--spacing-gap-sm)] inline-block no-underline uppercase tracking-[0.1em] transition-all duration-200 hover:text-[var(--accent)] hover:translate-x-[4px]">{linkText}</a>
+        <a href={link} class="font-[family-name:var(--font-mono)] text-[length:var(--text-2xs)] text-[var(--text-3)] mt-[var(--spacing-gap-sm)] inline-block no-underline uppercase tracking-[0.1em] transition-all duration-200 hover:text-[var(--accent)] hover:translate-x-[4px]">{linkText}</a>
       </div>
     </article>
   )

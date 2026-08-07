@@ -69,7 +69,7 @@ const { title, skills, collapsible = false, class: className = '' } = Astro.prop
         <div class="collapsible-reveal-inner">
           <div class="flex flex-wrap gap-[var(--spacing-gap-xs)] pb-[var(--card-py)]">
             {skills.map(skill => (
-              <span class="font-[family-name:var(--font-mono)] text-[var(--text-2xs)] font-medium tracking-[0.04em] px-[10px] py-[4px] border border-[var(--border)] text-[var(--text-2)] transition-all duration-200 hover:border-[var(--accent)] hover:text-[var(--accent)] hover:bg-[rgba(16,185,129,0.08)] interactive-scale">{skill}</span>
+              <span class="font-[family-name:var(--font-mono)] text-[length:var(--text-2xs)] font-medium tracking-[0.04em] px-[10px] py-[4px] border border-[var(--border)] text-[var(--text-2)] transition-all duration-200 hover:border-[var(--accent)] hover:text-[var(--accent)] hover:bg-[rgba(16,185,129,0.08)] interactive-scale">{skill}</span>
             ))}
           </div>
         </div>
@@ -128,7 +128,7 @@ const { title, skills, collapsible = false, class: className = '' } = Astro.prop
       </div>
       <div class="flex flex-wrap gap-[var(--spacing-gap-xs)]">
         {skills.map(skill => (
-          <span class="font-[family-name:var(--font-mono)] text-[var(--text-2xs)] font-medium tracking-[0.04em] px-[10px] py-[4px] border border-[var(--border)] text-[var(--text-2)] transition-all duration-200 hover:border-[var(--accent)] hover:text-[var(--accent)] hover:bg-[rgba(16,185,129,0.08)] interactive-scale">{skill}</span>
+          <span class="font-[family-name:var(--font-mono)] text-[length:var(--text-2xs)] font-medium tracking-[0.04em] px-[10px] py-[4px] border border-[var(--border)] text-[var(--text-2)] transition-all duration-200 hover:border-[var(--accent)] hover:text-[var(--accent)] hover:bg-[rgba(16,185,129,0.08)] interactive-scale">{skill}</span>
         ))}
       </div>
     </div>

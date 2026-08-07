@@ -211,11 +211,10 @@ const {
           if (!animate || prefersReducedMotion) {
             alpha = 0.92;
           } else {
-            // Visible wave oscillation: alpha 0.35–0.95
-            const wave = Math.sin(t * 2.2 + c * 0.18 + r * 0.25 + offset) * 0.3 + 0.65;
-            // Random flicker for glitch-pixel feel
-            const flick = Math.random() < 0.008 ? 0.2 + Math.random() * 0.4 : 1.0;
-            alpha = Math.max(0.2, Math.min(1, wave * flick));
+            // Simple blink: square-wave on/off per pixel with slight phase variation
+            const freq = 0.9 + ((c * 3 + r * 7) % 7) * 0.1; // 0.9–1.5 Hz per pixel
+            const phase = (t * freq + offset + r * 0.2 + c * 0.3) % 1;
+            alpha = phase < 0.5 ? 0.92 : 0.02;
           }
 
           ctx.fillStyle = hexToRgba(color, alpha);
@@ -236,11 +235,11 @@ const {
       const { bs1, bs2, fill1, fill2, totalW1, totalW2, canvasW, rowGap } = canvas._layout;
       const ox = (canvasW - Math.max(totalW1, totalW2)) / 2;
 
-      // ── AYMEN (emerald, animated wave + flicker) ──
+      // ── AYMEN (emerald, animated blink) ──
       const ox1 = ox + (Math.max(totalW1, totalW2) - totalW1) / 2;
       drawGrid(grid1, cols1, rows1, ox1, 0, bs1, fill1, ACCENT, t, 0, true);
 
-      // ── ben Yedder (gray, animated wave) ──
+      // ── ben Yedder (gray, animated blink) ──
       const oy2 = rows1 * bs1 + rowGap;
       const ox2 = ox + (Math.max(totalW1, totalW2) - totalW2) / 2;
       drawGrid(grid2, cols2, rows2, ox2, oy2, bs2, fill2, GRAY, t, 2.5, true);

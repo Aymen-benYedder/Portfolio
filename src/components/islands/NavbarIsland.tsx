@@ -138,7 +138,7 @@ export default function NavbarIsland() {
         {/* Logo */}
         <a
           href="/"
-          className={`nav-logo font-[family-name:var(--font-mono)] text-[var(--text-xs)] font-bold tracking-[0.1em] text-[var(--accent)] no-underline min-h-[44px] flex items-center drop-shadow-[0_0_8px_rgba(16,185,129,0.3)] transition-all duration-300 ${logoScale} origin-left`}
+          className={`nav-logo font-[family-name:var(--font-mono)] text-[length:var(--text-xs)] font-bold tracking-[0.1em] text-[var(--accent)] no-underline min-h-[44px] flex items-center drop-shadow-[0_0_8px_rgba(16,185,129,0.3)] transition-all duration-300 ${logoScale} origin-left`}
         >
           AYMEN.DEV
         </a>
@@ -151,7 +151,7 @@ export default function NavbarIsland() {
                 href={getNavHref(item)}
                 onClick={closeMenu}
                 data-magnetic
-                className={`font-[family-name:var(--font-mono)] text-[var(--text-2xs)] tracking-[0.1em] px-[14px] h-full flex items-center no-underline uppercase transition-all duration-200 relative
+                className={`font-[family-name:var(--font-mono)] text-[length:var(--text-2xs)] tracking-[0.1em] px-[14px] h-full flex items-center no-underline uppercase transition-all duration-200 relative
                   ${isActive(item)
                     ? 'text-[var(--accent)] drop-shadow-[0_0_5px_rgba(16,185,129,0.3)]'
                     : 'text-[var(--text-2)] hover:text-[var(--accent)] hover:drop-shadow-[0_0_5px_rgba(16,185,129,0.3)]'
@@ -205,7 +205,7 @@ export default function NavbarIsland() {
               <a
                 href={getNavHref(item)}
                 onClick={closeMenu}
-                className={`font-[family-name:var(--font-mono)] text-[var(--text-2xs)] tracking-[0.1em] h-[44px] flex items-center no-underline uppercase transition-all duration-200
+                className={`font-[family-name:var(--font-mono)] text-[length:var(--text-2xs)] tracking-[0.1em] h-[44px] flex items-center no-underline uppercase transition-all duration-200
                   ${isActive(item)
                     ? 'text-[var(--accent)] drop-shadow-[0_0_5px_rgba(16,185,129,0.3)]'
                     : 'text-[var(--text-2)] hover:text-[var(--accent)]'

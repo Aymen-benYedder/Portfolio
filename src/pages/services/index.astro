@@ -15,20 +15,20 @@ const services = [
 
   <div class="max-w-[var(--container-max)] mx-auto px-[var(--section-px)] pt-[var(--section-gap)]">
     <div class="section-header mb-[var(--spacing-gap-lg)]">
-      <span class="font-[family-name:var(--font-mono)] text-[var(--text-2xs)] font-bold tracking-[0.10em] text-[var(--accent)]">Services</span>
-      <h1 class="font-[family-name:var(--font-mono)] text-[var(--heading-md)] font-bold text-[var(--text-1)] mt-[var(--spacing-gap-xs)]">Engineering Services</h1>
-      <p class="text-[var(--text-base)] text-[var(--text-2)] mt-[var(--spacing-gap-sm)]">Freelance DevOps and development services for startups and scale-ups.</p>
+      <span class="font-[family-name:var(--font-mono)] text-[length:var(--text-2xs)] font-bold tracking-[0.10em] text-[var(--accent)]">Services</span>
+      <h1 class="font-[family-name:var(--font-mono)] text-[length:var(--heading-md)] font-bold text-[var(--text-1)] mt-[var(--spacing-gap-xs)]">Engineering Services</h1>
+      <p class="text-[length:var(--text-base)] text-[var(--text-2)] mt-[var(--spacing-gap-sm)]">Freelance DevOps and development services for startups and scale-ups.</p>
     </div>
 
     <BentoGrid columns="3">
       {services.map((s) => (
         <div class="card glass-hover hover-lift px-[var(--card-px)] py-[var(--card-py)]">
-          <h2 class="font-[family-name:var(--font-mono)] text-[14px] max-md:text-[var(--text-small)] font-bold text-[var(--text-1)]">{s.title}</h2>
-          <p class="text-[var(--text-small)] text-[var(--text-2)] mt-[var(--spacing-gap-sm)]">{s.desc}</p>
+          <h2 class="font-[family-name:var(--font-mono)] text-[14px] max-md:text-[length:var(--text-small)] font-bold text-[var(--text-1)]">{s.title}</h2>
+          <p class="text-[length:var(--text-small)] text-[var(--text-2)] mt-[var(--spacing-gap-sm)]">{s.desc}</p>
           <ul class="list-none p-0 mt-[var(--spacing-gap-sm)] space-y-[4px]">
-            {s.features.map((f) => <li class="text-[var(--text-xs)] text-[var(--text-3)] font-[family-name:var(--font-mono)]">→ {f}</li>)}
+            {s.features.map((f) => <li class="text-[length:var(--text-xs)] text-[var(--text-3)] font-[family-name:var(--font-mono)]">→ {f}</li>)}
           </ul>
-          <a href={s.link} class="font-[family-name:var(--font-mono)] text-[var(--text-2xs)] text-[var(--accent)] mt-[var(--spacing-gap-sm)] inline-block underline" aria-label={`Learn more about ${s.title}`}>Learn More →</a>
+          <a href={s.link} class="font-[family-name:var(--font-mono)] text-[length:var(--text-2xs)] text-[var(--accent)] mt-[var(--spacing-gap-sm)] inline-block underline" aria-label={`Learn more about ${s.title}`}>Learn More →</a>
         </div>
       ))}
     </BentoGrid>

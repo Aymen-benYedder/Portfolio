@@ -19,7 +19,7 @@ export default function StatsSection() {
             <AnimatedCounter end={stat.end} suffix={stat.suffix} duration={2 + i * 0.3} decimals={stat.decimals || 0} />
           </span>
           <div className="flex flex-col">
-            <span className="font-[family-name:var(--font-mono)] text-[var(--text-2xs)] text-[var(--text-1)] font-medium">
+            <span className="font-[family-name:var(--font-mono)] text-[length:var(--text-2xs)] text-[var(--text-1)] font-medium">
               {stat.label}
             </span>
             <span className="font-[family-name:var(--font-mono)] text-[10px] text-[var(--text-3)]">
