@@ -7391,6 +7391,11 @@ jobs:
     title: 'I Was GitOps\'s Biggest Advocate. Then I Watched Auto-Sync Roll Back a Good Deploy at 3 AM',
     slug: 'gitops-reconciliation-auto-sync-human-gate-2026',
     description: 'GitOps auto-sync problems are real — unchecked reconciliation rolls back good deploys at 3 AM. Here\'s how human approval gates, selective self-heal, and dry-run guardrails fix it in 2026.',
+    image: {
+      url: '/assets/img/gitops-reconciliation-meme.png',
+      alt: 'A meme about GitOps auto-sync: the reconciliation loop rolling back a good deployment without a human approval gate',
+      caption: 'The reconciliation loop, left to its own devices at 3 AM.',
+    },
     publishedAt: '2026-08-16',
     categories: ['DevOps'],
     tags: ['GitOps', 'ArgoCD', 'Auto-Sync', 'Reconciliation', 'Kubernetes', 'Platform Engineering'],
