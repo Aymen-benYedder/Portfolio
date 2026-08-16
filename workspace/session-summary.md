@@ -318,3 +318,5 @@ untracked files (stale blog HTML, pipeline md, PNG, workspace/).
 **Validation (dist):** 37 pages, 0 errors. New page renders: h1=1, h2=11, h3=20, directAnswer box, keyTakeaways, FAQ (Is GitOps safe in 2026 / auto-sync and self-heal), footnotes fn1-21 all present with resolving fnref backlinks (21 fn ids, 47 backrefs, no orphans).
 
 **Pending:** dev-server visual check + browsermcp screenshot (430px/1440px), Reviewer pass (fact-check, heading order, footnote refs), commit/deploy only on user request. Not committed.
+
+**2026-08-16 DEPLOY COMPLETE:** committed ec3b011, deployed to production (branch=main, e7177afd). LIVE verified on aymen.benyedder.top: article 200, H1=1 H2=11 footnotes=21, 0 mojibake, blog index lists it. Note: first deploy went to Preview env (--branch=production) - custom domain serves Production (--branch=main).
