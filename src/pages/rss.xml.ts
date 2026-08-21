@@ -56,7 +56,19 @@ export async function GET() {
     categories: p.categories,
   }));
 
-  const posts = sanityPosts.length > 0 ? sanityPosts : staticFallback;
+  // Merge Sanity + static catalogs, dedupe by slug, newest first.
+  const bySlug = new Map<string, any>();
+  for (const p of [...staticFallback, ...sanityPosts]) {
+    const slug = p.slug?.current || p.slug;
+    if (!slug) continue;
+    const existing = bySlug.get(slug);
+    if (!existing || new Date(p.publishedAt) > new Date(existing.publishedAt)) {
+      bySlug.set(slug, { ...p, slug });
+    }
+  }
+  const posts = [...bySlug.values()].sort(
+    (a, b) => new Date(b.publishedAt).getTime() - new Date(a.publishedAt).getTime()
+  );
 
   const items = posts.map((post: any) => {
     // Extract category titles from objects if needed
