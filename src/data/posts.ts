@@ -1369,7 +1369,7 @@ sudo ufw enable</code></pre>
 </ol>
 
 <div class="highlight-section">
-<h4 style="margin-top: 0; color: var(--accent-primary);">Critical Timing Rule</h4>
+<h3 style="margin-top: 0; color: var(--accent-primary);">Critical Timing Rule</h3>
 <p style="margin-bottom: 0;">The portal submission must happen <strong>before</strong> the worker files — not after, not simultaneously. A submission that lags the worker\'s application results in refusal under IRPR section 200. This sequencing error is entirely preventable but accounts for an estimated 15 to 20 percent of all C16 refusals.</p>
 </div>
 
@@ -3161,7 +3161,7 @@ sudo ufw enable</code></pre>
 <h2>Frequently Asked Questions</h2>
 
 <div class="faq-item">
-  <h4>What's the difference between DevOps and Portal Engineering?</h4>
+  <h3>What's the difference between DevOps and Platform Engineering?</h3>
   <p>DevOps is a cultural philosophy for breaking silos between development and operations. Portal engineering institutionalizes DevOps by building an IDP — a self-service layer encoding organizational standards and reducing cognitive load. DevOps says "you build it, you run it"; the IDP says "here's an abstraction layer that makes running it safe and easy."</p>
   <p style="margin-top: 0.6rem;"><strong>When should you invest?</strong> When you have 5+ teams, environment provisioning takes days, tooling is inconsistent, and senior engineers spend 2–3 hours daily on shadow ops. Teams under 50 engineers should consider a commercial IDP like Port. Between 50 and 500 engineers, Backstage with a 2–4 person dedicated team is the sweet spot.</p>
 </div>
