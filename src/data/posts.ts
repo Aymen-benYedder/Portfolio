@@ -771,6 +771,12 @@ docker-compose up -d</code></pre>
     categories: ['DevOps'],
     tags: ['OpenTofu', 'Terragrunt', 'Multi Cloud', 'DevOps', 'Infrastructure as Code'],
     readingTime: 9,
+    faq: [
+      { question: 'Why choose OpenTofu over Terraform in 2026?', answer: 'After the licensing model changed, dependency on a single corporate ecosystem became a strategic failure rather than a convenience. OpenTofu is the community-driven, open-source execution engine that keeps infrastructure logic portable across AWS, Google Cloud, Azure, and on-premises environments through one unified interface.' },
+      { question: 'Do OpenTofu and Terragrunt replace each other?', answer: 'No - they are complementary layers. OpenTofu is the engine that turns infrastructure definitions into real cloud assets. Terragrunt sits on top as an orchestration blueprint: you write core modules once and reuse them cleanly across development, staging, and production instead of duplicating definitions.' },
+      { question: 'What problems does Terragrunt solve at scale?', answer: 'Duplication and drift. Teams that copy the same definitions across environments accumulate configuration drift and outage risk. Terragrunt enforces module reuse so environments stay consistent, structure stays clear, and any engineer joining the project can onboard faster.' },
+    ],
+
     body: `<h2>Executive Summary</h2>
 <p>The rules of infrastructure management shifted fundamentally in recent years. For a long time, the industry relied heavily on a single corporate ecosystem for cloud provisioning. That dependency became a major vulnerability the moment licensing models changed.</p>
 <p>Today, vendor lock in is a strategic failure. For engineering teams globally, including fast-growing hubs such as Tunisia, reliance on closed tooling is no longer acceptable. The practical standard in 2026 is OpenTofu for open source integrity and Terragrunt for scalable orchestration.</p>
@@ -829,6 +835,12 @@ docker-compose up -d</code></pre>
     categories: ['DevOps'],
     tags: ['Observability', 'DevOps', 'SRE', 'Claude', 'MTTR'],
     readingTime: 8,
+    faq: [
+      { question: 'What did Anthropic release on March 12, 2026?', answer: 'A major Claude update that generates interactive inline charts and diagrams directly from raw code, JSON payloads, and system logs - including clickable architecture maps from microservices manifests, inspectable time-series charts, and state machine mappings that surface loop and deadlock zones.' },
+      { question: 'Does Claude replace Prometheus, Grafana, or Datadog?', answer: 'No. Platforms like Datadog, New Relic, Prometheus, and Grafana provide the raw telemetry. Claude transforms that data into actionable intelligence - visualization happens inline in the investigation flow instead of requiring manual dashboard construction.' },
+      { question: 'How does this reduce MTTR during incidents?', answer: 'Pattern recognition is faster when an issue is visualized rather than summarized as plain text. Engineers inspect specific latency breach points interactively, map blast radius with Claude Code before running builds, and junior engineers can assemble usable incident dashboards without writing dashboard code.' },
+    ],
+
     body: `<h2>Executive Summary</h2>
 <p>On March 12, 2026, Anthropic shipped a major Claude update that can generate interactive inline charts and diagrams directly from raw code, JSON payloads, and system logs. For DevOps and SRE teams, this is not a visual polish update. It changes how incidents are analyzed in real time.</p>
 <p>Instead of static text output, engineers now get an interactive execution view for stack traces, traffic spikes, and resource contention while investigating live issues.</p>
@@ -880,6 +892,12 @@ docker-compose up -d</code></pre>
     categories: ['DevOps'],
     tags: ['DevSecOps', 'CI/CD Security', 'Supply Chain', 'GitHub Actions', 'Security'],
     readingTime: 9,
+    faq: [
+      { question: 'Did hackerbot-claw exploit a GitHub Actions zero-day?', answer: 'No. The campaign relied on insecure implementation patterns that remain widespread: workflows using pull_request_target that run in base-repository context while checking out untrusted fork code, and user-controlled values like branch names, PR titles, and filenames interpolated directly into shell scripts through ${{ }} expressions.' },
+      { question: 'Which organizations were affected by the hackerbot-claw campaign?', answer: 'Within seven days the agent achieved remote code execution in five out of seven high-profile targets, including projects maintained by Microsoft, DataDog, Aqua Security, and the CNCF. Aqua Security suffered full compromise, and awesome-go lost a write-scoped GITHUB_TOKEN through a Pwn Request pattern.' },
+      { question: 'Why are CI/CD pipelines now primary targets?', answer: 'Because they hold privileged credentials and write access to production repositories. The campaign proved pipelines are no longer secondary attack surfaces: an autonomous agent scanning public repositories could generate context-aware pull requests that triggered privileged workflows.' },
+    ],
+
     body: `<h2>Executive Summary</h2>
 <p>In late February and early March 2026, the software supply chain experienced a major security event. An autonomous, AI-powered agent named <code>hackerbot-claw</code> compromised GitHub Actions workflows across top-tier repositories, including projects maintained by Microsoft, DataDog, Aqua Security, and the Cloud Native Computing Foundation (CNCF).</p>
 <p>Operating continuously, the bot scanned for exploitable workflow patterns and proved that CI/CD pipelines are no longer secondary attack surfaces. They are now primary, high-value targets.</p>
@@ -1133,6 +1151,12 @@ Do not invent information.</code></pre>
     categories: ['DevOps'],
     tags: ['GitOps', 'Resilience', 'Observability', 'DevOps', 'NGINX', 'Docker'],
     readingTime: 10,
+    faq: [
+      { question: 'What uptime target is this resilience framework built for?', answer: '99.9% uptime. The framework combines GitOps-driven deployment stability, NGINX reverse proxying with TLS termination, Docker process isolation, and automated observability so failures are contained and corrected before users notice.' },
+      { question: 'How does GitOps prevent configuration drift?', answer: 'Infrastructure and deployment state are declared in Git, then the runtime reconciles against that declaration automatically. Pairing ArgoCD or FluxCD with GitHub Actions means failed nodes and bad manual edits are corrected by reconciliation instead of human intervention - fewer manual interventions means fewer deployment incidents.' },
+      { question: 'Should databases ever be exposed to the internet?', answer: 'Never. PostgreSQL and MongoDB should run on private Docker networks reachable only by the application layer. Combine that with Fail2Ban brute-force blocking, key-based access, least-privilege defaults, and ELK or Prometheus plus Grafana visibility for defense in depth.' },
+    ],
+
     body: `<h2>Introduction</h2>
 <p>In a world where "it works on my machine" is a liability, the role of a web and systems engineer is to bridge the gap between creative code and industrial-grade operations.</p>
 <p>Moving a project from a local repository to production that can handle thousands of concurrent users requires more than a deployment script. It requires an ecosystem built on GitOps, observability, and Agile rigor.</p>
