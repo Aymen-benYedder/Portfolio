@@ -404,10 +404,11 @@ const FALLBACK_FAQS = [
               class="font-[family-name:var(--font-mono)] text-[length:var(--text-xs)] text-[var(--text-1)] bg-[var(--inset)] border border-[var(--border)] px-[12px] py-[12px] min-h-[44px] outline-none w-full transition-all duration-200 placeholder:text-[var(--text-3)] focus:border-[var(--accent)] focus:shadow-[0_0_8px_rgba(16,185,129,0.15)]"></textarea>
           </div>
 
-          <button type="submit"
-            class="w-full font-[family-name:var(--font-mono)] text-[length:var(--text-2xs)] font-bold tracking-[0.1em] px-[20px] py-[12px] min-h-[44px] uppercase border cursor-pointer transition-all duration-200 bg-[var(--accent)] border-[var(--accent)] text-[var(--void)] hover:bg-transparent hover:text-[var(--accent)] hover:shadow-[0_0_15px_rgba(16,185,129,0.3)]">
+          <button type="submit" id="contact-submit"
+            class="w-full font-[family-name:var(--font-mono)] text-[length:var(--text-2xs)] font-bold tracking-[0.1em] px-[20px] py-[12px] min-h-[44px] uppercase border cursor-pointer transition-all duration-200 bg-[var(--accent)] border-[var(--accent)] text-[var(--void)] hover:bg-transparent hover:text-[var(--accent)] hover:shadow-[0_0_15px_rgba(16,185,129,0.3)] disabled:opacity-70">
             [ SEND MESSAGE ]
           </button>
+          <p id="contact-status" class="hidden text-[length:var(--text-xs)] text-center font-[family-name:var(--font-mono)] label-caps" role="alert" aria-live="polite"></p>
         </div>
       </form>
       <div class="card px-[var(--card-px)] py-[var(--card-py)]">
@@ -515,3 +516,50 @@ article.card:hover .language-flag { opacity: 1; transform: scale(1.15); }
   details.collapsible-section.card:hover .service-icon { transform: none; }
 }
 </style>
+
+<script>
+  // Contact form: AJAX submit to Web3Forms — keeps the user on-site.
+  // No-JS fallback: native POST still works (web3forms redirect page).
+  const form = document.getElementById('contact-form') as HTMLFormElement | null;
+  const button = document.getElementById('contact-submit') as HTMLButtonElement | null;
+  const statusEl = document.getElementById('contact-status');
+
+  if (form && button && statusEl) {
+    const showStatus = (msg: string, ok: boolean) => {
+      statusEl.textContent = msg;
+      statusEl.classList.remove('hidden');
+      statusEl.classList.toggle('text-[var(--success)]', ok);
+      statusEl.classList.toggle('text-[var(--error)]', !ok);
+    };
+
+    form.addEventListener('submit', async (e) => {
+      e.preventDefault();
+      if (button.disabled) return;
+
+      const original = button.textContent;
+      button.disabled = true;
+      button.textContent = '[ TRANSMITTING... ]';
+      statusEl.classList.add('hidden');
+      statusEl.textContent = '';
+
+      try {
+        const res = await fetch(form.action, {
+          method: 'POST',
+          body: new FormData(form),
+          headers: { Accept: 'application/json' },
+        });
+        if (res.ok) {
+          showStatus('[ MESSAGE SENT SUCCESSFULLY ]', true);
+          form.reset();
+        } else {
+          showStatus('[ TRANSMISSION FAILED - TRY EMAIL DIRECTLY ]', false);
+        }
+      } catch {
+        showStatus('[ TRANSMISSION FAILED - CHECK CONNECTION ]', false);
+      } finally {
+        button.disabled = false;
+        button.textContent = original;
+      }
+    });
+  }
+</script>
