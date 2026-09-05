@@ -7705,7 +7705,12 @@ Ecosystem hardening: <a href="https://www.infoq.com/news/2026/02/28/argocd-3-3-s
     id: 'post-ai-webapp-2026',
     title: 'How to Add AI to a Web App Without Turning It Into a Science Project',
     slug: 'add-ai-to-web-app-beginners-guide-2026',
-    description: 'Add AI to your web app in 5 steps: pick the right API, structure output, add context, keep a human in the loop, and measure cost. Real example included.',
+description: 'Add AI to your web app in 5 steps: pick the right API, structure output, add context, keep a human in the loop, and measure cost. Real example included.',
+    image: {
+      url: '/assets/img/web-app-ai.webp',
+      alt: 'Illustration of adding AI to a web application: a web app connected to a managed AI model API, with structured data flowing back through validation and a human review step',
+      caption: 'The pattern: a web app calls a managed AI API and gets validated, structured data back.',
+    },
     publishedAt: '2026-09-05',
     categories: ['Web Development', 'AI'],
     tags: ['AI', 'LLM', 'Structured Outputs', 'Web Development', 'SaaS'],
