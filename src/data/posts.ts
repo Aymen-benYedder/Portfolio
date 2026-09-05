@@ -14,6 +14,7 @@ export interface StaticPost {
     alt: string;
     caption?: string;
   };
+  ogImage?: string;
   seoTitle?: string;
   seoDescription?: string;
   canonicalUrl?: string;
@@ -6958,6 +6959,7 @@ groups:
       alt: 'Agentic AI coding agents in a CI/CD review gate analyze a pull request diff and post advisory findings while a human keeps merge authority',
       caption: 'The agentic AI review gate: the agent flags risk on every pull request, and a human approves the merge.',
     },
+    ogImage: '/assets/img/agentic-ai-cicd-review-gates-2026-og.png',
     publishedAt: '2026-08-07',
     categories: ['DevOps', 'AI', 'WEB DEV'],
     tags: ['AI Agents', 'CI/CD', 'Code Review', 'GitHub Actions', 'Agentic AI', 'DevOps'],
@@ -7234,6 +7236,7 @@ jobs:
       alt: 'Developer reviewing AI-generated code on a dark terminal with warning indicators and a verification checklist, emerald neon accents',
       caption: 'In 2026 the senior skill is verification: assume AI output is compromised until it runs, tests, and reviews clean.',
     },
+    ogImage: '/assets/img/ai-code-review-verification-2026-og.png',
     publishedAt: '2026-08-08',
     categories: ['AI', 'DevOps', 'WEB DEV'],
     tags: ['AI Code Review', 'Code Review', 'AI Security', 'AI Trust', 'LLM', 'AI Assistants'],
@@ -7461,6 +7464,7 @@ jobs:
       alt: 'A meme about GitOps auto-sync: the reconciliation loop rolling back a good deployment without a human approval gate',
       caption: 'The reconciliation loop, left to its own devices at 3 AM.',
     },
+    ogImage: '/assets/img/gitops-reconciliation-meme-og.png',
     publishedAt: '2026-08-16',
     categories: ['DevOps'],
     tags: ['GitOps', 'ArgoCD', 'Auto-Sync', 'Reconciliation', 'Kubernetes', 'Platform Engineering'],
@@ -7711,6 +7715,7 @@ description: 'Add AI to your web app in 5 steps: pick the right API, structure o
       alt: 'Illustration of adding AI to a web application: a web app connected to a managed AI model API, with structured data flowing back through validation and a human review step',
       caption: 'The pattern: a web app calls a managed AI API and gets validated, structured data back.',
     },
+    ogImage: '/assets/img/web-app-ai-og.png',
     publishedAt: '2026-09-05',
     categories: ['Web Development', 'AI'],
     tags: ['AI', 'LLM', 'Structured Outputs', 'Web Development', 'SaaS'],

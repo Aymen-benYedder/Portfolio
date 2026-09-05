@@ -20,6 +20,7 @@ export interface BlogPost {
     alt: string;
     caption?: string;
   };
+  ogImage?: string;
   author?: {
     id: string;
     name: string;
@@ -117,6 +118,7 @@ function normalizeStaticPost(post: StaticPost): BlogPost {
     categories: post.categories,
     tags: post.tags,
     image: post.image,
+    ogImage: post.ogImage,
     author: post.author ?? { id: 'aymen-ben-yedder', name: 'Aymen ben Yedder', slug: 'aymen-ben-yedder' },
     seoTitle: post.seoTitle,
     seoDescription: post.seoDescription,

@@ -69,6 +69,7 @@ try {
       categories: staticPost.categories,
       tags: staticPost.tags,
       image: staticPost.image,
+      ogImage: staticPost.ogImage,
       author: staticPost.author ?? { id: 'aymen-ben-yedder', name: 'Aymen ben Yedder', slug: 'aymen-ben-yedder' },
       isSanity: false,
     };
@@ -86,7 +87,9 @@ const allPosts = await getNormalizedPosts();
 const relatedPosts = getRelatedPosts(allPosts, slug as string, 3);
 const canonicalUrl = getCanonicalUrl(slug as string, post.canonicalUrl);
 // OG/JSON-LD need absolute URLs; the <img> keeps the relative path so it renders in local preview too.
-const postImage = post.image?.url ? (post.image.url.startsWith('http') ? post.image.url : `https://aymen.benyedder.top${post.image.url}`) : undefined;
+// Prefer the dedicated 1200x627 PNG og:image (LinkedIn-compliant) when present; fall back to the hero image.
+const ogImagePath = post.ogImage || post.image?.url;
+const postImage = ogImagePath ? (ogImagePath.startsWith('http') ? ogImagePath : `https://aymen.benyedder.top${ogImagePath}`) : undefined;
 ---
 
 <BlogLayout

@@ -13,11 +13,14 @@ export interface Props {
   description: string;
   canonical?: string;
   image?: string;
+  imageWidth?: number;
+  imageHeight?: number;
+  imageType?: string;
   ogType?: string;
   noIndex?: boolean;
 }
 
-const { title, description, canonical, image, ogType, noIndex } = Astro.props;
+const { title, description, canonical, image, imageWidth, imageHeight, imageType, ogType, noIndex } = Astro.props;
 ---
 
 <!DOCTYPE html>
@@ -26,7 +29,7 @@ const { title, description, canonical, image, ogType, noIndex } = Astro.props;
     <meta charset="UTF-8" />
     <meta name="viewport" content="width=device-width, initial-scale=1.0" />
     <meta name="msvalidate.01" content="61B543554A1E46310B22E3208A7075DD" />
-    <BaseSeo {title} {description} {canonical} {image} {ogType} {noIndex} />
+    <BaseSeo {title} {description} {canonical} {image} {imageWidth} {imageHeight} {imageType} {ogType} {noIndex} />
     <HeadSchema pageUrl={canonical} pageName={title} pageDescription={description} />
     <Gtag />
     <link rel="icon" href="/favicon.ico" type="image/x-icon" />
