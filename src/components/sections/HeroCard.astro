@@ -1,10 +1,12 @@
 ---
 import StatsSection from '@components/islands/StatsSection.tsx';
 import TerminalAbout from '@components/islands/TerminalAbout.tsx';
-import AsciiGlobe from '@components/AsciiGlobe.astro';
+
+const HERO_NAME = 'Aymen ben Yedder';
+const heroNameChars = HERO_NAME.split('').map((c) => (c === ' ' ? '\u00A0' : c));
 ---
 
-<section id="hero" class="relative max-w-[var(--container-max)] mx-auto px-[var(--section-px)] pt-[clamp(80px,10vw,140px)] min-h-[90vh] flex items-center overflow-hidden" aria-labelledby="hero-heading">
+<section id="hero" class="hero relative max-w-[var(--container-max)] mx-auto px-[var(--section-px)] pt-[clamp(80px,10vw,140px)] min-h-[90vh] flex items-center overflow-hidden" aria-labelledby="hero-heading">
 
   <!-- Aurora Background -->
   <div class="aurora-bg absolute inset-0 -z-10" aria-hidden="true"></div>
@@ -39,7 +41,7 @@ import AsciiGlobe from '@components/AsciiGlobe.astro';
 
   <div class="w-full">
     <!-- ===== System Status Banner (Terminal-inspired, single row) ===== -->
-    <div class="max-w-[620px] mb-[var(--spacing-gap-xl)]" data-stagger-hero style="--stagger-delay: 0ms">
+    <div class="hero-status max-w-[620px] mb-[var(--spacing-gap-xl)]">
       <div class="card-premium px-[var(--card-px)] py-[var(--spacing-gap-sm)] min-h-0">
         <div class="flex flex-wrap items-center gap-x-[var(--spacing-gap-md)] gap-y-[6px]">
           <!-- Badge + hostname -->
@@ -80,53 +82,40 @@ import AsciiGlobe from '@components/AsciiGlobe.astro';
       </div>
     </div>
 
-    <!-- ===== Main Title: Retro Pixel Name ===== -->
-    <div class="w-full max-w-[600px]" data-stagger-hero style="--stagger-delay: 100ms">
+    <!-- ===== Main Title: Letter-by-Letter Name ===== -->
+    <div class="w-full max-w-[600px]">
       <h1 id="hero-heading" class="m-0 w-full">
         <!-- Visible text for crawlers + screen readers -->
         <span class="sr-only">Aymen ben Yedder — DevOps &amp; Cloud Infrastructure Engineer</span>
-        <!-- Visually present in normal flow for crawlers -->
-        <span class="h1-crawl-text font-[family-name:var(--font-mono)] text-[length:var(--heading-lg)] font-bold text-[var(--text-1)] leading-tight">
-          Aymen ben Yedder
+        <!-- Server-side rendered letter spans (graceful degradation: visible if JS fails) -->
+        <span aria-hidden="true" class="hero-name font-[family-name:var(--font-mono)] text-[length:var(--heading-lg)] font-bold text-[var(--accent)] leading-tight">
+          {heroNameChars.map((c) => <span class="letter">{c}</span>)}
         </span>
-        <span class="block font-[family-name:var(--font-mono)] text-[clamp(0.75rem,1.2vw,0.9rem)] text-[var(--accent)] font-semibold tracking-wide mt-[var(--spacing-gap-xs)]">
+        <span class="role block font-[family-name:var(--font-mono)] text-[clamp(0.75rem,1.2vw,0.9rem)] text-[var(--accent)] font-semibold tracking-wide mt-[var(--spacing-gap-xs)]">
           DevOps &amp; Cloud Infrastructure Engineer
         </span>
-        <!-- Decorative canvas — aria-hidden -->
-        <AsciiGlobe
-          width="100%"
-          height="auto"
-          accent="#34d399"
-          gray="#6b7280"
-          firstFont={30}
-          baseFont={22}
-          blockRatio={0.66}
-          rowGapRatio={0.66}
-          pixelGap={2}
-          aria-hidden="true"
-        />
       </h1>
     </div>
 
     <!-- ===== Tagline with terminal scan + cursor ===== -->
-    <p class="terminal-tagline font-[family-name:var(--font-mono)] text-[clamp(0.875rem,1.5vw,1.125rem)] text-[var(--text-2)] leading-relaxed mt-[var(--spacing-gap-xl)] max-w-2xl" data-stagger-hero style="--stagger-delay: 200ms">
+    <p class="terminal-tagline font-[family-name:var(--font-mono)] text-[clamp(0.875rem,1.5vw,1.125rem)] text-[var(--text-2)] leading-relaxed mt-[var(--spacing-gap-xl)] max-w-2xl">
       <span class="text-[var(--accent)] font-semibold">DevOps Engineer</span> &amp; Web Systems Architect. 
       Building CI/CD pipelines, Docker infrastructure, and MERN applications for startups that can't afford downtime.
       <span class="terminal-cursor" aria-hidden="true"></span>
     </p>
 
     <!-- ===== Terminal About (collapsed by default, expand on click) ===== -->
-    <div class="mt-[var(--spacing-gap-xl)]" data-stagger-hero style="--stagger-delay: 250ms">
+    <div class="about-box mt-[var(--spacing-gap-xl)]">
       <TerminalAbout client:load />
     </div>
 
     <!-- ===== Stats (animated on scroll) ===== -->
-    <div class="mt-[var(--spacing-gap-xl)]" data-stagger-hero style="--stagger-delay: 700ms">
+    <div class="stats mt-[var(--spacing-gap-xl)]">
       <StatsSection client:visible />
     </div>
 
     <!-- ===== CTAs with Magnetic Effect ===== -->
-    <div class="flex gap-[var(--spacing-gap-lg)] mt-[var(--spacing-gap-2xl)] max-md:flex-col" data-stagger-hero style="--stagger-delay: 800ms">
+    <div class="cta flex gap-[var(--spacing-gap-lg)] mt-[var(--spacing-gap-2xl)] max-md:flex-col">
       <a href="/#contact" class="group btn-magnetic font-[family-name:var(--font-mono)] text-[length:var(--text-2xs)] font-bold tracking-[0.1em] px-[28px] py-[16px] bg-[var(--accent)] text-[var(--void)] no-underline inline-flex items-center gap-[12px] justify-center min-h-[52px] uppercase border border-[var(--accent)] transition-all duration-300 hover:shadow-[0_0_40px_rgba(16,185,129,0.35)] hover:brightness-110 interactive-scale relative overflow-hidden" data-magnetic>
         <span class="relative z-10">View My Work</span>
         <svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5" stroke-linecap="round" stroke-linejoin="round" class="relative z-10 group-hover:translate-x-[3px] transition-transform duration-200"><path d="M5 12h14M12 5l7 7-7 7"/></svg>
@@ -140,7 +129,7 @@ import AsciiGlobe from '@components/AsciiGlobe.astro';
     </div>
 
     <!-- ===== Tech Stack Tags (Capsule Pills) ===== -->
-    <div class="flex flex-wrap gap-[var(--spacing-gap-xs)] mt-[var(--spacing-gap-xl)]" data-stagger-hero style="--stagger-delay: 900ms">
+    <div class="hero-tech flex flex-wrap gap-[var(--spacing-gap-xs)] mt-[var(--spacing-gap-xl)]">
       <span class="capsule-pill">k8s</span>
       <span class="capsule-pill">terraform</span>
       <span class="capsule-pill">argo</span>
@@ -163,33 +152,28 @@ import AsciiGlobe from '@components/AsciiGlobe.astro';
 <style>
   .capsule-pill { transition: all 250ms cubic-bezier(0.16, 1, 0.3, 1); }
 
-  .h1-crawl-text {
-    /* Visible to crawlers and screen readers — the canvas does the visual heavy lifting */
+  /* Letter-by-letter H1 spans (server-rendered, JS animates them in).
+     Default: visible (no-JS fallback). When JS has loaded (html.js-loaded),
+     the hide block below sets opacity: 0 so there is no flash of visible
+     text before the anime timeline starts. */
+  .hero-name .letter {
+    display: inline-block;
+    will-change: transform, opacity;
   }
 
-  /* Default: visible (no JS or before JS runs) */
-  [data-stagger-hero] {
-    opacity: 1;
-    transform: translateY(0) scale(1);
-    filter: blur(0);
-  }
-
-  /* When JS has loaded, prep for animation */
-  html.js-loaded [data-stagger-hero] {
+  /* Hide reveal: when JS has loaded, prep ALL hero entrance elements for the
+     anime timeline — including the H1 letters, to avoid a flash of visible
+     text before the animation starts. */
+  html.js-loaded .hero .hero-status,
+  html.js-loaded .hero .role,
+  html.js-loaded .hero .subtitle,
+  html.js-loaded .hero .terminal-tagline,
+  html.js-loaded .hero .about-box,
+  html.js-loaded .hero .stats,
+  html.js-loaded .hero .cta,
+  html.js-loaded .hero .hero-tech,
+  html.js-loaded .hero .hero-name .letter {
     opacity: 0;
-    transform: translateY(40px) scale(0.95);
-    filter: blur(4px);
-    transition: opacity 800ms cubic-bezier(0.16, 1, 0.3, 1),
-                transform 800ms cubic-bezier(0.16, 1, 0.3, 1),
-                filter 800ms cubic-bezier(0.16, 1, 0.3, 1);
-    transition-delay: var(--stagger-delay, 0ms);
-  }
-
-  /* Revealed: animate in */
-  html.js-loaded [data-stagger-hero].revealed {
-    opacity: 1;
-    transform: translateY(0) scale(1);
-    filter: blur(0);
   }
 
   /* Hero entrance: particles fade in first */
@@ -203,15 +187,187 @@ import AsciiGlobe from '@components/AsciiGlobe.astro';
     to { opacity: var(--opacity, 0.3); }
   }
 
-  /* ── AsciiGlobe Container ──
-     Note: sizing of .ascii-globe-wrap is owned by AsciiGlobe.astro.
-     Scoped rules here can never match the globe (different Astro component
-     scope), so keep any globe styling inside AsciiGlobe.astro instead. */
-
   @media (prefers-reduced-motion: reduce) {
     .capsule-pill { transition: none !important; }
-    [data-stagger-hero] { opacity: 1 !important; transform: none !important; filter: none !important; }
-    html.js-loaded [data-stagger-hero] { opacity: 1 !important; transform: none !important; filter: none !important; }
+    html.js-loaded .hero .hero-status,
+    html.js-loaded .hero .role,
+    html.js-loaded .hero .subtitle,
+    html.js-loaded .hero .terminal-tagline,
+    html.js-loaded .hero .about-box,
+    html.js-loaded .hero .stats,
+    html.js-loaded .hero .cta,
+    html.js-loaded .hero .hero-tech,
+    html.js-loaded .hero .hero-name .letter { opacity: 1 !important; }
+    .hero-name .letter { transform: none !important; opacity: 1 !important; }
     .float-particle { opacity: var(--opacity, 0.3) !important; animation: none !important; }
   }
 </style>
+
+<script>
+  // Hero entrance animation.
+  // Uses MCP animejs recipes verbatim:
+  //   - text-animation: split H1 text into <span class="letter">$1</span>, then
+  //     anime.timeline with stagger(40) + translateY/opacity easing easeOutExpo.
+  //   - timeline-sequence: chained .add(...) blocks for role/subtitle, then
+  //     for paragraph/about/stats/CTA, with offset: '-=600' / '-=500'.
+  //
+  // The H1 letter spans are already rendered server-side (graceful degradation:
+  // no JS = text is visible normally). JS only animates them.
+
+  import anime from 'animejs/lib/anime.es.js';
+
+  function initHero() {
+    const hero = document.querySelector('.hero');
+    if (!hero) return;
+
+    const h1 = hero.querySelector('h1');
+    if (!h1) return;
+
+    // ── text-animation recipe (MCP) ──
+    // Server-side already wrapped text in <span class="letter">. The JS
+    // wrapping fallback below is kept verbatim from the recipe for safety
+    // in case the markup changes.
+    let letters = h1.querySelectorAll('.hero-name .letter');
+    if (!letters.length) {
+      const text = h1.textContent || '';
+      h1.innerHTML = text.replace(/(\S)/g, "<span class='letter'>$1</span>");
+      letters = h1.querySelectorAll('.hero-name .letter');
+      // If the .hero-name wrapper is missing, fall back to h1 direct children.
+      if (!letters.length) letters = h1.querySelectorAll('.letter');
+    }
+
+    const reducedMotion = window.matchMedia('(prefers-reduced-motion: reduce)').matches;
+
+    if (reducedMotion) {
+      // Make sure everything is visible immediately.
+      anime.set(
+        [
+          '.hero .hero-status',
+          '.hero h1 .letter',
+          '.hero .role, .hero .subtitle',
+          '.hero .terminal-tagline, .hero .about-box, .hero .stats, .hero .cta, .hero .hero-tech',
+        ],
+        { opacity: 1, translateY: 0 }
+      );
+      return;
+    }
+
+    // ── timeline-sequence recipe (MCP) ──
+    const tl = anime.timeline({
+      easing: 'easeOutExpo',
+      duration: 750,
+    });
+
+    // Step 0: status banner fades in first.
+    tl.add({
+      targets: '.hero .hero-status',
+      translateY: [-20, 0],
+      opacity: [0, 1],
+      duration: 600,
+    });
+
+    // Step 1: H1 letters rise + fade in (stagger 40ms) — the star of the show.
+    tl.add(
+      {
+        targets: '.hero h1 .letter',
+        translateY: ['1.1em', 0],
+        opacity: [0, 1],
+        duration: 750,
+        delay: anime.stagger(40),
+      },
+      '-=400'
+    );
+
+    // Step 2: role / subtitle slide down from -30.
+    tl.add(
+      {
+        targets: '.hero .role, .hero .subtitle',
+        translateY: [-30, 0],
+        opacity: [0, 1],
+      },
+      '-=600'
+    );
+
+    // Step 3: tagline + about-box rise from +20.
+    tl.add(
+      {
+        targets: '.hero .terminal-tagline, .hero .about-box',
+        translateY: [20, 0],
+        opacity: [0, 1],
+      },
+      '-=500'
+    );
+
+    // Step 4: stats + CTA + tech tags rise from +15.
+    tl.add(
+      {
+        targets: '.hero .stats, .hero .cta, .hero .hero-tech',
+        translateY: [15, 0],
+        opacity: [0, 1],
+      },
+      '-=400'
+    );
+
+    // Cleanup on view-transition swap.
+    document.addEventListener(
+      'astro:before-swap',
+      () => {
+        try {
+          tl.pause();
+          anime.remove('.hero .hero-status');
+          anime.remove('.hero h1 .letter');
+          anime.remove('.hero .role, .hero .subtitle');
+          anime.remove('.hero .terminal-tagline, .hero .about-box');
+          anime.remove('.hero .stats, .hero .cta, .hero .hero-tech');
+        } catch (_) {
+          /* no-op */
+        }
+      },
+      { once: true }
+    );
+  }
+
+  let _initialised = false;
+  function safe() {
+    if (_initialised) return;
+    _initialised = true;
+    try {
+      initHero();
+    } catch (_) {
+      /* Fallback: if the animation fails, reveal everything so the hero is
+         never left hidden. */
+      try {
+        anime.set(
+          [
+            '.hero .hero-status',
+            '.hero h1 .letter',
+            '.hero .role, .hero .subtitle',
+            '.hero .terminal-tagline, .hero .about-box, .hero .stats, .hero .cta, .hero .hero-tech',
+          ],
+          { opacity: 1, translateY: 0 }
+        );
+      } catch (_) {
+        /* no-op */
+      }
+    }
+  }
+
+  // Start the animation only after the first paint + a short buffer, so the
+  // entrance is actually visible to the user. Without this, the ~2.3s timeline
+  // can finish while the page is still rendering (fonts/images/React islands),
+  // and the user only ever sees the final static state.
+  function startWhenReady() {
+    requestAnimationFrame(() => {
+      requestAnimationFrame(() => {
+        setTimeout(safe, 600);
+      });
+    });
+  }
+
+  if (document.readyState === 'loading') {
+    document.addEventListener('DOMContentLoaded', startWhenReady);
+  } else {
+    startWhenReady();
+  }
+  document.addEventListener('astro:page-load', startWhenReady);
+</script>

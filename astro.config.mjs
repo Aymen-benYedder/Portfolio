@@ -45,5 +45,11 @@ export default defineConfig({
   ],
   vite: {
     plugins: [tailwindcss()],
+    optimizeDeps: {
+      // Pre-bundle animejs at server start so Vite never discovers it as a
+      // "new dependency" mid-session (which caused 504 Outdated Optimize Dep
+      // errors and broke the hero letter animation in dev).
+      include: ['animejs'],
+    },
   },
 });
