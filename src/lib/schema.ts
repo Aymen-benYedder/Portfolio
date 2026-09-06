@@ -4,6 +4,7 @@ export interface PersonData {
   description: string;
   url: string;
   image?: string;
+  email?: string;
   sameAs: string[];
   knowsAbout: string[];
   address?: { 
@@ -30,6 +31,7 @@ export function generatePerson(data: PersonData) {
     description: data.description,
     url: data.url,
     ...(data.image && { image: data.image }),
+    ...(data.email && { email: data.email }),
     sameAs: data.sameAs,
     knowsAbout: data.knowsAbout,
     ...(data.address && {
@@ -73,7 +75,7 @@ export function generateWebPage(data: { url: string; name: string; description: 
   };
 }
 
-export function generateOrganization(data: { name: string; url: string; logo: string; sameAs: string[]; founderId: string }) {
+export function generateOrganization(data: { name: string; url: string; logo: string; sameAs: string[]; founderId: string; email?: string }) {
   return {
     '@type': 'Organization',
     '@id': `${data.url}/#organization`,
@@ -83,6 +85,7 @@ export function generateOrganization(data: { name: string; url: string; logo: st
     sameAs: data.sameAs,
     founder: { '@id': data.founderId },
     foundingDate: '2019-01-01',
+    ...(data.email && { email: data.email }),
   };
 }
 
@@ -174,33 +177,6 @@ export function generateArticle(data: {
   };
 }
 
-export function generateLocalBusiness(person: PersonData) {
-  return {
-    '@type': 'LocalBusiness',
-    '@id': `${person.url}/#localbusiness`,
-    name: `${person.name} — Senior DevOps Engineer`,
-    description: person.description,
-    url: person.url,
-    sameAs: person.sameAs,
-    ...(person.address && {
-      address: {
-        '@type': 'PostalAddress',
-        streetAddress: person.address.streetAddress,
-        addressLocality: person.address.addressLocality,
-        addressRegion: person.address.addressRegion,
-        postalCode: person.address.postalCode,
-        addressCountry: person.address.country,
-      },
-    }),
-    geo: {
-      '@type': 'GeoCoordinates',
-      latitude: '33.343355',
-      longitude: '10.490444',
-    },
-    ICBM: '33.343355, 10.490444',
-  };
-}
-
 export function generateProfessionalService(data: {
   name: string;
   description: string;
@@ -208,6 +184,8 @@ export function generateProfessionalService(data: {
   providerId: string;
   areaServed: string[];
   serviceTypes: string[];
+  image?: string;
+  priceRange?: string;
 }) {
   return {
     '@type': 'ProfessionalService',
@@ -215,6 +193,8 @@ export function generateProfessionalService(data: {
     name: data.name,
     description: data.description,
     provider: { '@id': data.providerId },
+    ...(data.image && { image: data.image }),
+    ...(data.priceRange && { priceRange: data.priceRange }),
     areaServed: data.areaServed.map((a) => ({ '@type': 'Place', name: a })),
     serviceType: data.serviceTypes,
   };
@@ -321,8 +301,8 @@ export function generateHeadGraph(
     logo: person.image || `${site.url}/assets/img/preview.webp`,
     sameAs: person.sameAs,
     founderId: personId,
+    email: person.email,
   });
-  const lb = generateLocalBusiness(person);
   const service = generateProfessionalService({
     name: `${person.name} — Senior DevOps Engineer`,
     description: 'Professional DevOps consulting, CI/CD automation, cloud infrastructure, and web development services.',
@@ -330,10 +310,12 @@ export function generateHeadGraph(
     providerId: personId,
     areaServed: ['Tunisia', 'France', 'Europe', 'Middle East', 'North Africa'],
     serviceTypes: ['DevOps Consulting', 'CI/CD Pipeline Automation', 'Cloud Infrastructure', 'Web Development', 'Server Setup & Hardening'],
+    image: person.image,
+    priceRange: '$$',
   });
 
   return {
     '@context': 'https://schema.org',
-    '@graph': [personObj, siteObj, pageObj, org, lb, service],
+    '@graph': [personObj, siteObj, pageObj, org, service],
   };
 }

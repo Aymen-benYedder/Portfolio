@@ -1,8 +1,10 @@
 ---
 // AsciiGlobe.astro
-// Pixel block name — "AYMEN" in emerald / "ben Yedder" in gray.
-// Block sizes are computed to fit the container width, then multiplied by blockScale.
-// Smaller render font = fewer pixel columns = bigger blocks at the same screen width.
+// Pixel-block name — "AYMEN" in emerald / "ben Yedder" in gray.
+// DOM-based pixel grid animated with Anime.js v3 using the MCP's ready-made
+// patterns: stagger-grid (scale/opacity/translateY from center, easeOutBack)
+// and timeline-sequence (AYMEN then ben Yedder).
+// Respects prefers-reduced-motion.
 
 interface Props {
   width?: string;
@@ -16,6 +18,7 @@ interface Props {
   blockScale?: number;      // Multiplier on computed block size (1 = fit container, 2 = 2x bigger)
   pixelGap?: number;        // Gap in px between each pixel block (0 = solid)
   rowGapRatio?: number;     // Gap between lines as fraction of first block size
+  staggerMs?: number;       // Stagger spacing per grid step (default 60)
 }
 
 const {
@@ -30,11 +33,12 @@ const {
   blockScale = 1,
   pixelGap = 1,
   rowGapRatio = 0.6,
+  staggerMs = 60,
 } = Astro.props;
 ---
 
 <div class="ascii-globe-wrap" style={`width: ${width}; ${height !== 'auto' ? `height: ${height};` : ''}`}>
-  <canvas id="ascii-globe"
+  <div id="ascii-globe" class="ascii-globe"
     data-accent={accent}
     data-gray={gray}
     data-font={fontFamily}
@@ -44,7 +48,8 @@ const {
     data-block-scale={blockScale}
     data-pixel-gap={pixelGap}
     data-row-gap-ratio={rowGapRatio}
-  ></canvas>
+    data-stagger-ms={staggerMs}
+  ></div>
 </div>
 
 <style>
@@ -56,18 +61,30 @@ const {
     background-color: transparent;
     overflow: hidden;
   }
-  #ascii-globe {
-    display: block;
-    background: transparent;
-    image-rendering: pixelated;
+  .ascii-globe {
+    position: relative;
+    --bs1: 12px;
+    --bs2: 9px;
+    --gap: 1px;
+  }
+  .ascii-globe .line {
+    position: absolute;
+    top: 0;
+    left: 0;
+  }
+  .ascii-globe .pixel {
+    position: absolute;
+    width: calc(var(--bs) - var(--gap));
+    height: calc(var(--bs) - var(--gap));
+    left: calc(var(--bs) * var(--c));
+    top: calc(var(--bs) * var(--r));
+    background: var(--pc);
+    opacity: 0;
   }
 </style>
 
 <script>
-  function hexToRgba(hex, alpha) {
-    const h = hex.replace('#', '');
-    return `rgba(${parseInt(h.substring(0,2),16)}, ${parseInt(h.substring(2,4),16)}, ${parseInt(h.substring(4,6),16)}, ${Math.max(0, Math.min(1, alpha))})`;
-  }
+  import anime from 'animejs/lib/anime.es.js';
 
   // ─── Render text to binary pixel grid ───
   function textToGrid(text, fontSize, fontFam, bold) {
@@ -121,25 +138,24 @@ const {
 
   /* ──────── INIT ──────── */
   function initAsciiGlobe() {
-    const canvas = /** @type {HTMLCanvasElement} */ (document.getElementById('ascii-globe'));
-    if (!canvas) return;
-    const ctx = canvas.getContext('2d');
-    if (!ctx) return;
+    const el = /** @type {HTMLDivElement} */ (document.getElementById('ascii-globe'));
+    if (!el) return;
 
-    const ACCENT = canvas.dataset.accent || '#34d399';
-    const GRAY   = canvas.dataset.gray || '#6b7280';
-    const FONT   = canvas.dataset.font || 'JetBrains Mono';
-    const FIRST_FONT = parseInt(canvas.dataset.firstFont) || 45;
-    const BASE_FONT  = parseInt(canvas.dataset.baseFont) || 18;
-    const BLOCK_RATIO = parseFloat(canvas.dataset.blockRatio) || 0.88;
-    const BLOCK_SCALE = parseFloat(canvas.dataset.blockScale) || 1;
-    const PIXEL_GAP  = parseInt(canvas.dataset.pixelGap) || 1;
-    const ROW_GAP_RATIO = parseFloat(canvas.dataset.rowGapRatio) || 0.6;
+    const ACCENT = el.dataset.accent || '#34d399';
+    const GRAY   = el.dataset.gray || '#6b7280';
+    const FONT   = el.dataset.font || 'JetBrains Mono';
+    const FIRST_FONT = parseInt(el.dataset.firstFont) || 45;
+    const BASE_FONT  = parseInt(el.dataset.baseFont) || 18;
+    const BLOCK_RATIO = parseFloat(el.dataset.blockRatio) || 0.88;
+    const BLOCK_SCALE = parseFloat(el.dataset.blockScale) || 1;
+    const PIXEL_GAP  = parseInt(el.dataset.pixelGap) || 1;
+    const ROW_GAP_RATIO = parseFloat(el.dataset.rowGapRatio) || 0.6;
+    const STAGGER_MS = parseInt(el.dataset.staggerMs) || 60;
 
-    let rafId = 0;
     let grid1 = null, grid2 = null;
     let cols1 = 0, rows1 = 0, cols2 = 0, rows2 = 0;
-    let width1 = 0, width2 = 0;
+    let line1 = null, line2 = null;
+    let timeline = null;
 
     const mq = window.matchMedia('(prefers-reduced-motion: reduce)');
     const prefersReducedMotion = mq.matches;
@@ -150,10 +166,10 @@ const {
       const r2 = textToGrid('ben Yedder', BASE_FONT, FONT, false);
       if (r1 && r2) {
         grid1 = r1.grid; cols1 = r1.cols; rows1 = r1.rows;
-        width1 = r1.cols;
         grid2 = r2.grid; cols2 = r2.cols; rows2 = r2.rows;
-        width2 = r2.cols;
-        sizeCanvas();
+        buildPixels();
+        sizeGlobe();
+        startAnimations();
       }
     }
 
@@ -164,29 +180,60 @@ const {
     }
     buildWithFontCheck();
 
-    // ─── Size canvas from pixel grid × container width ───
-    function sizeCanvas() {
-      if (!grid1 || !grid2) return;
-      const dpr = Math.min(window.devicePixelRatio || 1, 2);
+    // ─── Create pixel DOM (row-major so anime.stagger grid indexing works) ───
+    function buildPixels() {
+      el.innerHTML = '';
+
+      line1 = document.createElement('div');
+      line1.className = 'line line1';
+      for (let r = 0; r < rows1; r++) {
+        for (let c = 0; c < cols1; c++) {
+          const p = document.createElement('div');
+          p.className = 'pixel';
+          p.style.setProperty('--c', String(c));
+          p.style.setProperty('--r', String(r));
+          p.style.setProperty('--pc', ACCENT);
+          if (!grid1[r][c]) p.style.visibility = 'hidden';
+          line1.appendChild(p);
+        }
+      }
+      el.appendChild(line1);
+
+      line2 = document.createElement('div');
+      line2.className = 'line line2';
+      for (let r = 0; r < rows2; r++) {
+        for (let c = 0; c < cols2; c++) {
+          const p = document.createElement('div');
+          p.className = 'pixel';
+          p.style.setProperty('--c', String(c));
+          p.style.setProperty('--r', String(r));
+          p.style.setProperty('--pc', GRAY);
+          if (!grid2[r][c]) p.style.visibility = 'hidden';
+          line2.appendChild(p);
+        }
+      }
+      el.appendChild(line2);
+    }
+
+    // ─── Size globe from pixel grid × container width ───
+    function sizeGlobe() {
+      if (!grid1 || !grid2 || !line1 || !line2) return;
 
       // Available width from parent container
-      const parent = canvas.parentElement;
-      const cssW = parent ? parent.clientWidth : canvas.clientWidth;
+      const parent = el.parentElement;
+      const cssW = parent ? parent.clientWidth : el.clientWidth;
 
       if (cssW <= 0) {
-        // Retry after resize
-        setTimeout(sizeCanvas, 100);
+        setTimeout(sizeGlobe, 100);
         return;
       }
 
       // Compute block sizes from container width
       const baseBs1 = Math.max(1, Math.floor((cssW * BLOCK_RATIO) / cols1));
       const bs1 = Math.max(1, Math.round(baseBs1 * BLOCK_SCALE));
-      const fill1 = Math.max(1, bs1 - PIXEL_GAP);
 
       const fontRatio = BASE_FONT / FIRST_FONT;
       const bs2 = Math.max(1, Math.round(bs1 * fontRatio));
-      const fill2 = Math.max(1, bs2 - PIXEL_GAP);
 
       const totalW1 = cols1 * bs1;
       const totalW2 = cols2 * bs2;
@@ -194,71 +241,66 @@ const {
       const rowGap = Math.round(bs1 * ROW_GAP_RATIO);
       const canvasH = rows1 * bs1 + rowGap + rows2 * bs2;
 
-      canvas._layout = { bs1, bs2, fill1, fill2, totalW1, totalW2, canvasW, rowGap, canvasH, cssW };
+      // Center each line horizontally
+      const ox = (canvasW - Math.max(totalW1, totalW2)) / 2;
+      const ox1 = ox + (Math.max(totalW1, totalW2) - totalW1) / 2;
+      const ox2 = ox + (Math.max(totalW1, totalW2) - totalW2) / 2;
+      const oy2 = rows1 * bs1 + rowGap;
 
-      canvas.width = canvasW * dpr;
-      canvas.height = canvasH * dpr;
-      ctx.setTransform(dpr, 0, 0, dpr, 0, 0);
+      el.style.setProperty('--bs1', bs1 + 'px');
+      el.style.setProperty('--bs2', bs2 + 'px');
+      el.style.setProperty('--gap', PIXEL_GAP + 'px');
+      el.style.width = canvasW + 'px';
+      el.style.height = canvasH + 'px';
+
+      line1.style.left = ox1 + 'px';
+      line1.style.top = '0px';
+      line2.style.left = ox2 + 'px';
+      line2.style.top = oy2 + 'px';
     }
 
-    // ─── Draw a single pixel grid ───
-    function drawGrid(g, gCols, gRows, ox, oy, bs, fill, color, t, offset, animate) {
-      for (let r = 0; r < gRows; r++) {
-        for (let c = 0; c < gCols; c++) {
-          if (!g[r][c]) continue;
-
-          let alpha;
-          if (!animate || prefersReducedMotion) {
-            alpha = 0.92;
-          } else {
-            // Simple blink: square-wave on/off per pixel with slight phase variation
-            const freq = 0.9 + ((c * 3 + r * 7) % 7) * 0.1; // 0.9–1.5 Hz per pixel
-            const phase = (t * freq + offset + r * 0.2 + c * 0.3) % 1;
-            alpha = phase < 0.5 ? 0.92 : 0.02;
-          }
-
-          ctx.fillStyle = hexToRgba(color, alpha);
-          ctx.fillRect(ox + c * bs, oy + r * bs, fill, fill);
-        }
-      }
-    }
-
-    // ─── Main draw loop ───
-    function draw(now) {
-      if (!grid1 || !grid2 || !canvas._layout) {
-        rafId = requestAnimationFrame(draw);
+    // ─── Animate with Anime.js v3 (MCP stagger-grid + timeline patterns) ───
+    function startAnimations() {
+      if (prefersReducedMotion) {
+        anime.set('.ascii-globe .pixel', { opacity: 1, scale: 1, translateY: 0 });
         return;
       }
-      const t = now / 1000;
-      ctx.clearRect(0, 0, canvas._layout.canvasW, canvas._layout.canvasH);
 
-      const { bs1, bs2, fill1, fill2, totalW1, totalW2, canvasW, rowGap } = canvas._layout;
-      const ox = (canvasW - Math.max(totalW1, totalW2)) / 2;
+      timeline = anime.timeline({
+        easing: 'easeOutExpo',
+        duration: 750
+      });
 
-      // ── AYMEN (emerald, animated blink) ──
-      const ox1 = ox + (Math.max(totalW1, totalW2) - totalW1) / 2;
-      drawGrid(grid1, cols1, rows1, ox1, 0, bs1, fill1, ACCENT, t, 0, true);
-
-      // ── ben Yedder (gray, animated blink) ──
-      const oy2 = rows1 * bs1 + rowGap;
-      const ox2 = ox + (Math.max(totalW1, totalW2) - totalW2) / 2;
-      drawGrid(grid2, cols2, rows2, ox2, oy2, bs2, fill2, GRAY, t, 2.5, true);
-
-      rafId = requestAnimationFrame(draw);
+      // AYMEN — pop in from center with bounce
+      timeline.add({
+        targets: '.ascii-globe .line1 .pixel',
+        scale: [0, 1],
+        opacity: [0, 1],
+        translateY: [50, 0],
+        delay: anime.stagger(STAGGER_MS, { grid: [cols1, rows1], from: 'center' }),
+        easing: 'easeOutBack'
+      }).add({
+        // ben Yedder — follows, overlapping the tail of AYMEN
+        targets: '.ascii-globe .line2 .pixel',
+        scale: [0, 1],
+        opacity: [0, 1],
+        translateY: [50, 0],
+        delay: anime.stagger(STAGGER_MS, { grid: [cols2, rows2], from: 'center' }),
+        easing: 'easeOutBack'
+      }, '-=600');
     }
-
-    rafId = requestAnimationFrame(draw);
 
     // Re-layout on resize (debounced)
     let resizeTimer = 0;
     const ro = new ResizeObserver(() => {
       clearTimeout(resizeTimer);
-      resizeTimer = setTimeout(() => sizeCanvas(), 120);
+      resizeTimer = setTimeout(() => sizeGlobe(), 120);
     });
-    ro.observe(canvas.parentElement);
+    ro.observe(el.parentElement);
 
     document.addEventListener('astro:before-swap', () => {
-      cancelAnimationFrame(rafId);
+      if (timeline) timeline.pause();
+      anime.remove('.ascii-globe .pixel');
       ro.disconnect();
     }, { once: true });
   }
