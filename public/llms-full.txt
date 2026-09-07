@@ -1,5 +1,5 @@
 # Aymen.dev - Long Form Machine-Readable Context
-Updated: 2026-09-05
+Updated: 2026-09-07
 
 ## Identity
 - Name: Aymen ben Yedder
@@ -25,137 +25,142 @@ https://aymen.benyedder.top/blog/
 
 ## Article Catalog
 
-1. How to Add AI to a Web App Without Turning It Into a Science Project
+1. RAG for B2B SaaS: A Practical Guide to Retrieval-Augmented Generation in Production
+URL: https://aymen.benyedder.top/blog/rag-b2b-saas-production-guide-2026/
+Date: 2026-09-07
+Summary: A mentor-led, production-focused guide to RAG for B2B SaaS: when it makes sense, how to architect the full ingestion-to-generation pipeline, and the retrieval-quality and security judgment calls that separate demos from shipped products.
+
+2. How to Add AI to a Web App Without Turning It Into a Science Project
 URL: https://aymen.benyedder.top/blog/add-ai-to-web-app-beginners-guide-2026/
 Date: 2026-09-05
 Summary: Add AI to your web app in 5 steps: pick the right API, structure output, add context, keep a human in the loop, and measure cost. Real example included.
 
-2. I Was GitOps's Biggest Advocate. Then I Watched Auto-Sync Roll Back a Good Deploy at 3 AM
+3. I Was GitOps's Biggest Advocate. Then I Watched Auto-Sync Roll Back a Good Deploy at 3 AM
 URL: https://aymen.benyedder.top/blog/gitops-reconciliation-auto-sync-human-gate-2026/
 Date: 2026-08-16
 Summary: GitOps auto-sync problems are real — unchecked reconciliation rolls back good deploys at 3 AM. Here's how human approval gates, selective self-heal, and dry-run guardrails fix it in 2026.
 
-3. AI Writes 41% of Code. Only 29% of Devs Trust It. Review It Like a Senior Engineer
+4. AI Writes 41% of Code. Only 29% of Devs Trust It. Review It Like a Senior Engineer
 URL: https://aymen.benyedder.top/blog/ai-code-review-verification-2026/
 Date: 2026-08-08
 Summary: 41% of code is AI-generated, yet only 29% of devs trust it. How to review AI code: failure modes, 10-point checklist, trust tiers, tooling.
 
-4. AI Coding Agents in CI/CD: Turning Review Gates Into Your First Line of Defense
+5. AI Coding Agents in CI/CD: Turning Review Gates Into Your First Line of Defense
 URL: https://aymen.benyedder.top/blog/agentic-ai-cicd-review-gates-2026/
 Date: 2026-08-07
 Summary: AI coding agents in CI/CD work best as review gates, not generators. Hybrid-strict gates cut defect escape 40% and review time 55% in 2026.
 
-5. Docker Security Hardening in 2026: From Dev Defaults to Production Fortress
+6. Docker Security Hardening in 2026: From Dev Defaults to Production Fortress
 URL: https://aymen.benyedder.top/blog/docker-security-hardening-2026/
 Date: 2026-07-28
 Summary: Container escapes, supply chain attacks, and misconfigured defaults are rampant. Here is a layered security hardening guide for Docker in 2026 — with practical configs, real CVEs, and production-grade tooling.
 
-6. Terraform in Production: State Management, Modules, and Multi-Environment IaC
+7. Terraform in Production: State Management, Modules, and Multi-Environment IaC
 URL: https://aymen.benyedder.top/blog/terraform-production-state-management-modules-multi-environment-iac/
 Date: 2026-07-28
 Summary: Production-grade Terraform: remote state with locking, composable module design, multi-environment directory patterns, CI/CD with OIDC, policy as code with OPA, cost estimation with Infracost, and migration to OpenTofu.
 
-7. Production Docker: Multi-Stage Builds, Security Scanning, and Image Optimization
+8. Production Docker: Multi-Stage Builds, Security Scanning, and Image Optimization
 URL: https://aymen.benyedder.top/blog/production-docker-multi-stage-builds-security-scanning-optimization/
 Date: 2026-07-28
 Summary: Production-grade Docker: multi-stage builds for 80% smaller images, Trivy security scanning in CI, distroless base images, layer caching strategies, health checks, and container hardening patterns from 8 years of production experience.
 
-8. Prometheus + Grafana on a VPS: Complete Self-Hosted Monitoring Stack
+9. Prometheus + Grafana on a VPS: Complete Self-Hosted Monitoring Stack
 URL: https://aymen.benyedder.top/blog/prometheus-grafana-self-hosted-monitoring-stack-vps/
 Date: 2026-07-28
 Summary: Complete self-hosted monitoring stack on a single VPS: Prometheus, Grafana, Loki, Alertmanager, Node Exporter, and cAdvisor with Docker Compose. Includes alert rules, dashboard provisioning, Nginx reverse proxy, and cost comparison vs Datadog.
 
-9. Vibe Coding Is a Security Disaster Waiting to Happen — And Nobody's Talking About the Real Numbers
+10. Vibe Coding Is a Security Disaster Waiting to Happen — And Nobody's Talking About the Real Numbers
 URL: https://aymen.benyedder.top/blog/vibe-coding-security-disaster-real-numbers/
 Date: 2026-07-02
 Summary: 92% of US developers use AI coding tools daily. 46% of new code is AI-generated. 45% of AI code contains OWASP Top-10 vulnerabilities. A DevOps engineer connects the data everyone's missing on vibe coding security — and what happens when AI-generated frontends hit production infrastructure.
 
-10. Canada's Global Talent Stream in 2026 — The Two-Week Work Permit Still Delivers
+11. Canada's Global Talent Stream in 2026 — The Two-Week Work Permit Still Delivers
 URL: https://aymen.benyedder.top/blog/canada-global-talent-stream-2026-two-week-work-permit/
 Date: 2026-06-20
 Summary: Complete 2026 guide to Canada's Global Talent Stream work permit. Category A vs B explained, 22+ GTS occupations, two-week processing, LMBP compliance, PR pathways via Express Entry and PNP tech streams, plus the June 2026 AI Worker Stream announcement.
 
-11. DevOps Engineer's Guide to the Best Digital Nomad Visas in 2026
+12. DevOps Engineer's Guide to the Best Digital Nomad Visas in 2026
 URL: https://aymen.benyedder.top/blog/devops-digital-nomad-visas-2026-comparison/
 Date: 2026-06-20
 Summary: Compare 8 digital nomad visa programs for DevOps engineers in 2026 — Portugal D8, Spain DNV, UAE VWP, Estonia, Croatia, Greece, Italy, and Thailand. Income thresholds, tax frameworks, PR pathways, and application strategies for MENA-region tech freelancers.
 
-12. Platform Engineering in 2026: Building Internal Developer Platforms with Backstage, Kubernetes, and GitOps
+13. Platform Engineering in 2026: Building Internal Developer Platforms with Backstage, Kubernetes, and GitOps
 URL: https://aymen.benyedder.top/blog/platform-engineering-2026-building-idp-backstage-kubernetes-gitops/
 Date: 2026-06-20
 Summary: A comprehensive guide to building Internal Developer Platforms in 2026 with Backstage, Kubernetes, ArgoCD and Crossplane. Covers the seven-plane IDP architecture, Shift Down paradigm, Golden Triangle stack, agent experience (AX), failure modes, and the TVP playbook.
 
-13. Deploying and Scaling LLMs in Production: A DevOps Guide to Self-Hosted AI Inference
+14. Deploying and Scaling LLMs in Production: A DevOps Guide to Self-Hosted AI Inference
 URL: https://aymen.benyedder.top/blog/deploying-scaling-llms-production-devops-self-hosted-ai-inference/
 Date: 2026-06-20
 Summary: A complete DevOps guide to self-hosted LLM inference in 2026. Covers vLLM vs Ollama vs SGLang benchmarks (793 vs 41 TPS), GPU sizing for 7B–70B models, Kubernetes deployment with the vLLM Production Stack, KV cache monitoring, cost analysis ($20K/month break-even), and security controls for on-prem AI.
 
-14. LMIA Exemption Codes for Canadian Work Permits in 2026: C61, C62, C63, C10, C11, C16, and the PR Pathways
+15. LMIA Exemption Codes for Canadian Work Permits in 2026: C61, C62, C63, C10, C11, C16, and the PR Pathways
 URL: https://aymen.benyedder.top/blog/lmia-exemption-codes-canada-work-permits-2026-c61-c62-c63-c10/
 Date: 2026-06-20
 Summary: Complete 2026 guide to LMIA-exempt work permits in Canada. ICT (C61/C62/C63), C10 Significant Benefit (post-Feb 2026 rules), C11, C16 Francophone Mobility, CUSMA, and the Start-Up Visa pause. Processing times, refusal traps, PR pathways, and the arranged employment CRS points removal.
 
-15. The State of Web Performance in 2026: Core Web Vitals, HTTP/3, Edge Rendering, and Modern Optimization Strategies
+16. The State of Web Performance in 2026: Core Web Vitals, HTTP/3, Edge Rendering, and Modern Optimization Strategies
 URL: https://aymen.benyedder.top/blog/state-of-web-performance-2026/
 Date: 2026-06-20
 Summary: A data-driven analysis of the 2026 web performance landscape: Core Web Vitals pass rates, INP two years in, HTTP/3 adoption plateau, edge rendering models, JavaScript bundle economics, AVIF opportunity gap, framework benchmarks, and the AI-generated code performance crisis.
 
-16. Building Resilient Web Applications in 2026: Error Boundaries, Graceful Degradation, and the Layered Reliability Architecture
+17. Building Resilient Web Applications in 2026: Error Boundaries, Graceful Degradation, and the Layered Reliability Architecture
 URL: https://aymen.benyedder.top/blog/web-resilience-2026/
 Date: 2026-06-20
 Summary: A deep-dive architecture guide to layered resilience: error isolation, graceful degradation, fallback strategies, third-party isolation, network fault tolerance, API error handling, chaos testing, and observability for production web apps.
 
-17. Modern CSS Engineering in 2026: Container Queries, View Transitions, CSS Layers, and the New Layout Paradigm
+18. Modern CSS Engineering in 2026: Container Queries, View Transitions, CSS Layers, and the New Layout Paradigm
 URL: https://aymen.benyedder.top/blog/css-engineering-2026/
 Date: 2026-06-20
 Summary: A data-driven analysis of the 2026 CSS renaissance: Container Queries, View Transitions API, CSS Layers, `:has()`, OKLCH, Anchor Positioning, scroll-driven animations, native nesting, and the thinning toolchain — with adoption metrics, browser support matrices, and a migration roadmap for engineering teams.
 
-18. npm vs pnpm vs Yarn vs Bun: The 2026 Package Manager Guide
+19. npm vs pnpm vs Yarn vs Bun: The 2026 Package Manager Guide
 URL: https://aymen.benyedder.top/blog/npm-vs-pnpm-vs-yarn-vs-bun-2026-package-manager-guide/
 Date: 2026-06-17
 Summary: Comprehensive 2026 benchmarks comparing npm 11.x, Yarn 4 Berry, pnpm 10.x, and Bun 1.3 across install speed, disk usage, monorepo support, security, and industry adoption trends. Includes 15 data tables and 18-term nomenclature.
 
-19. C16 Francophone Mobility: How Canadian Employers Hire Foreign Workers Without an LMIA
+20. C16 Francophone Mobility: How Canadian Employers Hire Foreign Workers Without an LMIA
 URL: https://aymen.benyedder.top/blog/c16-francophone-mobility-lmia-exemption-canada/
 Date: 2026-06-16
 Summary: Complete guide to Canada's C16 Francophone Mobility work permit. No LMIA, NCLC 5 French, any TEER category, 4-12 week processing. Includes 2026 CRS draw data, refusal traps, and PR pathway.
 
-20. GitOps in 2026: Why ArgoCD and FluxCD Are No Longer Just "Deployment Tools"
+21. GitOps in 2026: Why ArgoCD and FluxCD Are No Longer Just "Deployment Tools"
 URL: https://aymen.benyedder.top/blog/gitops-2026-argocd-fluxcd/
 Date: 2026-06-05
 Summary: In 2026 GitOps has become the backbone of platform engineering. Learn why ArgoCD and FluxCD now shape security, delivery, and scalable platform strategy.
 
-21. Unified Type-Safety: Architecting a $5/mo High-Performance Stack with Hono, TanStack, and Docker
+22. Unified Type-Safety: Architecting a $5/mo High-Performance Stack with Hono, TanStack, and Docker
 URL: https://aymen.benyedder.top/blog/unified-type-safety-hono-tanstack-docker/
 Date: 2026-05-03
 Summary: Build a unified type-safe full-stack system with Hono, TanStack Query, Zod, and Docker on a $5/mo VPS. Zero technical debt, auto-healing infrastructure, and instant deployments.
 
-22. Architecting Multi Cloud Resilience: Why OpenTofu and Terragrunt Are Mandatory in 2026
+23. Architecting Multi Cloud Resilience: Why OpenTofu and Terragrunt Are Mandatory in 2026
 URL: https://aymen.benyedder.top/blog/architecting-multi-cloud-resilience-opentofu-terragrunt-mandatory-2026/
 Date: 2026-03-18
 Summary: A practical roadmap for resilient, provider-neutral infrastructure using OpenTofu and Terragrunt to enforce parity, portability, and clean scale.
 
-23. From Logs to Logic: Claude's Real-Time Visualization is the Observability Leap DevOps Demanded
+24. From Logs to Logic: Claude's Real-Time Visualization is the Observability Leap DevOps Demanded
 URL: https://aymen.benyedder.top/blog/from-logs-to-logic-claude-real-time-visualization-observability/
 Date: 2026-03-17
 Summary: A practical look at how inline interactive charts shift incident response from text parsing to real-time visual diagnosis and faster MTTR.
 
-24. The Execution Layer Breach: Analyzing the March 2026 Hackerbot-Claw CI/CD Compromise
+25. The Execution Layer Breach: Analyzing the March 2026 Hackerbot-Claw CI/CD Compromise
 URL: https://aymen.benyedder.top/blog/execution-layer-breach-hackerbot-claw-cicd-compromise/
 Date: 2026-03-17
 Summary: A deep analysis of the hackerbot-claw campaign, the CI/CD trust boundary failures it exploited, and the immediate DevSecOps hardening mandates teams should apply.
 
-25. Building an AI-Powered Workflow Orchestration Stack: Open WebUI, n8n, Qdrant, and PostgreSQL
+26. Building an AI-Powered Workflow Orchestration Stack: Open WebUI, n8n, Qdrant, and PostgreSQL
 URL: https://aymen.benyedder.top/blog/ai-powered-workflow-orchestration-stack/
 Date: 2026-03-14
 Summary: Build a self-hosted AI workflow orchestration stack using Open WebUI, n8n, Qdrant, and PostgreSQL for support automation, knowledge search, and internal AI assistants.
 
-26. Beyond the Tutorial: Architecting Web Systems for 99.9% Resilience
+27. Beyond the Tutorial: Architecting Web Systems for 99.9% Resilience
 URL: https://aymen.benyedder.top/blog/beyond-tutorial-web-resilience/
 Date: 2026-03-11
 Summary: A practical framework for reliability at scale using GitOps, NGINX reverse proxying, container isolation, observability, and Agile execution.
 
-27. DevOps on a VPS for Startups: Self-Hosted CI/CD, Docker and Monitoring
+28. DevOps on a VPS for Startups: Self-Hosted CI/CD, Docker and Monitoring
 URL: https://aymen.benyedder.top/blog/devops-vps-startups/
 Date: 2026-03-11
 Summary: A practical startup guide to running DevOps on a VPS with Docker, CI/CD, monitoring, backups, and the security hardening that matters before you scale.

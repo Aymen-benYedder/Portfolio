@@ -7921,4 +7921,283 @@ const { object } = await generateObject({
       { question: 'When do I actually need RAG or a vector database?', answer: 'Only when the answer depends on information the model has not seen, like your own documents or a specific user data set. Start with search plus top-k chunks in the prompt. Add a vector database when that stops being fast enough.' },
     ],
   },
+  {
+    id: 'post-rag-b2b-2026',
+    title: 'RAG for B2B SaaS: A Practical Guide to Retrieval-Augmented Generation in Production',
+    seoTitle: 'RAG for B2B SaaS: Production Guide',
+    slug: 'rag-b2b-saas-production-guide-2026',
+    description: 'A mentor-led, production-focused guide to RAG for B2B SaaS: when it makes sense, how to architect the full ingestion-to-generation pipeline, and the retrieval-quality and security judgment calls that separate demos from shipped products.',
+    seoDescription: 'A practical guide to RAG in production: when it makes sense, fullstack architecture, chunking, hybrid search, reranking, eval, and security.',
+    publishedAt: '2026-09-07',
+    categories: ['AI', 'DevOps'],
+    tags: ['RAG', 'Retrieval-Augmented Generation', 'Vector Database', 'pgvector', 'Hybrid Search', 'Reranking', 'RAGAS', 'LLM', 'B2B SaaS', 'Chunking'],
+    readingTime: 13,
+    body: `<p>Retrieval-augmented generation is the workhorse of enterprise AI in 2026. By one industry estimate, 54% of GenAI-using enterprises have deployed RAG in at least one application, up from under 10% in 2024, with enterprise knowledge management the primary use case at 67% of deployments.<sup><a href="#fn1" id="fnref1">1</a></sup> The technique is not new — Meta AI introduced it in the 2020 paper "Retrieval-Augmented Generation for Knowledge-Intensive Tasks"<sup><a href="#fn2" id="fnref2">2</a></sup> — but shipping it in a multi-tenant B2B product is a different discipline.</p>
+
+<p>Here is the thesis that drives this guide: <strong>in B2B RAG, the model is a commodity — the retrieval is the product.</strong> The value comes from getting the right context to the model with citations, access control, and measurable quality. The skill that separates a demo from a shipped product is retrieval engineering and evaluation, not prompt writing.</p>
+
+<h2>When RAG Makes Sense for B2B (and When It Doesn't)</h2>
+
+<p>RAG injects knowledge at query time: no retraining, citeable answers, and fresh data. Fine-tuning changes model behavior and weights: best for stable knowledge, output format, and low-latency inference. The decision is not either/or — a hybrid, fine-tune for behavior and RAG for facts, typically outperforms either alone.<sup><a href="#fn3" id="fnref3">3</a></sup></p>
+
+<p>RAG wins when your knowledge is <strong>private, large, or changing</strong> — product documentation, internal runbooks, support history, compliance policies. It wins when you need <strong>citations</strong> and auditability, because every answer can point back to a retrieved source. It wins on economics: a typical RAG implementation reaches production in 3–4 months versus 7–9 months for a fine-tuned model, with compute costs roughly 73% lower for knowledge customization.<sup><a href="#fn4" id="fnref4">4</a></sup> Those are directional industry estimates, not guarantees.</p>
+
+<p>Fine-tuning wins when the problem is <strong>behavior</strong>, not knowledge: enforcing a strict output format, matching a domain tone, or hitting a low-latency inference target where a retrieval round-trip adds unacceptable overhead.<sup><a href="#fn3" id="fnref3">3</a></sup> It remains specialized, not standardized — 57% of organizations are not fine-tuning at all, relying instead on base models combined with prompt engineering and RAG.<sup><a href="#fn5" id="fnref5">5</a></sup></p>
+
+<p>I've seen this fail when a team fine-tunes a model to memorize a knowledge base that changes weekly. The model learns stale facts, retraining is slow, and there is no citation trail. RAG would have been cheaper, fresher, and auditable. I've also seen teams bolt a vector store onto a problem that was really about output formatting — a fine-tuned model would have been simpler.</p>
+
+<h2>The Fullstack Architecture</h2>
+
+<p>A production RAG system has two halves: an <strong>ingestion pipeline</strong> and a <strong>retrieval-and-generation path</strong>. The ingestion pipeline parses documents, chunks them, embeds them, and writes them to a vector store. The retrieval path takes a user question, runs hybrid search, reranks candidates, assembles context, and calls the LLM with citations. Around both sits an evaluation loop that measures whether retrieval is actually working.</p>
+
+<p>In words, the flow looks like this:</p>
+
+<ol>
+<li><strong>Ingest:</strong> parse source documents (Markdown, HTML, PDF) → split into chunks → embed each → upsert into the vector store with metadata (source, doc type, tenant, ACL).</li>
+<li><strong>Retrieve:</strong> on a query, run hybrid search (BM25 + vector), filtered by metadata, then rerank the candidate set.</li>
+<li><strong>Assemble:</strong> pack the top reranked chunks into a context window with citations.</li>
+<li><strong>Generate:</strong> the LLM answers grounded in that context.</li>
+<li><strong>Evaluate:</strong> measure faithfulness, answer relevance, and context precision; feed results back into chunking and retrieval tuning.</li>
+</ol>
+
+<h3>Choosing the Vector Store</h3>
+
+<p>For most teams, <strong>pgvector</strong> is the rising default. It is an open-source PostgreSQL extension for vector similarity search, created in 2021, supporting exact and approximate nearest neighbor, multiple distance metrics, ACID compliance, JOINs, and quantization for scaling.<sup><a href="#fn6" id="fnref6">6</a></sup> If you already run Postgres and have under roughly 10M vectors, pgvector gives you zero new infrastructure and SQL filtering.<sup><a href="#fn7" id="fnref7">7</a></sup></p>
+
+<p>Dedicated vector databases earn their place at larger scale or stricter requirements. <strong>Qdrant</strong> (Rust, Apache 2.0) is best-in-class for filtered, tenant-scoped approximate nearest neighbor via payload indexes.<sup><a href="#fn8" id="fnref8">8</a></sup> <strong>Weaviate</strong> offers native hybrid search (BM25 + vector) and native multi-tenancy with per-tenant shards.<sup><a href="#fn9" id="fnref9">9</a></sup> <strong>Milvus</strong> is built for 100M–10B+ vectors with the widest index menu and native sparse-plus-dense hybrid search.<sup><a href="#fn10" id="fnref10">10</a></sup></p>
+
+<p>Hybrid search is the highest-value feature after basic filtering for RAG over technical docs, code, and catalogs — vectors nail semantics, keywords nail exact terms like error codes, SKUs, and acronyms.<sup><a href="#fn11" id="fnref11">11</a></sup> Weaviate, Qdrant, Milvus, and Pinecone support hybrid natively; pgvector combines with Postgres <code>tsvector</code> full-text search.<sup><a href="#fn11" id="fnref11">11</a></sup></p>
+
+<h2>Chunking Done Right</h2>
+
+<p>Chunking is where naive demos die. The chunk is the unit of retrieval — too big and it buries the relevant detail; too small and it loses context. LlamaIndex's defaults are <code>chunk_size = 1024</code> and <code>chunk_overlap = 20</code>, with the guidance that smaller chunks give more precise embeddings while larger chunks are more general but can miss fine-grained detail.<sup><a href="#fn12" id="fnref12">12</a></sup></p>
+
+<p>Pinecone's rule of thumb is worth internalizing: <em>"if the chunk of text makes sense without the surrounding context to a human, it will make sense to the language model as well."</em> Fixed-size chunking is the best default for most cases — start there and iterate, testing 128/256 tokens (granular) up to 512/1024 tokens (context).<sup><a href="#fn13" id="fnref13">13</a></sup></p>
+
+<p>For real documents, structure-aware chunking beats naive fixed-size splitting. LangChain's <code>RecursiveCharacterTextSplitter</code> splits using separators in order — paragraphs, then sentences, then words.<sup><a href="#fn13" id="fnref13">13</a></sup> Splitting on headings and tables (for example, <code>MarkdownHeaderTextSplitter</code> with <code>headers_to_split_on</code> for <code>h2</code>) is recommended for Markdown, HTML, and PDF.<sup><a href="#fn14" id="fnref14">14</a></sup></p>
+
+<p>Use an overlap of 10–20% of chunk size to prevent context loss at boundaries — for a 512-token chunk, that's roughly 50–100 tokens; for 1024, roughly 100–200.<sup><a href="#fn15" id="fnref15">15</a></sup> Consider decoupling retrieval chunks from synthesis chunks: embed a document summary or sentence, then link to a window around it. This avoids "lost in the middle" problems and improves retrieval.<sup><a href="#fn16" id="fnref16">16</a></sup></p>
+
+<p>I've seen this fail when a team chunks a 40-page PDF into fixed 1024-token slices and then wonders why answers about a table buried on page 31 come back wrong. The table got split mid-row and the embedding captured half a concept. Splitting on the table boundary, keeping the row group intact, fixed it.</p>
+
+<h2>Retrieval Quality</h2>
+
+<p>Retrieval quality is the difference between a RAG system that answers and one that hallucinates. The single biggest lever is not a cleverer prompt — it's getting the right chunks into the context window.</p>
+
+<h3>Hybrid Search: BM25 + Vector</h3>
+
+<p>BM25 is a probabilistic keyword ranking function that improves on TF-IDF by accounting for document length and term saturation; it's widely used in production search, including Elasticsearch.<sup><a href="#fn17" id="fnref17">17</a></sup> Combining BM25 with dense vector search gives you both exact-term matching and semantic similarity — essential for B2B content full of error codes, SKUs, and product names that embeddings alone can blur.</p>
+
+<h3>Reranking</h3>
+
+<p>Reranking is a two-stage retrieval technique: initial retrieval (embeddings or BM25) is fast across millions of documents, then a reranker — slower but more accurate — reorders a smaller candidate set.<sup><a href="#fn18" id="fnref18">18</a></sup> Reranking adds roughly 100–200ms per query depending on candidate-set size.<sup><a href="#fn19" id="fnref19">19</a></sup></p>
+
+<p>The impact is measurable. Anthropic's Contextual Retrieval — prepending chunk-specific context before embedding and before BM25 — reduced failed retrievals by 49%; combined with reranking, by 67% (a top-20-chunk retrieval failure rate dropping from 5.7% to 1.9%).<sup><a href="#fn19" id="fnref19">19</a></sup> Contextual Embeddings alone reduced the top-20-chunk retrieval failure rate by 35% on average, with Pass@10 improving from roughly 87% to 92%, and to about 95% with reranking.<sup><a href="#fn20" id="fnref20">20</a></sup></p>
+
+<p>Why top-k alone is not enough: a top-k search returns the k nearest vectors, but "nearest" is not "most relevant to this specific question." Two chunks can be semantically close yet only one answers the question. Reranking reorders by actual relevance to the query, and it's cheap enough to run on a candidate set of 20–50 chunks.</p>
+
+<h2>Production Concerns</h2>
+
+<p>Getting RAG to production is an evaluation, cost, and security problem as much as an engineering one.</p>
+
+<h3>Evaluation</h3>
+
+<p>You cannot tune what you cannot measure. <strong>RAGAS</strong> (Retrieval Augmented Generation Assessment) is a reference-free framework for evaluating RAG pipelines, introduced in the paper "RAGAS: Automated Evaluation of Retrieval Augmented Generation."<sup><a href="#fn21" id="fnref21">21</a></sup> Its core metrics are <strong>Faithfulness</strong> (is the answer grounded in the retrieved context?), <strong>Answer Relevance</strong> (does the answer address the question?), and <strong>Context Relevance</strong> (is the retrieved context focused?).<sup><a href="#fn21" id="fnref21">21</a></sup> Faithfulness is the number of claims in the response supported by the retrieved context divided by the total number of claims, on a 0–1 scale.<sup><a href="#fn22" id="fnref22">22</a></sup></p>
+
+<p>For the retriever specifically, <strong>Context Precision</strong> evaluates whether relevant chunks are ranked higher than irrelevant ones (the mean of precision@k), and <strong>Context Recall</strong> measures whether the relevant context was retrieved at all.<sup><a href="#fn23" id="fnref23">23</a></sup></p>
+
+<p>Enterprises report baseline LLM hallucination rates of roughly 18% on organizational knowledge queries falling to about 4.2% with well-implemented RAG pipelines — a 77% reduction — with sophisticated 2026 implementations reporting under 2%.<sup><a href="#fn1" id="fnref1">1</a></sup> Directional, not gospel, but the pattern holds: grounding in retrieved context is what kills hallucination.</p>
+
+<h3>Cost and Latency Budgets</h3>
+
+<p>Embedding is cheap. OpenAI's <code>text-embedding-3-small</code> costs $0.02 per 1M tokens (or $0.01 via the Batch API), and <code>text-embedding-3-large</code> costs $0.13 per 1M tokens ($0.065 batch).<sup><a href="#fn24" id="fnref24">24</a></sup> Embedding a 100K-document corpus with 3-small is on the order of a few dollars a year.<sup><a href="#fn25" id="fnref25">25</a></sup> The retrieval pipeline — embed, search, rerank, assemble — typically runs in the 280–400ms range before LLM generation, with reranking contributing 100–200ms of that.<sup><a href="#fn26" id="fnref26">26</a></sup> These are environment-specific estimates that vary by stack, corpus size, and hardware.</p>
+
+<p>Budget for caching (repeat queries hit a cache, not the full pipeline), fallbacks (when retrieval returns nothing confident, route to a human or a refusal rather than a hallucination), and observability (log which chunks were retrieved, which were cited, and the confidence at each stage).</p>
+
+<h3>Security, PII, and Tenant Isolation</h3>
+
+<p>This is where multi-tenant B2B RAG gets serious. The OWASP RAG Security Cheat Sheet is explicit: store access-control metadata — classification, owner, permitted roles and tenants — alongside every vector chunk, not just the source document; enforce access control at retrieval time, not just ingestion; and never rely on the LLM to enforce access control — enforce it before content reaches the model.<sup><a href="#fn27" id="fnref27">27</a></sup></p>
+
+<p>The reason is what researchers call the <strong>relevance–authorization gap</strong>: retrieval systems rank by relevance, not authorization, so a query from one tenant can surface another tenant's confidential data.<sup><a href="#fn28" id="fnref28">28</a></sup> Post-retrieval filtering is "security theater" — by the time you remove unauthorized documents, they're already in the model's context window.<sup><a href="#fn29" id="fnref29">29</a></sup> The correct patterns are structural index isolation (per-tenant namespaces), database-level row-level security (Postgres + pgvector), or pre-filter ACL enforcement.<sup><a href="#fn29" id="fnref29">29</a></sup></p>
+
+<p>For PII: classify and tag access on ingest, redact PII, secrets, and regulated fields from retrieved passages before they reach the prompt or logs, and treat retrieved content as untrusted data — retrieved passages are a prompt-injection vector.<sup><a href="#fn30" id="fnref30">30</a></sup></p>
+
+<h2>Worked Example: Support Copilot for a B2B SaaS</h2>
+
+<p>Let's make this concrete with a multi-tenant invoicing platform. The support team answers the same questions repeatedly, and the answers live in two places: public product documentation and internal runbooks. The copilot answers from both, with citations, scoped to the asking tenant.</p>
+
+<h3>The Flow</h3>
+
+<ol>
+<li><strong>Ingest nightly:</strong> product docs and internal runbooks are parsed, chunked, embedded, and upserted into a tenant-scoped vector store.</li>
+<li><strong>User question:</strong> a support agent asks, "Why is invoice #4821 stuck in 'pending'?"</li>
+<li><strong>Hybrid retrieval:</strong> BM25 + vector search, filtered by tenant and doc type (docs vs. runbooks).</li>
+<li><strong>Rerank:</strong> the candidate set is reordered by relevance to the question.</li>
+<li><strong>Generate with citations:</strong> the LLM answers, citing the specific doc or runbook; low-confidence results hand off to a human rather than guessing.</li>
+</ol>
+
+<h3>Failure Modes</h3>
+
+<p>Three failures dominate. <strong>Stale docs:</strong> a runbook says a feature works one way, but it shipped differently — nightly re-ingestion helps, but you still need a freshness signal and a way to flag outdated chunks. <strong>Ambiguous questions:</strong> "Why is my invoice pending?" could mean a payment failure, a compliance hold, or a sync delay — the copilot should ask a clarifying question rather than commit to one. <strong>Cross-tenant leakage:</strong> the highest-risk failure — if tenant A's query can retrieve tenant B's data, you have a breach. Tenant scoping must be enforced at retrieval time, structurally, not filtered afterward.<sup><a href="#fn28" id="fnref28">28</a></sup></p>
+
+<h2>Code Snippets</h2>
+
+<h3>Ingestion Pipeline (TypeScript / Node)</h3>
+
+<p>This pipeline parses a document, splits it into chunks, embeds each chunk, and upserts into pgvector. Note the metadata: source, doc type, and tenant — the tenant field is what enables retrieval-time access control.</p>
+
+<pre><code class="language-typescript">import { RecursiveCharacterTextSplitter } from "langchain/text_splitter";
+import { OpenAIEmbeddings } from "@langchain/openai";
+import { Pool } from "pg";
+
+const pool = new Pool({ connectionString: process.env.DATABASE_URL });
+const embeddings = new OpenAIEmbeddings({ model: "text-embedding-3-small" });
+
+const splitter = new RecursiveCharacterTextSplitter({
+  chunkSize: 512,
+  chunkOverlap: 64, // ~12% overlap
+});
+
+export async function ingestDocument(doc: {
+  id: string;
+  tenantId: string;
+  docType: "docs" | "runbook";
+  content: string;
+}) {
+  const chunks = await splitter.splitText(doc.content);
+  const vectors = await embeddings.embedDocuments(chunks);
+
+  for (let i = 0; i < chunks.length; i++) {
+    await pool.query(
+      \`INSERT INTO document_chunks (doc_id, tenant_id, doc_type, chunk_index, content, embedding)
+       VALUES ($1, $2, $3, $4, $5, $6)
+       ON CONFLICT (doc_id, chunk_index) DO UPDATE
+       SET content = EXCLUDED.content, embedding = EXCLUDED.embedding\`,
+      [doc.id, doc.tenantId, doc.docType, i, chunks[i], vectors[i]]
+    );
+  }
+}
+</code></pre>
+
+<h3>Retrieval + Generation (Hybrid Query, Rerank, Context Assembly)</h3>
+
+<p>This is the retrieval path: hybrid BM25 + vector search filtered by tenant, reranking, context assembly, and the LLM call with citations. The tenant filter is applied in the SQL — before anything reaches the model.</p>
+
+<pre><code class="language-typescript">import { OpenAIEmbeddings } from "@langchain/openai";
+import { Pool } from "pg";
+import OpenAI from "openai";
+
+const pool = new Pool({ connectionString: process.env.DATABASE_URL });
+const embeddings = new OpenAIEmbeddings({ model: "text-embedding-3-small" });
+const openai = new OpenAI();
+
+export async function answerSupportQuestion(
+  question: string,
+  tenantId: string
+) {
+  const vector = await embeddings.embedQuery(question);
+
+  // Hybrid: BM25 (tsvector) + vector, filtered by tenant at query time.
+  const { rows } = await pool.query(
+    \`SELECT id, content, doc_type, source,
+            ts_rank(to_tsvector(content), plainto_tsquery($1)) AS bm25_score,
+            1 - (embedding <=> $2::vector) AS vector_score
+     FROM document_chunks
+     WHERE tenant_id = $3
+       AND (to_tsvector(content) @@ plainto_tsquery($1)
+            OR 1 - (embedding <=> $2::vector) > 0.5)
+     ORDER BY (0.5 * bm25_score + 0.5 * vector_score) DESC
+     LIMIT 20\`,
+    [question, vector, tenantId]
+  );
+
+  // Rerank the candidate set (e.g. Cohere Rerank) — omitted for brevity.
+  const reranked = await rerank(question, rows);
+
+  const context = reranked
+    .slice(0, 5)
+    .map((c) => \`[\${c.source}] \${c.content}\`)
+    .join("\\n\\n");
+
+  const completion = await openai.chat.completions.create({
+    model: "gpt-5.6-luna",
+    messages: [
+      {
+        role: "system",
+        content:
+          "Answer using only the provided context. Cite the source for each claim. If the context is insufficient, say so and route to a human.",
+      },
+      { role: "user", content: \`Context:\\n\${context}\\n\\nQuestion: \${question}\` },
+    ],
+  });
+
+  return { answer: completion.choices[0].message.content, sources: reranked.map((c) => c.source) };
+}
+</code></pre>
+
+<p>Two notes on the code. First, the model name in the generation call is illustrative — model names and prices change frequently, so verify at publication time.<sup><a href="#fn31" id="fnref31">31</a></sup> Second, the rerank step is the part most teams skip, and it's the part that moves retrieval quality the most. If you take one thing from this guide, make it this: <strong>retrieve broadly, rerank precisely, and enforce access control before the context ever reaches the model.</strong></p>
+
+<h2>FAQ</h2>
+
+<h3>When should I use RAG instead of fine-tuning?</h3>
+<p>Use RAG for knowledge access — fresh data, citations, explainability, and low-cost updates. Use fine-tuning for behavior — output format, domain tone, and low-latency inference. A hybrid (fine-tune for behavior, RAG for facts) typically outperforms either alone.<sup><a href="#fn3" id="fnref3">3</a></sup></p>
+
+<h3>Do I need a vector database for RAG?</h3>
+<p>Not necessarily. If you already run Postgres and have under roughly 10M vectors, pgvector — a Postgres extension — is often the right answer with zero new infrastructure. Dedicated vector DBs like Qdrant, Weaviate, or Milvus matter at larger scale, strict latency SLAs, or heavy metadata filtering.<sup><a href="#fn7" id="fnref7">7</a></sup></p>
+
+<h3>What chunk size should I use for RAG?</h3>
+<p>Start with fixed-size or recursive chunking at 512–1024 tokens with 10–20% overlap. Test 128/256 tokens for granular fact queries and 512/1024 for broader context. Structure-aware chunking on headings and tables helps for Markdown, HTML, and PDF.<sup><a href="#fn13" id="fnref13">13</a></sup><sup><a href="#fn15" id="fnref15">15</a></sup></p>
+
+<h3>How do I secure a multi-tenant RAG system and prevent data leakage between tenants?</h3>
+<p>Enforce access control at retrieval time, not post-retrieval. Store ACL metadata on every chunk, use per-tenant namespaces or Postgres row-level security, and never rely on the LLM to enforce access — enforce it before content reaches the model.<sup><a href="#fn27" id="fnref27">27</a></sup><sup><a href="#fn29" id="fnref29">29</a></sup></p>
+
+<h2>Footnotes</h2>
+<ol>
+<li id="fn1">Halkwinds Research, "Enterprise AI Adoption Trends 2026" — <a href="https://www.halkwinds.com/research/enterprise-ai-adoption-trends-2026" target="_blank" rel="noopener">halkwinds.com</a>. Secondary/industry source; treat as directional. <a href="#fnref1">↩</a></li>
+<li id="fn2">IBM, "RAG vs Fine-Tuning" — <a href="https://www.ibm.com/think/topics/rag-vs-fine-tuning" target="_blank" rel="noopener">ibm.com</a>. <a href="#fnref2">↩</a></li>
+<li id="fn3">Databricks, "RAG vs Fine-Tuning" — <a href="https://www.databricks.com/blog/rag-vs-fine-tuning" target="_blank" rel="noopener">databricks.com</a>; IBM, "RAG vs Fine-Tuning" — <a href="https://www.ibm.com/think/topics/rag-vs-fine-tuning" target="_blank" rel="noopener">ibm.com</a>. <a href="#fnref3">↩</a></li>
+<li id="fn4">Halkwinds Research (see fn1) — directional industry estimate. <a href="#fnref4">↩</a></li>
+<li id="fn5">LangChain, "State of Agent Engineering" (survey of 1,340 practitioners, fielded Nov 18–Dec 2, 2025) — <a href="https://www.langchain.com/state-of-agent-engineering" target="_blank" rel="noopener">langchain.com</a>. <a href="#fnref5">↩</a></li>
+<li id="fn6">pgvector — <a href="https://github.com/pgvector/pgvector" target="_blank" rel="noopener">github.com/pgvector/pgvector</a>. <a href="#fnref6">↩</a></li>
+<li id="fn7">Tomoda Hinata, "pgvector vs Pinecone/Qdrant/Weaviate/Milvus" — <a href="https://tomodahinata.com/en/blog/pgvector-vs-pinecone-qdrant-weaviate-milvus-vector-database-comparison-guide" target="_blank" rel="noopener">tomodahinata.com</a>; Jose Nobile — <a href="https://josenobile.co/guides/vector-databases/" target="_blank" rel="noopener">josenobile.co</a>; BirJob — <a href="https://www.birjob.com/blog/vector-databases-2026" target="_blank" rel="noopener">birjob.com</a>. <a href="#fnref7">↩</a></li>
+<li id="fn8">Qdrant documentation — <a href="https://qdrant.tech/documentation/" target="_blank" rel="noopener">qdrant.tech</a>. <a href="#fnref8">↩</a></li>
+<li id="fn9">Weaviate documentation — <a href="https://weaviate.io/developers/weaviate" target="_blank" rel="noopener">weaviate.io</a>. <a href="#fnref9">↩</a></li>
+<li id="fn10">Jose Nobile (see fn7); GenAI Maturity Framework — <a href="https://genaimaturity.net/vs/vector-databases" target="_blank" rel="noopener">genaimaturity.net</a>. <a href="#fnref10">↩</a></li>
+<li id="fn11">Jose Nobile (see fn7). <a href="#fnref11">↩</a></li>
+<li id="fn12">LlamaIndex docs, "Basic Strategies" — <a href="https://developers.llamaindex.ai/python/framework/optimizing/basic_strategies/basic_strategies/" target="_blank" rel="noopener">developers.llamaindex.ai</a>. <a href="#fnref12">↩</a></li>
+<li id="fn13">Pinecone, "Chunking Strategies for LLM Applications" — <a href="https://www.pinecone.io/learn/chunking-strategies/" target="_blank" rel="noopener">pinecone.io</a>. <a href="#fnref13">↩</a></li>
+<li id="fn14">Pinecone, "Build a RAG Chatbot" — <a href="https://docs.pinecone.io/guides/get-started/build-a-rag-chatbot" target="_blank" rel="noopener">docs.pinecone.io</a>. <a href="#fnref14">↩</a></li>
+<li id="fn15">Amir Teymoori, "RAG Text Chunking Strategies" — <a href="https://amirteymoori.com/posts/rag-text-chunking-strategies.md" target="_blank" rel="noopener">amirteymoori.com</a>. <a href="#fnref15">↩</a></li>
+<li id="fn16">LlamaIndex, "Building Performant RAG Applications for Production" — <a href="https://developers.llamaindex.ai/python/framework/optimizing/production_rag/" target="_blank" rel="noopener">developers.llamaindex.ai</a>. <a href="#fnref16">↩</a></li>
+<li id="fn17">Anthropic, "Contextual Retrieval" — <a href="https://www.anthropic.com/engineering/contextual-retrieval" target="_blank" rel="noopener">anthropic.com</a>. <a href="#fnref17">↩</a></li>
+<li id="fn18">Cohere, "Rerank" — <a href="https://docs.cohere.com/docs/rerank.mdx" target="_blank" rel="noopener">docs.cohere.com</a>. <a href="#fnref18">↩</a></li>
+<li id="fn19">Anthropic, "Contextual Retrieval" — <a href="https://www.anthropic.com/engineering/contextual-retrieval" target="_blank" rel="noopener">anthropic.com</a>. <a href="#fnref19">↩</a></li>
+<li id="fn20">Anthropic Claude Cookbook, "Contextual Embeddings Guide" — <a href="https://platform.claude.com/cookbook/capabilities-contextual-embeddings-guide" target="_blank" rel="noopener">platform.claude.com</a>. <a href="#fnref20">↩</a></li>
+<li id="fn21">RAGAS paper, "RAGAS: Automated Evaluation of Retrieval Augmented Generation" (arXiv 2309.15217; EACL 2024 demo) — <a href="https://arxiv.org/html/2309.15217v1" target="_blank" rel="noopener">arxiv.org</a>; <a href="https://aclanthology.org/2024.eacl-demo.16.pdf" target="_blank" rel="noopener">aclanthology.org</a>. <a href="#fnref21">↩</a></li>
+<li id="fn22">RAGAS docs, "Faithfulness" — <a href="https://docs.ragas.io/en/stable/concepts/metrics/available_metrics/faithfulness/" target="_blank" rel="noopener">docs.ragas.io</a>. <a href="#fnref22">↩</a></li>
+<li id="fn23">RAGAS docs, "Context Precision" / metrics — <a href="https://docs.ragas.io/en/stable/concepts/metrics/available_metrics/context_precision/" target="_blank" rel="noopener">docs.ragas.io</a>. <a href="#fnref23">↩</a></li>
+<li id="fn24">OpenAI API docs, text-embedding-3-small / text-embedding-3-large — <a href="https://developers.openai.com/api/docs/models/text-embedding-3-small" target="_blank" rel="noopener">developers.openai.com</a>; <a href="https://developers.openai.com/api/docs/models/text-embedding-3-large" target="_blank" rel="noopener">developers.openai.com</a>. <a href="#fnref24">↩</a></li>
+<li id="fn25">TokenMix, "OpenAI Embedding Pricing" — <a href="https://tokenmix.ai/blog/openai-embedding-pricing" target="_blank" rel="noopener">tokenmix.ai</a>. Estimate. <a href="#fnref25">↩</a></li>
+<li id="fn26">Nic Chin, "RAG vs Fine-Tuning" — <a href="https://nicchin.com/blog/rag-vs-fine-tuning" target="_blank" rel="noopener">nicchin.com</a>; Anthropic (see fn19). Environment-specific estimates. <a href="#fnref26">↩</a></li>
+<li id="fn27">OWASP RAG Security Cheat Sheet — <a href="https://cheatsheetseries.owasp.org/cheatsheets/RAG_Security_Cheat_Sheet.html" target="_blank" rel="noopener">cheatsheetseries.owasp.org</a>. <a href="#fnref27">↩</a></li>
+<li id="fn28">"Securing the Agent: Vendor-Neutral, Multitenant Enterprise Retrieval and Tool Use" (arXiv 2605.05287, 2026 preprint) — <a href="https://arxiv.org/html/2605.05287" target="_blank" rel="noopener">arxiv.org</a>. Preprint, not yet peer-reviewed. <a href="#fnref28">↩</a></li>
+<li id="fn29">Tian Pan, "Vector Store Access Control for RAG (RLS)" — <a href="https://tianpan.co/blog/2026/04/17/vector-store-access-control-rag-rls" target="_blank" rel="noopener">tianpan.co</a>. <a href="#fnref29">↩</a></li>
+<li id="fn30">Vibe Engines, "Secure Document Ingestion and RAG System Design" — <a href="https://vibeengines.com/ai-system-design/secure-document-ingestion-and-rag-system-design" target="_blank" rel="noopener">vibeengines.com</a>; OWASP (see fn27). <a href="#fnref30">↩</a></li>
+<li id="fn31">OpenAI pricing — <a href="https://developers.openai.com/api/docs/pricing" target="_blank" rel="noopener">developers.openai.com</a>. Model names and prices change frequently; verify at publication time. <a href="#fnref31">↩</a></li>
+</ol>`,
+    keyTakeaways: [
+      'In B2B RAG the model is a commodity; retrieval is the product — the value lives in getting the right, authorized context to the model with citations.',
+      'For most teams under ~10M vectors already on Postgres, pgvector is the rising default; dedicated vector DBs matter at larger scale or strict latency SLAs.',
+      'Start with fixed-size or recursive chunking at 512–1024 tokens with 10–20% overlap, then move to structure-aware chunking for real docs.',
+      'Hybrid search (BM25 + vector) plus reranking beats top-k alone; Anthropic\'s Contextual Retrieval cut failed retrievals by 49%, and by 67% with reranking.',
+      'Enforce access control at retrieval time, never post-retrieval — post-retrieval filtering is security theater in a multi-tenant RAG system.',
+    ],
+    directAnswer: 'RAG (retrieval-augmented generation) is the right choice for B2B SaaS when you need to ground answers in private, large, or frequently changing knowledge with citations — and it\'s cheaper and faster to ship than fine-tuning for knowledge use cases.',
+    faq: [
+      { question: 'When should I use RAG instead of fine-tuning?', answer: 'Use RAG for knowledge access — fresh data, citations, explainability, and low-cost updates. Use fine-tuning for behavior — output format, domain tone, and low-latency inference. A hybrid (fine-tune for behavior, RAG for facts) typically outperforms either alone.' },
+      { question: 'Do I need a vector database for RAG?', answer: 'Not necessarily. If you already run Postgres and have under ~10M vectors, pgvector — a Postgres extension — is often the right answer with zero new infrastructure. Dedicated vector DBs like Qdrant, Weaviate, or Milvus matter at larger scale, strict latency SLAs, or heavy metadata filtering.' },
+      { question: 'What chunk size should I use for RAG?', answer: 'Start with fixed-size or recursive chunking at 512–1024 tokens with 10–20% overlap. Test 128/256 tokens for granular fact queries and 512/1024 for broader context. Structure-aware chunking on headings and tables helps for Markdown, HTML, and PDF.' },
+      { question: 'How do I secure a multi-tenant RAG system and prevent data leakage between tenants?', answer: 'Enforce access control at retrieval time, not post-retrieval. Store ACL metadata on every chunk, use per-tenant namespaces or Postgres row-level security, and never rely on the LLM to enforce access — enforce it before content reaches the model.' },
+    ],
+  },
 ];

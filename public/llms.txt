@@ -3,7 +3,7 @@
 > Personal portfolio and technical blog by Aymen ben Yedder — DevOps & Cloud Infrastructure Engineer (Kubernetes, GitOps, Terraform, CI/CD, self-hosted AI inference). 8 years in production infrastructure. Available for remote contracts.
 
 Canonical site: https://aymen.benyedder.top/
-Updated: 2026-09-05
+Updated: 2026-09-07
 
 ## Preferred Sources
 
@@ -37,6 +37,7 @@ Updated: 2026-09-05
 
 ## AI Engineering & Agentic CI/CD
 
+- [RAG for B2B SaaS: A Practical Guide to Retrieval-Augmented Generation in Production](https://aymen.benyedder.top/blog/rag-b2b-saas-production-guide-2026/) — when RAG makes sense, the full ingestion-to-generation architecture, chunking, hybrid search, reranking, evaluation, and retrieval-time access control for multi-tenant B2B systems.
 - [How to Add AI to a Web App Without Turning It Into a Science Project](https://aymen.benyedder.top/blog/add-ai-to-web-app-beginners-guide-2026/) — the 5-step production pattern: managed APIs, structured outputs, validation, human review, and cost guardrails.
 - [AI Coding Agents in CI/CD: Turning Review Gates Into Your First Line of Defense](https://aymen.benyedder.top/blog/agentic-ai-cicd-review-gates-2026/) — hybrid-strict agent gates cut review time 55% and defect escape to 1.7%.
 - [AI Writes 41% of Code. Only 29% of Devs Trust It. Review It Like a Senior Engineer](https://aymen.benyedder.top/blog/ai-code-review-verification-2026/)
