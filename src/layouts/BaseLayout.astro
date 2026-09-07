@@ -54,7 +54,17 @@ const { title, description, canonical, image, imageWidth, imageHeight, imageType
     </script>
   </head>
   <body class="bg-[var(--void)] text-[var(--text-2)]">
-    <a href="#main-content" class="skip-link fixed -top-10 left-0 bg-[var(--accent)] text-[var(--void)] px-[var(--spacing-gap-sm)] py-[var(--spacing-gap-xs)] no-underline z-50 focus-visible:top-0">Skip to main content</a>
+    <a href="#main-content" class="skip-link fixed -top-10 left-0 bg-[var(--accent)] text-[var(--void)] px-[var(--spacing-gap-sm)] py-[var(--spacing-gap-xs)] no-underline z-50">Skip to main content</a>
+    <script>
+      // Reveal the skip link ONLY for keyboard users (WCAG pattern).
+      // Mouse clicks can never reveal it, regardless of browser :focus-visible heuristics.
+      document.addEventListener('keydown', (e) => {
+        if (e.key === 'Tab') document.body.classList.add('keyboard-nav');
+      });
+      document.addEventListener('mousedown', () => {
+        document.body.classList.remove('keyboard-nav');
+      });
+    </script>
     <!-- Volumetric light follows mouse position -->
     <div id="volumetric-light" aria-hidden="true"></div>
     <!-- Scroll progress bar -->
@@ -207,4 +217,8 @@ const { title, description, canonical, image, imageWidth, imageHeight, imageType
 
 <style>
 .skip-link { transition: top 150ms ease; }
+/* Keyboard-only reveal: only after a Tab keypress (body.keyboard-nav) does the
+   skip link become visible on focus. Mouse clicks remove the class, so the
+   skip link can never appear from mouse interaction. */
+body.keyboard-nav .skip-link:focus { top: 0; }
 </style>
