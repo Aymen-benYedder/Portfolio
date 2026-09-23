@@ -161,16 +161,6 @@ button, a {
   transition: color 200ms ease, background-color 200ms ease, border-color 200ms ease, opacity 200ms ease, transform 200ms ease, box-shadow 200ms ease;
 }
 
-@media (hover: hover) {
-  *:active {
-    transform: scale(0.98);
-  }
-
-  a:active, button:active {
-    transform: scale(0.95);
-  }
-}
-
 .blueprint-bg {
   background-color: var(--void);
   background-image:

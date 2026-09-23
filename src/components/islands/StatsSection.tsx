@@ -16,7 +16,7 @@ export default function StatsSection() {
             className="font-[family-name:var(--font-mono)] text-[clamp(1.5rem,3vw,2.25rem)] font-bold tabular-nums"
             style={{ color: stat.accent === false ? 'var(--text-1)' : 'var(--accent)' }}
           >
-            <AnimatedCounter end={stat.end} suffix={stat.suffix} duration={2 + i * 0.3} decimals={stat.decimals || 0} />
+            <AnimatedCounter end={stat.end} suffix={stat.suffix} duration={2 + i * 0.3} delay={2.5} decimals={stat.decimals || 0} />
           </span>
           <div className="flex flex-col">
             <span className="font-[family-name:var(--font-mono)] text-[length:var(--text-2xs)] text-[var(--text-1)] font-medium">
