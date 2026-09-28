@@ -8551,6 +8551,11 @@ export async function answerSupportQuestion(
     slug: 'ai-support-copilot-xgboost-rag-fastapi',
     description: 'A practical guide to building an AI support copilot: XGBoost predicts ticket priority and churn risk, RAG retrieves past resolutions from a vector database, and FastAPI serves it all as a clean REST API.',
     seoDescription: 'Build an AI support copilot step by step: XGBoost for ticket priority and churn prediction, RAG with Chroma for retrieving past resolutions, LangChain for the agent, and FastAPI for the REST API — with full code and Docker deployment.',
+    image: {
+      url: '/assets/img/ai-support-copilot-xgboost-rag-fastapi.jpg',
+      alt: 'AI support copilot architecture: an incoming ticket is scored by XGBoost for priority and churn risk, matched against past resolutions in a Chroma vector database, and drafted into a reply by a LangChain agent served through FastAPI',
+      caption: 'The AI support copilot pipeline: predict, retrieve, draft — one ticket in, one smart reply out.',
+    },
     publishedAt: '2026-09-23',
     categories: ['AI', 'DevOps'],
     tags: ['AI', 'Machine Learning', 'XGBoost', 'RAG', 'FastAPI', 'LangChain', 'Chroma', 'Support', 'Python', 'Docker'],
