@@ -8544,4 +8544,360 @@ export async function answerSupportQuestion(
       { question: 'Is Kubernetes needed for AI workloads?', answer: 'For large-scale AI inference, it is increasingly the standard — 66% of organizations hosting generative AI use it. For a small AI feature, a managed platform is usually enough.' },
     ],
   },
+  {
+    id: 'post-ai-support-copilot-xgboost-rag-fastapi',
+    title: 'One Ticket In, One Smart Reply Out: How to Build an AI Support Copilot with XGBoost, RAG, and FastAPI',
+    seoTitle: 'How to Build an AI Support Copilot with XGBoost, RAG, and FastAPI',
+    slug: 'ai-support-copilot-xgboost-rag-fastapi',
+    description: 'A practical guide to building an AI support copilot: XGBoost predicts ticket priority and churn risk, RAG retrieves past resolutions from a vector database, and FastAPI serves it all as a clean REST API.',
+    seoDescription: 'Build an AI support copilot step by step: XGBoost for ticket priority and churn prediction, RAG with Chroma for retrieving past resolutions, LangChain for the agent, and FastAPI for the REST API — with full code and Docker deployment.',
+    publishedAt: '2026-09-23',
+    categories: ['AI', 'DevOps'],
+    tags: ['AI', 'Machine Learning', 'XGBoost', 'RAG', 'FastAPI', 'LangChain', 'Chroma', 'Support', 'Python', 'Docker'],
+    readingTime: 14,
+    body: `<p>Support teams are drowning in tickets. The average email takes about 24 hours to resolve, only 72% of tickets are solved on the first contact, and a single agent handles 45 to 65 tickets a day.<sup><a href="#fn1" id="fnref1">1</a></sup> The result is slow replies, burned-out agents, and customers who leave. This article shows you how to build a system that changes that: an AI support copilot that reads an incoming ticket, predicts how urgent it is, finds the best past answer, and drafts a smart reply — all through one clean API.</p>
+
+<p>This is a practical, code-first guide. You will build a deployable machine learning application with four parts: <strong>XGBoost</strong> for priority and churn prediction, <strong>RAG</strong> (retrieval-augmented generation) with a <strong>Chroma</strong> vector database for finding past resolutions, a <strong>LangChain</strong> agent that pulls customer history from <strong>PostgreSQL</strong>, and a <strong>FastAPI</strong> REST API that ties it together. Everything runs in <strong>Docker</strong> with Docker Compose. By the end you will have the full source code and a working system you can extend.</p>
+
+<p>It is written for two kinds of readers: data scientists moving into AI engineering, and backend developers learning how AI agents fit into a real product. You do not need to be an expert in either — the code is complete and explained in plain language.</p>
+
+<h2>Why a Support Copilot Instead of a Chatbot?</h2>
+
+<p>A chatbot replaces the human. A copilot helps the human. That difference matters, because support is a high-stakes conversation: a wrong answer costs a customer, and a confident wrong answer costs more. The copilot approach keeps a human in the loop while removing the slow parts — reading, searching, and drafting.</p>
+
+<p>Concretely, the copilot does three jobs:</p>
+
+<ul>
+<li><strong>Predicts</strong> which tickets are urgent and which customers are about to leave, so agents work on the right things first.</li>
+<li><strong>Retrieves</strong> the best past resolution for a new problem, instead of making the agent search through years of history.</li>
+<li><strong>Drafts</strong> a reply the agent can review and send in seconds, instead of typing from scratch.</li>
+</ul>
+
+<p>Each job uses a different tool, because each job is a different kind of problem. That is the core idea of this article — and of most real AI systems in 2026.</p>
+
+<h2>The Architecture at a Glance</h2>
+
+<p>Here is the whole system before we build it:</p>
+
+<table>
+<thead>
+<tr><th>Component</th><th>Job</th><th>Technology</th></tr>
+</thead>
+<tbody>
+<tr><td>Priority &amp; churn model</td><td>Predict urgency and churn risk from ticket data</td><td>XGBoost</td></tr>
+<tr><td>Knowledge base</td><td>Store past resolutions as searchable vectors</td><td>Chroma</td></tr>
+<tr><td>Retrieval + generation</td><td>Find the best past answer and draft a reply</td><td>LangChain + OpenAI</td></tr>
+<tr><td>Customer history</td><td>Context about who is asking</td><td>PostgreSQL</td></tr>
+<tr><td>API layer</td><td>Expose everything as one REST endpoint</td><td>FastAPI</td></tr>
+<tr><td>Deployment</td><td>Run it anywhere, reproducibly</td><td>Docker + Docker Compose</td></tr>
+</tbody>
+</table>
+
+<p>The flow for one ticket looks like this:</p>
+
+<ol>
+<li>A ticket arrives at <code>POST /api/copilot/process</code>.</li>
+<li>XGBoost scores it: priority (high/medium/low) and churn risk (0–100).</li>
+<li>The ticket text is embedded and searched against Chroma for similar past resolutions.</li>
+<li>LangChain assembles a prompt with the retrieved context, the customer's history from PostgreSQL, and the ticket itself.</li>
+<li>The LLM drafts a reply. FastAPI returns everything — prediction, sources, and draft — as JSON.</li>
+</ol>
+
+<p>Now let's build it, step by step.</p>
+
+<h2>Step 1: Predict Priority and Churn with XGBoost</h2>
+
+<p>Support tickets are tabular data: text plus structured fields like plan, age of account, number of previous tickets, and time since last reply. For tabular data, gradient-boosted trees — and XGBoost in particular — are still the strongest default choice. A widely cited 2022 study compared XGBoost against several deep learning models across many datasets and found XGBoost won on accuracy while requiring far less tuning.<sup><a href="#fn2" id="fnref2">2</a></sup> That is exactly what you want in production: strong results without a research project.</p>
+
+<p>Here is a complete training script. It assumes you have a CSV of historical tickets with a <code>priority</code> label and a <code>churned</code> label:</p>
+
+<pre><code class="language-python">import pandas as pd
+import xgboost as xgb
+from sklearn.model_selection import train_test_split
+from sklearn.metrics import accuracy_score, roc_auc_score
+
+df = pd.read_csv("tickets.csv")
+
+# Features: structured fields from the ticket and customer
+features = [
+    "plan_tier", "account_age_days", "tickets_last_30d",
+    "avg_response_hours", "sentiment_score", "is_billing",
+    "is_technical", "escalation_count",
+]
+X = df[features]
+y_priority = df["priority"]          # 0 = low, 1 = medium, 2 = high
+y_churn = df["churned"]              # 0 or 1
+
+X_train, X_test, yp_train, yp_test = train_test_split(
+    X, y_priority, test_size=0.2, random_state=42
+)
+_, _, yc_train, yc_test = train_test_split(
+    X, y_churn, test_size=0.2, random_state=42
+)
+
+# Priority model (multi-class)
+prio_model = xgb.XGBClassifier(
+    objective="multi:softprob", num_class=3,
+    max_depth=6, n_estimators=300, learning_rate=0.05,
+)
+prio_model.fit(X_train, yp_train)
+print("Priority accuracy:", accuracy_score(
+    yp_test, prio_model.predict(X_test)
+))
+
+# Churn model (binary)
+churn_model = xgb.XGBClassifier(
+    objective="binary:logistic",
+    max_depth=5, n_estimators=300, learning_rate=0.05,
+)
+churn_model.fit(X_train, yc_train)
+print("Churn AUC:", roc_auc_score(
+    yc_test, churn_model.predict_proba(X_test)[:, 1]
+))</code></pre>
+
+<p>Two practical notes. First, keep the models small and retrain them on a schedule — support patterns change as your product changes. Second, save the models with <code>joblib</code> so the API can load them at startup:</p>
+
+<pre><code class="language-python">import joblib
+
+joblib.dump(prio_model, "models/priority.joblib")
+joblib.dump(churn_model, "models/churn.joblib")</code></pre>
+
+<h2>Step 2: Store Past Resolutions in Chroma</h2>
+
+<p>Your team has already answered most questions before. The problem is finding those answers. RAG solves this: you split past resolutions into chunks, turn each chunk into a vector (a list of numbers that captures meaning), and store them in a vector database. At query time, you turn the new ticket into a vector and search for the closest chunks.</p>
+
+<p>Chroma is a good default: open source, runs in-process, persists to disk, and handles hundreds of thousands of vectors without any infrastructure.<sup><a href="#fn3" id="fnref3">3</a></sup> Here is the ingestion script:</p>
+
+<pre><code class="language-python">from langchain_openai import OpenAIEmbeddings
+from langchain_chroma import Chroma
+from langchain.text_splitter import RecursiveCharacterTextSplitter
+
+embeddings = OpenAIEmbeddings(model="text-embedding-3-small")
+
+splitter = RecursiveCharacterTextSplitter(
+    chunk_size=800, chunk_overlap=120
+)
+
+# resolutions: list of dicts with "text" and "ticket_id"
+chunks = []
+for r in resolutions:
+    for chunk in splitter.split_text(r["text"]):
+        chunks.append({
+            "text": chunk,
+            "metadata": {"ticket_id": r["ticket_id"]},
+        })
+
+vectorstore = Chroma.from_texts(
+    texts=[c["text"] for c in chunks],
+    embedding=embeddings,
+    metadatas=[c["metadata"] for c in chunks],
+    persist_directory="./chroma_db",
+)</code></pre>
+
+<p>Chunking matters more than people expect. A chunk that is too large buries the answer; too small loses context. The 800-character chunk with 120 characters of overlap is a solid starting point used widely in production.<sup><a href="#fn3" id="fnref3">3</a></sup></p>
+
+<h2>Step 3: Build the Agent with LangChain</h2>
+
+<p>Now the retrieval meets the language model. LangChain wires the pieces together: retrieve relevant chunks, add the customer's history from PostgreSQL, and ask the LLM to draft a reply grounded in that context.</p>
+
+<pre><code class="language-python">from langchain_openai import ChatOpenAI
+from langchain.chains import create_retrieval_chain
+from langchain.chains.combine_documents import create_stuff_documents_chain
+from langchain_core.prompts import ChatPromptTemplate
+
+retriever = vectorstore.as_retriever(
+    search_type="similarity", search_kwargs={"k": 5}
+)
+
+llm = ChatOpenAI(model="gpt-4o-mini", temperature=0.2)
+
+prompt = ChatPromptTemplate.from_messages([
+    ("system", """You are a support copilot. Draft a reply to the
+customer using ONLY the retrieved past resolutions and the customer
+history. If the context does not contain the answer, say so clearly
+instead of guessing. Be warm, specific, and concise.
+
+Retrieved past resolutions:
+{context}
+
+Customer history:
+{history}"""),
+    ("human", "Ticket: {input}"),
+])
+
+document_chain = create_stuff_documents_chain(llm, prompt)
+rag_chain = create_retrieval_chain(retriever, document_chain)</code></pre>
+
+<p>The <code>{history}</code> slot is filled from PostgreSQL. A simple query pulls the customer's plan, past tickets, and any open issues:</p>
+
+<pre><code class="language-python">import psycopg
+
+def get_customer_history(customer_id: str) -> str:
+    with psycopg.connect(DB_URL) as conn:
+        rows = conn.execute("""
+            SELECT subject, status, created_at
+            FROM tickets
+            WHERE customer_id = %s
+            ORDER BY created_at DESC
+            LIMIT 5
+        """, (customer_id,)).fetchall()
+    return "\n".join(
+        f"- [{status}] {subject} ({created_at:%Y-%m-%d})"
+        for subject, status, created_at in rows
+    )</code></pre>
+
+<p>One important production detail: the LLM call dominates latency. Vector search takes milliseconds; generation takes seconds. Keep the retrieved context tight (5 chunks is plenty) and the model small (<code>gpt-4o-mini</code> is a strong quality-to-cost choice) so replies stay fast.<sup><a href="#fn3" id="fnref3">3</a></sup></p>
+
+<h2>Step 4: Serve It All with FastAPI</h2>
+
+<p>FastAPI is the natural glue: async-native, typed, and it generates OpenAPI documentation for free. The endpoint loads the models and the RAG chain once at startup, then handles requests concurrently.</p>
+
+<pre><code class="language-python">from fastapi import FastAPI, HTTPException
+from pydantic import BaseModel
+import joblib
+
+app = FastAPI(title="AI Support Copilot")
+
+class TicketIn(BaseModel):
+    customer_id: str
+    subject: str
+    body: str
+    plan_tier: int
+    account_age_days: int
+    tickets_last_30d: int
+
+class CopilotOut(BaseModel):
+    priority: str
+    churn_risk: float
+    draft_reply: str
+    sources: list[str]
+
+@app.on_event("startup")
+async def load_models():
+    app.state.priority_model = joblib.load("models/priority.joblib")
+    app.state.churn_model = joblib.load("models/churn.joblib")
+    app.state.rag_chain = rag_chain  # built in step 3
+
+@app.post("/api/copilot/process", response_model=CopilotOut)
+async def process_ticket(ticket: TicketIn):
+    features = [[
+        ticket.plan_tier, ticket.account_age_days,
+        ticket.tickets_last_30d, 0, 0,
+        int("billing" in ticket.subject.lower()),
+        int("error" in ticket.body.lower() or "bug" in ticket.body.lower()),
+        0,
+    ]]
+
+    prio = app.state.priority_model.predict(features)[0]
+    churn = app.state.churn_model.predict_proba(features)[0][1]
+
+    history = get_customer_history(ticket.customer_id)
+    result = app.state.rag_chain.invoke({
+        "input": f"{ticket.subject}\n{ticket.body}",
+        "history": history,
+    })
+
+    return CopilotOut(
+        priority=["low", "medium", "high"][prio],
+        churn_risk=round(float(churn), 3),
+        draft_reply=result["answer"],
+        sources=[d.metadata["ticket_id"] for d in result["context"]],
+    )</code></pre>
+
+<p>Note the <code>asyncio.to_thread</code> pattern if you use a synchronous chain: LangChain's <code>invoke</code> is blocking, so wrap it to avoid stalling the event loop under load.<sup><a href="#fn3" id="fnref3">3</a></sup></p>
+
+<h2>Step 5: Deploy with Docker Compose</h2>
+
+<p>Finally, package everything so it runs identically on a laptop and a server. Three services: the API, PostgreSQL, and Chroma (as a standalone server so the API stays stateless).</p>
+
+<pre><code class="language-python"># docker-compose.yml
+services:
+  api:
+    build: .
+    ports:
+      - "8000:8000"
+    environment:
+      - OPENAI_API_KEY=\${OPENAI_API_KEY}
+      - DATABASE_URL=postgresql://support:support@db:5432/support
+      - CHROMA_HOST=chroma
+    depends_on:
+      - db
+      - chroma
+
+  db:
+    image: postgres:16
+    environment:
+      - POSTGRES_USER=support
+      - POSTGRES_PASSWORD=support
+      - POSTGRES_DB=support
+    volumes:
+      - pgdata:/var/lib/postgresql/data
+
+  chroma:
+    image: chromadb/chroma
+    volumes:
+      - chromadata:/data
+
+volumes:
+  pgdata:
+  chromadata:</code></pre>
+
+<p>Run it with <code>docker compose up --build</code>, then open <code>http://localhost:8000/docs</code> to see the interactive API documentation FastAPI generates automatically.</p>
+
+<h2>Putting It All Together</h2>
+
+<p>You now have a complete support copilot: XGBoost decides what matters, Chroma finds the best past answer, LangChain drafts a grounded reply, FastAPI serves it, and Docker ships it. The same pattern extends far beyond support — priority scoring plus retrieval plus generation is the shape of most useful AI products in 2026.</p>
+
+<p>Three things to do before production:</p>
+
+<ul>
+<li><strong>Evaluate retrieval quality.</strong> Measure faithfulness (does the reply stick to the retrieved context?) and answer relevancy with a tool like RAGAS before trusting it.<sup><a href="#fn3" id="fnref3">3</a></sup></li>
+<li><strong>Keep a human in the loop.</strong> The copilot drafts; a person approves. That is the difference between a helpful tool and a liability.</li>
+<li><strong>Log everything.</strong> Question, retrieved chunks, draft, latency, and whether the agent accepted or edited the reply. That data is how you improve both the models and the retrieval.</li>
+</ul>
+
+<h2>Common Questions</h2>
+
+<h3>Why XGBoost instead of a neural network for the predictions?</h3>
+
+<p>For tabular data, XGBoost is still the strongest default: it outperforms deep models on most datasets and needs far less tuning. Deep learning shines on text, images, and audio — which is why this system uses an LLM for drafting and XGBoost for the structured predictions.</p>
+
+<h3>Do I need a vector database, or can I just search?</h3>
+
+<p>Keyword search fails when the customer uses different words than the past resolution ("refund" vs "money back"). Vector search matches by meaning, so it finds the right past answer even with different wording. That is the whole point of RAG.</p>
+
+<h3>Is this expensive to run?</h3>
+
+<p>No. With <code>gpt-4o-mini</code> and <code>text-embedding-3-small</code>, a single query costs fractions of a cent. Chroma runs in Docker on the same server as the API. The main cost is the LLM API, and it scales with usage.</p>
+
+<h3>Can I use open-source models instead of OpenAI?</h3>
+
+<p>Yes. LangChain abstracts the model provider, so you can swap in a local model served by vLLM or Ollama. You trade a little reply quality for full control and no per-token cost — a reasonable trade for privacy-sensitive support data.</p>
+
+<h3>How do I know the draft reply is correct?</h3>
+
+<p>You do not — which is why the human approves it. To make approval easy, return the sources (the ticket IDs the reply was built from) alongside the draft, and log whether the agent edits it. Over time, that feedback loop is what makes the copilot trustworthy.</p>
+
+<h2>Footnotes</h2>
+<ol>
+<li id="fn1">TidySupport, "20 Customer Support Benchmarks for 2026" — <a href="https://tidysupport.com/blog/customer-support-benchmarks" target="_blank" rel="noopener">tidysupport.com</a>. <a href="#fnref1">↩</a></li>
+<li id="fn2">R. Shwartz-Ziv and A. Armon, "Tabular data: Deep learning is not all you need," Information Fusion, vol. 81, pp. 84–90, 2022 — <a href="https://www.sciencedirect.com/science/article/abs/pii/S1566253521002360" target="_blank" rel="noopener">sciencedirect.com</a>. <a href="#fnref2">↩</a></li>
+<li id="fn3">Production RAG references: Chroma capacity and latency characteristics, LangChain retrieval patterns, and FastAPI serving guidance — <a href="https://markaicode.com/stack/chroma-langchain-stack/" target="_blank" rel="noopener">markaicode.com</a> and <a href="https://mlopslab.org/rag-tutorial-langchain-chromadb-2026/" target="_blank" rel="noopener">mlopslab.org</a>. <a href="#fnref3">↩</a></li>
+</ol>`,
+    keyTakeaways: [
+      'An AI support copilot keeps a human in the loop: XGBoost predicts priority and churn risk, RAG retrieves the best past resolution, and an LLM drafts a reply the agent approves — instead of a chatbot that replaces the human.',
+      'XGBoost remains the strongest default for tabular prediction: a 2022 Information Fusion study found it outperforms deep models on tabular data while requiring far less tuning.',
+      'RAG with Chroma solves the "different words, same meaning" problem: past resolutions are stored as vectors, so a new ticket finds the right past answer even when wording differs.',
+      'FastAPI ties it together as one typed REST endpoint, and Docker Compose ships the API, PostgreSQL, and Chroma as three reproducible services.',
+      'Before production: evaluate retrieval quality (faithfulness, relevancy), keep a human approval step, and log every draft plus whether the agent edited it — that feedback loop is how the copilot improves.',
+    ],
+    directAnswer: 'To build an AI support copilot with XGBoost, RAG, and FastAPI: (1) train an XGBoost model on historical tickets to predict priority and churn risk from structured fields; (2) ingest past resolutions into a Chroma vector database as 800-character chunks with embeddings; (3) build a LangChain retrieval chain that finds the 5 closest past resolutions, adds the customer\'s history from PostgreSQL, and asks an LLM (gpt-4o-mini) to draft a grounded reply; (4) expose it as a FastAPI POST endpoint that returns priority, churn risk, draft reply, and sources; (5) deploy the API, PostgreSQL, and Chroma with Docker Compose. Keep a human approval step and log whether agents edit the drafts.',
+    faq: [
+      { question: 'Why XGBoost instead of a neural network for the predictions?', answer: 'For tabular data, XGBoost is still the strongest default: it outperforms deep models on most datasets and needs far less tuning. Deep learning shines on text, images, and audio — which is why this system uses an LLM for drafting and XGBoost for the structured predictions.' },
+      { question: 'Do I need a vector database, or can I just search?', answer: 'Keyword search fails when the customer uses different words than the past resolution ("refund" vs "money back"). Vector search matches by meaning, so it finds the right past answer even with different wording. That is the whole point of RAG.' },
+      { question: 'Is this expensive to run?', answer: 'No. With gpt-4o-mini and text-embedding-3-small, a single query costs fractions of a cent. Chroma runs in Docker on the same server as the API. The main cost is the LLM API, and it scales with usage.' },
+      { question: 'Can I use open-source models instead of OpenAI?', answer: 'Yes. LangChain abstracts the model provider, so you can swap in a local model served by vLLM or Ollama. You trade a little reply quality for full control and no per-token cost — a reasonable trade for privacy-sensitive support data.' },
+      { question: 'How do I know the draft reply is correct?', answer: 'You do not — which is why the human approves it. To make approval easy, return the sources (the ticket IDs the reply was built from) alongside the draft, and log whether the agent edits it. Over time, that feedback loop is what makes the copilot trustworthy.' },
+    ],
+  },
 ];
