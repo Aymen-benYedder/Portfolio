@@ -4975,4 +4975,75 @@ sudo ufw enable</code></pre>
     </ol>
   </div>`,
   },
+{
+    id: 'post-multi-tenant-production-rules',
+    title: 'Eight rules for running multi-tenant systems in production',
+    slug: 'eight-rules-multi-tenant-production',
+    description: 'Production-grade rules for isolation, performance, deployment, and incident response in multi-tenant systems — from Postgres RLS and PgBouncer pitfalls to expand/contract migrations and per-tenant instrumentation.',
+    publishedAt: '2026-11-20',
+    categories: ['DevOps', 'Systems Engineering'],
+    tags: ['Multi-tenancy', 'Postgres', 'Docker', 'Deployment', 'Incident Response', 'System Design'],
+    readingTime: 10,
+    body: `<p>The worst multi-tenant bugs rarely look like bugs. A query ships without its <code>WHERE tenant_id = ?</code>. A cache key forgets to include the tenant. One customer's nightly import eats every connection in the pool. Nothing crashes, and the dashboards stay green until a customer notices something they shouldn't be able to see, or can't get a page to load.</p>
+
+<p>Most of the engineering on a shared stack goes into making those failures structurally difficult. These are the eight rules we apply to isolation, performance, deployment, and incident response, along with the reasoning behind each one.</p>
+
+<h2>1. Enforce tenancy below the application layer</h2>
+
+<p>The client never decides ownership. We resolve the tenant from the verified JWT or session at the edge, attach it to the request context, and apply it in the ORM or middleware so no individual developer has to remember it.</p>
+
+<p>Application-level filtering is still one forgotten <code>WHERE</code> away from a leak, so on Postgres we add Row-Level Security as a second layer. A few details decide whether it works:</p>
+
+<ul>
+<li>Set the tenant with <code>SET LOCAL</code> inside a transaction. A plain session-level <code>SET</code> can leak between requests when PgBouncer runs in transaction pooling mode.</li>
+<li>Connect as a role that is not the table owner, not a superuser, and doesn't have <code>BYPASSRLS</code>. Add <code>FORCE ROW LEVEL SECURITY</code> so the owner is covered too.</li>
+<li>Carry tenant context into everything that isn't an HTTP request: background jobs, cron tasks, and cache keys (<code>t:{tenant_id}:...</code>). That's where isolation bugs tend to hide.</li>
+</ul>
+
+<p>Lead composite indexes with <code>tenant_id</code>, and scope uniqueness per tenant, for example <code>UNIQUE (tenant_id, email)</code>.</p>
+
+<h2>2. Measure first, then scale</h2>
+
+<p>When the app slows down, the reflex is a bigger instance. That treats the symptom. We start with <code>pg_stat_statements</code> to find the queries that consume the most total time, then run <code>EXPLAIN (ANALYZE, BUFFERS)</code> to see why.</p>
+
+<p>The usual causes are a missing composite index, an N+1 pattern from lazily loaded relations, or OFFSET pagination over a large table. That last one is common: a list endpoint that is fine at 10,000 rows degrades steadily as the table grows, because the database still walks past every skipped row. Keyset pagination on an index like <code>(tenant_id, created_at, id)</code> fixes it properly.</p>
+
+<p>Caching comes after the query is fixed. Redis in front of a bad query hides the problem and adds an invalidation problem you now own.</p>
+
+<h2>3. Buy commodity, build differentiation</h2>
+
+<p>Payments, authentication, and object storage are solved problems. We use Stripe, Auth0 or Clerk, and S3, and keep custom code for the domain logic that makes the product what it is.</p>
+
+<p>Buying doesn't mean coupling yourself to the vendor. Each service sits behind a thin internal interface. We verify webhook signatures and make every handler idempotent, because Stripe will deliver the same event more than once.</p>
+
+<h2>4. Make deploys boring</h2>
+
+<p>CI builds the image, runs the tests, pushes to the registry, and deploys by immutable tag or digest, never <code>latest</code>. Rolling or blue/green deploys run behind NGINX, and the old version is withdrawn only after the new one passes its readiness check.</p>
+
+<p>The step people skip is migrations. We use expand/contract: add the new column, deploy code that handles both shapes, and drop the old one in a later release. That is what makes rollback safe. Secrets live in GitHub Secrets or a server-side <code>.env</code> outside the repo, and nobody runs <code>git pull</code> on a production box.</p>
+
+<h2>5. Restore first, investigate second</h2>
+
+<p>During an incident the order is fixed. Check <code>docker ps</code> and <code>docker logs --tail 100</code>, look at memory with <code>free -m</code> or <code>htop</code>, and capture whatever will vanish on restart: logs, a heap snapshot, connection counts. Then roll back to the last known-good tag.</p>
+
+<p>Root-cause work happens afterward, reproduced in staging. Leaks, unclosed pool connections, and runaway queries all get the same treatment. Every incident should leave behind at least one change: an alert, a limit, or a test.</p>
+
+<h2>6. A fresh clone should run</h2>
+
+<p><code>docker compose up</code> should work with no tribal knowledge. That means multi-stage builds, a non-root runtime user, pinned base image versions, a <code>.dockerignore</code> that keeps <code>node_modules</code> out of the build context, and a committed <code>.env.example</code>.</p>
+
+<p>Add healthchecks, and use <code>depends_on</code> with <code>condition: service_healthy</code> so the API doesn't start before the database is accepting connections. Validate every request body with Zod or Joi at the boundary. In the React dashboard, give every fetch an explicit loading state and error state, so users never get a blank screen.</p>
+
+<h2>7. Instrument per tenant</h2>
+
+<p>Aggregate metrics hide the failures that matter here. A p95 of 300ms can coexist with one customer waiting eight seconds.</p>
+
+<p>We tag logs, traces, and metrics with <code>tenant_id</code>, so "who is affected?" takes seconds to answer. We also set per-tenant rate limits and job concurrency caps, so one customer's bulk import can't starve everyone else. This is the noisy-neighbor problem, and it's much cheaper to design for early than to retrofit.</p>
+
+<h2>8. Ship the small version first</h2>
+
+<p>A founder asks for a report builder with drag-and-drop filters and scheduled exports. We start with a CSV export. It ships in days and shows whether anyone uses reports at all. If large exports start timing out, move them to a background job that emails a download link. That is still far less than the full builder.</p>
+
+<p>Every feature you decline early is surface area you don't have to secure, migrate, or maintain.</p>`
+  },
 ];
