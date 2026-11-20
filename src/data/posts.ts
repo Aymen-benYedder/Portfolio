@@ -8915,6 +8915,10 @@ volumes:
     categories: ['DevOps', 'Systems Engineering'],
     tags: ['Multi-tenancy', 'Postgres', 'Docker', 'Deployment', 'Incident Response', 'System Design'],
     readingTime: 10,
+    image: {
+      url: '/assets/img/eight-rules-multi-tenant-production.jpg',
+      alt: 'Multi-tenant system architecture showing tenant isolation layers, database RLS, and deployment pipeline',
+    },
     body: `<p>The worst multi-tenant bugs rarely look like bugs. A query ships without its <code>WHERE tenant_id = ?</code>. A cache key forgets to include the tenant. One customer's nightly import eats every connection in the pool. Nothing crashes, and the dashboards stay green until a customer notices something they shouldn't be able to see, or can't get a page to load.</p>
 
 <p>Most of the engineering on a shared stack goes into making those failures structurally difficult. These are the eight rules we apply to isolation, performance, deployment, and incident response, along with the reasoning behind each one.</p>
