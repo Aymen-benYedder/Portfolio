@@ -1,6 +1,6 @@
 import { useState, type FormEvent } from 'react';
 
-const inputClass = "font-[family-name:var(--font-mono)] text-[var(--text-xs)] text-[var(--text-1)] bg-[var(--inset)] border px-[14px] py-[12px] min-h-[44px] outline-none w-full transition-all duration-200 placeholder:text-[var(--text-3)] focus:border-[var(--accent)] focus:shadow-[0_0_8px_rgba(16,185,129,0.15)]";
+const inputClass = "font-[family-name:var(--font-mono)] text-[length:var(--text-xs)] text-[var(--text-1)] bg-[var(--inset)] border px-[14px] py-[12px] min-h-[44px] outline-none w-full transition-all duration-200 placeholder:text-[var(--text-3)] focus:border-[var(--accent)] focus:shadow-[0_0_8px_rgba(16,185,129,0.15)]";
 const inputError = "border-[var(--error)]";
 const inputNormal = "border-[var(--border)]";
 
@@ -56,7 +56,7 @@ export default function ContactFormIsland() {
             aria-required="true" autoComplete="email"
             onBlur={(e) => validateEmail(e.target.value)}
             onChange={(e) => { if (emailErr) validateEmail(e.target.value); }} />
-          {emailErr && <p className="text-[var(--error)] text-[var(--text-2xs)] mt-[4px] font-[family-name:var(--font-mono)]" role="alert">{emailErr}</p>}
+          {emailErr && <p className="text-[var(--error)] text-[length:var(--text-2xs)] mt-[4px] font-[family-name:var(--font-mono)]" role="alert">{emailErr}</p>}
         </div>
 
         <div className="form-group">
@@ -83,12 +83,12 @@ export default function ContactFormIsland() {
         </div>
 
         <button type="submit" disabled={status === 'sending'}
-          className={`w-full font-[family-name:var(--font-mono)] text-[var(--text-2xs)] font-bold tracking-[0.1em] px-[20px] py-[12px] min-h-[44px] uppercase border cursor-pointer transition-all duration-200 bg-[var(--accent)] border-[var(--accent)] text-[var(--void)] hover:bg-transparent hover:text-[var(--accent)] hover:shadow-[0_0_15px_rgba(16,185,129,0.3)] disabled:opacity-70 ${status === 'sending' ? 'animate-pulse-send' : ''}`}>
+          className={`w-full font-[family-name:var(--font-mono)] text-[length:var(--text-2xs)] font-bold tracking-[0.1em] px-[20px] py-[12px] min-h-[44px] uppercase border cursor-pointer transition-all duration-200 bg-[var(--accent)] border-[var(--accent)] text-[var(--void)] hover:bg-transparent hover:text-[var(--accent)] hover:shadow-[0_0_15px_rgba(16,185,129,0.3)] disabled:opacity-70 ${status === 'sending' ? 'animate-pulse-send' : ''}`}>
           {status === 'sending' ? '[ TRANSMITTING... ]' : '[ SEND MESSAGE ]'}
         </button>
 
-        {status === 'sent' && <p className="text-[var(--success)] text-[var(--text-xs)] text-center font-[family-name:var(--font-mono)] label-caps" role="alert">Message sent successfully.</p>}
-        {status === 'error' && <p className="text-[var(--error)] text-[var(--text-xs)] text-center font-[family-name:var(--font-mono)] label-caps" role="alert">Failed to send. Try emailing directly.</p>}
+        {status === 'sent' && <p className="text-[var(--success)] text-[length:var(--text-xs)] text-center font-[family-name:var(--font-mono)] label-caps" role="alert">Message sent successfully.</p>}
+        {status === 'error' && <p className="text-[var(--error)] text-[length:var(--text-xs)] text-center font-[family-name:var(--font-mono)] label-caps" role="alert">Failed to send. Try emailing directly.</p>}
       </div>
     </form>
   );

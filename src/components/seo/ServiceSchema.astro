@@ -1,0 +1,25 @@
+---
+import { generateProfessionalService } from '@lib/schema';
+
+export interface Props {
+  name: string;
+  description: string;
+  url: string;
+  providerId?: string;
+  areaServed?: string[];
+  serviceTypes: string[];
+}
+
+const {
+  name,
+  description,
+  url,
+  providerId = 'https://aymen.benyedder.top/#person',
+  areaServed = ['Tunisia', 'France', 'Europe', 'Middle East', 'North Africa'],
+  serviceTypes,
+} = Astro.props;
+
+const service = generateProfessionalService({ name, description, url, providerId, areaServed, serviceTypes });
+---
+
+<script type="application/ld+json" set:html={JSON.stringify(service)} />

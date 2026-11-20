@@ -1,2 +1,57 @@
-# Redirect old fraudulent LMIA post to C16 article
+# ─── Cloudflare Pages redirects ───
+# Legacy .html URLs (pre-migration) → canonical trailing-slash routes
+# Preserves backlink equity + citations baked into LLM training data
+
+# Root pages
+/index.html / 301
+/hire.html /hire/ 301
+/author/aymen-ben-yedder.html /author/aymen-ben-yedder/ 301
+
+# Blog index
+/blog/index.html /blog/ 301
+/blog.html /blog/ 301
+
+# Blog articles
+/blog/agentic-ai-cicd-review-gates-2026.html /blog/agentic-ai-cicd-review-gates-2026/ 301
+/blog/ai-code-review-verification-2026.html /blog/ai-code-review-verification-2026/ 301
+/blog/ai-powered-workflow-orchestration-stack.html /blog/ai-powered-workflow-orchestration-stack/ 301
+/blog/architecting-multi-cloud-resilience-opentofu-terragrunt-mandatory-2026.html /blog/architecting-multi-cloud-resilience-opentofu-terragrunt-mandatory-2026/ 301
+/blog/beyond-tutorial-web-resilience.html /blog/beyond-tutorial-web-resilience/ 301
+/blog/c16-francophone-mobility-lmia-exemption-canada.html /blog/c16-francophone-mobility-lmia-exemption-canada/ 301
+/blog/canada-global-talent-stream-2026-two-week-work-permit.html /blog/canada-global-talent-stream-2026-two-week-work-permit/ 301
+/blog/css-engineering-2026.html /blog/css-engineering-2026/ 301
+/blog/deploying-scaling-llms-production-devops-self-hosted-ai-inference.html /blog/deploying-scaling-llms-production-devops-self-hosted-ai-inference/ 301
+/blog/devops-digital-nomad-visas-2026-comparison.html /blog/devops-digital-nomad-visas-2026-comparison/ 301
+/blog/devops-vps-startups.html /blog/devops-vps-startups/ 301
+/blog/docker-security-hardening-2026.html /blog/docker-security-hardening-2026/ 301
+/blog/execution-layer-breach-hackerbot-claw-cicd-compromise.html /blog/execution-layer-breach-hackerbot-claw-cicd-compromise/ 301
+/blog/from-logs-to-logic-claude-real-time-visualization-observability.html /blog/from-logs-to-logic-claude-real-time-visualization-observability/ 301
+/blog/gitops-2026-argocd-fluxcd.html /blog/gitops-2026-argocd-fluxcd/ 301
+/blog/gitops-reconciliation-auto-sync-human-gate-2026.html /blog/gitops-reconciliation-auto-sync-human-gate-2026/ 301
+/blog/lmia-exemption-codes-canada-work-permits-2026-c61-c62-c63-c10.html /blog/lmia-exemption-codes-canada-work-permits-2026-c61-c62-c63-c10/ 301
+/blog/npm-vs-pnpm-vs-yarn-vs-bun-2026-package-manager-guide.html /blog/npm-vs-pnpm-vs-yarn-vs-bun-2026-package-manager-guide/ 301
+/blog/platform-engineering-2026-building-idp-backstage-kubernetes-gitops.html /blog/platform-engineering-2026-building-idp-backstage-kubernetes-gitops/ 301
+/blog/production-docker-multi-stage-builds-security-scanning-optimization.html /blog/production-docker-multi-stage-builds-security-scanning-optimization/ 301
+/blog/prometheus-grafana-self-hosted-monitoring-stack-vps.html /blog/prometheus-grafana-self-hosted-monitoring-stack-vps/ 301
+/blog/state-of-web-performance-2026.html /blog/state-of-web-performance-2026/ 301
+/blog/terraform-production-state-management-modules-multi-environment-iac.html /blog/terraform-production-state-management-modules-multi-environment-iac/ 301
+/blog/unified-type-safety-hono-tanstack-docker.html /blog/unified-type-safety-hono-tanstack-docker/ 301
+/blog/vibe-coding-security-disaster-real-numbers.html /blog/vibe-coding-security-disaster-real-numbers/ 301
+/blog/web-dev-beliefs-that-are-quietly-costing-you-debunked.html /blog/web-dev-beliefs-that-are-quietly-costing-you-debunked/ 301
+/blog/web-resilience-2026.html /blog/web-resilience-2026/ 301
+
+# Non-article pages cited in old llms.txt / old backlinks
+/blog/template.html /blog/ 301
+/blog/sample-post.html /blog/ 301
+/services/mern-development.html /services/mern-development/ 301
+/services/wordpress-development.html /services/wordpress-development/ 301
+/services/ci-cd-infrastructure.html /services/ci-cd-infrastructure/ 301
+/services/index.html /services/ 301
+/projects/eatorder.html /projects/eatorder/ 301
+
+# Retired geo pages → services hub
+/geo/tunisia.html /services/ 301
+/geo/france.html /services/ 301
+
+# Historical: fraudulent LMIA post → C16 article
 /blog/how-i-help-canadian-startups-skip-lmia-headache/ /blog/c16-francophone-mobility-lmia-exemption-canada/ 301

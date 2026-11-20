@@ -20,11 +20,20 @@ const postCards = posts.map(p => ({
   readingTime: p.readingTime,
 }));
 
-const categories = ['all', ...new Set(posts.flatMap(p => p.categories).filter(Boolean))];
+const categoryKeys = new Set<string>();
+const categories = ['all', ...posts
+  .flatMap(p => p.categories)
+  .filter(Boolean)
+  .filter(c => {
+    const key = c.toLowerCase();
+    if (categoryKeys.has(key)) return false;
+    categoryKeys.add(key);
+    return true;
+  })];
 ---
 
 <BaseLayout
-  title="Technical Blog"
+    title="DevOps & AI Engineering Blog"
   description="In-depth technical articles on DevOps, infrastructure automation, CI/CD, and systems engineering by Aymen Ben Yedder."
   canonical="https://aymen.benyedder.top/blog/"
 >
@@ -37,9 +46,9 @@ const categories = ['all', ...new Set(posts.flatMap(p => p.categories).filter(Bo
 
   <div class="max-w-[var(--container-max)] mx-auto px-[var(--section-px)] pt-[var(--section-gap)]">
     <div class="section-header mb-[var(--spacing-gap-lg)]">
-      <span class="font-[family-name:var(--font-mono)] text-[var(--text-2xs)] font-bold tracking-[0.10em] text-[var(--accent)]">Blog</span>
-      <h1 class="font-[family-name:var(--font-mono)] text-[var(--heading-md)] max-md:text-[var(--heading-sm)] font-bold text-[var(--text-1)] mt-[var(--spacing-gap-xs)]">Technical Writing</h1>
-      <p class="text-[var(--text-base)] text-[var(--text-2)] mt-[var(--spacing-gap-sm)]">Aymen Ben Yedder — DevOps &amp; Systems Engineering<br />8 years in production infrastructure. Writing about CI/CD, GitOps, Docker, and systems architecture for startup teams.</p>
+      <span class="font-[family-name:var(--font-mono)] text-[length:var(--text-2xs)] font-bold tracking-[0.10em] text-[var(--accent)]">Blog</span>
+      <h1 class="font-[family-name:var(--font-mono)] text-[length:var(--heading-md)] max-md:text-[length:var(--heading-sm)] font-bold text-[var(--text-1)] mt-[var(--spacing-gap-xs)]">Technical Writing</h1>
+      <p class="text-[length:var(--text-base)] text-[var(--text-2)] mt-[var(--spacing-gap-sm)]">Aymen Ben Yedder — DevOps &amp; Systems Engineering<br />8 years in production infrastructure. Writing about CI/CD, GitOps, Docker, and systems architecture for startup teams.</p>
     </div>
 
     {posts.length > 0 ? (
@@ -48,7 +57,8 @@ const categories = ['all', ...new Set(posts.flatMap(p => p.categories).filter(Bo
           {categories.map(cat => (
             <button
               data-category={cat === 'all' ? '' : cat}
-              class="filter-btn label-caps px-[12px] py-[8px] min-h-[36px] border cursor-pointer transition-all duration-200 border-[var(--border)] text-[var(--text-2)] hover:border-[var(--accent)] hover:text-[var(--accent)]"
+              aria-pressed={cat === 'all'}
+              class="filter-btn label-caps px-[12px] py-[8px] min-h-[44px] border cursor-pointer transition-all duration-200 border-[var(--border)] text-[var(--text-2)] hover:border-[var(--accent)] hover:text-[var(--accent)]"
             >
               {cat === 'all' ? 'ALL' : cat.toUpperCase()}
             </button>
@@ -62,13 +72,13 @@ const categories = ['all', ...new Set(posts.flatMap(p => p.categories).filter(Bo
               class="post-card glass-panel px-[var(--card-px)] py-[var(--card-py)] hover:bg-[rgba(16,185,129,0.03)] transition-[background_120ms_ease] rounded-none"
             >
               <a href={`/blog/${post.slug}/`} class="no-underline min-h-[44px] flex flex-col justify-center">
-                <h2 class="font-[family-name:var(--font-mono)] text-[14px] max-md:text-[var(--text-small)] font-bold text-[var(--text-1)] hover:text-[var(--accent)] hover:drop-shadow-[0_0_5px_rgba(16,185,129,0.3)] transition-all duration-200">{post.title}</h2>
-                {post.description && <p class="text-[var(--text-small)] text-[var(--text-2)] mt-[var(--spacing-gap-xs)]">{post.description}</p>}
+                <h2 class="font-[family-name:var(--font-mono)] text-[14px] max-md:text-[length:var(--text-small)] font-bold text-[var(--text-1)] hover:text-[var(--accent)] hover:drop-shadow-[0_0_5px_rgba(16,185,129,0.3)] transition-all duration-200">{post.title}</h2>
+                {post.description && <p class="text-[length:var(--text-small)] text-[var(--text-2)] mt-[var(--spacing-gap-xs)]">{post.description}</p>}
                 <div class="flex items-center gap-[var(--spacing-gap-md)] mt-[var(--spacing-gap-sm)] flex-wrap">
-                  {post.publishedAt && <time datetime={post.publishedAt} class="font-[family-name:var(--font-mono)] text-[var(--text-2xs)] text-[var(--text-3)]">{new Date(post.publishedAt).toLocaleDateString('en-US', { year: 'numeric', month: 'long', day: 'numeric' })}</time>}
-                  {post.readingTime && <span class="font-[family-name:var(--font-mono)] text-[var(--text-2xs)] text-[var(--text-3)]">{post.readingTime} min read</span>}
+                  {post.publishedAt && <time datetime={post.publishedAt} class="font-[family-name:var(--font-mono)] text-[length:var(--text-2xs)] text-[var(--text-3)]">{new Date(post.publishedAt).toLocaleDateString('en-US', { year: 'numeric', month: 'long', day: 'numeric' })}</time>}
+                  {post.readingTime && <span class="font-[family-name:var(--font-mono)] text-[length:var(--text-2xs)] text-[var(--text-3)]">{post.readingTime} min read</span>}
                   {post.categories.length > 0 && (
-                    <span class="font-[family-name:var(--font-mono)] text-[var(--text-2xs)] text-[var(--accent)]">{post.categories[0]}</span>
+                    <span class="font-[family-name:var(--font-mono)] text-[length:var(--text-2xs)] text-[var(--accent)]">{post.categories[0]}</span>
                   )}
                 </div>
               </a>
@@ -77,11 +87,11 @@ const categories = ['all', ...new Set(posts.flatMap(p => p.categories).filter(Bo
         </div>
       </div>
     ) : (
-      <p class="text-[var(--text-2)] text-[var(--text-base)] px-[var(--card-px)] py-[40px] text-center">No posts yet. Check back soon.</p>
+      <p class="text-[var(--text-2)] text-[length:var(--text-base)] px-[var(--card-px)] py-[40px] text-center">No posts yet. Check back soon.</p>
     )}
 
     <div class="mt-[var(--spacing-gap-lg)] text-center">
-      <a href="https://aymen.benyedder.top/rss.xml" class="font-[family-name:var(--font-mono)] text-[var(--text-2xs)] text-[var(--accent)] no-underline hover:underline">Subscribe via RSS</a>
+      <a href="https://aymen.benyedder.top/rss.xml" class="font-[family-name:var(--font-mono)] text-[length:var(--text-2xs)] text-[var(--accent)] no-underline hover:underline">Subscribe via RSS</a>
     </div>
   </div>
 
@@ -92,16 +102,19 @@ const categories = ['all', ...new Set(posts.flatMap(p => p.categories).filter(Bo
         document.querySelectorAll('.filter-btn').forEach(b => {
           b.classList.remove('border-[var(--accent)]', 'text-[var(--accent)]', 'bg-[rgba(16,185,129,0.08)]', 'shadow-[0_0_8px_rgba(16,185,129,0.1)]');
           b.classList.add('border-[var(--border)]', 'text-[var(--text-2)]');
+          b.setAttribute('aria-pressed', 'false');
         });
         btn.classList.remove('border-[var(--border)]', 'text-[var(--text-2)]');
         btn.classList.add('border-[var(--accent)]', 'text-[var(--accent)]', 'bg-[rgba(16,185,129,0.08)]', 'shadow-[0_0_8px_rgba(16,185,129,0.1)]');
+        btn.setAttribute('aria-pressed', 'true');
 
         document.querySelectorAll('.post-card').forEach(card => {
           if (!category) {
             (card as HTMLElement).style.display = 'block';
           } else {
             const categories = JSON.parse(card.getAttribute('data-categories') || '[]');
-            (card as HTMLElement).style.display = categories.includes(category) ? 'block' : 'none';
+            const key = category.toLowerCase();
+            (card as HTMLElement).style.display = categories.some((c: string) => c.toLowerCase() === key) ? 'block' : 'none';
           }
         });
       });

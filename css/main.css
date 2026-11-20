@@ -53,9 +53,8 @@ body::before {
   }
 }
 
-/* Deep Space Aurora Background */
-[data-theme="dark"] body,
-.dark body {
+/* Deep Space Aurora Background — always active (dark mode only) */
+body {
   background-color: var(--bg-primary);
   background-image: var(--bg-aurora);
   background-attachment: fixed;
@@ -476,4 +475,10 @@ textarea:focus-visible {
 
 .ghost-text.delay-2 {
   animation-delay: 0.4s;
+}
+
+/* Theme toggle buttons are now inert — light mode disabled permanently */
+#theme-toggle,
+.mobile-theme-toggle {
+  display: none !important;
 }

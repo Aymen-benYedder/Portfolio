@@ -38,8 +38,8 @@ export default function BlogFilterIsland({ posts }: { posts: Post[] }) {
         {filtered.map(post => (
           <article key={post.id} className="glass-panel px-[var(--card-px)] py-[var(--card-py)] hover:bg-[rgba(16,185,129,0.03)] transition-[background_120ms_ease] rounded-none">
             <a href={`/blog/${post.slug}/`} className="no-underline min-h-[44px] flex flex-col justify-center">
-              <h2 className="font-[family-name:var(--font-mono)] text-[14px] max-md:text-[var(--text-small)] font-bold text-[var(--text-1)] hover:text-[var(--accent)] hover:drop-shadow-[0_0_5px_rgba(16,185,129,0.3)] transition-all duration-200">{post.title}</h2>
-              {post.description && <p className="text-[var(--text-small)] text-[var(--text-2)] mt-[var(--spacing-gap-xs)]">{post.description}</p>}
+              <h2 className="font-[family-name:var(--font-mono)] text-[14px] max-md:text-[length:var(--text-small)] font-bold text-[var(--text-1)] hover:text-[var(--accent)] hover:drop-shadow-[0_0_5px_rgba(16,185,129,0.3)] transition-all duration-200">{post.title}</h2>
+              {post.description && <p className="text-[length:var(--text-small)] text-[var(--text-2)] mt-[var(--spacing-gap-xs)]">{post.description}</p>}
             </a>
           </article>
         ))}
