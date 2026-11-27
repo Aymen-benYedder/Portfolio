@@ -8,6 +8,7 @@ import FAQAccordion from '@components/islands/FAQAccordion.tsx';
 import DeployMeta from '@components/ui/DeployMeta.astro';
 import FAQPageSchema from '@components/seo/FAQPageSchema.astro';
 import BreadcrumbSchema from '@components/seo/BreadcrumbSchema.astro';
+import QuickActionPopup from '@components/ui/QuickActionPopup.astro';
 import { fetchSanityApi } from '@lib/sanity';
 
 let siteSettings = null;
@@ -476,6 +477,8 @@ const FALLBACK_FAQS = [
       </div>
     </div>
   </section>
+
+  <QuickActionPopup />
 </BaseLayout>
 
 <template slot="after-footer">
